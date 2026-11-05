@@ -1,0 +1,7 @@
+/* Atkinson Hyperlegible Next and Mono (SIL Open Font License 1.1; see OFL-Atkinson-Hyperlegible-Next.txt).
+   Served from this folder so the Hub looks the same with no connection. Latin subset. */
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 400; font-display: swap; src: url(atkinson-hyperlegible-next-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 500; font-display: swap; src: url(atkinson-hyperlegible-next-latin-500-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Next"; font-style: normal; font-weight: 700; font-display: swap; src: url(atkinson-hyperlegible-next-latin-700-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url(atkinson-hyperlegible-mono-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Atkinson Hyperlegible Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url(atkinson-hyperlegible-mono-latin-500-normal.woff2) format("woff2"); }

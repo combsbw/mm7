@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- The Hub's own mark (a ring with a rising line) on the app's accent colour. Full-bleed square: the mark sits inside the
+       central 80% circle, so a circular or rounded mask never touches it. -->
+  <rect width="512" height="512" fill="#2d6a86"/>
+  <circle cx="256" cy="256" r="150" fill="none" stroke="#ffffff" stroke-width="34"/>
+  <path d="M172.7 297.7 L222.7 247.7 L264.4 289.4 L339.3 214.3" fill="none" stroke="#ffffff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
