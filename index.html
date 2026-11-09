@@ -786,6 +786,25 @@
     .cards .cl { font-size: 16px; }
   }
 
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
+
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
 .lead2 { color: var(--ink-2); font-size: 16px; margin: 0; }
@@ -1528,6 +1547,12 @@ a.btn { text-decoration: none; display: inline-block; }
 .hb-dialbtn { margin-top: 12px; flex-wrap: wrap; gap: 10px; align-items: center; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .hb-fcex { margin: 6px 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); } .hb-fcex li { margin: 4px 0; }
+/* framed page on a phone: the back link keeps only its arrow (the word stays for screen readers) so the title fits on one line */
+@media (max-width: 560px) {
+  .hb-framed .hb-chhead { padding-top: 4px; padding-bottom: 4px; }
+  .hb-framed .hb-chhead .back span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .hb-framed .hb-chhead h1 { line-height: 1.15; }
+}
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -26055,13 +26080,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -26086,10 +26132,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -43092,6 +43146,25 @@ if (typeof module !== 'undefined') module.exports = LMS;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -47887,7 +47960,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -48169,7 +48242,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -48179,11 +48255,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -48437,13 +48525,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -49280,6 +49368,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -54256,7 +54363,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -54538,7 +54645,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -54548,11 +54658,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -54806,13 +54928,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -55649,6 +55771,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -60385,7 +60526,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -60667,7 +60808,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -60677,11 +60821,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -60935,13 +61091,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -61778,6 +61934,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -67570,7 +67745,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -67852,7 +68027,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -67862,11 +68040,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -68120,13 +68310,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -68963,6 +69153,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -74643,7 +74852,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -74925,7 +75134,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -74935,11 +75147,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -75193,13 +75417,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -76036,6 +76260,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -82666,7 +82909,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -82948,7 +83191,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -82958,11 +83204,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -83216,13 +83474,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -84059,6 +84317,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -90605,7 +90882,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -90887,7 +91164,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -90897,11 +91177,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -91155,13 +91447,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -91998,6 +92290,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 </style>
 </head>
 <body>
@@ -100261,7 +100572,7 @@ var GEN = (function () {
     $('tabPath').setAttribute('aria-selected', String(view === 'path' || view === 'practice'));
     $('tabProgress').setAttribute('aria-selected', String(view === 'progress'));
     $('tabHistory').setAttribute('aria-selected', String(view === 'history'));
-    tip.hidden = true;
+    hideTip();
     if (view === 'progress') renderProgress();
     if (view === 'history') renderHistory();
     window.scrollTo(0, 0);
@@ -100543,7 +100854,10 @@ var GEN = (function () {
     var shared = 0; for (var kk in SRC) if (SRC[kk].length > 1) shared++;
     $('keynote').textContent = shared ? shared + ' of the ' + NL + ' levels draw on more than one section, so they appear under each of them.' : '';
   }
-  var tip = $('tip');
+  var tip = $('tip'), tipAnchor = null, tipTimer = 0, tipY = 0;
+  // On touch screens a tap focuses the element and nothing clears the tip when the view changes, so it also closes
+  // on a tap outside a tipped element, a real scroll, the page being hidden, or its anchor leaving the screen.
+  function hideTip() { tip.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
   function showTip(el, x, y) {
     var parts = el.getAttribute('data-tip').split('|');
     tip.textContent = '';
@@ -100553,11 +100867,23 @@ var GEN = (function () {
     var w = tip.offsetWidth, hgt = tip.offsetHeight;
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + 'px';
     tip.style.top = Math.max(8, Math.min(window.innerHeight - hgt - 8, y + 14)) + 'px';
+    tipAnchor = el; tipY = window.scrollY;
+    if (!tipTimer) tipTimer = setInterval(function () {
+      var a = tipAnchor; if (!a || !a.isConnected || !a.getClientRects().length) return hideTip();
+      var r = a.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) hideTip();
+    }, 250);
   }
-  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.hidden = true; });
-  $('sunburst').addEventListener('pointerleave', function () { tip.hidden = true; });
-  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
-  $('sunburst').addEventListener('focusout', function () { tip.hidden = true; });
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) hideTip(); }, true);
+  // focus raises a tip only when the person moved it there, never when focus is restored by script
+  function byPerson(t) { if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true; try { return t.matches(':focus-visible'); } catch (e) { return true; } }
+  window.addEventListener('scroll', function () { if (!tip.hidden && Math.abs(window.scrollY - tipY) > 40) hideTip(); }, { passive: true });
+  ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, hideTip); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) hideTip(); });
+  $('sunburst').addEventListener('pointermove', function (e) { var el = e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else hideTip(); });
+  $('sunburst').addEventListener('pointerleave', function () { hideTip(); });
+  $('sunburst').addEventListener('focusin', function (e) { var el = e.target.closest('[data-tip]'); if (el && byPerson(el)) { var r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top + r.height / 2); } });
+  $('sunburst').addEventListener('focusout', function () { hideTip(); });
 
   // ---------- settings ----------
   var dlg = $('settings');
@@ -100811,13 +101137,13 @@ var GEN = (function () {
   hv.addEventListener('pointermove', function (e) {
     var t = tipTarget(e);
     hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); });
-    if (!t) { tip.hidden = true; return; }
+    if (!t) { hideTip(); return; }
     if (t.dataset.gx) { var svg = t.ownerSVGElement, g = svg.querySelector('.guide'), d = svg.querySelector('.gdot'); g.setAttribute('x1', t.dataset.gx); g.setAttribute('x2', t.dataset.gx); g.setAttribute('visibility', 'visible'); d.setAttribute('cx', t.dataset.gx); d.setAttribute('cy', t.dataset.gy); d.setAttribute('visibility', 'visible'); }
     showTip(t, e.clientX, e.clientY);
   });
-  hv.addEventListener('pointerleave', function () { tip.hidden = true; hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
-  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
-  hv.addEventListener('focusout', function () { tip.hidden = true; });
+  hv.addEventListener('pointerleave', function () { hideTip(); hv.querySelectorAll('.guide, .gdot').forEach(function (g) { g.setAttribute('visibility', 'hidden'); }); });
+  hv.addEventListener('focusin', function (e) { var t = tipTarget(e); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); showTip(t, r.left + r.width / 2, r.top + r.height / 2); } });
+  hv.addEventListener('focusout', function () { hideTip(); });
   var rsz = null;
   window.addEventListener('resize', function () { if (hv.hidden) return; clearTimeout(rsz); rsz = setTimeout(renderHistory, 150); });
   el('hFilterType').innerHTML = '<option value="all">All problem types</option>' + UNITS.map(function (u, i) { return '<option value="' + (i + 1) + '">' + (i + 1) + ' · ' + esc(u) + '</option>'; }).join('');
@@ -101653,6 +101979,25 @@ var GEN = (function () {
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -110427,13 +110772,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -110458,10 +110824,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -111435,7 +111809,7 @@ if (typeof module !== 'undefined') module.exports = RD;
   var TABS = { dash: 'Dash', warm: 'Warm', trial: 'Trial', transfer: 'Transfer', history: 'History' };
   function secOf(v) { return v === 'trial' || v === 'trialplay' ? 'trial' : v === 'play' && S ? (S.cfg.sec === 'warm' ? 'warm' : 'transfer') : v; }
   function show(v) {
-    current = v;
+    current = v; X.tip(null);
     VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; });
     var sec = secOf(v); document.body.dataset.sec = sec;
     Object.keys(TABS).forEach(function (k) { $('tab' + TABS[k]).setAttribute('aria-selected', String(k === sec)); });
@@ -112591,6 +112965,25 @@ if (typeof module !== 'undefined') module.exports = RD;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -121405,13 +121798,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -121436,10 +121850,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -122282,7 +122704,7 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
-    view = v; VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
+    view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
     window.scrollTo(0, 0);
@@ -123428,6 +123850,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -132770,13 +133211,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -132801,10 +133263,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -134280,7 +134750,7 @@ if (typeof module !== 'undefined') module.exports = RD;
   var TABS = { dash: 'Dash', warm: 'Warm', trial: 'Trial', transfer: 'Transfer', history: 'History' };
   function secOf(v) { return v === 'trial' || v === 'trialplay' ? 'trial' : v === 'play' && S ? (S.cfg.sec === 'warm' ? 'warm' : 'transfer') : v; }
   function show(v) {
-    current = v;
+    current = v; X.tip(null);
     VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; });
     var sec = secOf(v); document.body.dataset.sec = sec;
     Object.keys(TABS).forEach(function (k) { $('tab' + TABS[k]).setAttribute('aria-selected', String(k === sec)); });
@@ -135436,6 +135906,25 @@ if (typeof module !== 'undefined') module.exports = RD;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -144818,13 +145307,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -144849,10 +145359,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -145695,7 +146213,7 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
-    view = v; VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
+    view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
     window.scrollTo(0, 0);
@@ -146841,6 +147359,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -154921,13 +155458,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -154952,10 +155510,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -155993,7 +156559,7 @@ if (typeof module !== 'undefined') module.exports = RD;
   var TABS = { dash: 'Dash', warm: 'Warm', trial: 'Trial', transfer: 'Transfer', history: 'History' };
   function secOf(v) { return v === 'trial' || v === 'trialplay' ? 'trial' : v === 'play' && S ? (S.cfg.sec === 'warm' ? 'warm' : 'transfer') : v; }
   function show(v) {
-    current = v;
+    current = v; X.tip(null);
     VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; });
     var sec = secOf(v); document.body.dataset.sec = sec;
     Object.keys(TABS).forEach(function (k) { $('tab' + TABS[k]).setAttribute('aria-selected', String(k === sec)); });
@@ -157149,6 +157715,25 @@ if (typeof module !== 'undefined') module.exports = RD;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -165269,13 +165854,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -165300,10 +165906,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -166146,7 +166760,7 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
-    view = v; VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
+    view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
     window.scrollTo(0, 0);
@@ -167292,6 +167906,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -177133,13 +177766,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -177164,10 +177818,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -177675,7 +178337,7 @@ if (typeof module !== 'undefined') module.exports = RD;
   var TABS = { dash: 'Dash', warm: 'Warm', trial: 'Trial', transfer: 'Transfer', history: 'History' };
   function secOf(v) { return v === 'trial' || v === 'trialplay' ? 'trial' : v === 'play' && S ? (S.cfg.sec === 'warm' ? 'warm' : 'transfer') : v; }
   function show(v) {
-    current = v;
+    current = v; X.tip(null);
     VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; });
     var sec = secOf(v); document.body.dataset.sec = sec;
     Object.keys(TABS).forEach(function (k) { $('tab' + TABS[k]).setAttribute('aria-selected', String(k === sec)); });
@@ -178831,6 +179493,25 @@ if (typeof module !== 'undefined') module.exports = RD;
     .cg .an, .dotp .an, .boxp .an, .hist .an, .barg .an, .lng .an { font-size: 17px; }
     .cards .cl { font-size: 16px; }
   }
+
+  /* ---------- inside the Learning Hub ----------
+     The hub opens every app in a frame under its own header, which already names the chapter or group and its
+     page. It marks the frame's document <html data-embed="hub">, and the app drops what that header repeats:
+     the bar's name, the big chapter title, the section eyebrows, and the generous standalone spacing. */
+  html[data-embed] .top-in { padding-top: 6px; padding-bottom: 6px; }
+  html[data-embed] .brand { display: none; }
+  html[data-embed] .top-in > .tabs { margin-right: auto; }
+  html[data-embed] .top-in > .iconbtn:last-child { margin-left: auto; }
+  html[data-embed] .wrap { padding-top: 4px; }
+  html[data-embed] .intro { padding: 12px 0 10px; }
+  html[data-embed] .intro .eyebrow { display: none; }
+  html[data-embed] .intro h1 { font-size: 22px; margin: 0 0 4px; }
+  html[data-embed] .intro p { font-size: 14.5px; }
+  html[data-embed] #pathView .intro { padding: 10px 0 0; }
+  html[data-embed] #pathView .intro h1 { display: none; }
+  html[data-embed] #pathView .intro p { color: var(--muted); max-width: none; }
+  html[data-embed] #pathView .units { margin-top: 14px; }
+  @media (max-width: 430px) { html[data-embed] .top-in { padding: 6px 10px; } }
 
 /* ===== shared styles for the review and exam apps (on top of the chapter-path base styles) ===== */
 .wrap.wide { max-width: 900px; }
@@ -188712,13 +189393,34 @@ var X = (function () {
   function applyTheme(t) { if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme'); }
 
   // tooltip (one shared element)
-  var tipEl = null;
-  function tip(html, x, y) {
+  // A tip belongs to the element that raised it (its anchor). On touch screens a tap focuses the element and no
+  // pointerleave/focusout follows when a view is swapped out, so the tip also closes on: a tap anywhere outside a
+  // tipped element, scrolling, navigation, the page being hidden, and (checked while open) the anchor being
+  // removed, hidden or blurred.
+  var tipEl = null, tipAnchor = null, tipTimer = 0, tipWired = false, tipY = 0;
+  function anchorGone(a) {
+    if (!a || !a.isConnected) return true;
+    if (!a.getClientRects().length) return true;
+    var r = a.getBoundingClientRect(); return r.bottom < 0 || r.top > window.innerHeight;
+  }
+  function tipHide() { if (tipEl) tipEl.hidden = true; tipAnchor = null; if (tipTimer) { clearInterval(tipTimer); tipTimer = 0; } }
+  function wireTipDismiss() {
+    if (tipWired) return; tipWired = true;
+    document.addEventListener('pointerdown', function (e) { if (!(e.target && e.target.closest && e.target.closest('[data-tip]'))) tipHide(); }, true);
+    window.addEventListener('scroll', function () { if (tipEl && !tipEl.hidden && Math.abs(window.scrollY - tipY) > 40) tipHide(); }, { passive: true });
+    ['hashchange', 'popstate', 'pagehide', 'blur'].forEach(function (n) { window.addEventListener(n, tipHide); });
+    document.addEventListener('visibilitychange', function () { if (document.hidden) tipHide(); });
+    document.addEventListener('click', function (e) { if (e.target && e.target.closest && e.target.closest('button, a, [role="tab"]') && !e.target.closest('[data-tip]')) tipHide(); }, true);
+  }
+  function tip(html, x, y, anchor) {
     if (!tipEl) { tipEl = el('div', 'tip'); tipEl.setAttribute('role', 'tooltip'); document.body.appendChild(tipEl); }
-    if (html === null) { tipEl.hidden = true; return; }
+    wireTipDismiss();
+    if (html === null) { tipHide(); return; }
     tipEl.hidden = false; tipEl.innerHTML = html;
     var w = tipEl.offsetWidth, h = tipEl.offsetHeight, nx = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)), ny = y - h - 14 < 8 ? y + 18 : y - h - 14;
     tipEl.style.left = nx + 'px'; tipEl.style.top = ny + 'px';
+    tipAnchor = anchor || null; tipY = window.scrollY;
+    if (tipAnchor && !tipTimer) tipTimer = setInterval(function () { if (anchorGone(tipAnchor)) tipHide(); }, 250);
   }
 
   return { $: $, el: el, esc: esc, plain: plain, cut: cut, clock: clock, mins: mins, secs: secs, pct: pct, uid: uid, median: median, dayStamp: dayStamp, ICON: ICON,
@@ -188743,10 +189445,18 @@ var C = (function () {
   // ---------- tooltips (event delegation on a chart root) ----------
   function wireTips(root) {
     function tipOf(t) { return t && t.closest && t.closest('[data-tip]'); }
-    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY); else X.tip(null); });
+    root.addEventListener('pointermove', function (e) { var t = tipOf(e.target); if (t) X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, e.clientX, e.clientY, t); else X.tip(null); });
     root.addEventListener('pointerleave', function () { X.tip(null); });
-    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top); } });
+    // focus raises a tip only when the person moved it there (keyboard, or a tap on that element just now) —
+    // not when a page restores focus by script, which would pop a tip up on a page nobody touched.
+    root.addEventListener('focusin', function (e) { var t = tipOf(e.target); if (t && byPerson(t)) { var r = t.getBoundingClientRect(); X.tip('<b>' + t.dataset.tipTitle + '</b>' + t.dataset.tip, r.left + r.width / 2, r.top, t); } });
     root.addEventListener('focusout', function () { X.tip(null); });
+  }
+  var lastDown = { t: 0, el: null };
+  document.addEventListener('pointerdown', function (e) { lastDown = { t: Date.now(), el: e.target }; }, true);
+  function byPerson(t) {
+    if (lastDown.el && t.contains(lastDown.el) && Date.now() - lastDown.t < 1500) return true;
+    try { return t.matches(':focus-visible'); } catch (e) { return true; }
   }
   function tipAttrs(title, body) { return ' data-tip-title="' + esc(title) + '" data-tip="' + esc(body) + '" tabindex="0"'; }
 
@@ -189589,7 +190299,7 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
-    view = v; VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
+    view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
     window.scrollTo(0, 0);
@@ -190294,7 +191004,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
 
   // =================== embedded apps ===================
-  function appSource(key) { var m = MANIFEST[key], s = m && document.getElementById(m.id); return s ? s.textContent.replace(//g, '<') : null; }
+  // The app is told it sits inside the hub (<html data-embed="hub">) so it can drop what the hub header already shows.
+  function appSource(key) { var m = MANIFEST[key], s = m && document.getElementById(m.id); return s ? s.textContent.replace(//g, '<').replace(/<html(?=[\s>])/i, '<html data-embed="hub"') : null; }
   function openFrame(host, key, title, pre) {
     var src = appSource(key); if (!src) { host.appendChild(el('div', 'hb-wrap', empty('This app is not part of this build yet.'))); return; }
     var box = el('div', 'hb-framebox'), ifr = document.createElement('iframe');
