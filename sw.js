@@ -5,7 +5,7 @@
    Updating: a new build installs quietly beside the old one and WAITS. The page offers "reload"; the new version takes over
    only when the person says so, so nobody is switched mid-problem. */
 'use strict';
-var VERSION = '3259de05d4';                       // a hash of every file below: a new build is a new worker
+var VERSION = 'e460e0b954';                       // a hash of every file below: a new build is a new worker
 var CACHE = 'mm7-hub-' + VERSION;
 var ASSETS = ["index.html", "manifest.webmanifest", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/icon.svg", "fonts/atkinson-hyperlegible-mono-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-mono-latin-500-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-500-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-700-normal.woff2", "fonts/fonts.css"];
 
