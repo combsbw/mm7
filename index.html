@@ -1722,9 +1722,9 @@ a.btn { text-decoration: none; display: inline-block; }
 
 /* ===== Trajectory (hub/hub_traj.js) =====
    One accent for motion (--tj), one for what is held (--tj-held), one for checkpoints (--tj-gate). No dates anywhere. */
-:root { --tj: #2a78d6; --tj-soft: rgba(42, 120, 214, .12); --tj-fan: rgba(42, 120, 214, .16); --tj-held: #1c5cab; --tj-gate: #c43f8c; --tj-up: #1baf7a; --tj-dn: #eb6834; --tj-ahead: rgba(42, 120, 214, .045); --tj-ring: #d5e0e6; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --tj: #4a90e8; --tj-soft: rgba(74, 144, 232, .16); --tj-fan: rgba(74, 144, 232, .2); --tj-held: #8bbcf4; --tj-gate: #d867ad; --tj-up: #25b885; --tj-dn: #e2703f; --tj-ahead: rgba(74, 144, 232, .07); --tj-ring: #2c3a42; } }
-:root[data-theme="dark"] { --tj: #4a90e8; --tj-soft: rgba(74, 144, 232, .16); --tj-fan: rgba(74, 144, 232, .2); --tj-held: #8bbcf4; --tj-gate: #d867ad; --tj-up: #25b885; --tj-dn: #e2703f; --tj-ahead: rgba(74, 144, 232, .07); --tj-ring: #2c3a42; }
+:root { --tj: #2a78d6; --tj-soft: rgba(42, 120, 214, .12); --tj-fan: rgba(42, 120, 214, .16); --tj-held: #1c5cab; --tj-gate: #c43f8c; --tj-up: #1baf7a; --tj-dn: #eb6834; --tj-ahead: rgba(42, 120, 214, .045); --tj-ring: #d5e0e6; --tj-flag: #0e8f63; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --tj: #4a90e8; --tj-soft: rgba(74, 144, 232, .16); --tj-fan: rgba(74, 144, 232, .2); --tj-held: #8bbcf4; --tj-gate: #d867ad; --tj-up: #25b885; --tj-dn: #e2703f; --tj-ahead: rgba(74, 144, 232, .07); --tj-ring: #2c3a42; --tj-flag: #25b885; } }
+:root[data-theme="dark"] { --tj-flag: #25b885; --tj: #4a90e8; --tj-soft: rgba(74, 144, 232, .16); --tj-fan: rgba(74, 144, 232, .2); --tj-held: #8bbcf4; --tj-gate: #d867ad; --tj-up: #25b885; --tj-dn: #e2703f; --tj-ahead: rgba(74, 144, 232, .07); --tj-ring: #2c3a42; }
 .hb-subnav { max-width: 1100px; margin: 0 auto; padding: 16px 20px 0; }
 .hb-subnav .seg a { text-decoration: none; padding: 6px 16px; border-radius: 7px; font-size: 15px; font-weight: 700; color: var(--ink-2); }
 .hb-subnav .seg a[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
@@ -1737,23 +1737,6 @@ a.btn { text-decoration: none; display: inline-block; }
 .tj-lens .lab { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
 .tj-lens .seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
 .tj-lens .busy { font-size: 14px; color: var(--ink-2); }
-.tj-inst { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-@media (max-width: 900px) { .tj-inst { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.tj-in.hb-card { padding: 14px 16px 14px; border-radius: 18px; display: grid; gap: 2px; align-content: start; }
-.tj-inh { display: flex; justify-content: space-between; align-items: flex-start; min-height: 74px; }
-.tj-inh .k { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
-.tj-inh svg { width: 74px; height: 74px; flex: none; }
-.tj-inv { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-top: -26px; }
-.tj-inv .v { font-size: clamp(28px, 4.4vw, 38px); font-weight: 700; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-.tj-inv .u { font-size: 14px; color: var(--ink-2); font-weight: 700; }
-.tj-inl { font-size: 14.5px; font-weight: 700; color: var(--tj); margin-top: 4px; }
-.tj-ind { font-size: 14px; color: var(--ink-2); margin: 4px 0 0; line-height: 1.4; }
-@media (max-width: 560px) { .tj-ind { display: none; } .tj-inh svg { width: 58px; height: 58px; } .tj-inh { min-height: 58px; } .tj-inv { margin-top: -14px; } }
-.i-max { fill: none; stroke: var(--tj-ring); stroke-width: 1.5; stroke-dasharray: 3 4; } .i-mass { fill: var(--tj); opacity: .55; } .i-held { fill: var(--tj-held); }
-.i-dial { fill: none; stroke: var(--tj-ring); stroke-width: 7; stroke-linecap: round; } .i-dialv { fill: none; stroke: var(--tj); stroke-width: 7; stroke-linecap: round; }
-.i-ref { stroke: var(--ink-2); stroke-width: 2; } .i-needle { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; } .i-hub { fill: var(--ink); }
-.i-chev { fill: none; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; } .i-chev.up { stroke: var(--tj-up); } .i-chev.dn { stroke: var(--tj-dn); }
-.i-flat { stroke: var(--ink-2); stroke-width: 6; stroke-linecap: round; } .i-streak { stroke: var(--tj); stroke-width: 4; stroke-linecap: round; }
 .tj-hero h2, .tj-level h2, .tj-impact h2, .tj-checks h2, .tj-map h2 { font-size: 21px; }
 .tj-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 6px; }
 @media (max-width: 560px) { .tj-chips { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 6px; margin-right: -22px; padding-right: 22px; } .tj-chip { flex: none; } }
@@ -1784,17 +1767,6 @@ a.btn { text-decoration: none; display: inline-block; }
 .tj-key .k-trail { width: 18px; height: 3px; background: var(--tj); border-radius: 2px; } .tj-key .k-body { width: 12px; height: 12px; border-radius: 50%; background: var(--tj-held); }
 .tj-key .k-vel { width: 18px; height: 3px; background: var(--ink); border-radius: 2px; } .tj-key .k-mid { width: 18px; height: 8px; background: var(--tj-fan); border-bottom: 2px dotted var(--tj); }
 .tj-key .k-gate { width: 9px; height: 9px; background: var(--tj-gate); transform: rotate(45deg); }
-.tj-lvrow { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
-.tj-orb { flex: none; width: 190px; height: 190px; }
-.tj-orb .ring { fill: none; stroke: var(--tj-ring); stroke-width: 1.5; } .tj-orb .ring.done { stroke: var(--tj); opacity: .45; stroke-width: 2; } .tj-orb .ring.cur { stroke: var(--tj); stroke-width: 3; }
-.tj-orb .climb { fill: none; stroke: var(--tj-up); stroke-width: 5; stroke-linecap: round; }
-.tj-orb .core { fill: var(--tj-held); } .tj-orb .lvn { fill: #fff; font-size: 21px; font-weight: 700; }
-:root[data-theme="dark"] .tj-orb .lvn { fill: #0b0b0b; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tj-orb .lvn { fill: #0b0b0b; } }
-.tj-orb .body { fill: var(--tj-up); stroke: var(--surface); stroke-width: 2.5; } .tj-orb .orbiter { transform-origin: 110px 110px; animation: tjOrbit 1.2s ease-out; }
-.tj-lvtxt { flex: 1 1 200px; min-width: 0; } .tj-lvtxt .big { font-size: 34px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; } .tj-lvtxt .big span { font-size: 15px; color: var(--ink-2); font-weight: 700; letter-spacing: 0; }
-.tj-lvtxt .bar { height: 10px; border-radius: 6px; background: var(--hb-track); margin: 10px 0 8px; overflow: hidden; } .tj-lvtxt .bar i { display: block; height: 100%; background: var(--tj-up); border-radius: 6px; }
-.tj-lvtxt p { margin: 4px 0 0; font-size: 15.5px; }
 .tj-did { margin: 12px 0 0; padding: 0 0 0 20px; display: grid; gap: 7px; font-size: 15.5px; }
 .tj-sk { display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
 .tj-sk .lab { font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); flex: 0 0 100%; }
@@ -1813,15 +1785,76 @@ a.btn { text-decoration: none; display: inline-block; }
 .tj-rb .now { left: 0; background: var(--tj-held); border-radius: 6px 0 0 6px; } .tj-rb .then { background: var(--tj); opacity: .45; } .tj-rb .tg { width: 3px; top: -4px; bottom: -4px; background: var(--tj-gate); border-radius: 2px; }
 .tj-cpgo { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 7px 12px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; min-height: 36px; }
 .tj-end { margin-top: 12px; }
-.tj-blocks { display: flex; gap: 6px; align-items: flex-end; margin-top: 14px; }
-.tj-blk { display: grid; gap: 4px; justify-items: center; text-decoration: none; color: var(--ink); min-width: 0; font-size: 13px; }
-.tj-blk .col { position: relative; display: block; width: 100%; height: 130px; background: var(--hb-track); border-radius: 8px; overflow: hidden; }
-.tj-blk .col i { position: absolute; left: 0; right: 0; bottom: 0; } .tj-blk .m { background: var(--tj); opacity: .5; } .tj-blk .h { background: var(--tj-held); }
-.tj-blk .n { font-weight: 700; white-space: nowrap; } .tj-blk .n em { font-style: normal; } .tj-blk .mq { color: var(--ink-2); font-variant-numeric: tabular-nums; font-size: 12.5px; }
-@media (max-width: 560px) { .tj-blk .n em { display: none; } .tj-blocks { gap: 3px; } .tj-blk .mq { font-size: 11px; } }
 .tj-method summary { cursor: pointer; font-weight: 700; font-size: 16px; } .tj-mgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 26px; margin-top: 10px; font-size: 15px; color: var(--ink-2); } .tj-mgrid p { margin: 0; } .tj-mgrid b { color: var(--ink); }
 @media (max-width: 700px) { .tj-mgrid { grid-template-columns: 1fr; } }
 .tj-wait h2 { font-size: 21px; margin-bottom: 6px; }
+
+/* instruments: the orb and the four gauges */
+.tj-inst { display: grid; grid-template-columns: minmax(250px, 320px) minmax(0, 1fr); gap: 14px; align-items: stretch; }
+.tj-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (min-width: 1000px) { .tj-inst { grid-template-columns: 340px minmax(0, 1fr); } }
+@media (max-width: 760px) { .tj-inst { grid-template-columns: minmax(0, 1fr); } }
+.tj-orbcard.hb-card, .tj-in.hb-card { padding: 14px 14px 12px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.tj-orbcard .k, .tj-in .k { align-self: flex-start; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.tj-in { cursor: default; } .tj-in:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tj-g { width: 100%; max-width: 250px; height: auto; display: block; margin: 2px auto 0; }
+.tj-g .gv { font-size: 34px; font-weight: 700; fill: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; paint-order: stroke; stroke: var(--surface); stroke-width: 5px; stroke-linejoin: round; }
+.tj-g .gu { font-size: 13px; font-weight: 700; fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.tj-inl { font-size: 14px; font-weight: 700; color: var(--tj); margin-top: 2px; line-height: 1.3; }
+.i-max { fill: none; stroke: var(--tj-ring); stroke-width: 2; stroke-dasharray: 4 5; } .i-mass { fill: var(--tj); opacity: .5; } .i-held { fill: var(--tj-held); opacity: .85; }
+.i-dial { fill: none; stroke: var(--tj-ring); stroke-width: 14; stroke-linecap: round; } .i-dialv { fill: none; stroke: var(--tj); stroke-width: 14; stroke-linecap: round; }
+.i-dialv.up { stroke: var(--tj-up); } .i-dialv.dn { stroke: var(--tj-dn); }
+.i-tick { stroke: var(--tj-ring); stroke-width: 2; } .i-ref { stroke: var(--ink); stroke-width: 3; stroke-linecap: round; } .i-zero { stroke: var(--ink-2); stroke-width: 3; stroke-linecap: round; }
+.i-knob { fill: var(--surface); stroke: var(--tj); stroke-width: 4; } .i-knob.up { stroke: var(--tj-up); } .i-knob.dn { stroke: var(--tj-dn); } .i-knob.flat { stroke: var(--ink-2); }
+.i-pm { font-size: 20px; font-weight: 700; fill: var(--ink-2); }
+.tj-orbcard { justify-content: space-between; } .tj-orbv { width: 100%; max-width: 330px; height: auto; display: block; }
+.tj-orbv .full { fill: none; stroke: var(--tj-ring); stroke-width: 1.5; stroke-dasharray: 3 6; }
+.tj-orbv .o0 { stop-color: #cfe6ff; } .tj-orbv .o1 { stop-color: var(--tj); } .tj-orbv .o2 { stop-color: #123c73; }
+.tj-orbv.up .o0 { stop-color: #d6ffe9; } .tj-orbv.up .o1 { stop-color: var(--tj-up); } .tj-orbv.up .o2 { stop-color: #0a5a3f; }
+.tj-orbv.dn .o0 { stop-color: #ffe6d6; } .tj-orbv.dn .o1 { stop-color: var(--tj-dn); } .tj-orbv.dn .o2 { stop-color: #7a2f0f; }
+.tj-orbv .halo { fill: none; stroke: var(--tj); opacity: .22; animation: tjHalo 3s ease-in-out infinite; } .tj-orbv.up .halo { stroke: var(--tj-up); } .tj-orbv.dn .halo { stroke: var(--tj-dn); }
+.tj-orbv .bands ellipse { fill: #fff; opacity: .13; } .tj-orbv .bands { animation: tjSpin 8s linear infinite; }
+.tj-orbv .shine { fill: #fff; opacity: .5; }
+.tj-orbv .streak { stroke: var(--tj); stroke-width: 4; stroke-linecap: round; opacity: .55; animation: tjStreak 1.3s ease-in-out infinite; } .tj-orbv.up .streak { stroke: var(--tj-up); } .tj-orbv.dn .streak { stroke: var(--tj-dn); }
+.tj-orbv .thrust { fill: none; stroke: var(--tj-up); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; } .tj-orbv.dn .thrust { stroke: var(--tj-dn); }
+@keyframes tjSpin { from { transform: translateX(0); } to { transform: translateX(62px); } }
+@keyframes tjHalo { 0%, 100% { opacity: .16; } 50% { opacity: .32; } }
+@keyframes tjStreak { 0%, 100% { opacity: .25; transform: translateX(6px); } 50% { opacity: .7; transform: translateX(-4px); } }
+@keyframes tjSway { 0%, 100% { transform: rotate(calc(var(--sway) * -1)); } 50% { transform: rotate(var(--sway)); } }
+@media (prefers-reduced-motion: reduce) { .tj-orbv .bands, .tj-orbv .halo, .tj-orbv .streak, .tj-ves { animation: none !important; } }
+.tj-orbkey { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-size: 13px; color: var(--ink-2); text-align: left; width: 100%; }
+.tj-orbkey b { color: var(--ink); display: block; } .tj-orbkey li { position: relative; padding-left: 18px; }
+.tj-orbkey i { position: absolute; left: 0; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: var(--tj); }
+.tj-orbkey .ok-streak { height: 4px; top: 8px; border-radius: 2px; } .tj-orbkey .ok-col { background: linear-gradient(90deg, var(--tj-dn), var(--tj), var(--tj-up)); } .tj-orbkey .ok-halo { background: none; border: 3px solid var(--tj); opacity: .5; }
+/* energy level */
+.tj-level { display: flex; flex-direction: column; } .tj-orb { width: 100%; max-width: 360px; height: auto; display: block; margin: 6px auto 0; }
+.tj-orb .ring { fill: none; stroke: var(--tj-ring); stroke-width: 2; } .tj-orb .ring.done { stroke: var(--tj); opacity: .4; stroke-width: 3; } .tj-orb .ring.new { stroke: var(--tj-up); stroke-width: 5; } .tj-orb .ring.cur { stroke: var(--tj); stroke-width: 5; }
+.tj-orb .rl { font-size: 12.5px; font-weight: 700; fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 6px; stroke-linejoin: round; } .tj-orb .rl.cur { fill: var(--tj); } .tj-orb .rl.new { fill: var(--tj-up); }
+.tj-orb .climb { fill: none; stroke: var(--tj-up); stroke-width: 7; stroke-linecap: round; }
+.tj-orb .togo { font-size: 13.5px; font-weight: 700; fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 6px; stroke-linejoin: round; }
+.tj-orb .core { fill: var(--tj-held); } .tj-orb .lvn { fill: #fff; font-size: 32px; font-weight: 700; } .tj-orb .lvo { fill: #fff; opacity: .8; font-size: 12px; font-weight: 700; }
+.tj-orb .body { fill: var(--tj-up); stroke: var(--surface); stroke-width: 3; } .tj-orb .orbiter { transform-origin: 170px 170px; animation: tjOrbit 1.2s ease-out; }
+.tj-lvcap { margin: 6px 0 0; font-size: 15px; text-align: center; } .tj-lvcap .up { color: var(--tj-up); }
+/* checkpoints */
+.tj-path .flag line { stroke: var(--tj-flag); stroke-width: 2; } .tj-path .flag path { fill: var(--tj-flag); stroke: var(--surface); stroke-width: 1.5; } .tj-path .flag .ck { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; } .tj-path .flag text { fill: var(--tj-flag); font-size: 12.5px; font-weight: 700; paint-order: stroke; stroke: var(--surface); stroke-width: 4px; }
+.tj-path .gate path { fill: var(--surface); stroke: var(--tj-gate); stroke-width: 2.5; } .tj-path .gate.here path { fill: var(--tj-gate); }
+.tj-path .gate:focus-visible, .tj-path .flag:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tj-key .k-flag { width: 9px; height: 9px; background: var(--tj-flag); transform: rotate(45deg); } .tj-key .k-gate { background: transparent; border: 2px solid var(--tj-gate); }
+.tj-cp.completed { border-color: color-mix(in srgb, var(--tj-flag) 45%, var(--line)); } .tj-cp.completed .dia { background: var(--tj-flag); }
+.tj-snap { display: flex; gap: 18px; flex-wrap: wrap; font-size: 14.5px; color: var(--ink-2); } .tj-snap b { font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; margin-right: 4px; }
+.tj-cpa { display: flex; gap: 8px; flex-wrap: wrap; } a.tj-cpgo { text-decoration: none; display: inline-flex; align-items: center; }
+/* vessels */
+.tj-vessels { display: flex; gap: 6px 10px; flex-wrap: wrap; align-items: flex-start; justify-content: space-around; margin-top: 10px; padding-top: 6px; border-top: 3px solid var(--tj-ring); min-height: 190px; }
+.tj-ves { display: grid; justify-items: center; text-decoration: none; color: var(--ink); font-size: 13px; transform-origin: 50% 0; animation: tjSway var(--dur) ease-in-out infinite; }
+.tj-ves .str { width: 2px; height: calc(10px + var(--sink)); background: var(--tj-ring); } .tj-ves .bob { display: block; line-height: 0; }
+.tj-ves .n { font-weight: 700; margin-top: 3px; white-space: nowrap; } .tj-ves .n em { font-style: normal; } .tj-ves .mq { color: var(--ink-2); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+.v-bg { fill: var(--hb-track); } .v-m { fill: var(--tj); opacity: .5; } .v-h { fill: var(--tj-held); } .v-w { fill: var(--tj); opacity: .5; } .v-rim { fill: none; stroke: var(--tj); stroke-width: 2; opacity: .7; }
+/* on other pages */
+.tj-chh { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; } .tj-chv { flex: none; line-height: 0; } .tj-chs { flex: 1 1 260px; min-width: 0; } .tj-chs h2 { font-size: 21px; }
+.tj-stats { display: flex; gap: 6px 20px; flex-wrap: wrap; margin: 6px 0 4px; font-size: 15px; color: var(--ink-2); } .tj-stats b { color: var(--ink); font-size: 19px; font-variant-numeric: tabular-nums; }
+.tj-strip { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; text-decoration: none; color: var(--ink); background: var(--tj-soft); border-radius: 12px; padding: 8px 12px; font-size: 14.5px; margin: 10px 0 2px; }
+.tj-strip .k { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--tj); } .tj-strip .t { flex: 1 1 220px; } .tj-strip .go { color: var(--tj); font-weight: 700; }
+.tj-spark { flex: none; } .tj-spark .sp-p { fill: none; stroke: var(--tj); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; } .tj-spark .sp-f { fill: none; stroke: var(--tj); stroke-width: 2; stroke-dasharray: 2 4; stroke-linecap: round; } .tj-spark .sp-n { fill: var(--tj-held); stroke: var(--surface); stroke-width: 2; }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -1839,7 +1872,7 @@ a.btn { text-decoration: none; display: inline-block; }
       <a class="tab" href="#today" data-nav="today">Today</a>
       <a class="tab" href="#chapters" data-nav="chapters">Chapters</a>
       <a class="tab" href="#reviews" data-nav="reviews"><span class="hb-tlong">Reviews &amp; Exams</span><span class="hb-tshort">Reviews</span></a>
-      <a class="tab" href="#progress" data-nav="progress">Progress</a>
+      <a class="tab" href="#dashboard" data-nav="dashboard">Dashboard</a>
     </nav>
     <a class="iconbtn hb-gear" href="#settings" data-nav="settings" aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -47668,6 +47701,7 @@ var LMF = (function () {
     var P = ctx.P, out = [];
     if (traj) {   // the trajectory engine's series (not limited to 0..1): mass, held mass, and each exam's readiness against its targets
       P.chapters.forEach(function (n) { out.push({ id: 'ch' + n + ':M', get: function (ms) { return ms.ch[n].M; } }); });
+      P.groups.forEach(function (g) { out.push({ id: g.id + ':M', get: function (ms) { var t = 0; g.chapters.forEach(function (n) { if (ms.ch[n]) t += ms.ch[n].M; }); return t; } }); });
       P.groups.forEach(function (g) { out.push({ id: g.id + ':rho', get: function (ms) { var x = ms.grp[g.id]; return Math.min(x.core / ctx.th.c, x.stretch / ctx.th.s); } }, { id: g.id + ':core', get: function (ms) { return ms.grp[g.id].core; } }, { id: g.id + ':stretch', get: function (ms) { return ms.grp[g.id].stretch; } }); });
       out.push({ id: 'course:M', get: function (ms) { return ms.course.M; } }, { id: 'course:Mh', get: function (ms) { return ms.course.Mh; } }, { id: 'course:comp', get: function (ms) { return ms.course.comp; } });
       return out;
@@ -48136,7 +48170,7 @@ if (typeof module !== 'undefined') module.exports = LMF;
    It is a date-free reading of the learner model (hub/lms_model.js) and of the simulator (hub/lms_forecast.js):
    nothing it returns is a calendar date. The unit along the path is the SESSION (one day with answers), behind and ahead.
 
-   QUANTITIES (all in quanta, q; LMF.F.MASS_Q = 10 q is one skill fully demonstrated)
+   QUANTITIES (all in blobs; LMF.F.MASS_Q = 10 blobs is one skill fully demonstrated)
      mass      M  = sum over started skills of MASS_Q * E * W / (W + MASS_W0)      demonstrated mastery, from the evidence as counted
                     (E and W here are not aged, so mass changes only through answers: right ones add, misses take away)
      held      Mh = sum of mass * retention                                           the part of the mass that is in memory now
@@ -48169,7 +48203,7 @@ var LMT = (function () {
   var FC = (typeof LMF !== 'undefined' && LMF) || (typeof require !== 'undefined' ? require('./lms_forecast.js') : null);
   var X = L._x, DAY = X.DAY, F = FC.F;
   var T = {
-    V: 2, LEVEL_Q: 25, RUNS: 16, RUNS_IMPACT: 16, H: 260, H_IMPACT_PAD: 12, GAP_MIN: 1, GAP_MAX: 4, SEED: 20261111,
+    V: 3, LEVEL_Q: 25, RUNS: 16, RUNS_IMPACT: 16, H: 260, H_IMPACT_PAD: 12, GAP_MIN: 1, GAP_MAX: 4, SEED: 20261111,
     WEEK: 7, MONTH: 30, PREV_SESSIONS: 5, TOP_UP: 6, TOP_DOWN: 3, CAP_MS: 300000, PAST_MAX: 500, BOUND_R: 0.85, EPS_V: 0.5
   };
   function r1(x) { return x === null || x === undefined || !isFinite(x) ? null : Math.round(x * 10) / 10; }
@@ -48287,9 +48321,24 @@ var LMT = (function () {
         coreReady: cor ? { done: !!cor.done, s: cor.done ? 0 : cor.d50, lo: cor.dLo, hi: cor.dHi } : null,
         ready: rdy ? { done: !!rdy.done, s: rdy.done ? 0 : rdy.d50, lo: rdy.dLo, hi: rdy.dHi, p: r3(rdy.pWithin) } : null,
         now: { core: r3(nowR.grp[g.id].core), stretch: r3(nowR.grp[g.id].stretch), rho: r3(nowR.grp[g.id].rho) } };
+      // an exam is a checkpoint: once it has been taken it is a snapshot on the trail (its score), not something to keep predicting
+      var tk = (ctx._taken || []).filter(function (e) { return e.group === g.id; });
+      c.taken = tk.length; c.attempts = tk; c.state = tk.length ? 'completed' : here ? 'here' : 'ahead';
       if (sArr !== null) { var a = function (k) { var x = at(res.series[g.id + ':' + k], sArr); return x ? { lo: r3(x.lo), mid: r3(x.mid), hi: r3(x.hi) } : null; }; c.atArrive = { core: a('core'), stretch: a('stretch'), rho: a('rho') }; }
       out.push(c);
     });
+    return out;
+  }
+  // every exam attempt, as a mark on the trail: which session it fell in, and its Core and Stretch
+  function takenExams(cat, obs, ss) {
+    var out = [], seen = {};
+    obs.forEach(function (o) {
+      if (o.src !== 'exam' || o.kind !== 'exam' || seen[o.attempt]) return; seen[o.attempt] = 1;
+      var sm = X.examSummaries(obs.filter(function (p) { return p.src === 'exam' && p.attempt === o.attempt; }), cat)[o.group]; if (!sm) return;
+      var k = -1; for (var i = 0; i < ss.length; i++) if (ss[i].t1 >= o.t - 1 && k < 0) k = i; if (k < 0) k = ss.length - 1;
+      out.push({ group: o.group, i: k + 1, back: ss.length - 1 - k, core: r3(sm.core), stretch: r3(sm.stretch) });
+    });
+    var n = {}; out.forEach(function (e) { n[e.group] = (n[e.group] || 0) + 1; e.n = n[e.group]; });
     return out;
   }
   function ahead(ctx, nowR) {
@@ -48339,8 +48388,9 @@ var LMT = (function () {
     var ss = sessionsOf(obs); if (ss.length > T.PAST_MAX) ss = ss.slice(-T.PAST_MAX);
     var get = getter(input.records), pp = past(cat, input, ss);
     var ctx = FC.context(cat, obs, input.now, input.hub, get, input.thr), nowR = reading(ctx, input.now, true), kk = kin(ss, pp.pts, input.now), N = ss.length;
-    var out = { v: T.V, sig: input.sig || null, unit: { q: F.MASS_Q, level: T.LEVEL_Q }, thr: { core: ctx.th.c, stretch: ctx.th.s },
-      sessions: ss.map(function (s, i) { var p = pp.pts[i]; return { i: s.i, n: s.n, ok: s.ok, min: Math.round(s.ms / 60000), gain: kk.gain[i], drift: kk.drift[i], M: p.A.M, Mh: p.A.Mh, comp: p.A.comp, age: r1((input.now - s.t1) / DAY), grp: p.A.grp }; }),
+    ctx._taken = takenExams(cat, obs, ss);
+    var out = { v: T.V, sig: input.sig || null, unit: { name: 'blob', perSkill: F.MASS_Q, level: T.LEVEL_Q }, exams: ctx._taken, thr: { core: ctx.th.c, stretch: ctx.th.s },
+      sessions: ss.map(function (s, i) { var p = pp.pts[i]; return { i: s.i, n: s.n, ok: s.ok, min: Math.round(s.ms / 60000), gain: kk.gain[i], drift: kk.drift[i], M: p.A.M, Mh: p.A.Mh, comp: p.A.comp, age: r1((input.now - s.t1) / DAY), grp: p.A.grp, ch: (function () { var o = {}; for (var n in p.A.ch) o[n] = p.A.ch[n][0]; return o; })() }; }),
       now: { M: r1(nowR.M), Mh: r1(nowR.Mh), Mmax: nowR.Mmax, held: nowR.M > 0 ? r3(nowR.Mh / nowR.M) : null, level: levelOf(nowR.M), levelMax: levelOf(nowR.Mmax), toNext: r1(T.LEVEL_Q - (nowR.M % T.LEVEL_Q)), inLevel: r3((nowR.M % T.LEVEL_Q) / T.LEVEL_Q),
         started: nowR.started, bound: nowR.bound, nSkills: ctx.P.skills.length, comp: r3(nowR.comp), idle: N ? r1((input.now - ss[N - 1].t1) / DAY) : null, driftSince: N ? kk.drift[N - 1] : 0, grp: slim(nowR).grp },
       lens: kk.lens, map: ctx.P.chapters.map(function (n) { var c = nowR.ch[n], C = cat.chapters.filter(function (q) { return q.n === n; })[0] || {}; return { ch: n, title: C.title || ('Chapter ' + n), M: r1(c.M), Mh: r1(c.Mh), Mmax: c.Mmax, comp: r3(c.comp) }; }),
@@ -48359,6 +48409,143 @@ var LMT = (function () {
 })();
 if (typeof module !== 'undefined') module.exports = LMT;
 /* ===== LMT END ===== */
+
+/* --- data export --- */
+/* ===== LMX (data export for analysis: hub/lms_export.js) START =====
+   Pure logic, no DOM, ES5. Browser global LMX (after LMS, LMF, LMT) and Node module.
+   Turns the learner record and everything computed from it into flat tables that a spreadsheet or pandas reads directly:
+   one CSV per table, a data dictionary (every column: type, unit, meaning, how it is computed) and a README.
+     LMX.tables(cat, obs, now, traj, hub) -> { <table>: { about, columns: [{ name, type, unit, desc }], rows: [[...]] } }
+     LMX.files(tables, meta)              -> [{ name, text }]      (CSV files with a UTF-8 byte-order mark, data_dictionary.csv, README.txt)
+     LMX.zip(files)                       -> Uint8Array            (a plain, uncompressed .zip)
+     LMX.csv(columns, rows)               -> string
+   This is the one place where real dates and times leave the system: they are the student's own data, and an analysis
+   module needs them. Nothing in the hub's own pages reads them from here. */
+var LMX = (function () {
+  'use strict';
+  var L = (typeof LMS !== 'undefined' && LMS) || (typeof require !== 'undefined' ? require('./lms_model.js') : null);
+  var FC = (typeof LMF !== 'undefined' && LMF) || (typeof require !== 'undefined' ? require('./lms_forecast.js') : null);
+  var TJ = (typeof LMT !== 'undefined' && LMT) || (typeof require !== 'undefined' ? require('./lms_traj.js') : null);
+  var DAY = 86400000;
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function dLocal(t) { var d = new Date(t); return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); }
+  function tLocal(t) { var d = new Date(t); return two(d.getHours()) + ':' + two(d.getMinutes()) + ':' + two(d.getSeconds()); }
+  function iso(t) { return t ? new Date(t).toISOString() : ''; }
+  function r(x, k) { if (x === null || x === undefined || (typeof x === 'number' && !isFinite(x))) return ''; var p = Math.pow(10, k === undefined ? 4 : k); return Math.round(x * p) / p; }
+  function b(x) { return x ? 1 : 0; }
+  function col(name, type, unit, desc) { return { name: name, type: type, unit: unit || '', desc: desc }; }
+  function cell(v) { if (v === null || v === undefined) return ''; var s = String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function csv(columns, rows) { return [columns.map(function (c) { return cell(c.name); }).join(',')].concat(rows.map(function (row) { return row.map(cell).join(','); })).join('\r\n') + '\r\n'; }
+
+  function tables(cat, obs, now, traj, hub) {
+    obs = obs.slice().sort(function (a, c) { return (a.t || 0) - (c.t || 0); });
+    var T = {}, ss = TJ.sessionsOf(obs), sIdx = 0, m = L.build(obs, now, cat);
+    function sessionOf(t) { while (sIdx < ss.length - 1 && t > ss[sIdx].t1) sIdx++; return ss.length && t >= ss[sIdx].t0 - 1 && t <= ss[sIdx].t1 + 1 ? ss[sIdx].i : ''; }
+
+    // ---- answers: one row per answer (the raw evidence), and its skills in long form
+    var A = [], AS = [], id = 0;
+    obs.forEach(function (o) {
+      if (!(o.kind === 'answer' || o.kind === 'trial')) return;
+      id++; var sk = o.skills || [], k0 = sk.length ? cat.skills[sk[0]] : null, ch = o.level ? +String(o.level).replace(/^ch(\d+).*/, '$1') : (k0 ? k0.ch : '');
+      A.push([id, sessionOf(o.t), iso(o.t), dLocal(o.t), tLocal(o.t), new Date(o.t).getDay(), o.src, o.kind, ch, o.level || '', o.entry || '', o.terr || '', o.tier || '', r(o.diff, 2), sk.length, sk.join(';'), b(o.ok), r(o.credit, 3), o.ms ? r(o.ms / 1000, 1) : '', o.est || '', b(o.help), o.tag || '', r(o.w, 2), o.group || '', o.attempt || '', o.role || '']);
+      sk.forEach(function (s) { AS.push([id, s, sk.length, b(o.ok), r(o.credit, 3)]); });
+    });
+    T.answers = { about: 'One row per answer or timed round: the raw evidence everything else is computed from.', rows: A, columns: [
+      col('answer_id', 'integer', '', 'Row number, in time order. Joins to answer_skills.'), col('session_number', 'integer', '', 'The session (a calendar day with answers) the answer belongs to; 1 is the first. Joins to sessions.'),
+      col('timestamp_utc', 'datetime', 'ISO 8601, UTC', 'When the answer was given.'), col('date_local', 'date', 'YYYY-MM-DD', 'The local calendar date of the answer.'), col('time_local', 'time', 'HH:MM:SS', 'The local clock time of the answer.'), col('weekday', 'integer', '0 = Sunday', 'Local day of the week.'),
+      col('source', 'category', '', 'Where it was answered: path (a chapter level), review, exam, onramp (the daily warm-up).'), col('kind', 'category', '', 'answer = one question; trial = one timed round of several questions scored together.'),
+      col('chapter', 'integer', '', 'The chapter of the level, or of the first skill when there is no level.'), col('level', 'text', '', 'The Path level (chapter:unit-level) for path answers.'), col('entry', 'text', '', 'The Review or Exam question family.'), col('territory', 'text', '', 'The Review or Exam lane.'),
+      col('tier', 'integer', '1 to 4', 'Difficulty tier of a Review or Exam question (1-2 Core, 3-4 Stretch).'), col('difficulty', 'number', '', 'The difficulty the model assigns to the question.'), col('n_skills', 'integer', '', 'How many skills the question draws on.'), col('skills', 'text', 'semicolon-separated', 'The skill ids the question draws on. See answer_skills for one row per skill.'),
+      col('correct', 'integer', '0 or 1', '1 when the answer was accepted as right.'), col('credit', 'number', '0 to 1', 'Credit given: 1 right first time, less after a retry or for a partly right timed round.'), col('seconds', 'number', 's', 'Time taken (blank when not timed).'), col('expected_seconds', 'number', 's', 'The time the question was expected to take, where one is set.'),
+      col('used_help', 'integer', '0 or 1', '1 when a hint or worked step was opened first.'), col('error_tag', 'category', '', 'The kind of slip recognised in a wrong answer, when there was one.'), col('weight', 'number', '', 'How much this answer counts as evidence (exam answers count more, timed rounds less).'),
+      col('exam_group', 'text', '', 'The Review or Exam group (ch12, ch34, ...).'), col('exam_attempt', 'text', '', 'The exam attempt the answer belongs to.'), col('exam_role', 'category', '', 'Its part in the adaptive exam (first, second, probe, summit).')] };
+    T.answer_skills = { about: 'One row per answer per skill it draws on (long form of answers.skills), ready for group-by.', rows: AS, columns: [col('answer_id', 'integer', '', 'Joins to answers.'), col('skill_id', 'text', '', 'Joins to skills.'), col('n_skills', 'integer', '', 'How many skills the answer draws on (evidence is shared among them).'), col('correct', 'integer', '0 or 1', 'As in answers.'), col('credit', 'number', '0 to 1', 'As in answers.')] };
+
+    // ---- sessions and the trajectory
+    var S = [], SC = [], ts = (traj && traj.sessions) || [];
+    ss.forEach(function (s, i) {
+      var x = ts[i - (ss.length - ts.length)] || {}, lv = x.M !== undefined ? TJ.levelOf(x.M) : '';
+      S.push([s.i, dLocal(s.t0), i ? r((s.t0 - ss[i - 1].t1) / DAY, 2) : '', s.n, s.ok, s.n ? r(s.ok / s.n, 4) : '', r(s.ms / 60000, 1), r(x.gain, 1), r(x.drift, 1), r(x.M, 1), r(x.Mh, 1), lv, r(x.comp, 4)]);
+      if (x.ch) Object.keys(x.ch).forEach(function (n) { SC.push([s.i, +n, r(x.ch[n], 1)]); });
+    });
+    T.sessions = { about: 'One row per session (a calendar day with answers), with what the trajectory engine computed at its end.', rows: S, columns: [
+      col('session_number', 'integer', '', '1 is the first session.'), col('date_local', 'date', 'YYYY-MM-DD', 'The day of the session.'), col('days_since_previous', 'number', 'days', 'Gap from the end of the previous session to the start of this one.'),
+      col('answers', 'integer', '', 'Answers and timed rounds in the session.'), col('right', 'integer', '', 'How many were right.'), col('fraction_right', 'number', '0 to 1', 'right / answers.'), col('minutes', 'number', 'min', 'Time spent answering (each answer capped at 5 minutes).'),
+      col('blobs_gained', 'number', 'blobs', 'Mass at the end of the session minus mass just before it.'), col('held_drift_after', 'number', 'blobs', 'Change in held mass between the end of this session and the start of the next (memory slipping).'),
+      col('blobs_after', 'number', 'blobs', 'Mass at the end of the session: the sum over started skills of 10 x E x W / (W + 3), with E and W from the evidence as counted.'), col('held_after', 'number', 'blobs', 'Mass x retention, summed over skills, at the end of the session.'),
+      col('energy_level_after', 'integer', '', 'floor(blobs_after / 25).'), col('course_complete_after', 'number', '0 to 1', 'Fraction of Path levels and Review steps complete.')] };
+    T.session_chapters = { about: 'Mass per chapter at the end of each session (long form).', rows: SC, columns: [col('session_number', 'integer', '', 'Joins to sessions.'), col('chapter', 'integer', '', 'Chapter number.'), col('blobs_after', 'number', 'blobs', 'Mass of the chapter\'s skills at the end of the session.')] };
+
+    // ---- skills as they stand now
+    var ctx = FC.context(cat, obs, now, hub, function () { return null; }, null), v = FC.skillView(ctx, ctx.states, now, ctx.k), K = [];
+    ctx.P.skills.forEach(function (k, i) {
+      var c = cat.skills[k] || {}, s = m.skills[k] || {};
+      K.push([k, c.ch, c.short || c.text || '', c.group || '', (c.strands || []).join(';'), (c.prereqs || []).join(';'), (c.levels || []).length, s.n || 0, s.nOK || 0, s.n ? r(s.E) : '', s.n ? r(s.W, 2) : '', v.n[i] ? r(v.mq[i], 2) : 0, v.learned[i] ? r(v.R[i]) : '', v.learned[i] ? r(v.mq[i] * v.R[i], 2) : (v.n[i] ? 0 : ''), s.S ? r(s.S, 1) : '', s.status || 'Not started', s.lapses || 0, iso(s.first), iso(s.lastSeen)]);
+    });
+    T.skills = { about: 'One row per skill in the course, with the learner model\'s reading of it now.', rows: K, columns: [
+      col('skill_id', 'text', '', 'The skill.'), col('chapter', 'integer', '', 'The chapter that teaches it.'), col('description', 'text', '', 'What the skill is.'), col('topic', 'text', '', 'The topic it is grouped under.'), col('strands', 'text', 'semicolon-separated', 'Course strands it belongs to.'), col('prerequisites', 'text', 'semicolon-separated', 'Skill ids it builds on.'), col('n_levels', 'integer', '', 'Path levels that practise it.'),
+      col('answers', 'integer', '', 'Answers that drew on the skill.'), col('right', 'integer', '', 'How many were right.'), col('mastery', 'number', '0 to 1', 'E: evidence-based mastery (a Beta mean of credit-weighted successes and misses, older evidence weighing less).'), col('evidence_weight', 'number', '', 'W: how much evidence stands behind the mastery value.'),
+      col('blobs', 'number', '0 to 10', 'Mass of the skill: 10 x E x W / (W + 3), from the evidence as counted (not aged).'), col('retention', 'number', '0 to 1', 'Predicted chance of recalling it now: 2^(-days since last practice / (k x stability)).'), col('blobs_held', 'number', 'blobs', 'blobs x retention.'), col('stability_days', 'number', 'days', 'S: how slowly the skill fades; it grows with each successful, spaced practice.'),
+      col('status', 'category', '', 'Secure, Building, Fading, Needs support or Not started.'), col('lapses', 'integer', '', 'Times it was missed after having been secure.'), col('first_seen_utc', 'datetime', 'ISO 8601, UTC', 'First answer on the skill.'), col('last_seen_utc', 'datetime', 'ISO 8601, UTC', 'Latest answer on the skill.')] };
+
+    // ---- chapters, exams, checkpoints, lenses, the path ahead
+    if (traj) {
+      T.chapters = { about: 'One row per chapter, now.', rows: traj.map.map(function (c) { return [c.ch, c.title, r(c.M, 1), r(c.Mh, 1), c.Mmax, c.Mmax ? r(c.M / c.Mmax) : '', r(c.comp)]; }), columns: [col('chapter', 'integer', '', 'Chapter number.'), col('title', 'text', '', 'Chapter title.'), col('blobs', 'number', 'blobs', 'Mass of the chapter\'s skills.'), col('blobs_held', 'number', 'blobs', 'The part held in memory now.'), col('blobs_max', 'number', 'blobs', '10 x the number of skills in the chapter.'), col('fraction_filled', 'number', '0 to 1', 'blobs / blobs_max.'), col('path_complete', 'number', '0 to 1', 'Fraction of the chapter\'s Path levels complete.')] };
+      T.exams = { about: 'One row per exam attempt: a checkpoint completed.', rows: (traj.exams || []).map(function (e) { return [e.group, e.n, e.i, e.back, r(e.core), r(e.stretch)]; }), columns: [col('exam_group', 'text', '', 'Which exam.'), col('attempt_number', 'integer', '', '1 is the first attempt at this exam.'), col('session_number', 'integer', '', 'The session it was taken in.'), col('sessions_back', 'integer', 'sessions', 'How many sessions ago that is.'), col('core', 'number', '0 to 1', 'Core score: points on tiers 1-2 / points available.'), col('stretch', 'number', '0 to 1', 'Stretch score: points on tiers 3-4 / points available.')] };
+      var CP = []; ((traj.ahead || {}).checkpoints || []).forEach(function (c) { var a = c.atArrive || {}; CP.push([c.id, c.title, c.chapters.join(';'), c.state, c.taken, c.arrive ? c.arrive.s : '', c.arrive ? c.arrive.lo : '', c.arrive ? c.arrive.hi : '', r(c.now.core), r(c.now.stretch), a.core ? r(a.core.mid) : '', a.stretch ? r(a.stretch.mid) : '']); });
+      T.checkpoints = { about: 'One row per exam checkpoint: where it sits on the path and the mastery of its skills.', rows: CP, columns: [col('exam_group', 'text', '', 'Which exam.'), col('title', 'text', '', 'Its chapters, as a title.'), col('chapters', 'text', 'semicolon-separated', 'Chapter numbers.'), col('state', 'category', '', 'completed (taken at least once), here (its chapters are complete) or ahead.'), col('attempts', 'integer', '', 'Times taken.'), col('sessions_ahead', 'integer', 'sessions', 'Median simulated sessions until its last chapter\'s Path is complete (0 = reached).'), col('sessions_ahead_low', 'integer', 'sessions', 'Low end of the range across simulated futures.'), col('sessions_ahead_high', 'integer', 'sessions', 'High end of the range.'), col('core_now', 'number', '0 to 1', 'Projected Core score if the exam were taken now, from the exam\'s own scoring rules.'), col('stretch_now', 'number', '0 to 1', 'Projected Stretch score now.'), col('core_at_arrival', 'number', '0 to 1', 'Projected Core at the session the checkpoint is reached.'), col('stretch_at_arrival', 'number', '0 to 1', 'Projected Stretch at arrival.')] };
+      T.lenses = { about: 'Velocity, acceleration and momentum over each time lens.', rows: ['session', 'week', 'month', 'course'].map(function (id) { var x = traj.lens[id]; return [id, x.n, x.answers, x.right, x.minutes, r(x.gain, 1), r(x.net, 1), r(x.held, 1), r(x.v, 1), r(x.vPrev, 1), r(x.a, 1), x.p, x.levels]; }), columns: [col('lens', 'category', '', 'session = the latest session; week = the last 7 days; month = the last 30 days; course = every session.'), col('sessions', 'integer', '', 'Sessions in the lens.'), col('answers', 'integer', '', 'Answers in the lens.'), col('right', 'integer', '', 'Right answers in the lens.'), col('minutes', 'number', 'min', 'Minutes of answering.'), col('blobs_gained', 'number', 'blobs', 'Sum of the sessions\' gains.'), col('blobs_net', 'number', 'blobs', 'Mass now minus mass just before the lens.'), col('held_net', 'number', 'blobs', 'Change in held mass over the lens.'), col('velocity', 'number', 'blobs per session', 'blobs_net / sessions.'), col('velocity_before', 'number', 'blobs per session', 'Velocity over the stretch just before (session: the 5 sessions before; week and month: the same length before; course: the first half).'), col('acceleration', 'number', 'blobs per session', 'velocity - velocity_before (course: second half minus first half).'), col('momentum', 'number', 'blobs x blobs per session', 'Mass now x velocity.'), col('levels_climbed', 'integer', '', 'Energy levels gained over the lens.')] };
+      var PA = [], ah = traj.ahead || { s: [], series: {} };
+      Object.keys(ah.series).forEach(function (sid) { var x = ah.series[sid]; ah.s.forEach(function (s0, i) { PA.push([s0, sid, x.lo[i], x.mid[i], x.hi[i]]); }); });
+      T.path_ahead = { about: 'The simulated path ahead, in long form: one row per series per session ahead.', rows: PA, columns: [col('sessions_ahead', 'integer', 'sessions', '0 = now. One step is one session of the usual length, with the usual gap between sessions for forgetting.'), col('series', 'text', '', 'course:M / chN:M / <group>:M = mass (blobs); course:Mh = held mass; course:comp = fraction complete; <group>:core, :stretch = projected exam scores; <group>:rho = min(core / core target, stretch / stretch target).'), col('low', 'number', '', 'Low end of the range across simulated futures.'), col('middle', 'number', '', 'The median simulated future.'), col('high', 'number', '', 'High end of the range.')] };
+    }
+    return T;
+  }
+
+  function files(T, meta) {
+    meta = meta || {};
+    var out = [], dict = [], BOM = '﻿', names = Object.keys(T);
+    names.forEach(function (n) { out.push({ name: n + '.csv', text: BOM + csv(T[n].columns, T[n].rows) }); T[n].columns.forEach(function (c, i) { dict.push([n + '.csv', i + 1, c.name, c.type, c.unit, c.desc]); }); });
+    out.push({ name: 'data_dictionary.csv', text: BOM + csv([col('table'), col('position'), col('column'), col('type'), col('unit'), col('description')], dict) });
+    var rd = ['Math Mammoth Grade 7 mastery system: data export', '', 'Exported: ' + (meta.exported || ''), 'Course catalog: ' + (meta.catalog || ''), '', 'FILES', ''];
+    names.forEach(function (n) { rd.push('  ' + n + '.csv  (' + T[n].rows.length + ' rows, ' + T[n].columns.length + ' columns)', '      ' + T[n].about, ''); });
+    rd.push('  data_dictionary.csv', '      Every column of every table: its type, unit, meaning and how it is computed.', '',
+      'READING THE FILES', '', '  Every file is comma-separated UTF-8 with one header row. Empty cells mean "not applicable" or "not known yet".',
+      '  Spreadsheet: open a .csv directly.', '  pandas:      import pandas as pd; answers = pd.read_csv("answers.csv", parse_dates=["timestamp_utc"])',
+      '  Keys:        answers.answer_id -> answer_skills.answer_id;  answer_skills.skill_id -> skills.skill_id;', '               answers.session_number -> sessions.session_number -> session_chapters.session_number.', '',
+      'HOW THE NUMBERS ARE MADE', '', '  Collected: answers.csv is the raw record (what was asked, whether it was right, how long it took).', '  Computed:  everything else comes from the learner model and the trajectory engine reading that record.',
+      '  Mastery E is a Beta mean of credit-weighted right and wrong answers per skill, with older evidence weighing less.', '  Retention is 2^(-days since practice / (k x stability)); stability grows with successful spaced practice.',
+      '  A blob is the unit of mass: a skill carries 10 x E x W / (W + 3) blobs. Velocity is blobs per session; acceleration is the',
+      '  change in velocity; momentum is mass x velocity; an energy level is 25 blobs.', '  The path ahead is a simulation (16 futures) of the same model, one session at a time; low/middle/high are its range.', '');
+    out.push({ name: 'README.txt', text: rd.join('\r\n') });
+    return out;
+  }
+
+  // ---- a plain (stored, uncompressed) zip
+  var CRC = null;
+  function crc32(u8) { if (!CRC) { CRC = []; for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; CRC[n] = c >>> 0; } } var x = 0xFFFFFFFF; for (var i = 0; i < u8.length; i++) x = CRC[(x ^ u8[i]) & 0xFF] ^ (x >>> 8); return (x ^ 0xFFFFFFFF) >>> 0; }
+  function utf8(s) { if (typeof TextEncoder !== 'undefined') return new TextEncoder().encode(s); return new Uint8Array(Buffer.from(s, 'utf8')); }
+  function zip(fl, when) {
+    var d = when || new Date(), dt = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate(), tm = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), parts = [], cen = [], off = 0;
+    function hdr(sig, n) { var a = new Uint8Array(n), v = new DataView(a.buffer); v.setUint32(0, sig, true); return { a: a, v: v }; }
+    fl.forEach(function (f) {
+      var nm = utf8(f.name), data = utf8(f.text), crc = crc32(data), h = hdr(0x04034b50, 30);
+      h.v.setUint16(4, 20, true); h.v.setUint16(6, 0x0800, true); h.v.setUint16(8, 0, true); h.v.setUint16(10, tm, true); h.v.setUint16(12, dt, true); h.v.setUint32(14, crc, true); h.v.setUint32(18, data.length, true); h.v.setUint32(22, data.length, true); h.v.setUint16(26, nm.length, true);
+      parts.push(h.a, nm, data);
+      var c = hdr(0x02014b50, 46);
+      c.v.setUint16(4, 20, true); c.v.setUint16(6, 20, true); c.v.setUint16(8, 0x0800, true); c.v.setUint16(12, tm, true); c.v.setUint16(14, dt, true); c.v.setUint32(16, crc, true); c.v.setUint32(20, data.length, true); c.v.setUint32(24, data.length, true); c.v.setUint16(28, nm.length, true); c.v.setUint32(42, off, true);
+      cen.push(c.a, nm); off += 30 + nm.length + data.length;
+    });
+    var cs = 0; cen.forEach(function (x) { cs += x.length; });
+    var e = hdr(0x06054b50, 22); e.v.setUint16(8, fl.length, true); e.v.setUint16(10, fl.length, true); e.v.setUint32(12, cs, true); e.v.setUint32(16, off, true);
+    var all = parts.concat(cen, [e.a]), tot = 0; all.forEach(function (x) { tot += x.length; });
+    var out = new Uint8Array(tot), p = 0; all.forEach(function (x) { out.set(x, p); p += x.length; });
+    return out;
+  }
+  return { tables: tables, files: files, zip: zip, csv: csv };
+})();
+if (typeof module !== 'undefined') module.exports = LMX;
+/* ===== LMX END ===== */
 
 </script>
 <script type="text/plain" id="app-ch1"><!doctype html>
@@ -247236,6 +247423,7 @@ var LMF = (function () {
     var P = ctx.P, out = [];
     if (traj) {   // the trajectory engine's series (not limited to 0..1): mass, held mass, and each exam's readiness against its targets
       P.chapters.forEach(function (n) { out.push({ id: 'ch' + n + ':M', get: function (ms) { return ms.ch[n].M; } }); });
+      P.groups.forEach(function (g) { out.push({ id: g.id + ':M', get: function (ms) { var t = 0; g.chapters.forEach(function (n) { if (ms.ch[n]) t += ms.ch[n].M; }); return t; } }); });
       P.groups.forEach(function (g) { out.push({ id: g.id + ':rho', get: function (ms) { var x = ms.grp[g.id]; return Math.min(x.core / ctx.th.c, x.stretch / ctx.th.s); } }, { id: g.id + ':core', get: function (ms) { return ms.grp[g.id].core; } }, { id: g.id + ':stretch', get: function (ms) { return ms.grp[g.id].stretch; } }); });
       out.push({ id: 'course:M', get: function (ms) { return ms.course.M; } }, { id: 'course:Mh', get: function (ms) { return ms.course.Mh; } }, { id: 'course:comp', get: function (ms) { return ms.course.comp; } });
       return out;
@@ -247703,7 +247891,7 @@ if (typeof module !== 'undefined') module.exports = LMF;
    It is a date-free reading of the learner model (hub/lms_model.js) and of the simulator (hub/lms_forecast.js):
    nothing it returns is a calendar date. The unit along the path is the SESSION (one day with answers), behind and ahead.
 
-   QUANTITIES (all in quanta, q; LMF.F.MASS_Q = 10 q is one skill fully demonstrated)
+   QUANTITIES (all in blobs; LMF.F.MASS_Q = 10 blobs is one skill fully demonstrated)
      mass      M  = sum over started skills of MASS_Q * E * W / (W + MASS_W0)      demonstrated mastery, from the evidence as counted
                     (E and W here are not aged, so mass changes only through answers: right ones add, misses take away)
      held      Mh = sum of mass * retention                                           the part of the mass that is in memory now
@@ -247736,7 +247924,7 @@ var LMT = (function () {
   var FC = (typeof LMF !== 'undefined' && LMF) || (typeof require !== 'undefined' ? require('./lms_forecast.js') : null);
   var X = L._x, DAY = X.DAY, F = FC.F;
   var T = {
-    V: 2, LEVEL_Q: 25, RUNS: 16, RUNS_IMPACT: 16, H: 260, H_IMPACT_PAD: 12, GAP_MIN: 1, GAP_MAX: 4, SEED: 20261111,
+    V: 3, LEVEL_Q: 25, RUNS: 16, RUNS_IMPACT: 16, H: 260, H_IMPACT_PAD: 12, GAP_MIN: 1, GAP_MAX: 4, SEED: 20261111,
     WEEK: 7, MONTH: 30, PREV_SESSIONS: 5, TOP_UP: 6, TOP_DOWN: 3, CAP_MS: 300000, PAST_MAX: 500, BOUND_R: 0.85, EPS_V: 0.5
   };
   function r1(x) { return x === null || x === undefined || !isFinite(x) ? null : Math.round(x * 10) / 10; }
@@ -247854,9 +248042,24 @@ var LMT = (function () {
         coreReady: cor ? { done: !!cor.done, s: cor.done ? 0 : cor.d50, lo: cor.dLo, hi: cor.dHi } : null,
         ready: rdy ? { done: !!rdy.done, s: rdy.done ? 0 : rdy.d50, lo: rdy.dLo, hi: rdy.dHi, p: r3(rdy.pWithin) } : null,
         now: { core: r3(nowR.grp[g.id].core), stretch: r3(nowR.grp[g.id].stretch), rho: r3(nowR.grp[g.id].rho) } };
+      // an exam is a checkpoint: once it has been taken it is a snapshot on the trail (its score), not something to keep predicting
+      var tk = (ctx._taken || []).filter(function (e) { return e.group === g.id; });
+      c.taken = tk.length; c.attempts = tk; c.state = tk.length ? 'completed' : here ? 'here' : 'ahead';
       if (sArr !== null) { var a = function (k) { var x = at(res.series[g.id + ':' + k], sArr); return x ? { lo: r3(x.lo), mid: r3(x.mid), hi: r3(x.hi) } : null; }; c.atArrive = { core: a('core'), stretch: a('stretch'), rho: a('rho') }; }
       out.push(c);
     });
+    return out;
+  }
+  // every exam attempt, as a mark on the trail: which session it fell in, and its Core and Stretch
+  function takenExams(cat, obs, ss) {
+    var out = [], seen = {};
+    obs.forEach(function (o) {
+      if (o.src !== 'exam' || o.kind !== 'exam' || seen[o.attempt]) return; seen[o.attempt] = 1;
+      var sm = X.examSummaries(obs.filter(function (p) { return p.src === 'exam' && p.attempt === o.attempt; }), cat)[o.group]; if (!sm) return;
+      var k = -1; for (var i = 0; i < ss.length; i++) if (ss[i].t1 >= o.t - 1 && k < 0) k = i; if (k < 0) k = ss.length - 1;
+      out.push({ group: o.group, i: k + 1, back: ss.length - 1 - k, core: r3(sm.core), stretch: r3(sm.stretch) });
+    });
+    var n = {}; out.forEach(function (e) { n[e.group] = (n[e.group] || 0) + 1; e.n = n[e.group]; });
     return out;
   }
   function ahead(ctx, nowR) {
@@ -247906,8 +248109,9 @@ var LMT = (function () {
     var ss = sessionsOf(obs); if (ss.length > T.PAST_MAX) ss = ss.slice(-T.PAST_MAX);
     var get = getter(input.records), pp = past(cat, input, ss);
     var ctx = FC.context(cat, obs, input.now, input.hub, get, input.thr), nowR = reading(ctx, input.now, true), kk = kin(ss, pp.pts, input.now), N = ss.length;
-    var out = { v: T.V, sig: input.sig || null, unit: { q: F.MASS_Q, level: T.LEVEL_Q }, thr: { core: ctx.th.c, stretch: ctx.th.s },
-      sessions: ss.map(function (s, i) { var p = pp.pts[i]; return { i: s.i, n: s.n, ok: s.ok, min: Math.round(s.ms / 60000), gain: kk.gain[i], drift: kk.drift[i], M: p.A.M, Mh: p.A.Mh, comp: p.A.comp, age: r1((input.now - s.t1) / DAY), grp: p.A.grp }; }),
+    ctx._taken = takenExams(cat, obs, ss);
+    var out = { v: T.V, sig: input.sig || null, unit: { name: 'blob', perSkill: F.MASS_Q, level: T.LEVEL_Q }, exams: ctx._taken, thr: { core: ctx.th.c, stretch: ctx.th.s },
+      sessions: ss.map(function (s, i) { var p = pp.pts[i]; return { i: s.i, n: s.n, ok: s.ok, min: Math.round(s.ms / 60000), gain: kk.gain[i], drift: kk.drift[i], M: p.A.M, Mh: p.A.Mh, comp: p.A.comp, age: r1((input.now - s.t1) / DAY), grp: p.A.grp, ch: (function () { var o = {}; for (var n in p.A.ch) o[n] = p.A.ch[n][0]; return o; })() }; }),
       now: { M: r1(nowR.M), Mh: r1(nowR.Mh), Mmax: nowR.Mmax, held: nowR.M > 0 ? r3(nowR.Mh / nowR.M) : null, level: levelOf(nowR.M), levelMax: levelOf(nowR.Mmax), toNext: r1(T.LEVEL_Q - (nowR.M % T.LEVEL_Q)), inLevel: r3((nowR.M % T.LEVEL_Q) / T.LEVEL_Q),
         started: nowR.started, bound: nowR.bound, nSkills: ctx.P.skills.length, comp: r3(nowR.comp), idle: N ? r1((input.now - ss[N - 1].t1) / DAY) : null, driftSince: N ? kk.drift[N - 1] : 0, grp: slim(nowR).grp },
       lens: kk.lens, map: ctx.P.chapters.map(function (n) { var c = nowR.ch[n], C = cat.chapters.filter(function (q) { return q.n === n; })[0] || {}; return { ch: n, title: C.title || ('Chapter ' + n), M: r1(c.M), Mh: r1(c.Mh), Mmax: c.Mmax, comp: r3(c.comp) }; }),
@@ -247942,14 +248146,16 @@ self.onmessage = function (e) {
 <script type="application/json" id="hb-manifest">{"ch1": {"id": "app-ch1", "src": "Algebra_Path_Chapter1.html"}, "ch2": {"id": "app-ch2", "src": "Integer_Path_Chapter2.html"}, "ch3": {"id": "app-ch3", "src": "Equation_Path_Chapter3.html"}, "ch4": {"id": "app-ch4", "src": "Rational_Path_Chapter4.html"}, "ch5": {"id": "app-ch5", "src": "Inequality_Path_Chapter5.html"}, "ch6": {"id": "app-ch6", "src": "Proportion_Path_Chapter6.html"}, "ch7": {"id": "app-ch7", "src": "Percent_Path_Chapter7.html"}, "ch8": {"id": "app-ch8", "src": "Geometry_Path_Chapter8.html"}, "ch12-review": {"id": "app-ch12-review", "src": "Math_Mammoth_G7_Ch1-2_Review.html"}, "ch12-exam": {"id": "app-ch12-exam", "src": "Math_Mammoth_G7_Ch1-2_Exam.html"}, "ch34-review": {"id": "app-ch34-review", "src": "Math_Mammoth_G7_Ch3-4_Review.html"}, "ch34-exam": {"id": "app-ch34-exam", "src": "Math_Mammoth_G7_Ch3-4_Exam.html"}, "ch5-review": {"id": "app-ch5-review", "src": "Math_Mammoth_G7_Ch5_Review.html"}, "ch5-exam": {"id": "app-ch5-exam", "src": "Math_Mammoth_G7_Ch5_Exam.html"}, "ch67-review": {"id": "app-ch67-review", "src": "Math_Mammoth_G7_Ch6-7_Review.html"}, "ch67-exam": {"id": "app-ch67-exam", "src": "Math_Mammoth_G7_Ch6-7_Exam.html"}, "ch8-review": {"id": "app-ch8-review", "src": "Math_Mammoth_G7_Ch8_Review.html"}, "ch8-exam": {"id": "app-ch8-exam", "src": "Math_Mammoth_G7_Ch8_Exam.html"}}</script>
 <script>
 /* ===== HTJ (the Trajectory view: hub/hub_traj.js) START =====
-   The forward-looking half of Progress. It draws what hub/lms_traj.js (LMT) computes; it holds no model of its own.
+   The forward-looking half of the Dashboard. It draws what hub/lms_traj.js (LMT) computes; it holds no model of its own.
    No calendar date appears anywhere: the path is measured in sessions, behind and ahead.
-     HTJ.init(hx)          hx = the same helper object hub_ui.js gives the Forecast (M, esc, el, C, getItem, setItem, CAT, GROUPS, ...)
+     HTJ.init(hx)          hx = hub_ui.js's helper object (M, esc, el, C, getItem, setItem, CAT, GROUPS, ...)
      HTJ.ensure()          start (or reuse) the computation for the record as it is now (a Web Worker when there is one)
-     HTJ.view(main)        the Trajectory page (inside Progress)
+     HTJ.view(main)        the Trajectory page (Dashboard > Trajectory)
+     HTJ.chapterCard(n)    a chapter's own trajectory card (chapter pages)
+     HTJ.groupStrip(gid)   a section's trajectory strip (Reviews & Exams)
      HTJ.line()            one line for Today and other pages: level, momentum, the next checkpoint
      HTJ.state()           { cur, stage, fresh }      HTJ.onChange(f)
-   The lens (this session / this week / this month / whole course) and the scope (whole course or one exam) are kept for the visit. */
+   The lens (this session / this week / this month / whole course) and the scope (whole course or one section) are kept for the visit. */
 var HTJ = (function () {
   'use strict';
   var HX = null, PRIV = '', CKEY = 'hub-traj-cache', cur = null, stage = 'idle', pending = null, job = 0, worker = null, workerOK = true, listeners = [], booted = false, pastCache = {};
@@ -248023,118 +248229,141 @@ var HTJ = (function () {
   function lensName(id) { for (var i = 0; i < LENSES.length; i++) if (LENSES[i][0] === id) return LENSES[i][1]; return id; }
   function lensLower(id) { return id === 'course' ? 'the whole course' : lensName(id).charAt(0).toLowerCase() + lensName(id).slice(1); }
   function lensOver(id) { return id === 'course' ? 'over the whole course' : lensLower(id); }
-  function trendWord(L) { return L.trend === 'up' ? 'speeding up' : L.trend === 'down' ? 'easing off' : L.trend === 'steady' ? 'holding steady' : 'just getting going'; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  function blobs(n, sign) { return q(n, sign) + ' ' + (Math.abs(n) === 1 ? 'blob' : 'blobs'); }
+  function trendWord(L) { return L.trend === 'up' ? 'speeding up' : L.trend === 'down' ? 'slowing' : L.trend === 'steady' ? 'holding steady' : 'just getting going'; }
+  function shortT(t) { return String(t || '').replace('Chapters', 'Ch').replace('Chapter', 'Ch'); }
   function grpTitle(c) { return (c.title || c.id) + ' exam'; }
-  function nextCheckpoint(c) { var a = c.ahead && c.ahead.checkpoints || []; for (var i = 0; i < a.length; i++) if (!a[i].cleared) return a[i]; return null; }
+  function nextCheckpoint(c) { var a = c.ahead && c.ahead.checkpoints || []; for (var i = 0; i < a.length; i++) if (a[i].state !== 'completed') return a[i]; return null; }
+  function lastAttempt(cp) { return cp.attempts && cp.attempts.length ? cp.attempts[cp.attempts.length - 1] : null; }
   function aheadTxt(cp) {
-    if (cp.cleared) return 'cleared';
-    if (cp.here) return 'you are here';
+    if (cp.state === 'completed') return 'completed';
+    if (cp.state === 'here') return 'you are here';
     if (!cp.arrive || cp.arrive.s === null) return 'beyond the path drawn';
     return 'about ' + plural(cp.arrive.s, 'session') + ' ahead';
   }
+  function examHref(gid) { return document.getElementById('app-' + gid + '-exam') ? '#app/' + gid + '-exam' : '#reviews'; }
+  function grpOf(c, id) { for (var i = 0; i < c.groups.length; i++) if (c.groups[i].id === id) return c.groups[i]; return null; }
+  function grpOfCh(c, n) { for (var i = 0; i < c.groups.length; i++) if (c.groups[i].chapters.indexOf(n) >= 0) return c.groups[i]; return null; }
 
-  // ------------------------------------------------------------------ the one line (Today, Progress)
+  // ------------------------------------------------------------------ the one line (Today, Dashboard)
   function line() {
     boot(); ensure();
-    var box = el('a', 'hb-tjline'); box.href = '#progress';
+    var box = el('a', 'hb-tjline'); box.href = '#dashboard/trajectory';
     function draw() {
       var c = cur;
       if (!c || !c.sessions.length) { box.innerHTML = '<span class="k">Trajectory</span><span class="t">Your first session starts the path.</span>'; return; }
       var L = c.lens.week.n ? c.lens.week : c.lens.course, cp = nextCheckpoint(c);
-      box.innerHTML = '<span class="k">Trajectory</span><span class="lv">Level ' + c.now.level + '</span><span class="t">Momentum ' + trendWord(L) + (cp ? ' · ' + esc(grpTitle(cp)) + ': ' + aheadTxt(cp) : '') + '</span><span class="go" aria-hidden="true">→</span>';
+      box.innerHTML = '<span class="k">Trajectory</span><span class="lv">Level ' + c.now.level + '</span><span class="t">' + num(c.now.M) + ' blobs · momentum ' + trendWord(L) + (cp ? ' · ' + esc(grpTitle(cp)) + ': ' + aheadTxt(cp) : '') + '</span><span class="go" aria-hidden="true">→</span>';
     }
     draw(); onChange(function () { if (box.isConnected) draw(); });
     return box;
   }
 
-  // ------------------------------------------------------------------ the flight path
-  function scopeSeries(c) {
-    var N = c.sessions.length, g = ui.scope, past = [], i;
-    if (g === 'course') { past.push({ s: -N, y: 0 }); for (i = 0; i < N; i++) past.push({ s: i - (N - 1), y: c.sessions[i].M, k: i }); return { past: past, now: c.now.M, id: 'course:M', unit: 'q', mass: true }; }
-    for (i = 0; i < N; i++) past.push({ s: i - (N - 1), y: (c.sessions[i].grp[g] || [0, 0, 0])[2] * 100, k: i });
-    return { past: past, now: c.now.grp[g][2] * 100, id: g + ':rho', unit: '%', mass: false };
+  // ------------------------------------------------------------------ a scope: the whole course, one section (an exam's chapters), or one chapter
+  function scopeOf(c, scope) {
+    var N = c.sessions.length, past = [], i, chs, id, max = 0, now = 0, name;
+    if (scope === 'course') { chs = c.map.map(function (m) { return m.ch; }); id = 'course:M'; name = 'the whole course'; }
+    else if (/^ch:/.test(scope)) { chs = [+scope.slice(3)]; id = 'ch' + chs[0] + ':M'; name = 'Chapter ' + chs[0]; }
+    else { var g = grpOf(c, scope) || c.groups[0]; chs = g.chapters; id = g.id + ':M'; name = g.title; }
+    c.map.forEach(function (m) { if (chs.indexOf(m.ch) >= 0) { max += m.Mmax; now += m.M; } });
+    var first = -1, y;
+    for (i = 0; i < N; i++) { y = 0; chs.forEach(function (n) { y += (c.sessions[i].ch && c.sessions[i].ch[n]) || 0; }); if (scope === 'course') y = c.sessions[i].M; if (first < 0 && y > 0) first = i; past.push({ s: i - (N - 1), y: y, k: i }); }
+    if (scope === 'course') now = c.now.M;
+    return { past: past, now: now, max: max, id: id, chs: chs, name: name, first: first, scope: scope };
   }
-  function windowOf(c, lens) {
+  function lensOfScope(c, S, lens) {   // velocity of a scope over a lens (the course's own lens numbers are the engine's)
+    var L = c.lens[lens]; if (S.scope === 'course') return { n: L.n, v: L.v, net: L.net };
+    if (!L.n) return { n: 0, v: 0, net: 0 };
+    var a = L.from > 0 ? S.past[L.from - 1].y : 0, net = S.now - a; return { n: L.n, v: net / L.n, net: net };
+  }
+  function windowOf(c, lens, S) {
     var N = c.sessions.length, L = c.lens[lens], far = c.ahead ? c.ahead.s[c.ahead.s.length - 1] : 0, end = c.ahead && c.ahead.course && c.ahead.course.s ? Math.min(far, c.ahead.course.s + 6) : far;
     if (lens === 'session') return [-Math.min(N, 3), Math.min(far, 5)];
     if (lens === 'week') return [-Math.min(N, Math.max(5, L.n)), Math.min(far, 12)];
     if (lens === 'month') return [-Math.min(N, Math.max(12, L.n)), Math.min(far, 36)];
     return [-N, end];
   }
-  function pathSvg(c, W) {
-    var small = W < 620, H = small ? 340 : 390, Lm = small ? 44 : 58, Rm = small ? 14 : 26, Tm = 40, Bm = 44, S = scopeSeries(c), win = windowOf(c, ui.lens), s0 = win[0], s1 = Math.max(win[1], 1);
-    var ah = c.ahead, ser = ah ? ah.series[S.id] : null, sc = S.mass ? 1 : 100, vals = [], i;
+
+  // ------------------------------------------------------------------ the path
+  function pathSvg(c, W, S, win, opt) {
+    opt = opt || {};
+    var small = W < 620, H = opt.H || (small ? 340 : 390), Lm = small ? 44 : 58, Rm = small ? 14 : 26, Tm = opt.mini ? 30 : 44, Bm = 44, s0 = win[0], s1 = Math.max(win[1], 1), span = s1 - s0;
+    var ah = c.ahead, ser = ah ? ah.series[S.id] : null, vals = [], i;
     S.past.forEach(function (p) { if (p.s >= s0) vals.push(p.y); });
+    if (s0 <= -c.sessions.length) vals.push(0);
     vals.push(S.now);
-    if (ser) for (i = 0; i < ah.s.length; i++) if (ah.s[i] <= s1) { vals.push(ser.lo[i] * sc, ser.hi[i] * sc); }
-    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
-    if (!S.mass) { hi = Math.max(hi, 104); lo = Math.max(0, lo - 6); } else { var pad = Math.max(6, (hi - lo) * 0.12); lo = Math.max(0, lo - pad); hi = hi + pad; }
-    if (hi - lo < 1) hi = lo + 1;
+    if (ser) for (i = 0; i < ah.s.length; i++) if (ah.s[i] <= s1) { vals.push(ser.lo[i], ser.hi[i]); }
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), pad = Math.max(6, (hi - lo) * 0.12); lo = Math.max(0, lo - pad); hi = hi + pad;
     var xs = function (s) { return Lm + (s - s0) / (s1 - s0) * (W - Lm - Rm); }, ys = function (v) { return Tm + (1 - (v - lo) / (hi - lo)) * (H - Tm - Bm); };
-    var o = '<svg class="tj-path" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(S.mass ? 'Mass over sessions: the trail behind, now, and the path ahead' : 'Readiness over sessions: the trail behind, now, and the path ahead') + '">';
+    var o = '<svg class="tj-path" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="Blobs of ' + esc(S.name) + ' over sessions: the trail behind, now, and the path ahead">';
     o += '<defs><radialGradient id="tjGlow"><stop offset="0" class="g0"/><stop offset="1" class="g1"/></radialGradient><marker id="tjArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arr"/></marker></defs>';
-    // ahead is tinted, so the present is a place on the page
     o += '<rect class="ahead" x="' + f1(xs(0)) + '" y="' + Tm + '" width="' + f1(W - Rm - xs(0)) + '" height="' + (H - Tm - Bm) + '"/>';
-    // levels (mass) or the ready line (an exam)
-    if (S.mass) {
+    // horizontal guides: energy levels for the whole course, plain blob counts for a part of it
+    if (S.scope === 'course') {
       var LQ = c.unit.level, n0 = Math.ceil(lo / LQ), n1 = Math.floor(hi / LQ), step = Math.max(1, Math.ceil((n1 - n0 + 1) / (small ? 5 : 8)));
       if (step > 1) step = step <= 2 ? 2 : step <= 5 ? 5 : Math.ceil(step / 10) * 10;
       for (var n = Math.ceil(n0 / step) * step; n <= n1; n += step) if (n > 0) o += '<line class="lvl" x1="' + Lm + '" x2="' + (W - Rm) + '" y1="' + f1(ys(n * LQ)) + '" y2="' + f1(ys(n * LQ)) + '"/><text class="lvt" x="' + (Lm - 6) + '" y="' + f1(ys(n * LQ) + 4) + '" text-anchor="end">L' + n + '</text>';
     } else {
-      [25, 50, 75].forEach(function (v) { if (v > lo && v < hi) o += '<line class="lvl" x1="' + Lm + '" x2="' + (W - Rm) + '" y1="' + f1(ys(v)) + '" y2="' + f1(ys(v)) + '"/><text class="lvt" x="' + (Lm - 6) + '" y="' + f1(ys(v) + 4) + '" text-anchor="end">' + v + '%</text>'; });
-      o += '<line class="ready" x1="' + Lm + '" x2="' + (W - Rm) + '" y1="' + f1(ys(100)) + '" y2="' + f1(ys(100)) + '"/><text class="rdt" x="' + (Lm - 6) + '" y="' + f1(ys(100) + 4) + '" text-anchor="end">ready</text>';
+      var rng = hi - lo, st = [1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500].filter(function (x) { return rng / x <= (small ? 5 : 7); })[0] || 1000;
+      for (var v = Math.ceil(lo / st) * st; v <= hi; v += st) if (v > 0) o += '<line class="lvl" x1="' + Lm + '" x2="' + (W - Rm) + '" y1="' + f1(ys(v)) + '" y2="' + f1(ys(v)) + '"/><text class="lvt" x="' + (Lm - 6) + '" y="' + f1(ys(v) + 4) + '" text-anchor="end">' + v + '</text>';
     }
+    var yAt = function (s) { var best = null; S.past.forEach(function (p) { if (p.s === s) best = p.y; }); return best === null ? S.now : best; };
+    var mine = function (cp) { return S.scope === 'course' || cp.id === S.scope || (/^ch:/.test(S.scope) && cp.chapters.indexOf(S.chs[0]) >= 0); };
     // the path ahead: the range, then the middle
     if (ser) {
       var up = [], dn = [], mid = [];
-      for (i = 0; i < ah.s.length; i++) { if (ah.s[i] > s1) break; var X0 = f1(xs(ah.s[i])); up.push(X0 + ',' + f1(ys(ser.hi[i] * sc))); dn.unshift(X0 + ',' + f1(ys(ser.lo[i] * sc))); mid.push(X0 + ',' + f1(ys(ser.mid[i] * sc))); }
+      for (i = 0; i < ah.s.length; i++) { if (ah.s[i] > s1) break; var X0 = f1(xs(ah.s[i])); up.push(X0 + ',' + f1(ys(ser.hi[i]))); dn.unshift(X0 + ',' + f1(ys(ser.lo[i]))); mid.push(X0 + ',' + f1(ys(ser.mid[i]))); }
       if (mid.length > 1) o += '<polygon class="fan" points="' + up.concat(dn).join(' ') + '"/><polyline class="mid" points="' + mid.join(' ') + '"/>';
-      // checkpoints: a gate where each exam is reached
-      (ah.checkpoints || []).forEach(function (cp, k) {
-        if (cp.cleared || !cp.arrive || cp.arrive.s === null || cp.arrive.s > s1 || cp.arrive.s < 0) return;
-        if (!S.mass && cp.id !== ui.scope) return;
-        var gx = f1(xs(cp.arrive.s)), y1 = Tm + 14 + (k % 3) * 15, rd = cp.atArrive && cp.atArrive.rho ? cp.atArrive.rho.mid : cp.now.rho;
-        o += '<g class="gate"' + tip(grpTitle(cp), aheadTxt(cp) + (cp.arrive.s ? ' (' + cp.arrive.lo + ' to ' + cp.arrive.hi + ')' : '') + '<br>Readiness carried in: ' + pct(rd) + ' of the targets') + '><line x1="' + gx + '" x2="' + gx + '" y1="' + y1 + '" y2="' + (H - Bm) + '"/><path d="M' + gx + ' ' + (y1 - 9) + 'l6 9l-6 9l-6 -9z"/><text x="' + gx + '" y="' + (y1 - 13) + '" text-anchor="' + (xs(cp.arrive.s) > W - 90 ? 'end' : xs(cp.arrive.s) < Lm + 60 ? 'start' : 'middle') + '">' + esc(cp.title.replace('Chapters', 'Ch').replace('Chapter', 'Ch') + (small ? '' : ' exam')) + '</text></g>';
+      // checkpoints still to come: an open gate where each exam is reached
+      var k = 0;
+      (ah.checkpoints || []).forEach(function (cp) {
+        if (cp.state === 'completed' || !mine(cp) || !cp.arrive || cp.arrive.s === null || cp.arrive.s > s1) return;
+        var here = cp.state === 'here', gx = f1(xs(cp.arrive.s) + (here ? 0 : 0)), y1 = Tm + 2 + (k++ % 3) * 15, anc = xs(cp.arrive.s) > W - 90 ? 'end' : xs(cp.arrive.s) < Lm + 60 ? 'start' : 'middle';
+        o += '<g class="gate' + (here ? ' here' : '') + '"' + tip(grpTitle(cp), here ? 'Its chapters are complete: this checkpoint is ready to take.' : cap(aheadTxt(cp)) + ' (' + cp.arrive.lo + ' to ' + cp.arrive.hi + ')') + ' tabindex="0"><line x1="' + gx + '" x2="' + gx + '" y1="' + y1 + '" y2="' + (H - Bm) + '"/><path d="M' + gx + ' ' + (y1 - 8) + 'l7 8l-7 8l-7 -8z"/><text x="' + gx + '" y="' + (y1 - 12) + '" text-anchor="' + anc + '">' + esc(shortT(cp.title) + (small ? '' : ' exam')) + '</text></g>';
       });
     }
     // the trail behind: one mark per session, bigger for a bigger gain, fainter with distance
     var tr = [], dots = '';
-    S.past.forEach(function (p) {
+    if (s0 <= -c.sessions.length && S.scope === 'course') tr.push(f1(xs(-c.sessions.length)) + ',' + f1(ys(0)));
+    S.past.forEach(function (p, j) {
       if (p.s < s0) return; tr.push(f1(xs(p.s)) + ',' + f1(ys(p.y)));
-      if (p.k === undefined) return;
-      var se = c.sessions[p.k], r = Math.max(2.5, Math.min(9, 2 + Math.sqrt(Math.max(0, se.gain)) * 0.9)), op = Math.max(0.35, 1 + p.s / Math.max(6, -s0) * 0.6);
-      dots += '<circle class="tr' + (p.s === 0 ? ' last' : '') + '" cx="' + f1(xs(p.s)) + '" cy="' + f1(ys(p.y)) + '" r="' + f1(r) + '" opacity="' + f1(op) + '"' + tip(p.s === 0 ? 'The latest session' : plural(-p.s, 'session') + ' back', q(se.gain, true) + ' q of mass · ' + se.ok + ' of ' + se.n + ' right · ' + se.min + ' min') + ' tabindex="0"/>';
+      var se = c.sessions[p.k], g = S.scope === 'course' ? se.gain : p.y - (j ? S.past[j - 1].y : 0), r = Math.max(2.5, Math.min(9, 2 + Math.sqrt(Math.max(0, g)) * 0.9)), op = Math.max(0.35, 1 + p.s / Math.max(6, -s0) * 0.6);
+      if (S.scope !== 'course' && g < 0.05 && p.s !== 0) return;
+      dots += '<circle class="tr' + (p.s === 0 ? ' last' : '') + '" cx="' + f1(xs(p.s)) + '" cy="' + f1(ys(p.y)) + '" r="' + f1(r) + '" opacity="' + f1(op) + '"' + tip(p.s === 0 ? 'The latest session' : plural(-p.s, 'session') + ' back', blobs(g, true) + (S.scope === 'course' ? '' : ' here') + ' · ' + se.ok + ' of ' + se.n + ' right · ' + se.min + ' min') + ' tabindex="0"/>';
     });
     if (tr.length > 1) o += '<polyline class="trail" points="' + tr.join(' ') + '" pathLength="1"/>';
     o += dots;
-    // now: the body (bigger with more mass) and its velocity
-    var bx = xs(0), by = ys(S.now), R = 8 + 14 * Math.sqrt(c.now.M / Math.max(1, c.now.Mmax)), L = c.lens[ui.lens], vv = S.mass ? L.v : scopeV(c);
-    var dx = (xs(1) - xs(0)), dy = ys(S.now + vv) - ys(S.now), len = Math.sqrt(dx * dx + dy * dy) || 1, A = Math.min(small ? 70 : 96, Math.max(34, 26 + Math.abs(vv) * (S.mass ? 1.4 : 9)));
+    // checkpoints already completed: a solid flag on the trail, at the session the exam was taken
+    (c.exams || []).forEach(function (e, j) {
+      var cp = (ah && ah.checkpoints || []).filter(function (x) { return x.id === e.group; })[0] || { id: e.group, title: e.group, chapters: [] };
+      if (!mine(cp) || -e.back < s0) return;
+      var ex = xs(-e.back), ey = ys(yAt(-e.back)), top = Math.max(Tm + 16, ey - 46 - (j % 2) * 16), anc = ex > W - 90 ? 'end' : ex < Lm + 60 ? 'start' : 'middle';
+      o += '<g class="flag"' + tip(grpTitle(cp) + (e.n > 1 ? ' (attempt ' + e.n + ')' : ''), 'Checkpoint completed ' + (e.back ? plural(e.back, 'session') + ' back' : 'in the latest session') + '<br>Core ' + pct(e.core) + ' · Stretch ' + pct(e.stretch)) + ' tabindex="0"><line x1="' + f1(ex) + '" x2="' + f1(ex) + '" y1="' + f1(top) + '" y2="' + f1(ey) + '"/><path d="M' + f1(ex) + ' ' + f1(top - 9) + 'l8 9l-8 9l-8 -9z"/><path class="ck" d="M' + f1(ex - 3.6) + ' ' + f1(top) + 'l2.6 2.8l4.6 -5.4"/><text x="' + f1(ex) + '" y="' + f1(top - 14) + '" text-anchor="' + anc + '">' + esc(shortT(cp.title)) + (small ? '' : ' ✓ ' + pct(e.core) + ' / ' + pct(e.stretch)) + '</text></g>';
+    });
+    // now: the body (bigger with more blobs) and its velocity
+    var bx = xs(0), by = ys(S.now), R = 8 + 14 * Math.sqrt(S.now / Math.max(1, S.max)), vv = lensOfScope(c, S, opt.lens || ui.lens).v;
+    var dx = (xs(1) - xs(0)), dy = ys(S.now + vv) - ys(S.now), len = Math.sqrt(dx * dx + dy * dy) || 1, A = Math.min(small ? 70 : 96, Math.max(34, 26 + Math.abs(vv) * 1.4));
     o += '<circle class="glow" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R * 2.3) + '" fill="url(#tjGlow)"/>';
     if (Math.abs(vv) > 0.01) o += '<line class="vel" x1="' + f1(bx) + '" y1="' + f1(by) + '" x2="' + f1(bx + dx / len * A) + '" y2="' + f1(by + dy / len * A) + '" marker-end="url(#tjArr)"/>';
-    o += '<circle class="body" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R) + '"' + tip('You are here', S.mass ? num(c.now.M) + ' q of mass · Level ' + c.now.level : pct(S.now / 100) + ' of the readiness targets') + ' tabindex="0"/>';
+    o += '<circle class="body" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R) + '"' + tip('You are here', blobs(S.now) + (S.scope === 'course' ? ' · Level ' + c.now.level : ' of ' + num(S.max) + ' in ' + S.name)) + ' tabindex="0"/>';
     o += '<line class="nowl" x1="' + f1(bx) + '" x2="' + f1(bx) + '" y1="' + (H - Bm) + '" y2="' + (H - Bm + 6) + '"/><text class="nowt" x="' + f1(bx) + '" y="' + (H - Bm + 20) + '" text-anchor="middle">now</text>';
-    // the session axis
-    var span = s1 - s0, tk = span <= 10 ? 1 : span <= 24 ? 2 : span <= 60 ? 5 : span <= 140 ? 10 : 20;
+    var tk = span <= 10 ? 1 : span <= 24 ? 2 : span <= 60 ? 5 : span <= 140 ? 10 : 20;
     if (small) { var cand = [1, 2, 5, 10, 20, 25, 50, 100]; for (var ci = 0; ci < cand.length; ci++) if (span / cand[ci] <= 6) { tk = cand[ci]; break; } }
     for (var s = Math.ceil(s0 / tk) * tk; s <= s1; s += tk) { if (s === 0 || Math.abs(xs(s) - bx) < 26) continue; o += '<line class="tk" x1="' + f1(xs(s)) + '" x2="' + f1(xs(s)) + '" y1="' + (H - Bm) + '" y2="' + (H - Bm + 4) + '"/><text class="ax" x="' + f1(xs(s)) + '" y="' + (H - Bm + 18) + '" text-anchor="middle">' + (s > 0 ? '+' + s : String(s).replace('-', '−')) + '</text>'; }
-    o += '<text class="axl" x="' + Lm + '" y="' + (H - 6) + '">' + (small ? 'behind' : 'sessions behind') + '</text><text class="axl" x="' + (W - Rm) + '" y="' + (H - 6) + '" text-anchor="end">' + (small ? 'sessions ahead' : 'sessions ahead') + '</text>';
+    o += '<text class="axl" x="' + Lm + '" y="' + (H - 6) + '">' + (small ? 'behind' : 'sessions behind') + '</text><text class="axl" x="' + (W - Rm) + '" y="' + (H - 6) + '" text-anchor="end">sessions ahead</text>';
     return o + '</svg>';
   }
-  function scopeV(c) {   // readiness points per session over the lens, for an exam scope
-    var L = c.lens[ui.lens], g = ui.scope; if (!L.n || g === 'course') return 0;
-    var a = L.from > 0 ? (c.sessions[L.from - 1].grp[g] || [0, 0, 0])[2] : (c.sessions[0].grp[g] || [0, 0, 0])[2];
-    return (c.now.grp[g][2] - a) * 100 / L.n;
-  }
+  var KEY = '<div class="tj-key"><span><i class="k-trail"></i>the trail behind (a bigger mark is a bigger gain)</span><span><i class="k-body"></i>you, now</span><span><i class="k-vel"></i>velocity</span><span><i class="k-mid"></i>the path ahead, with its range</span><span><i class="k-flag"></i>a checkpoint completed</span><span><i class="k-gate"></i>a checkpoint ahead</span></div>';
   function heroCard(c) {
     var card = el('section', 'hb-card wide tj-hero');
-    var chips = '<button type="button" class="tj-chip" data-scope="course" aria-pressed="' + (ui.scope === 'course') + '">Mass, whole course</button>' + c.groups.map(function (g) { return '<button type="button" class="tj-chip" data-scope="' + g.id + '" aria-pressed="' + (ui.scope === g.id) + '">' + esc(g.title) + ' exam readiness</button>'; }).join('');
-    card.innerHTML = '<div class="tj-hh"><div><h2>The path</h2><p class="sub" id="tjPathSub"></p></div></div><div class="tj-chips" role="group" aria-label="What the path shows">' + chips + '</div><div class="tj-pathbox"></div><div class="tj-key"><span><i class="k-trail"></i>the trail behind (a bigger mark is a bigger gain)</span><span><i class="k-body"></i>you, now</span><span><i class="k-vel"></i>velocity</span><span><i class="k-mid"></i>the path ahead, with its range</span><span><i class="k-gate"></i>an exam checkpoint</span></div>';
+    if (ui.scope !== 'course' && !grpOf(c, ui.scope)) ui.scope = 'course';
+    var chips = '<button type="button" class="tj-chip" data-scope="course" aria-pressed="' + (ui.scope === 'course') + '">Whole course</button>' + c.groups.map(function (g) { return '<button type="button" class="tj-chip" data-scope="' + g.id + '" aria-pressed="' + (ui.scope === g.id) + '">' + esc(g.title) + '</button>'; }).join('');
+    card.innerHTML = '<div class="tj-hh"><div><h2>The path</h2><p class="sub" id="tjPathSub"></p></div></div><div class="tj-chips" role="group" aria-label="Which blobs the path shows">' + chips + '</div><div class="tj-pathbox"></div>' + KEY;
     function draw() {
-      var box = card.querySelector('.tj-pathbox'), W = Math.max(300, Math.floor(box.clientWidth || card.clientWidth - 44 || 900));
-      box.innerHTML = c.sessions.length ? pathSvg(c, W) : HX.empty('The first session puts the first mark on the path.', 220);
-      var S = ui.scope === 'course', L = c.lens[ui.lens];
-      card.querySelector('#tjPathSub').textContent = (S ? 'Mass is everything demonstrated so far. ' : 'Readiness is how far the trajectory has come toward this exam’s targets. ') + (L.n ? cap(lensLower(ui.lens)) + ': ' + plural(L.n, 'session') + ' behind, the path ahead at the pace of your usual session' + (c.ahead ? ' (about ' + c.ahead.sessionMin + ' minutes).' : '.') : 'No session in ' + lensLower(ui.lens) + ' yet.');
+      var box = card.querySelector('.tj-pathbox'), W = Math.max(300, Math.floor(box.clientWidth || card.clientWidth - 44 || 900)), S = scopeOf(c, ui.scope), L = c.lens[ui.lens];
+      box.innerHTML = c.sessions.length ? pathSvg(c, W, S, windowOf(c, ui.lens, S)) : HX.empty('The first session puts the first mark on the path.', 220);
+      card.querySelector('#tjPathSub').textContent = 'Blobs of ' + S.name + '. ' + (L.n ? cap(lensLower(ui.lens)) + ': ' + plural(L.n, 'session') + ' behind, and the path ahead at the pace of your usual session' + (c.ahead ? ' (about ' + c.ahead.sessionMin + ' minutes).' : '.') : 'No session in ' + lensLower(ui.lens) + ' yet.');
       HX.C.wireTips(box);
     }
     card.addEventListener('click', function (e) { var b = e.target.closest('[data-scope]'); if (!b) return; ui.scope = b.dataset.scope; Array.prototype.forEach.call(card.querySelectorAll('[data-scope]'), function (x) { x.setAttribute('aria-pressed', String(x === b)); }); draw(); });
@@ -248142,54 +248371,78 @@ var HTJ = (function () {
     return card;
   }
 
-  // ------------------------------------------------------------------ the four instruments
-  function massSvg(c) {
-    var S = 92, R = 40, r = R * Math.sqrt(Math.max(0.02, c.now.M / c.now.Mmax)), rh = r * Math.sqrt(Math.max(0, c.now.held || 0));
-    return '<svg viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" aria-hidden="true"><circle class="i-max" cx="46" cy="46" r="' + R + '"/><circle class="i-mass" cx="46" cy="46" r="' + f1(r) + '"/><circle class="i-held" cx="46" cy="46" r="' + f1(rh) + '"/></svg>';
+  // ------------------------------------------------------------------ the instruments: one orb that carries all four, and a gauge for each
+  function refs(c) {   // the scales the gauges read against: this student's own course so far
+    var vs = ['session', 'week', 'month', 'course'].map(function (k) { return Math.abs(c.lens[k].v); }), vTop = Math.max(10, c.lens.course.v * 2, Math.max.apply(null, vs) * 1.1);
+    return { vTop: vTop, aTop: Math.max(5, vTop * 0.75), pTop: Math.max(1, c.now.Mmax * Math.max(1, c.lens.course.v) * 0.6) };
   }
-  function velSvg(L, ref) {
-    var S = 92, top = Math.max(1, Math.abs(ref) * 2, Math.abs(L.v) * 1.15), a = Math.max(0, Math.min(1, L.v / top)), b = Math.max(0, Math.min(1, ref / top)), arc = function (t, r) { var an = Math.PI * (1 - t); return f1(46 + r * Math.cos(an)) + ' ' + f1(58 - r * Math.sin(an)); };
-    return '<svg viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" aria-hidden="true"><path class="i-dial" d="M' + arc(0, 36) + ' A36 36 0 0 1 ' + arc(1, 36) + '"/><path class="i-dialv" d="M' + arc(0, 36) + ' A36 36 0 0 1 ' + arc(a, 36) + '"/><line class="i-ref" x1="' + arc(b, 28).replace(' ', '" y1="') + '" x2="' + arc(b, 42).replace(' ', '" y2="') + '"/><line class="i-needle" x1="46" y1="58" x2="' + arc(a, 30).replace(' ', '" y2="') + '"/><circle class="i-hub" cx="46" cy="58" r="4"/></svg>';
+  function arcPt(cx, cy, r, deg) { var a = deg * Math.PI / 180; return f1(cx + r * Math.cos(a)) + ' ' + f1(cy + r * Math.sin(a)); }
+  function arcD(cx, cy, r, a0, a1) { if (a1 < a0) { var t = a0; a0 = a1; a1 = t; } return 'M' + arcPt(cx, cy, r, a0) + ' A' + r + ' ' + r + ' 0 ' + (a1 - a0 > 180 ? 1 : 0) + ' 1 ' + arcPt(cx, cy, r, a1); }
+  function gaugeBox(kind, inner, value, unit, aria) { return '<svg class="tj-g tj-g-' + kind + '" viewBox="0 0 200 172" role="img" aria-label="' + esc(aria) + '">' + inner + '<text class="gv" x="100" y="' + (kind === 'mass' ? 96 : 104) + '" text-anchor="middle">' + value + '</text><text class="gu" x="100" y="' + (kind === 'mass' ? 116 : 124) + '" text-anchor="middle">' + unit + '</text></svg>'; }
+  function gMass(c) {
+    var R = 74, r = R * Math.sqrt(Math.max(0.004, c.now.M / c.now.Mmax)), rh = r * Math.sqrt(Math.max(0, c.now.held || 0));
+    return gaugeBox('mass', '<circle class="i-max" cx="100" cy="86" r="' + R + '"/><circle class="i-mass" cx="100" cy="86" r="' + f1(r) + '"/><circle class="i-held" cx="100" cy="86" r="' + f1(rh) + '"/>', num(c.now.M), 'blobs', num(c.now.M) + ' blobs of ' + num(c.now.Mmax));
   }
-  function accSvg(L) {
-    var S = 92, n = L.trend === 'up' ? 3 : L.trend === 'down' ? -3 : 0, o = '<svg viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" aria-hidden="true">';
-    if (!n) return o + '<line class="i-flat" x1="20" x2="72" y1="46" y2="46"/><line class="i-flat" x1="20" x2="72" y1="58" y2="58" opacity=".45"/></svg>';
-    for (var i = 0; i < 3; i++) { var y = n > 0 ? 62 - i * 15 : 30 + i * 15; o += '<path class="i-chev ' + (n > 0 ? 'up' : 'dn') + '" opacity="' + (1 - i * 0.28) + '" d="M24 ' + (y + (n > 0 ? 10 : -10)) + ' L46 ' + y + ' L68 ' + (y + (n > 0 ? 10 : -10)) + '"/>'; }
+  function gVel(c, L, rf) {
+    var t = Math.max(0, Math.min(1, L.v / rf.vTop)), tr = Math.max(0, Math.min(1, c.lens.course.v / rf.vTop)), a0 = 150, sw = 240, ticks = '';
+    for (var i = 0; i <= 8; i++) ticks += '<line class="i-tick" x1="' + arcPt(100, 96, 80, a0 + sw * i / 8).replace(' ', '" y1="') + '" x2="' + arcPt(100, 96, 86, a0 + sw * i / 8).replace(' ', '" y2="') + '"/>';
+    return gaugeBox('vel', ticks + '<path class="i-dial" d="' + arcD(100, 96, 70, a0, a0 + sw) + '"/>' + (t > 0.004 ? '<path class="i-dialv" d="' + arcD(100, 96, 70, a0, a0 + sw * t) + '"/>' : '') + '<line class="i-ref" x1="' + arcPt(100, 96, 60, a0 + sw * tr).replace(' ', '" y1="') + '" x2="' + arcPt(100, 96, 80, a0 + sw * tr).replace(' ', '" y2="') + '"/><circle class="i-knob" cx="' + arcPt(100, 96, 70, a0 + sw * t).replace(' ', '" cy="') + '" r="8"/>', q(L.v), 'blobs a session', 'Velocity ' + q(L.v) + ' blobs a session');
+  }
+  function gAcc(c, L, rf) {
+    var a = L.vPrev === null ? 0 : L.a, t = Math.max(-1, Math.min(1, a / rf.aTop)), top = 270, end = top + 120 * t, cls = t > 0.02 ? 'up' : t < -0.02 ? 'dn' : 'flat';
+    return gaugeBox('acc', '<path class="i-dial" d="' + arcD(100, 96, 70, 150, 390) + '"/>' + (Math.abs(t) > 0.01 ? '<path class="i-dialv ' + cls + '" d="' + arcD(100, 96, 70, top, end) + '"/>' : '') + '<line class="i-zero" x1="100" y1="16" x2="100" y2="36"/><text class="i-pm" x="34" y="150" text-anchor="middle">−</text><text class="i-pm" x="166" y="150" text-anchor="middle">+</text><circle class="i-knob ' + cls + '" cx="' + arcPt(100, 96, 70, end).replace(' ', '" cy="') + '" r="8"/>', L.vPrev === null ? '–' : q(L.a, true), L.vPrev === null ? 'not enough yet' : 'Δ velocity', 'Acceleration ' + (L.vPrev === null ? 'not known yet' : q(L.a, true)));
+  }
+  function gMom(c, L, rf) {
+    var t = Math.max(0, Math.min(1, Math.abs(L.p) / rf.pTop)), C = 2 * Math.PI * 70;
+    return gaugeBox('mom', '<circle class="i-dial" cx="100" cy="96" r="70"/><circle class="i-dialv' + (L.p < 0 ? ' dn' : '') + '" cx="100" cy="96" r="70" stroke-dasharray="' + f1(C * t) + ' ' + f1(C) + '" transform="rotate(-90 100 96)"/>', num(L.p), num(c.now.M) + ' × ' + q(L.v), 'Momentum ' + num(L.p));
+  }
+  // one orb for all four: size is mass, the streaks and the spin are velocity, the colour is acceleration, the halo is momentum
+  function orbSvg(c, L, rf) {
+    var R = 30 + 62 * Math.sqrt(Math.max(0, c.now.M / c.now.Mmax)), vt = Math.max(0, Math.min(1, L.v / rf.vTop)), at = L.vPrev === null ? 0 : Math.max(-1, Math.min(1, L.a / rf.aTop)), pt = Math.max(0, Math.min(1, Math.abs(L.p) / rf.pTop));
+    var cls = at > 0.15 ? 'up' : at < -0.15 ? 'dn' : 'flat', halo = 3 + 22 * pt, cx = 150, cy = 130, spin = vt > 0.01 ? f1(Math.max(2.2, 16 - 13 * vt)) : 0, o = '<svg class="tj-orbv ' + cls + '" viewBox="0 0 300 260" role="img" aria-label="' + esc(num(c.now.M) + ' blobs, velocity ' + q(L.v) + ', acceleration ' + (L.vPrev === null ? 'not known yet' : q(L.a, true)) + ', momentum ' + num(L.p)) + '">';
+    o += '<defs><radialGradient id="tjOrbG" cx="36%" cy="30%" r="75%"><stop offset="0" class="o0"/><stop offset=".55" class="o1"/><stop offset="1" class="o2"/></radialGradient><radialGradient id="tjOrbH"><stop offset=".55" class="h0"/><stop offset="1" class="h1"/></radialGradient><clipPath id="tjOrbC"><circle cx="' + cx + '" cy="' + cy + '" r="' + f1(R) + '"/></clipPath></defs>';
+    o += '<circle class="full" cx="' + cx + '" cy="' + cy + '" r="94"/>';
+    // velocity: streaks behind the orb, longer and more of them the faster it moves
+    var nS = Math.round(vt * 6), sl = 24 + 70 * vt;
+    for (var i = 0; i < nS; i++) { var yy = cy - R * 0.7 + (i + 0.5) * (R * 1.4 / Math.max(1, nS)), x2 = cx - Math.sqrt(Math.max(0, R * R - (yy - cy) * (yy - cy))) - 8 - halo; o += '<line class="streak" x1="' + f1(x2 - sl * (0.6 + 0.4 * ((i * 7) % 5) / 4)) + '" x2="' + f1(x2) + '" y1="' + f1(yy) + '" y2="' + f1(yy) + '" style="animation-delay:' + (i * 0.13).toFixed(2) + 's"/>'; }
+    // momentum: the halo, thicker with more momentum
+    o += '<circle class="halo" cx="' + cx + '" cy="' + cy + '" r="' + f1(R + halo * 0.5 + 3) + '" stroke-width="' + f1(halo) + '"/>';
+    o += '<circle class="orb" cx="' + cx + '" cy="' + cy + '" r="' + f1(R) + '" fill="url(#tjOrbG)"/>';
+    // the spin: bands sliding across the surface, faster with more velocity
+    o += '<g clip-path="url(#tjOrbC)"><g class="bands"' + (spin ? ' style="animation-duration:' + spin + 's"' : ' style="animation:none"') + '>';
+    for (i = -2; i < 5; i++) o += '<ellipse cx="' + f1(cx - R + i * R * 0.62) + '" cy="' + cy + '" rx="' + f1(R * 0.18) + '" ry="' + f1(R * 1.05) + '"/>';
+    o += '</g></g><ellipse class="shine" cx="' + f1(cx - R * 0.34) + '" cy="' + f1(cy - R * 0.42) + '" rx="' + f1(R * 0.3) + '" ry="' + f1(R * 0.17) + '" transform="rotate(-28 ' + f1(cx - R * 0.34) + ' ' + f1(cy - R * 0.42) + ')"/>';
+    // acceleration: thrust chevrons ahead of the orb when speeding up, behind it when slowing
+    var nC = Math.round(Math.abs(at) * 3);
+    for (i = 0; i < nC; i++) { var x0 = at > 0 ? cx + R + halo + 12 + i * 13 : cx + R + halo + 38 - i * 13; o += '<path class="thrust" opacity="' + (1 - i * 0.25) + '" d="M' + f1(x0) + ' ' + (cy - 11) + (at > 0 ? ' l10 11 l-10 11' : ' l-10 11 l10 11') + '"/>'; }
     return o + '</svg>';
-  }
-  function momSvg(c, L) {
-    var S = 92, r = 9 + 15 * Math.sqrt(c.now.M / Math.max(1, c.now.Mmax)), ref = Math.max(1, Math.abs(c.lens.course.v) * 2, Math.abs(L.v)), w = 8 + 34 * Math.min(1, Math.abs(L.v) / ref), o = '<svg viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" aria-hidden="true">';
-    for (var i = 0; i < 3; i++) o += '<line class="i-streak" x1="' + f1(40 - r - 4 - w * (1 - i * 0.25)) + '" x2="' + f1(40 - r - 4) + '" y1="' + (36 + i * 10) + '" y2="' + (36 + i * 10) + '" opacity="' + (0.9 - i * 0.25) + '"/>';
-    return o + '<circle class="i-mass" cx="' + f1(52) + '" cy="46" r="' + f1(r) + '"/></svg>';
   }
   function instruments(c) {
-    var L = c.lens[ui.lens], wrap = el('section', 'tj-inst wide'), ref = c.lens.course.v, ln = lensLower(ui.lens);
-    var cards = [
-      { k: 'Mass', v: num(c.now.M), u: 'q', svg: massSvg(c), l: L.n ? q(L.net, true) + ' q ' + lensOver(ui.lens) : 'nothing added ' + ln, d: 'Everything you have demonstrated, weighed by how much evidence there is. Held in memory right now: ' + pct(c.now.held) + ' (the inner disc).' },
-      { k: 'Velocity', v: q(L.v), u: 'q per session', svg: velSvg(L, ref), l: ui.lens === 'course' ? 'your average over every session' : 'whole-course average ' + q(ref) + ' (the tick)', d: 'How much mass a session adds, ' + lensOver(ui.lens) + '.' },
-      { k: 'Acceleration', v: L.vPrev === null ? '–' : q(L.a, true), u: L.vPrev === null ? '' : 'q per session', svg: accSvg(L), l: cap(trendWord(L)), d: L.vPrev === null ? 'It takes a little more history to tell whether velocity is changing.' : 'Velocity now against the stretch just before: ' + q(L.v) + ' against ' + q(L.vPrev) + '.' },
-      { k: 'Momentum', v: num(L.p), u: '', svg: momSvg(c, L), l: num(c.now.M) + ' × ' + q(L.v), d: 'Mass × velocity. As mass builds, the same velocity carries more momentum, so steady work counts for more the further you are.' }
+    var L = c.lens[ui.lens], rf = refs(c), wrap = el('section', 'tj-inst wide'), ln = lensOver(ui.lens);
+    var tiles = [
+      { k: 'Mass', g: gMass(c), l: L.n ? blobs(L.net, true) + ' ' + ln : 'nothing added ' + ln, d: 'Every blob of math you have demonstrated. The darker centre is held in memory right now (' + pct(c.now.held) + '); the dashed ring is the whole course.' },
+      { k: 'Velocity', g: gVel(c, L, rf), l: ui.lens === 'course' ? 'your average over every session' : 'the mark is your whole-course average, ' + q(c.lens.course.v), d: 'Blobs added per session, ' + ln + '.' },
+      { k: 'Acceleration', g: gAcc(c, L, rf), l: cap(trendWord(L)), d: L.vPrev === null ? 'The change in velocity. It needs a little more history.' : 'The change in velocity: ' + q(L.v) + ' now against ' + q(L.vPrev) + ' in the stretch before.' },
+      { k: 'Momentum', g: gMom(c, L, rf), l: 'mass × velocity', d: 'As blobs build up, the same velocity carries more momentum.' }
     ];
-    wrap.innerHTML = cards.map(function (x) { return '<div class="hb-card tj-in" data-k="' + x.k.toLowerCase() + '"><div class="tj-inh"><span class="k">' + x.k + '</span>' + x.svg + '</div><div class="tj-inv"><span class="v">' + x.v + '</span><span class="u">' + x.u + '</span></div><div class="tj-inl">' + esc(x.l) + '</div><p class="tj-ind">' + esc(x.d) + '</p></div>'; }).join('');
+    wrap.innerHTML = '<div class="hb-card tj-orbcard"><div class="k">All four at once</div>' + orbSvg(c, L, rf) + '<ul class="tj-orbkey"><li><i class="ok-size"></i><b>Size</b> mass</li><li><i class="ok-streak"></i><b>Streaks and spin</b> velocity</li><li><i class="ok-col"></i><b>Colour and thrust</b> acceleration</li><li><i class="ok-halo"></i><b>Halo</b> momentum</li></ul></div><div class="tj-tiles">' + tiles.map(function (x) { return '<div class="hb-card tj-in" data-k="' + x.k.toLowerCase() + '"' + tip(x.k, esc(x.d)) + ' tabindex="0"><div class="k">' + x.k + '</div>' + x.g + '<div class="tj-inl">' + esc(x.l) + '</div></div>'; }).join('') + '</div>';
+    HX.C.wireTips(wrap);
     return wrap;
   }
-  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-  // ------------------------------------------------------------------ energy level
-  function levelSvg(c) {
-    var S = 220, cx = 110, cy = 110, n = c.now.level, rings = [n - 2, n - 1, n, n + 1, n + 2].filter(function (x) { return x >= 0 && x <= c.now.levelMax; }), o = '<svg class="tj-orb" viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" role="img" aria-label="Energy level ' + n + ', ' + pct(c.now.inLevel) + ' of the way to level ' + (n + 1) + '">';
-    var rOf = function (lv) { return 34 + (lv - (n - 2)) * 17; };
-    rings.forEach(function (lv) { o += '<circle class="ring' + (lv < n ? ' done' : lv === n ? ' cur' : '') + '" cx="' + cx + '" cy="' + cy + '" r="' + rOf(lv) + '"/>'; });
-    // the climb to the next level: an arc on the ring above, and the body between the two rings
-    var r1 = rOf(n + 1), t = Math.max(0.001, Math.min(0.999, c.now.inLevel)), a0 = -Math.PI / 2, a1 = a0 + 2 * Math.PI * t, big = t > 0.5 ? 1 : 0;
-    o += '<path class="climb" d="M' + f1(cx + r1 * Math.cos(a0)) + ' ' + f1(cy + r1 * Math.sin(a0)) + ' A' + r1 + ' ' + r1 + ' 0 ' + big + ' 1 ' + f1(cx + r1 * Math.cos(a1)) + ' ' + f1(cy + r1 * Math.sin(a1)) + '"/>';
-    var rb = rOf(n) + 17 * t; o += '<g class="orbiter"><circle class="body" cx="' + f1(cx + rb * Math.cos(a1)) + '" cy="' + f1(cy + rb * Math.sin(a1)) + '" r="7"/></g>';
-    o += '<circle class="core" cx="' + cx + '" cy="' + cy + '" r="24"/><text class="lvn" x="' + cx + '" y="' + (cy + 7) + '" text-anchor="middle">' + n + '</text>';
-    return o + '</svg>';
-  }
+  // ------------------------------------------------------------------ energy level: the rings carry the numbers
   function levelCard(c) {
-    var L = c.lens[ui.lens], card = el('section', 'hb-card tj-level');
-    card.innerHTML = '<h2>Energy level</h2><p class="sub">Every level is the same amount of mass (' + c.unit.level + ' q), so a level late in the course takes the same work as a level at the start.</p><div class="tj-lvrow">' + levelSvg(c) + '<div class="tj-lvtxt"><div class="big">Level ' + c.now.level + '<span> of ' + c.now.levelMax + '</span></div><div class="bar" aria-hidden="true"><i style="width:' + Math.round(c.now.inLevel * 100) + '%"></i></div><p><b>' + q(c.now.toNext) + ' q</b> to Level ' + (c.now.level + 1) + '.</p><p>' + (L.levels > 0 ? cap(lensOver(ui.lens)) + ' you climbed <b>' + plural(L.levels, 'level') + '</b>.' : L.n ? cap(lensOver(ui.lens)) + ' you moved ' + pct(Math.max(0, L.net) / c.unit.level) + ' of a level.' : 'No session in ' + lensLower(ui.lens) + ' yet.') + '</p>' + (L.v > 0.5 ? '<p class="hb-muted">At this velocity, the next level is about ' + plural(Math.max(1, Math.ceil(c.now.toNext / L.v)), 'session') + ' away.</p>' : '') + '</div></div>';
+    var L = c.lens[ui.lens], card = el('section', 'hb-card tj-level'), n = c.now.level, S = 340, cx = 170, cy = 170, lo = Math.max(0, n - 2), rings = [], i;
+    for (i = lo; i <= Math.min(c.now.levelMax, lo + 4); i++) rings.push(i);
+    var rOf = function (lv) { return 58 + (lv - lo) * 24; }, climbedFrom = n - Math.max(0, L.levels), t = Math.max(0.001, Math.min(0.999, c.now.inLevel)), a0 = -90, a1 = a0 + 360 * t, rn = rOf(Math.min(n + 1, rings[rings.length - 1] || n + 1)), rb = rOf(n) + 24 * t;
+    var o = '<svg class="tj-orb" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Energy level ' + n + ' of ' + c.now.levelMax + ', ' + q(c.now.toNext) + ' blobs to level ' + (n + 1) + '">';
+    rings.forEach(function (lv) { var cls = lv === n ? ' cur' : lv < n ? (lv >= climbedFrom ? ' new' : ' done') : ''; o += '<circle class="ring' + cls + '" cx="' + cx + '" cy="' + cy + '" r="' + rOf(lv) + '"/><text class="rl' + cls + '" x="' + (cx - rOf(lv)) + '" y="' + (cy + 4) + '" text-anchor="middle">' + lv + '</text>'; });
+    o += '<path class="climb" d="' + arcD(cx, cy, rn, a0, a1) + '"/>';
+    o += '<g class="orbiter"><circle class="body" cx="' + arcPt(cx, cy, rb, a1).replace(' ', '" cy="') + '" r="9"/></g>';
+    var lx = +arcPt(cx, cy, rn + 16, a1).split(' ')[0], ly = +arcPt(cx, cy, rn + 16, a1).split(' ')[1];
+    o += '<text class="togo" x="' + f1(Math.max(60, Math.min(S - 60, lx))) + '" y="' + f1(Math.max(14, Math.min(S - 8, ly))) + '" text-anchor="middle">' + q(c.now.toNext) + ' to L' + (n + 1) + '</text>';
+    o += '<circle class="core" cx="' + cx + '" cy="' + cy + '" r="40"/><text class="lvn" x="' + cx + '" y="' + (cy + 6) + '" text-anchor="middle">' + n + '</text><text class="lvo" x="' + cx + '" y="' + (cy + 24) + '" text-anchor="middle">of ' + c.now.levelMax + '</text></svg>';
+    card.innerHTML = '<h2>Energy level</h2><p class="sub">Each ring is ' + c.unit.level + ' blobs, the same step all the way up.</p>' + o + '<p class="tj-lvcap">' + (L.levels > 0 ? '<b class="up">' + plural(L.levels, 'level') + '</b> climbed ' + lensOver(ui.lens) + ' (the bright rings).' : L.n ? pct(Math.max(0, L.net) / c.unit.level) + ' of a level ' + lensOver(ui.lens) + '.' : 'No session in ' + lensLower(ui.lens) + ' yet.') + (L.v > 0.5 ? ' Next ring in about ' + plural(Math.max(1, Math.ceil(c.now.toNext / L.v)), 'session') + '.' : '') + '</p>';
     return card;
   }
 
@@ -248199,14 +248452,15 @@ var HTJ = (function () {
     var h = '<h2>' + (lens === 'course' ? 'What the whole course has added' : 'What ' + lensLower(lens) + ' did') + '</h2>';
     if (!L.n) { card.innerHTML = h + '<p class="sub">No session in ' + lensLower(lens) + ' yet. The next one moves every number on this page.</p>'; return card; }
     h += '<p class="sub">' + plural(L.n, 'session') + ' · ' + L.right + ' of ' + plural(L.answers, 'answer') + ' right · ' + L.minutes + ' minutes of answering.</p><ul class="tj-did">';
-    h += '<li><b>' + q(L.net, true) + ' q</b> of mass' + (L.levels > 0 ? ', up <b>' + plural(L.levels, 'level') + '</b>' : '') + '.</li>';
-    h += '<li>Velocity <b>' + q(L.v) + ' q</b> a session' + (L.vPrev !== null ? ', ' + (L.trend === 'up' ? 'faster than' : L.trend === 'down' ? 'slower than' : 'about the same as') + ' the ' + q(L.vPrev) + ' before it' : '') + '. Momentum <b>' + num(L.p) + '</b>.</li>';
+    h += '<li><b>' + blobs(L.net, true) + '</b>' + (L.levels > 0 ? ', up <b>' + plural(L.levels, 'level') + '</b>' : '') + '.</li>';
+    h += '<li>Velocity <b>' + q(L.v) + '</b> blobs a session' + (L.vPrev !== null ? ', against ' + q(L.vPrev) + ' in the stretch before: acceleration <b>' + q(L.a, true) + '</b>' : '') + '. Momentum <b>' + num(L.p) + '</b>.</li>';
     if (I) {
-      if (I.dMh) h += '<li>Held in memory: <b>' + q(I.dMh, true) + ' q</b>' + (I.bound[1] !== I.bound[0] ? ' (' + I.bound[1] + ' skills firmly held, ' + (I.bound[1] > I.bound[0] ? 'up' : 'down') + ' from ' + I.bound[0] + ')' : '') + '.</li>';
-      var moved = c.groups.map(function (g) { var x = I.grp[g.id]; return x ? { g: g, d: (x.rho[1] - x.rho[0]) * 100, x: x } : null; }).filter(function (m) { return m && Math.abs(m.d) >= 0.5; }).sort(function (a, b) { return Math.abs(b.d) - Math.abs(a.d); }).slice(0, 3);
-      if (moved.length) h += '<li>Exam readiness: ' + moved.map(function (m) { return esc(m.g.title) + ' <b>' + pct(m.x.rho[0]) + ' → ' + pct(m.x.rho[1]) + '</b>'; }).join(' · ') + '.</li>';
-      var sh = (I.shift || []).filter(function (s) { return s.se !== null && Math.abs(s.closer - I.sessions) > Math.max(1, 2 * s.se) || (s.se !== null && s.closer > 0 && s.se < 1); })[0];
-      if (sh) { var nm = /^course/.test(sh.id) ? 'the end of the course' : 'the next exam checkpoint'; h += '<li>' + cap(nm) + ' is about <b>' + plural(Math.max(0, Math.round(sh.now)), 'session') + '</b> ahead; before ' + lensLower(lens) + ' it was ' + Math.round(sh.before) + (sh.closer > I.sessions + 0.5 ? '. The work counted for more than its ' + plural(I.sessions, 'session') + '.' : '.') + '</li>'; }
+      if (I.dMh) h += '<li>Held in memory: <b>' + blobs(I.dMh, true) + '</b>' + (I.bound[1] !== I.bound[0] ? ' (' + I.bound[1] + ' skills firmly held, ' + (I.bound[1] > I.bound[0] ? 'up' : 'down') + ' from ' + I.bound[0] + ')' : '') + '.</li>';
+      var open = {}; (c.ahead && c.ahead.checkpoints || []).forEach(function (cp) { if (cp.state !== 'completed') open[cp.id] = 1; });
+      var moved = c.groups.map(function (g) { var x = I.grp[g.id]; return x && open[g.id] ? { g: g, d: (x.rho[1] - x.rho[0]) * 100, x: x } : null; }).filter(function (m) { return m && Math.abs(m.d) >= 0.5; }).sort(function (a, b) { return Math.abs(b.d) - Math.abs(a.d); }).slice(0, 2);
+      if (moved.length) h += '<li>Toward the checkpoints ahead: ' + moved.map(function (m) { return esc(m.g.title) + ' <b>' + pct(m.x.rho[0]) + ' → ' + pct(m.x.rho[1]) + '</b> of the way to its targets'; }).join(' · ') + '.</li>';
+      var sh = (I.shift || []).filter(function (s) { return s.se !== null && (Math.abs(s.closer - I.sessions) > Math.max(1, 2 * s.se) || (s.closer > 0 && s.se < 1)); })[0];
+      if (sh) h += '<li>' + (/^course/.test(sh.id) ? 'The end of the course' : 'The next checkpoint') + ' is about <b>' + plural(Math.max(0, Math.round(sh.now)), 'session') + '</b> ahead; before ' + lensLower(lens) + ' it was ' + Math.round(sh.before) + '.</li>';
       h += '</ul>';
       if (I.skills.up.length) h += '<div class="tj-sk"><span class="lab">Gained most</span>' + I.skills.up.map(function (s) { return '<button type="button" class="tj-skb up" data-skill="' + esc(s.skill) + '"><b>' + q(s.d, true) + '</b> ' + esc(s.label) + '</button>'; }).join('') + '</div>';
       if (I.skills.down.length) h += '<div class="tj-sk"><span class="lab">Gave some back</span>' + I.skills.down.map(function (s) { return '<button type="button" class="tj-skb dn" data-skill="' + esc(s.skill) + '"><b>' + q(s.d, true) + '</b> ' + esc(s.label) + '</button>'; }).join('') + '</div>';
@@ -248216,39 +248470,51 @@ var HTJ = (function () {
     return card;
   }
 
-  // ------------------------------------------------------------------ checkpoints
+  // ------------------------------------------------------------------ checkpoints: an exam is a snapshot, not a target to keep chasing
   function rbar(label, now, then, target) {
     var w = function (v) { return Math.round(Math.max(0, Math.min(1, v)) * 100); };
     return '<div class="tj-rb"><span class="lab">' + label + '</span><div class="trk"><i class="now" style="width:' + w(now) + '%"></i>' + (then !== null && then > now + 0.004 ? '<i class="then" style="left:' + w(now) + '%;width:' + (w(then) - w(now)) + '%"></i>' : '') + '<i class="tg" style="left:' + w(target) + '%"></i></div><span class="val">' + pct(now) + (then !== null && Math.abs(then - now) >= 0.005 ? ' → ' + pct(then) : '') + '</span></div>';
   }
   function checkCard(c) {
     var card = el('section', 'hb-card wide tj-checks'), a = c.ahead;
-    var h = '<h2>Exam checkpoints</h2><p class="sub">Each exam sits where its chapters end. The bars show the readiness you have now and, lighter, what the trajectory carries into the checkpoint; the mark is the target (Core ' + pct(c.thr.core) + ', Stretch ' + pct(c.thr.stretch) + ').</p>';
+    var h = '<h2>Checkpoints</h2><p class="sub">An exam is a checkpoint: a snapshot that calibrates what the course knows about your mastery. Once it is completed it stays on the trail; the skills in it keep being tracked.</p>';
     if (!a) { card.innerHTML = h + '<p class="hb-muted">Drawing the path ahead…</p>'; return card; }
-    h += '<div class="tj-cps">' + a.checkpoints.map(function (cp, i) {
-      var st = cp.cleared ? 'cleared' : cp.here ? 'here' : 'ahead', at = cp.atArrive || {}, nxt = !cp.cleared && nextCheckpoint(c) === cp;
-      var where = cp.cleared ? 'Cleared: the exam met both targets.' : cp.here ? 'You are at this checkpoint: its chapters are complete.' : cp.arrive && cp.arrive.s !== null ? cap(aheadTxt(cp)) + ' (' + cp.arrive.lo + ' to ' + cp.arrive.hi + ').' : 'Beyond the path drawn so far.';
-      var rdy = cp.cleared ? '' : cp.ready && cp.ready.done ? ' Both targets are within reach now.' : cp.ready && cp.ready.s !== null ? ' Both targets in about ' + plural(cp.ready.s, 'session') + '.' : cp.coreReady && cp.coreReady.done ? ' Core is at its target; Stretch is the climb.' : cp.coreReady && cp.coreReady.s !== null ? ' Core reaches its target in about ' + plural(cp.coreReady.s, 'session') + '.' : '';
-      return '<div class="tj-cp ' + st + (nxt ? ' next' : '') + '"><div class="tj-cph"><span class="dia" aria-hidden="true"></span><div><b>' + esc(grpTitle(cp)) + '</b>' + (nxt ? '<span class="tag">next</span>' : '') + '<p>' + where + rdy + '</p></div></div><div class="tj-cpb">' + rbar('Core', cp.now.core, cp.here || cp.cleared || !at.core ? null : at.core.mid, c.thr.core) + rbar('Stretch', cp.now.stretch, cp.here || cp.cleared || !at.stretch ? null : at.stretch.mid, c.thr.stretch) + '</div><button type="button" class="tj-cpgo" data-scope="' + cp.id + '">Show this path</button></div>';
+    h += '<div class="tj-cps">' + a.checkpoints.map(function (cp) {
+      var at = cp.atArrive || {}, nxt = nextCheckpoint(c) === cp, la = lastAttempt(cp), body, where;
+      if (cp.state === 'completed') {
+        where = 'Completed ' + (la.back ? plural(la.back, 'session') + ' back' : 'in the latest session') + (cp.taken > 1 ? ' (' + cp.taken + ' attempts; the latest is shown)' : '') + '.';
+        body = '<div class="tj-snap"><span><b>' + pct(la.core) + '</b> Core</span><span><b>' + pct(la.stretch) + '</b> Stretch</span></div>';
+      } else {
+        where = cp.state === 'here' ? 'You have reached this checkpoint: its chapters are complete.' : cp.arrive && cp.arrive.s !== null ? cap(aheadTxt(cp)) + ' (' + cp.arrive.lo + ' to ' + cp.arrive.hi + ').' : 'Beyond the path drawn so far.';
+        body = '<div class="tj-cpb">' + rbar('Core', cp.now.core, cp.state === 'here' || !at.core ? null : at.core.mid, c.thr.core) + rbar('Stretch', cp.now.stretch, cp.state === 'here' || !at.stretch ? null : at.stretch.mid, c.thr.stretch) + '</div>';
+      }
+      return '<div class="tj-cp ' + cp.state + (nxt ? ' next' : '') + '"><div class="tj-cph"><span class="dia" aria-hidden="true"></span><div><b>' + esc(grpTitle(cp)) + '</b>' + (nxt ? '<span class="tag">next</span>' : '') + '<p>' + where + '</p></div></div>' + body + '<div class="tj-cpa"><button type="button" class="tj-cpgo" data-scope="' + cp.id + '">Its path</button>' + (cp.state !== 'ahead' ? '<a class="tj-cpgo" href="' + examHref(cp.id) + '">' + (cp.state === 'completed' ? 'Retake' : 'Take it') + '</a>' : '') + '</div></div>';
     }).join('') + '</div>';
-    if (a.course && !a.course.done && a.course.s !== null) h += '<p class="hb-muted tj-end">The end of the course (every Path level and Review) is about ' + plural(a.course.s, 'session') + ' ahead (' + a.course.lo + ' to ' + a.course.hi + ') at your usual session of about ' + a.sessionMin + ' minutes.' + (a.early ? ' With only a few sessions so far, this is an early reading.' : '') + '</p>';
+    h += '<p class="hb-muted tj-end">For a checkpoint ahead, the bars show mastery of its skills now and, lighter, what the trajectory carries into it; the mark is the target (Core ' + pct(c.thr.core) + ', Stretch ' + pct(c.thr.stretch) + '). A retake is welcome any time: it is one more calibration.' + (a.course && !a.course.done && a.course.s !== null ? ' The end of the course is about ' + plural(a.course.s, 'session') + ' ahead (' + a.course.lo + ' to ' + a.course.hi + ').' : '') + '</p>';
     card.innerHTML = h;
     return card;
   }
 
-  // ------------------------------------------------------------------ where the mass is
+  // ------------------------------------------------------------------ where the mass is: one vessel per chapter
+  function vessel(m, R, id) {
+    var f = m.Mmax ? Math.max(0, Math.min(1, m.M / m.Mmax)) : 0, hd = m.Mmax ? Math.max(0, Math.min(1, m.Mh / m.Mmax)) : 0, D = R * 2 + 6, c0 = D / 2;
+    // the level of a liquid that fills fraction f of a circle's area (solved by bisection)
+    var lev = function (fr) { if (fr <= 0) return 0; if (fr >= 1) return 1; var lo = 0, hi = 1; for (var i = 0; i < 22; i++) { var h = (lo + hi) / 2, x = 2 * h - 1, ar = (Math.acos(-x) + x * Math.sqrt(1 - x * x)) / Math.PI; if (ar < fr) lo = h; else hi = h; } return (lo + hi) / 2; };
+    var yM = c0 + R - 2 * R * lev(f), yH = c0 + R - 2 * R * lev(hd);
+    return '<svg viewBox="0 0 ' + f1(D) + ' ' + f1(D) + '" width="' + f1(D) + '" height="' + f1(D) + '" aria-hidden="true"><defs><clipPath id="' + id + '"><circle cx="' + f1(c0) + '" cy="' + f1(c0) + '" r="' + f1(R) + '"/></clipPath></defs><circle class="v-bg" cx="' + f1(c0) + '" cy="' + f1(c0) + '" r="' + f1(R) + '"/><g clip-path="url(#' + id + ')"><rect class="v-m" x="0" y="' + f1(yM) + '" width="' + f1(D) + '" height="' + f1(D) + '"/><rect class="v-h" x="0" y="' + f1(yH) + '" width="' + f1(D) + '" height="' + f1(D) + '"/>' + (f > 0.02 && f < 0.98 ? '<path class="v-w" d="M-20 ' + f1(yM) + ' q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 v8 h-200z"/>' : '') + '</g><circle class="v-rim" cx="' + f1(c0) + '" cy="' + f1(c0) + '" r="' + f1(R) + '"/></svg>';
+  }
   function mapCard(c) {
-    var card = el('section', 'hb-card tj-map'), tot = 0; c.map.forEach(function (m) { tot += m.Mmax; });
-    card.innerHTML = '<h2>Where the mass is</h2><p class="sub">One block per chapter, as wide as the chapter is big. The fill is mass; the darker part is held in memory now.</p><div class="tj-blocks">' + c.map.map(function (m) {
-      var f = m.Mmax ? m.M / m.Mmax : 0, hd = m.Mmax ? m.Mh / m.Mmax : 0;
-      return '<a class="tj-blk" href="#ch/' + m.ch + '" style="flex:' + Math.max(1, Math.round(m.Mmax / tot * 100)) + '"' + tip('Chapter ' + m.ch + ' · ' + num(m.M) + ' q', pct(f) + ' of its mass demonstrated · ' + pct(m.M ? m.Mh / m.M : 0) + ' of that held now<br>Path ' + pct(m.comp) + ' complete') + '><span class="col"><i class="m" style="height:' + Math.round(f * 100) + '%"></i><i class="h" style="height:' + Math.round(hd * 100) + '%"></i></span><span class="n"><em>Ch </em>' + m.ch + '</span><span class="mq">' + num(m.M) + '</span></a>';
+    var card = el('section', 'hb-card wide tj-map'), big = 0; c.map.forEach(function (m) { big = Math.max(big, m.Mmax); });
+    card.innerHTML = '<h2>Where the mass is</h2><p class="sub">One vessel per chapter, sized by how much the chapter can hold. Blobs fill it; the darker part is held in memory now. A fuller vessel hangs lower and swings less.</p><div class="tj-vessels">' + c.map.map(function (m) {
+      var f = m.Mmax ? m.M / m.Mmax : 0, R = (20 + 34 * Math.sqrt(m.Mmax / Math.max(1, big))) * (window.innerWidth < 600 ? 0.6 : 1);
+      return '<a class="tj-ves" href="#ch/' + m.ch + '" style="--sink:' + Math.round(f * 46) + 'px;--sway:' + f1(4 * (1 - f)) + 'deg;--dur:' + f1(2.6 + 2.2 * f) + 's"' + tip('Chapter ' + m.ch + ' · ' + blobs(m.M), pct(f) + ' of what it can hold (' + num(m.Mmax) + ') · ' + pct(m.M ? m.Mh / m.M : 0) + ' of that held now<br>Path ' + pct(m.comp) + ' complete') + '><span class="str"></span><span class="bob">' + vessel(m, R, 'tjV' + m.ch) + '</span><span class="n"><em>Ch </em>' + m.ch + '</span><span class="mq">' + num(m.M) + '</span></a>';
     }).join('') + '</div>';
     HX.C.wireTips(card);
     return card;
   }
   function methodCard(c) {
     var card = el('section', 'hb-card wide tj-method');
-    card.innerHTML = '<details><summary>How this is worked out</summary><div class="tj-mgrid"><p><b>Mass</b> is what you have demonstrated: each skill carries up to ' + c.unit.q + ' q, more as the evidence for it builds. Right answers add mass; misses take a little back. Time alone does not change it.</p><p><b>Held</b> is the part of the mass that is in memory now. It slips between sessions and comes back with practice.</p><p><b>Velocity</b> is mass added per session; <b>acceleration</b> is how velocity is changing; <b>momentum</b> is mass × velocity.</p><p><b>Energy levels</b> are equal steps of mass, ' + c.unit.level + ' q each.</p><p><b>The path ahead</b> comes from the same learner model that reads your answers, run forward one session at a time at your usual session length. The shaded range holds most of the futures it tried.</p><p><b>Sessions, not dates.</b> A session is a day with answers. The path does not say when; it says how far.</p></div></details>';
+    card.innerHTML = '<details><summary>How this is worked out</summary><div class="tj-mgrid"><p><b>Blobs</b> are what you have demonstrated: each skill carries up to ' + c.unit.perSkill + ' blobs, more as the evidence for it builds. Right answers add blobs; misses take a little back. Time alone does not change them.</p><p><b>Held</b> is the part of the mass that is in memory now. It slips between sessions and comes back with practice.</p><p><b>Velocity</b> is blobs added per session; <b>acceleration</b> is the change in velocity; <b>momentum</b> is mass × velocity. A short lens is noisier than a long one, and that is fine: it shows that stretch exactly.</p><p><b>Energy levels</b> are equal steps of ' + c.unit.level + ' blobs.</p><p><b>The path ahead</b> comes from the same learner model that reads your answers, run forward one session at a time at your usual session length. The shaded range holds most of the futures it tried.</p><p><b>Checkpoints</b> are the exams. A completed exam is a snapshot on the trail and a calibration of everything else; it can be retaken at any time.</p><p><b>Sessions, not dates.</b> A session is a day with answers. The path does not say when; it says how far.</p></div></details>';
     return card;
   }
 
@@ -248260,27 +248526,74 @@ var HTJ = (function () {
       var c = cur;
       wrap.innerHTML = '<section class="hb-intro tj-intro"><div class="eyebrow">Progress that keeps going past today</div><h1>Trajectory</h1><p>Where you have been, where you are, and where the work is taking you.</p></section>';
       if (!c) { wrap.appendChild(el('div', 'hb-card tj-wait', '<p class="hb-muted">' + (stage === 'error' ? 'The trajectory could not be worked out this time. Everything else in the hub still works.' : 'Reading your record…') + '</p>')); return; }
-      if (!c.sessions.length) { wrap.appendChild(el('div', 'hb-card tj-wait', '<h2>Nothing is moving yet</h2><p class="hb-muted">Answer a few questions on a Path level. Your first session gives you mass, a velocity, and a path to look down.</p><p><a class="btn" href="#today">Go to Today</a></p>')); return; }
+      if (!c.sessions.length) { wrap.appendChild(el('div', 'hb-card tj-wait', '<h2>Nothing is moving yet</h2><p class="hb-muted">Answer a few questions on a Path level. Your first session gives you blobs, a velocity, and a path to look down.</p><p><a class="btn" href="#today">Go to Today</a></p>')); return; }
       var bar = el('div', 'tj-lens'); bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'Time lens');
       bar.innerHTML = '<span class="lab">Lens</span><div class="seg">' + LENSES.map(function (L) { return '<button type="button" data-lens="' + L[0] + '" aria-pressed="' + (ui.lens === L[0]) + '">' + L[1] + '</button>'; }).join('') + '</div>' + (stage !== 'ready' ? '<span class="busy" role="status">updating…</span>' : '');
       wrap.appendChild(bar);
       var grid = el('div', 'hb-grid tj-grid'); wrap.appendChild(grid);
       grid.appendChild(instruments(c));
       grid.appendChild(heroCard(c));
-      grid.appendChild(impactCard(c));
       grid.appendChild(levelCard(c));
-      grid.appendChild(checkCard(c));
+      grid.appendChild(impactCard(c));
       grid.appendChild(mapCard(c));
+      grid.appendChild(checkCard(c));
       grid.appendChild(methodCard(c));
       bar.addEventListener('click', function (e) { var b = e.target.closest('[data-lens]'); if (b && b.dataset.lens !== ui.lens) { ui.lens = b.dataset.lens; draw(); } });
-      grid.addEventListener('click', function (e) { var b = e.target.closest('.tj-cpgo'); if (b) { ui.scope = b.dataset.scope; draw(); var hh = wrap.querySelector('.tj-hero'); if (hh && hh.scrollIntoView) hh.scrollIntoView({ block: 'start', behavior: 'smooth' }); } });
+      grid.addEventListener('click', function (e) { var b = e.target.closest('button.tj-cpgo'); if (b) { ui.scope = b.dataset.scope; draw(); var hh = wrap.querySelector('.tj-hero'); if (hh && hh.scrollIntoView) hh.scrollIntoView({ block: 'start', behavior: 'smooth' }); } });
     }
     draw();
     var last = null, rs = function () { if (!wrap.isConnected) { window.removeEventListener('resize', rs); return; } var w = wrap.clientWidth; if (w !== last) { last = w; var hh = wrap.querySelector('.tj-hero'); if (hh && hh._draw) hh._draw(); } };
     window.addEventListener('resize', rs);
     onChange(function () { if (wrap.isConnected) draw(); });
   }
-  return { init: init, ensure: ensure, view: view, line: line, state: state, onChange: onChange, _ui: ui };
+
+  // ------------------------------------------------------------------ the same picture on other pages: a chapter, a section
+  function miniStats(c, S) {
+    var wk = lensOfScope(c, S, 'week'), all = lensOfScope(c, S, 'course'), L = wk.n ? wk : all, nSess = 0; S.past.forEach(function (p, j) { if (p.y - (j ? S.past[j - 1].y : 0) > 0.05) nSess++; });
+    return { L: L, lens: wk.n ? 'this week' : 'so far', vAll: nSess ? S.now / nSess : 0, nSess: nSess, fill: S.max ? S.now / S.max : 0 };
+  }
+  function cpLine(c, cp) {
+    if (!cp) return '';
+    var la = lastAttempt(cp);
+    return cp.state === 'completed' ? 'Checkpoint completed: Core ' + pct(la.core) + ', Stretch ' + pct(la.stretch) + '.' : cp.state === 'here' ? 'Its checkpoint is here: the exam is ready to take.' : cp.arrive && cp.arrive.s !== null ? 'Its checkpoint is ' + aheadTxt(cp) + '.' : '';
+  }
+  function chapterCard(n) {
+    boot(); ensure();
+    var card = el('section', 'hb-card wide tj-chcard'); card.id = 'tjChapter';
+    function draw() {
+      var c = cur;
+      if (!c || !c.ahead) { card.innerHTML = '<h2>This chapter’s trajectory</h2><p class="hb-muted">' + (stage === 'error' ? 'Not available this time.' : 'Reading your record…') + '</p>'; return; }
+      var S = scopeOf(c, 'ch:' + n), m = c.map.filter(function (x) { return x.ch === n; })[0], st = miniStats(c, S), g = grpOfCh(c, n), cp = g && c.ahead.checkpoints.filter(function (x) { return x.id === g.id; })[0];
+      var chA = (c.ahead.chapters || []).filter(function (x) { return x.ch === n; })[0], N = c.sessions.length, from = S.first < 0 ? -Math.min(N, 2) : -(N - S.first), to = chA && chA.s ? Math.min(c.ahead.s[c.ahead.s.length - 1], chA.s + 6) : Math.min(c.ahead.s[c.ahead.s.length - 1], 12);
+      card.innerHTML = '<div class="tj-chh"><div class="tj-chv">' + vessel(m, 44, 'tjCv' + n) + '</div><div class="tj-chs"><h2>This chapter’s trajectory</h2><div class="tj-stats"><span><b>' + num(S.now) + '</b> of ' + num(S.max) + ' blobs</span><span><b>' + q(st.L.v) + '</b> blobs a session ' + st.lens + '</span><span>' + (m.M ? '<b>' + pct(m.Mh / m.M) + '</b> held now' : 'nothing held yet') + '</span>' + (chA && !chA.done && chA.s !== null ? '<span>Path complete in about <b>' + plural(chA.s, 'session') + '</b></span>' : '') + '</div><p class="sub">' + esc(cpLine(c, cp)) + ' <a class="hb-link" href="#dashboard/trajectory">The whole trajectory</a></p></div></div><div class="tj-pathbox"></div>';
+      var box = card.querySelector('.tj-pathbox'), W = Math.max(300, Math.floor(box.clientWidth || card.clientWidth - 44 || 900));
+      box.innerHTML = N ? pathSvg(c, W, S, [Math.min(from, -1), Math.max(to, 3)], { H: W < 620 ? 250 : 270, mini: true, lens: 'week' }) : HX.empty('The first session puts the first mark on the path.', 160);
+      HX.C.wireTips(box);
+    }
+    setTimeout(draw, 0); onChange(function () { if (card.isConnected) draw(); });
+    return card;
+  }
+  function spark(c, S) {
+    var W = 150, H = 40, N = c.sessions.length, pts = S.past.filter(function (p) { return S.first >= 0 && p.k >= S.first; }).map(function (p) { return [p.s, p.y]; }), ah = c.ahead, ser = ah && ah.series[S.id], fut = [];
+    if (ser) for (var i = 0; i < ah.s.length && ah.s[i] <= Math.max(10, pts.length); i++) fut.push([ah.s[i], ser.mid[i]]);
+    var all = pts.concat(fut), x0 = all.length ? all[0][0] : 0, x1 = all.length ? all[all.length - 1][0] : 1, y1 = Math.max(1, Math.max.apply(null, all.map(function (p) { return p[1]; }).concat([1])));
+    var X = function (s) { return 3 + (s - x0) / Math.max(1, x1 - x0) * (W - 6); }, Y = function (v) { return H - 4 - v / y1 * (H - 9); }, pl = function (a) { return a.map(function (p) { return f1(X(p[0])) + ',' + f1(Y(p[1])); }).join(' '); };
+    return '<svg class="tj-spark" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" aria-hidden="true">' + (pts.length > 1 ? '<polyline class="sp-p" points="' + pl(pts) + '"/>' : '') + (fut.length > 1 ? '<polyline class="sp-f" points="' + pl(fut) + '"/>' : '') + '<circle class="sp-n" cx="' + f1(X(0)) + '" cy="' + f1(Y(S.now)) + '" r="4"/></svg>';
+  }
+  function groupStrip(gid) {
+    boot(); ensure();
+    var box = el('a', 'tj-strip'); box.href = '#dashboard/trajectory';
+    function draw() {
+      var c = cur, g = c && grpOf(c, gid);
+      if (!c || !c.ahead || !g) { box.innerHTML = '<span class="k">Trajectory</span><span class="t">' + (c && !g ? '' : 'Reading your record…') + '</span>'; box.hidden = !!(c && !g); return; }
+      var S = scopeOf(c, gid), st = miniStats(c, S), cp = c.ahead.checkpoints.filter(function (x) { return x.id === gid; })[0];
+      box.innerHTML = '<span class="k">Trajectory</span>' + spark(c, S) + '<span class="t"><b>' + num(S.now) + '</b> of ' + num(S.max) + ' blobs · <b>' + q(st.L.v) + '</b> a session ' + st.lens + (cp ? ' · ' + esc(cpLine(c, cp).replace(/^Its checkpoint/, 'Checkpoint').replace(/\.$/, '')) : '') + '</span><span class="go" aria-hidden="true">→</span>';
+    }
+    box.addEventListener('click', function () { ui.scope = gid; });
+    draw(); onChange(function () { if (box.isConnected) draw(); });
+    return box;
+  }
+  return { init: init, ensure: ensure, view: view, line: line, chapterCard: chapterCard, groupStrip: groupStrip, state: state, onChange: onChange, _ui: ui };
 })();
 /* ===== HTJ END ===== */
 
@@ -248291,11 +248604,8 @@ var HTJ = (function () {
    The learner model is hub/lms_model.js (pure); this file only reads storage, calls LMS and draws. */
 (function () {
   'use strict';
-  // The forecast (hub/hub_fc.js) is optional: a build without it (build_hub.py --no-forecast) has no HFC, no Forecast tab
-  // and no forecast lines anywhere.
-  var FC = typeof HFC !== 'undefined' ? HFC : null;
   // The Trajectory (hub/hub_traj.js over hub/lms_traj.js) is the forward-looking half of Progress. It is optional too
-  // (build_hub.py --no-trajectory): without it #progress is the record page alone.
+  // (build_hub.py --no-trajectory): without it the Dashboard is the Progress page alone.
   var TJ = typeof HTJ !== 'undefined' ? HTJ : null;
   var CAT = LMS_CAT, HUBKEY = 'mm7-hub-v1', DAY = 864e5, ONRAMP_MS = 10 * 60000, ONRAMP_MAX = 14;
   var LVN = ['Foundation', 'Fluency', 'Transfer'];
@@ -248426,7 +248736,6 @@ var HTJ = (function () {
   }
   function model() { if (dirty || !M) rebuild(); return M; }
   function snaps() { if (!M.snaps) M.snaps = LMS.snapshots(M.obs, CAT) || []; return M.snaps; }
-  function forecast() { if (!M.fc) M.fc = LMS.forecast(M.m, CAT, 30) || { chapters: {}, overall: [], fading: [] }; return M.fc; }
   function nextWork() { if (M.next === undefined) M.next = LMS.nextWork(CAT, getItem, M.hub) || null; return M.next; }
   function plan() {
     if (!M.plan) { var nw = nextWork(); M.plan = LMS.plan(M.m, CAT, M.hub, M.now, { current: M.hub.settings.current || (nw ? { ch: nw.ch, key: nw.key } : null), budgetSec: 540, maxItems: ONRAMP_MAX }) || []; }
@@ -248613,7 +248922,7 @@ var HTJ = (function () {
   function parse() { var h = decodeURIComponent(location.hash.replace(/^#/, '')) || 'today', p = h.split('/'); if (p[0] === 'app' && ROUTE_ALIAS[p[1]]) p[1] = ROUTE_ALIAS[p[1]]; return p; }
   function go(h) { if (location.hash === '#' + h) route(); else location.hash = h; }
   function setNav(name) {
-    var map = { today: 'today', onramp: 'today', practice: cur.practice && cur.practice.navFrom || 'chapters', chapters: 'chapters', ch: 'chapters', reviews: 'reviews', app: 'reviews', progress: 'progress', forecast: 'forecast', settings: 'settings' };
+    var map = { today: 'today', onramp: 'today', practice: cur.practice && cur.practice.navFrom || 'chapters', chapters: 'chapters', ch: 'chapters', reviews: 'reviews', app: 'reviews', progress: 'dashboard', dashboard: 'dashboard', settings: 'settings' };
     var on = map[name] || 'today';
     Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function (a) { if (a.dataset.nav === on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   }
@@ -248635,8 +248944,7 @@ var HTJ = (function () {
       else if (name === 'ch' && chOf(+p[1])) { if (p[2] === 'path') viewChapterPath(main, +p[1], p[3]); else viewChapterDash(main, +p[1]); }
       else if (name === 'reviews') viewReviews(main);
       else if (name === 'app' && MANIFEST[p[1]]) viewApp(main, p[1]);
-      else if (name === 'progress') { if (TJ) progressNav(main, p[1] === 'record'); if (TJ && p[1] !== 'record') TJ.view(main); else viewProgress(main); }
-      else if (name === 'forecast' && FC) FC.view(main);
+      else if (name === 'dashboard' || name === 'progress') { var tjOn = TJ && p[1] === 'trajectory'; if (TJ) dashNav(main, tjOn); if (tjOn) TJ.view(main); else viewProgress(main); }   // #progress is the old address of the same page
       else if (name === 'settings') viewSettings(main);
       else { go('today'); return; }
     } catch (e) {
@@ -248692,8 +249000,7 @@ var HTJ = (function () {
     wrap.innerHTML = '<section class="hb-hello"><div class="eyebrow">' + esc(fmtLong(M.now)) + '</div><h1>' + greeting(M.now) + '</h1></section>';
     var box = el('div', 'hb-today'); wrap.appendChild(box);
     var specs = plan(), done = todaysSession(), nw = nextWork(), fresh = !anyEvidence();
-    if (!fresh && FC) box.appendChild(FC.milestoneLine());   // the one forecast line (every other date is on the Forecast page)
-    else if (!fresh && TJ) box.appendChild(TJ.line());       // without the Forecast: the one trajectory line (level, momentum, next checkpoint)
+    if (!fresh && TJ) box.appendChild(TJ.line());   // the one trajectory line (level, momentum, next checkpoint)
     if (fresh) {
       var wc = el('section', 'hb-card hb-welcome');
       wc.innerHTML = '<h2>Welcome to the Learning Hub</h2><p class="sub">Everything you do in the chapter Paths, the Reviews and the Exams shows up here as evidence of what you know, and the hub plans a short daily onramp from it.</p>' +
@@ -249041,10 +249348,9 @@ var HTJ = (function () {
     grid.appendChild(unitGridCard(n, C0));
     // 3. skill map
     grid.appendChild(skillMapCard(n, C0));
-    // 4. trajectory + forecast
+    // 4. the chapter's trajectory (blobs, velocity, the path) and its record so far
+    if (TJ) grid.appendChild(TJ.chapterCard(n));
     grid.appendChild(trajectoryCard('ch', n));
-    grid.appendChild(forecastCard('ch', n));
-    if (FC) grid.appendChild(FC.chapterCard(n));
     // 5. support map
     grid.appendChild(supportCard(n));
     // sections (book -> chapter -> section -> skill)
@@ -249126,25 +249432,10 @@ var HTJ = (function () {
   function trajectoryCard(scope, n) {
     var sn = snaps(), pts = sn.map(function (d) { var x = scope === 'ch' ? (d.chapters && d.chapters[n]) : d.overall; return { day: d.day, E: x ? x.E : null, R: x ? x.Rnow : null, items: d.items, minutes: d.minutes, active: x && x.counts ? STATUS.slice(0, 4).reduce(function (a, s) { return a + (x.counts[s] || 0); }, 0) : 0 }; }).filter(function (p) { return p.active > 0 || scope !== 'ch'; });
     function lab(day) { var p = day.split('-'); return fmtDate(new Date(+p[0], +p[1] - 1, +p[2]).getTime()); }
-    var card = xcard({ title: 'Trajectory', sub: 'Evidence-based mastery and retention at the end of each day with practice' + (scope === 'ch' ? ' on this chapter' : '') + '.', legend: '<span><i class="lgk ln"></i>Mastery</span><span><i class="lgk ln s2"></i>Retention</span>',
+    var card = xcard({ title: 'Mastery and retention so far', sub: 'Evidence-based mastery and retention at the end of each day with practice' + (scope === 'ch' ? ' on this chapter' : '') + '.', legend: '<span><i class="lgk ln"></i>Mastery</span><span><i class="lgk ln s2"></i>Retention</span>',
       render: function (W) { return pts.length < 1 ? empty('The line starts after the first day of practice.', 200) : lines({ labels: pts.map(function (p) { return lab(p.day); }), series: [{ name: 'Mastery', cls: 's1', vals: pts.map(function (p) { return p.E; }) }, { name: 'Retention', cls: 's2', vals: pts.map(function (p) { return p.R; }), square: true }], label: 'Evidence-based mastery and retention by day', tipExtra: function (i) { return '<br><span class="tl">' + plural(pts[i].items || 0, 'answer') + ' that day</span>'; } }, W); },
       table: C.table(['Day', 'Mastery', 'Retention', 'Answers'], pts.map(function (p) { return [lab(p.day), pct(p.E), pct(p.R), String(p.items || 0)]; }), [1, 2, 3]) });
     card.classList.add('hb-traj');
-    return card;
-  }
-  function forecastCard(scope, n) {
-    var fc = forecast(), arr = (scope === 'ch' ? fc.chapters && fc.chapters[n] : fc.overall) || [];
-    var ids = scope === 'ch' ? chapterSkills(n) : null, fad = (fc.fading || []).filter(function (f) { return !ids || ids.indexOf(f.skill) >= 0; }).slice(0, 4);
-    var has = arr.some(function (p) { return p.R > 0; });
-    var labels = arr.map(function (p) { return p.d === 0 ? 'today' : fmtDate(M.now + p.d * DAY); });
-    var card = xcard({ title: 'Next 30 days', sub: 'Predicted recall if nothing is reviewed, and with the reviews the onramp will schedule.', legend: '<span><i class="lgk ln"></i>With planned reviews</span><span><i class="lgk ln s2 dash"></i>No review</span><span><i class="lgk ln ref"></i>review point (75%)</span>',
-      render: function (W) {
-        var h = !has ? empty('The forecast appears once some skills have been practiced.', 200) : lines({ labels: labels, series: [{ name: 'Reviews', cls: 's1', vals: arr.map(function (p) { return p.Rreview; }) }, { name: 'No review', cls: 's2', vals: arr.map(function (p) { return p.R; }), dash: true }], ref: { y: 0.75, label: 'review point' }, label: 'Forecast of recall over 30 days', tipTitle: function (i) { return labels[i] + (arr[i].d ? ' (in ' + plural(arr[i].d, 'day') + ')' : ''); } }, W);
-        if (has && fad.length) h += '<div class="hb-note">Turning <b>Fading</b> soon without review: ' + fad.map(function (f) { return '<b>' + esc(f.skill) + '</b> ' + fmtDate(f.t || f.date); }).join(' · ') + '</div>';
-        return h;
-      },
-      table: C.table(['Day', 'With planned reviews', 'No review'], arr.filter(function (p, i) { return i % 5 === 0 || i === arr.length - 1; }).map(function (p) { return [p.d === 0 ? 'today' : fmtDate(M.now + p.d * DAY), pct(p.Rreview), pct(p.R)]; }), [1, 2]) + (fad.length ? '<p class="hb-note">Turning Fading without review: ' + fad.map(function (f) { return esc(f.skill) + ' ' + fmtDate(f.t || f.date); }).join(', ') + '</p>' : '') });
-    card.classList.add('hb-fc');
     return card;
   }
   function lvChip(ch, levelKey) { var k = String(levelKey).replace(/^ch\d+:/, ''), c = +(String(levelKey).match(/^ch(\d+):/) || [0, ch])[1]; return '<button type="button" class="hb-lvchip" data-open="' + esc(k) + '" title="Open in the Path">' + IC.bridge.replace('<svg', '<svg width="14" height="14"') + 'Ch ' + c + ' · ' + esc(short(unitName(c, k), 26)) + ' · ' + levelName(k) + '</button>'; }
@@ -249290,7 +249581,7 @@ var HTJ = (function () {
       b.appendChild(xcard({ title: 'Mastery evidence over time', sub: 'Answers that count for this skill, one mark per day and difficulty; a bigger mark means more answers.', legend: '<span><i class="lgk ok"></i>all correct</span><span><i class="lgk hb-half"></i>some missed</span><span><i class="lgk no"></i>all missed</span>',
         render: function (W) { return hist.length ? timelineSVG(hist, W, imps) : empty('No evidence yet.', 140); },
         table: C.table(['When', 'Where', 'Difficulty', 'Result'], hist.slice().reverse().map(function (o) { return [esc(X.dayStamp(o.t)), esc(srcLabel(o)), diffName(o.diff), o.ok ? 'Correct' : 'Missed']; })) }));
-      b.appendChild(xcard({ title: 'Memory curve', sub: 'Predicted recall between practices. Each review resets it and makes it fade more slowly; the dashed part is the forecast.', legend: '<span><i class="lgk ln"></i>predicted recall</span><span><i class="lgk ok"></i>recalled</span><span><i class="lgk no"></i>missed</span><span><i class="lgk hb-imp"></i>refreshed by related work</span><span><i class="lgk ln ref"></i>75% review point</span>',
+      b.appendChild(xcard({ title: 'Memory curve', sub: 'Predicted recall between practices. Each review resets it and makes it fade more slowly; the dashed part is what the model expects next.', legend: '<span><i class="lgk ln"></i>predicted recall</span><span><i class="lgk ok"></i>recalled</span><span><i class="lgk no"></i>missed</span><span><i class="lgk hb-imp"></i>refreshed by related work</span><span><i class="lgk ln ref"></i>75% review point</span>',
         render: function (W) { return sk.S || hist.length ? memorySVG(sk, hist, W, id) : empty('The curve starts with the first correct answer.', 140); },
         table: C.table(['Practice', 'Result', 'Predicted recall before', 'Holds (days to 50%)'], memTrace(id).map(function (o) { return [esc(X.dayStamp(o.t)), o.kind === 'implicit' ? 'Refreshed by related work' : o.ok ? 'Recalled' : 'Missed', o.Rpre === null ? 'first' : pct(o.Rpre), o.S ? String(Math.round(o.S * 10) / 10) : '–']; })) + '<p class="hb-note">Next review: ' + esc(dueText(sk)) + '</p>' }));
       var lv = (s.levels || []), ents = Object.keys(CAT.entries).filter(function (e) { return (CAT.entries[e].skills || []).indexOf(id) >= 0; });
@@ -249358,16 +249649,16 @@ var HTJ = (function () {
       // Nothing under an exam not yet taken. The page intro already says what an exam feeds forward, and with
       // five groups that same sentence under every untouched card was five repetitions of the intro.
       sec.innerHTML = h;
-      if (FC) sec.querySelector('.xch').insertAdjacentElement('afterend', FC.groupStrip(g.id));
+      if (TJ) sec.querySelector('.xch').insertAdjacentElement('afterend', TJ.groupStrip(g.id));
     });
   }
   function fmtPts(x) { var r = Math.round(x * 2) / 2; return r % 1 ? r.toFixed(1) : String(r); }
 
   // =================== PROGRESS ===================
-  // Progress has two halves: the Trajectory (where the work is heading) and the Record (the evidence so far)
-  function progressNav(main, record) {
+  // The Dashboard has two halves: Progress (the evidence so far) and Trajectory (where the work is heading)
+  function dashNav(main, traj) {
     var n = el('div', 'hb-subnav');
-    n.innerHTML = '<nav class="seg" aria-label="Progress"><a href="#progress"' + (record ? '' : ' aria-current="page"') + '>Trajectory</a><a href="#progress/record"' + (record ? ' aria-current="page"' : '') + '>Record</a></nav>';
+    n.innerHTML = '<nav class="seg" aria-label="Dashboard"><a href="#dashboard"' + (traj ? '' : ' aria-current="page"') + '>Progress</a><a href="#dashboard/trajectory"' + (traj ? ' aria-current="page"' : '') + '>Trajectory</a></nav>';
     main.appendChild(n);
   }
   function viewProgress(main) {
@@ -249375,7 +249666,7 @@ var HTJ = (function () {
     var o = M.m.overall || { counts: {}, nSkills: 0 }, st = nStarted(o) > 0, comp = { done: 0, total: 0 };
     CAT.chapters.forEach(function (c0) { var cc0 = (M.m.chapters[c0.n] || {}).completion; if (cc0) { comp.done += cc0.done; comp.total += cc0.total; } });
     wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">The whole book so far</div><h1>Progress</h1></section>';
-    if (st && FC) wrap.appendChild(FC.milestoneLine());
+    if (st && TJ) wrap.appendChild(TJ.line());
     var grid = el('div', 'hb-grid'); wrap.appendChild(grid);
     var head = el('section', 'hb-card wide');
     head.innerHTML = '<div class="hb-head"><div class="hb-hero"><span class="v" id="hbBookE">' + (st ? pct(o.E) : '–') + '</span><span class="l">Evidence-based mastery across Chapters 1–' + CAT.chapters.length + '</span></div><div class="hb-headr"><p class="hb-headline">' + (st ? (o.counts.Secure || 0) + ' of ' + o.nSkills + ' skills secure · retention ' + pct(o.Rnow) + ' · ' + comp.done + ' of ' + comp.total + ' Path levels completed' : 'No evidence yet. The picture fills in as the Paths are worked.') + '</p>' + sbar(o.counts || {}, 'All skills') + '</div></div>';
@@ -249476,6 +249767,21 @@ var HTJ = (function () {
     deviceStatus();
     c.querySelector('#hbTheme').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var h = loadHub(); h.settings.theme = b.dataset.theme; saveHub(h); applyTheme(); Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); }); });
     c.querySelector('#hbCurrent').addEventListener('change', function () { var h = loadHub(), v = +this.value; h.settings.current = v ? { ch: v, key: firstOpenLevel(v) } : null; saveHub(h); dirty = true; toast(v ? 'Main work set to Chapter ' + v + '.' : 'Main work follows the latest Path activity.'); });
+    // the analysis export: every table as CSV with a data dictionary, in one .zip (hub/lms_export.js)
+    if (typeof LMX !== 'undefined' && TJ) {
+      var arow = el('div', 'hb-srow');
+      arow.innerHTML = '<div><h3>Export data for analysis</h3><p>A .zip of spreadsheet files (CSV): every answer, session, skill, chapter and checkpoint, the trajectory, and a data dictionary that explains each column and how it is computed. Opens in any spreadsheet or in pandas.</p></div><button class="btn ghost sm" type="button" id="hbExportData">Export data</button><div class="hb-msg" id="hbExportDataMsg" role="status"></div>';
+      c.insertBefore(arow, c.querySelector('#hbExport').closest('.hb-srow').nextSibling);
+      arow.querySelector('#hbExportData').addEventListener('click', function () {
+        var msg = $('hbExportDataMsg');
+        try {
+          var Mm = model(), tr = TJ.state(), d = new Date(), name = 'MM7_Data_' + d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()) + '.zip';
+          var tb = LMX.tables(CAT, Mm.obs, Mm.now, tr.cur && tr.fresh ? tr.cur : (tr.cur || null), Mm.hub), fl = LMX.files(tb, { exported: d.toString(), catalog: (CAT.meta && CAT.meta.generated) || '' }), blob = new Blob([LMX.zip(fl, d)], { type: 'application/zip' });
+          var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+          msg.textContent = 'Saved ' + name + ' with ' + plural(fl.length, 'file') + (tr.cur && tr.fresh ? '.' : '. The trajectory tables are from the last time it was worked out; open Dashboard, Trajectory first for the newest.');
+        } catch (e) { msg.textContent = 'The export could not be made this time.'; setTimeout(function () { throw e; }, 0); }
+      });
+    }
     c.querySelector('#hbExport').addEventListener('click', function () { var r = exportRecord(); $('hbExportMsg').textContent = 'Saved ' + r.name + ' with ' + plural(r.n, 'record') + '.'; });
     var file = c.querySelector('#hbFile');
     c.querySelector('#hbImport').addEventListener('click', function () { file.value = ''; file.click(); });
@@ -249554,9 +249860,8 @@ var HTJ = (function () {
   MMS.onChange(function () { if (!cur.frame && !cur.player) { dirty = true; } });
   var HXO = { M: function () { return model(); }, esc: esc, el: el, C: C, xcard: xcard, empty: empty, plural: plural, getItem: getItem, setItem: setItem, loadHub: loadHub, saveHub: saveHub,
     CAT: CAT, GROUPS: GROUPS, skillShort: skillShort, openSkill: function (k) { openSkill(k); }, PRIV: '\uE000' };
-  if (FC) FC.init(HXO);
   if (TJ) TJ.init(HXO);
-  MMS.start({ idb: /^https?:$/.test(location.protocol) }, function () { applyTheme(); route(); setTimeout(function () { try { model(); if (FC) FC.ensure(); if (TJ) TJ.ensure(); } catch (e) { } }, 1200); });
+  MMS.start({ idb: /^https?:$/.test(location.protocol) }, function () { applyTheme(); route(); setTimeout(function () { try { model(); if (TJ) TJ.ensure(); } catch (e) { } }, 1200); });
 })();
 /* ===== HUB END ===== */
 
