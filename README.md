@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `8449c6ef17`
+Build: `14fc130561`
 
 ## Install from GitHub Pages (the easy way to get https)
 
