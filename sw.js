@@ -5,7 +5,7 @@
    Updating: a new build installs quietly beside the old one and WAITS. The page offers "reload"; the new version takes over
    only when the person says so, so nobody is switched mid-problem. */
 'use strict';
-var VERSION = '201d9f08ba';                       // a hash of every file below: a new build is a new worker
+var VERSION = '00022ec3a6';                       // a hash of every file below: a new build is a new worker
 var CACHE = 'mm7-hub-' + VERSION;
 var ASSETS = ["index.html", "manifest.webmanifest", "icons/apple-touch-icon.png", "icons/favicon-32.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/icon.svg", "fonts/atkinson-hyperlegible-mono-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-mono-latin-500-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-400-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-500-normal.woff2", "fonts/atkinson-hyperlegible-next-latin-700-normal.woff2", "fonts/fonts.css"];
 
@@ -32,6 +32,7 @@ self.addEventListener('fetch', function (e) {
   if (r.method !== 'GET') return;
   var u = new URL(r.url);
   if (u.origin !== self.location.origin) return;                 // another site: not ours to touch
+  if (u.pathname.indexOf('/api/') >= 0) return;                  // the helper's live data: never from the cache
   e.respondWith(caches.open(CACHE).then(function (c) {
     // every page load, whatever the #hash, is the Hub
     if (r.mode === 'navigate') return c.match('./index.html').then(function (m) { return m || fetch(r); });

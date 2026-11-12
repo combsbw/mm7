@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `201d9f08ba`
+Build: `00022ec3a6`
 
 ## Install from GitHub Pages (the easy way to get https)
 
@@ -79,3 +79,15 @@ The saved record is not touched by an update.
 | `fonts/` | the typeface (Atkinson Hyperlegible, SIL Open Font License), so it looks the same offline |
 | `serve.py` | runs the folder on your own computer |
 | `_headers` | tells Netlify or Cloudflare Pages to re-check `sw.js` every time, so updates are found |
+
+## On the Mac, with autosave to a file (optional)
+
+`mm7_helper.py` runs this same app on the Mac and saves everything to one SQLite file as it happens.
+
+1. Double-click **Start Learning Hub.command** (the first time: right-click it, choose Open, then Open), or run `python3 mm7_helper.py`.
+2. The Hub opens at <http://localhost:8377>. Leave the helper's window open while working.
+
+- Data: `~/Documents/MM7 Data/mm7.sqlite` (the learner record and one row per problem answered). Backups: `~/Documents/MM7 Data/backups/`.
+- The address `localhost:8377` and the GitHub Pages address are separate apps to the browser. Move a record between them, or to a
+  tablet, with Settings → Export and Import. Import replaces the record on that device, so always export from the device with the latest work.
+- Needs Python 3.6 or newer and nothing else. Works with no internet.

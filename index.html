@@ -1993,10 +1993,19 @@ a.btn { text-decoration: none; display: inline-block; }
      'memory'       everything blocked (private mode): works for the session, and Settings says it will not be kept
    Keys and values are exactly the ones the apps already write, so the JSON export/import is byte-for-byte unchanged.
    API: start(opts, fn) · ready(fn) · getItem · setItem (returns false if the write could not be kept) · removeItem · keys
-        flush(cb) · backend() · info(cb) · onChange(fn) · noteInteraction()                                               */
+        flush(cb) · backend() · info(cb) · onChange(fn) · noteInteraction()
+   The problem store (MMS.problems)
+     Every problem answered, one row each, in its own IndexedDB object store ('prob'). Rows are written once and never read
+     into memory, so the whole course's problems (figures included) cost nothing at start-up and nothing per answer.
+     on() · put(row) · merge(rows, cb) · get(id, cb) · ids(cb) · count(cb) · all(cb) · clear(cb)
+     A row is { id, t, ... }; merge() keeps what a row already has and adds what is new (non-empty fields win).
+   The helper (optional: pwa/mm7_helper.py)
+     When the Hub is served from localhost by the Python helper, everything is also mirrored to a SQLite file on the
+     computer: the key-value record and the problem rows. At start the two are reconciled (keys changed here while the
+     helper could not be reached win; otherwise the file wins, so a cleared browser is restored from the file).      */
 var MMS = (function () {
   'use strict';
-  var DBNAME = 'mm7', DBVER = 1, KV = 'kv', META = 'meta', DEBOUNCE = 300, MAXWAIT = 2500;
+  var DBNAME = 'mm7', DBVER = 2, KV = 'kv', META = 'meta', PROB = 'prob', DEBOUNCE = 300, MAXWAIT = 2500;
   var mode = 'localStorage', started = false, hydrated = false, queue = [], mem = {};
   var cache = null, pending = {}, timer = null, firstDirty = 0, db = null, writing = false, writeFail = false, again = false;
   var armed = false, asked = false, persisted = null, migrated = null, bc = null, listeners = [], flushCbs = [];
@@ -2024,12 +2033,12 @@ var MMS = (function () {
     var guard = setTimeout(fallback, 6000);   // a browser that never answers must not leave the screen blank
     try {
       var rq = indexedDB.open(DBNAME, DBVER);
-      rq.onupgradeneeded = function () { var d = rq.result; if (!d.objectStoreNames.contains(KV)) d.createObjectStore(KV); if (!d.objectStoreNames.contains(META)) d.createObjectStore(META); };
+      rq.onupgradeneeded = function () { var d = rq.result; if (!d.objectStoreNames.contains(KV)) d.createObjectStore(KV); if (!d.objectStoreNames.contains(META)) d.createObjectStore(META); if (!d.objectStoreNames.contains(PROB)) d.createObjectStore(PROB, { keyPath: 'id' }); };
       rq.onerror = rq.onblocked = function () { clearTimeout(guard); fallback(); };
       rq.onsuccess = function () {
         if (done) { try { rq.result.close(); } catch (e) { } return; }
         db = rq.result; db.onversionchange = function () { try { db.close(); } catch (e) { } db = null; };
-        hydrate(function (ok) { clearTimeout(guard); if (done) return; if (!ok) { fallback(); return; } done = true; mode = 'idb'; wire(); runReady(); });
+        hydrate(function (ok) { clearTimeout(guard); if (done) return; if (!ok) { fallback(); return; } done = true; mode = 'idb'; wire(); if (opts.helper) helperStart(function () { runReady(); }); else runReady(); });
       };
     } catch (e) { clearTimeout(guard); fallback(); }
   }
@@ -2078,7 +2087,7 @@ var MMS = (function () {
     schedule();
   }
   function wire() {
-    function away() { journal(); flush(); }
+    function away() { journal(); flush(); helperBeacon(); }
     function hide() { if (document.visibilityState === 'hidden' || !document.visibilityState) away(); }
     try { window.addEventListener('pagehide', away); document.addEventListener('visibilitychange', hide); } catch (e) { }
     var arm = function () { armed = true; };
@@ -2143,7 +2152,7 @@ var MMS = (function () {
     var st = tx.objectStore(KV);
     ks.forEach(function (k) { if (batch[k] === null) st.delete(k); else st.put(batch[k], k); });
     tx.oncomplete = function () {
-      writing = false; writeFail = false; askPersist();
+      writing = false; writeFail = false; askPersist(); helperPush(batch);
       if (again || Object.keys(pending).length) { again = false; schedule(); }
       else { try { localStorage.removeItem(JKEY); } catch (e) { } }
       settle();
@@ -2168,13 +2177,115 @@ var MMS = (function () {
   function noteInteraction() { armed = true; }
   function onChange(fn) { listeners.push(fn); }
   function info(cb) {
-    var o = { backend: mode, persisted: persisted, migrated: migrated, pendingWrites: Object.keys(pending).length, writeFailed: writeFail, keys: keys().length };
-    var left = 2, fin = function () { if (--left === 0) cb(o); };
+    var o = { backend: mode, persisted: persisted, migrated: migrated, pendingWrites: Object.keys(pending).length, writeFailed: writeFail, keys: keys().length, helper: H.on ? { on: true, file: H.file, unsynced: Object.keys(unsyncedGet()).length, last: H.last, restored: H.restored, problems: H.problems } : { on: false, tried: H.tried } };
+    var left = 3, fin = function () { if (--left === 0) cb(o); };
     try { if (navigator.storage && navigator.storage.persisted) navigator.storage.persisted().then(function (p) { o.persisted = !!p; fin(); }, fin); else fin(); } catch (e) { fin(); }
+    problems.count(function (n) { o.problems = n; fin(); });
     try { if (navigator.storage && navigator.storage.estimate) navigator.storage.estimate().then(function (e) { o.usage = e.usage; o.quota = e.quota; fin(); }, fin); else fin(); } catch (e) { fin(); }
   }
 
-  return { __mm7: true, start: start, ready: ready, getItem: getItem, setItem: setItem, removeItem: removeItem, keys: keys, flush: flush,
+  // ------------------------------------------------------------------ the problem store
+  var pq = [], pTimer = null, pBusy = false;
+  function pOn() { return mode === 'idb' && !!db && db.objectStoreNames.contains(PROB); }
+  function mergeRow(old, row) { var o = old || {}; for (var k in row) if (has(row, k)) { var v = row[k]; if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.length && o[k] !== undefined)) { if (!has(o, k)) o[k] = v === undefined ? null : v; } else o[k] = v; } return o; }
+  function pFlush(cb) {
+    if (pTimer) { clearTimeout(pTimer); pTimer = null; }
+    if (!pOn() || !pq.length) { if (cb) cb(true); return; }
+    if (pBusy) { if (cb) setTimeout(function () { pFlush(cb); }, 60); return; }
+    pBusy = true; var rows = pq; pq = []; var tx, out = [];
+    try { tx = db.transaction([PROB], 'readwrite'); } catch (e) { pBusy = false; pq = rows.concat(pq); if (cb) cb(false); return; }
+    var st = tx.objectStore(PROB);
+    rows.forEach(function (r) { if (!r || !r.id) return; var g = st.get(r.id); g.onsuccess = function () { var m = mergeRow(g.result, r); out.push(m); st.put(m); }; });
+    tx.oncomplete = function () { pBusy = false; helperProblems(out); if (pq.length) pFlush(cb); else if (cb) cb(true); };
+    tx.onerror = tx.onabort = function () { pBusy = false; if (cb) cb(false); };
+  }
+  var problems = {
+    on: pOn,
+    put: function (row) { if (!pOn() || !row || !row.id) return false; pq.push(row); if (!pTimer) pTimer = setTimeout(function () { pFlush(); }, 250); return true; },
+    merge: function (rows, cb) { if (!pOn()) { if (cb) cb(false); return; } var i = 0; (function step() { if (i >= rows.length) { pFlush(cb); return; } pq = pq.concat(rows.slice(i, i + 400)); i += 400; pFlush(function () { setTimeout(step, 0); }); })(); },
+    get: function (id, cb) {
+      if (!pOn()) { cb(null); return; }
+      try { var rq = db.transaction([PROB], 'readonly').objectStore(PROB).get(id); rq.onsuccess = function () { if (rq.result || !H.on) cb(rq.result || null); else helperGet(id, cb); }; rq.onerror = function () { cb(null); }; } catch (e) { cb(null); }
+    },
+    ids: function (cb) { if (!pOn()) { cb([]); return; } try { var rq = db.transaction([PROB], 'readonly').objectStore(PROB).getAllKeys(); rq.onsuccess = function () { cb(rq.result || []); }; rq.onerror = function () { cb([]); }; } catch (e) { cb([]); } },
+    count: function (cb) { if (!pOn()) { cb(0); return; } try { var rq = db.transaction([PROB], 'readonly').objectStore(PROB).count(); rq.onsuccess = function () { cb(rq.result || 0); }; rq.onerror = function () { cb(0); }; } catch (e) { cb(0); } },
+    all: function (cb) { if (!pOn()) { cb([]); return; } var out = []; try { var c = db.transaction([PROB], 'readonly').objectStore(PROB).openCursor(); c.onsuccess = function () { var x = c.result; if (x) { out.push(x.value); x.continue(); } else cb(out); }; c.onerror = function () { cb(out); }; } catch (e) { cb(out); } },
+    clear: function (cb) { if (!pOn()) { if (cb) cb(); return; } pq = []; try { var tx = db.transaction([PROB], 'readwrite'); tx.objectStore(PROB).clear(); tx.oncomplete = function () { if (H.on) helperSend('api/problems/clear', {}, function () { if (cb) cb(); }); else if (cb) cb(); }; tx.onerror = function () { if (cb) cb(); }; } catch (e) { if (cb) cb(); } },
+    flush: pFlush
+  };
+
+  // ------------------------------------------------------------------ the helper mirror (a SQLite file on this computer)
+  var H = { on: false, tried: false, file: '', last: 0, restored: 0, problems: null }, UKEY = '__mms_unsynced__', hq = [], hBusy = false;
+  function unsyncedGet() { try { return JSON.parse(localStorage.getItem(UKEY) || '{}') || {}; } catch (e) { return {}; } }
+  function unsyncedSet(o) { try { if (Object.keys(o).length) localStorage.setItem(UKEY, JSON.stringify(o)); else localStorage.removeItem(UKEY); } catch (e) { } }
+  function helperFetch(path, body, ms, cb) {
+    var done = false, fin = function (ok, data) { if (done) return; done = true; cb(ok, data); }, t = setTimeout(function () { fin(false); }, ms || 8000);
+    try { fetch(path, body === undefined ? { cache: 'no-store' } : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); }).then(function (d) { clearTimeout(t); fin(true, d); }, function () { clearTimeout(t); fin(false); }); } catch (e) { clearTimeout(t); fin(false); }
+  }
+  function helperSend(path, body, cb) { helperFetch(path, body, 20000, function (ok, d) { if (ok) H.last = Date.now(); if (cb) cb(ok, d); }); }
+  function helperStart(cb) {
+    H.tried = true;
+    helperFetch('api/ping', undefined, 1500, function (ok, d) {
+      if (!ok || !d || d.app !== 'mm7-helper') { cb(); return; }
+      H.file = d.file || '';
+      helperFetch('api/kv', undefined, 15000, function (ok2, kv) {
+        if (!ok2 || !kv || typeof kv.keys !== 'object') { cb(); return; }
+        H.on = true; H.last = Date.now();
+        H.seen = kv.keys;
+        var remote = kv.keys, un = unsyncedGet(), push = { set: {}, del: [] }, n = 0, k;
+        for (k in remote) if (has(remote, k) && MINE.test(k) && !un[k] && cache[k] !== remote[k]) { cache[k] = remote[k]; pending[k] = 1; n++; }   // the file wins
+        Object.keys(cache).forEach(function (k2) { if (MINE.test(k2) && (un[k2] || !has(remote, k2))) push.set[k2] = cache[k2]; });                       // what the file lacks, or what changed here unseen
+        Object.keys(un).forEach(function (k3) { if (!has(cache, k3) && has(remote, k3)) push.del.push(k3); });
+        H.restored = n; if (n) schedule();
+        if (Object.keys(push.set).length || push.del.length) helperSend('api/kv', push, function (ok3) { if (ok3) { unsyncedSet({}); Object.keys(push.set).forEach(function (k) { H.seen[k] = push.set[k]; }); push.del.forEach(function (k) { delete H.seen[k]; }); } });
+        else unsyncedSet({});
+        cb();
+        setTimeout(helperSyncProblems, 2500);
+      });
+    });
+  }
+  function helperPush(batch) {
+    if (!H.on) return;
+    // skip what the file is already known to hold (for one, the records just restored from it)
+    var seen = H.seen || (H.seen = {}), body = { set: {}, del: [] }, ks = Object.keys(batch).filter(function (k) { return MINE.test(k) && !(batch[k] === null ? !has(seen, k) : seen[k] === batch[k]); }); if (!ks.length) return;
+    ks.forEach(function (k) { if (batch[k] === null) body.del.push(k); else body.set[k] = batch[k]; });
+    var un = unsyncedGet(); ks.forEach(function (k) { un[k] = 1; }); unsyncedSet(un);          // unsynced until the helper says it has them
+    hq.push({ body: body, ks: ks }); helperDrain();
+  }
+  function helperDrain() {
+    if (hBusy || !hq.length) return; hBusy = true; var job = hq.shift();
+    helperSend('api/kv', job.body, function (ok) { hBusy = false; if (ok) { Object.keys(job.body.set).forEach(function (k) { H.seen[k] = job.body.set[k]; }); job.body.del.forEach(function (k) { delete H.seen[k]; }); var un = unsyncedGet(); job.ks.forEach(function (k) { if (!pending[k]) delete un[k]; }); unsyncedSet(un); } helperDrain(); });
+  }
+  function helperBeacon() {   // the page is going away: hand whatever the helper has not confirmed to the browser to deliver
+    if (!H.on || !cache) return; var un = unsyncedGet(), ks = Object.keys(un).concat(Object.keys(pending)).filter(function (k, i, a) { return MINE.test(k) && a.indexOf(k) === i; }); if (!ks.length) return;
+    var body = { set: {}, del: [] }; ks.forEach(function (k) { if (has(cache, k)) body.set[k] = cache[k]; else body.del.push(k); });
+    try { if (navigator.sendBeacon) navigator.sendBeacon('api/kv', new Blob([JSON.stringify(body)], { type: 'application/json' })); } catch (e) { }
+  }
+  function helperProblems(rows) { if (!H.on || !rows || !rows.length) return; for (var i = 0; i < rows.length; i += 200) helperSend('api/problems', { rows: rows.slice(i, i + 200) }); }
+  function helperGet(id, cb) { helperFetch('api/problems/get?id=' + encodeURIComponent(id), undefined, 8000, function (ok, d) { var row = ok && d && d.row ? d.row : null; if (row) { pq.push(row); pFlush(); } cb(row); }); }
+  // once per start: whatever problem rows the file lacks are sent; rows the browser lacks are fetched when they are opened
+  function helperSyncProblems() {
+    if (!H.on) return;
+    helperFetch('api/problems/ids', undefined, 20000, function (ok, d) {
+      if (!ok || !d || !Array.isArray(d.ids)) return; H.problems = d.ids.length;
+      var have = {}; d.ids.forEach(function (i) { have[i] = 1; });
+      problems.ids(function (mine) { var miss = mine.filter(function (i) { return !have[i]; }); if (!miss.length) return; var i = 0; (function step() { if (i >= miss.length) return; var part = miss.slice(i, i + 100), rows = [], left = part.length; i += 100; part.forEach(function (id) { var rq = db.transaction([PROB], 'readonly').objectStore(PROB).get(id); rq.onsuccess = function () { if (rq.result) rows.push(rq.result); if (--left === 0) { helperSend('api/problems', { rows: rows }, function () { H.problems += rows.length; step(); }); } }; rq.onerror = function () { if (--left === 0) step(); }; }); })(); });
+    });
+  }
+
+  // whatever the file has not confirmed is sent again, now and once a minute while the page is open
+  function helperRetry(cb) {
+    if (!H.on || !cache) { if (cb) cb(false); return; }
+    var un = unsyncedGet(), ks = Object.keys(un).filter(function (k) { return MINE.test(k) && !pending[k]; });
+    if (!ks.length) { if (cb) cb(true); return; }
+    var body = { set: {}, del: [] }; ks.forEach(function (k) { if (has(cache, k)) body.set[k] = cache[k]; else body.del.push(k); });
+    helperSend('api/kv', body, function (ok) { if (ok) { var u2 = unsyncedGet(); ks.forEach(function (k) { if (!pending[k]) delete u2[k]; if (has(body.set, k)) H.seen[k] = body.set[k]; else delete H.seen[k]; }); unsyncedSet(u2); } if (cb) cb(ok); });
+  }
+  try { setInterval(function () { helperRetry(); }, 60000); } catch (e) { }
+  // a backup on request: everything unconfirmed first, then the helper writes today's backup files
+  function saveNow(cb) { if (!H.on) { cb(false); return; } helperRetry(function (ok) { if (!ok) { cb(false); return; } helperSend('api/backup', {}, function (ok2, d) { cb(!!ok2, ok2 && d && d.file ? String(d.file).replace(/^.*[\\/]/, '') : ''); }); }); }
+
+  return { __mm7: true, problems: problems, helper: function () { return H; }, saveNow: saveNow, helperRetry: helperRetry, start: start, ready: ready, getItem: getItem, setItem: setItem, removeItem: removeItem, keys: keys, flush: flush,
            backend: function () { return mode; }, info: info, onChange: onChange, noteInteraction: noteInteraction, MINE: MINE };
 })();
 
@@ -56317,8 +56428,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -64449,8 +64562,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -72520,8 +72635,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -81488,8 +81605,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -90704,8 +90823,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -100819,8 +100940,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -110550,8 +110673,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -122277,8 +122402,10 @@ var GEN = (function () {
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
     // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
     // record of progress can never be crowded out; the plain text above is always kept
-    var ph = String(p.prompt == null ? '' : p.prompt);
-    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
+    var ph = String(p.prompt == null ? '' : p.prompt), PS = STORE.problems && STORE.problems.on && STORE.problems.on() ? STORE.problems : null;
+    // inside the Hub with its database: one row in the problem store (no limit). Otherwise inline, within the budget.
+    if (PS) PS.put({ id: 'p:' + KEY + ':' + lastEvent.id, t: now, qh: ph, steps: Array.isArray(p.steps) ? p.steps : null });
+    else if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -134926,6 +135053,8 @@ if (typeof module !== 'undefined') module.exports = RD;
   // ---------- events ----------
   // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
   var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  // inside the Hub with its database, the whole problem goes to the problem store instead (one row each, no limit)
+  function PSTORE() { try { var pw = window.parent; if (pw && pw !== window && pw.MMS && pw.MMS.__mm7 && pw.MMS.problems && pw.MMS.problems.on()) return pw.MMS.problems; } catch (e) { } return null; }
   function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
@@ -134984,7 +135113,8 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: PSTORE() ? undefined : qhOf(p.prompt) });
+    if (PSTORE()) PSTORE().put({ id: 'r:' + KEY + ':' + S.last.id, t: S.last.t, qh: String(p.prompt == null ? '' : p.prompt), steps: Array.isArray(p.steps) ? p.steps : null });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -159238,6 +159368,8 @@ if (typeof module !== 'undefined') module.exports = RD;
   // ---------- events ----------
   // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
   var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  // inside the Hub with its database, the whole problem goes to the problem store instead (one row each, no limit)
+  function PSTORE() { try { var pw = window.parent; if (pw && pw !== window && pw.MMS && pw.MMS.__mm7 && pw.MMS.problems && pw.MMS.problems.on()) return pw.MMS.problems; } catch (e) { } return null; }
   function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
@@ -159296,7 +159428,8 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: PSTORE() ? undefined : qhOf(p.prompt) });
+    if (PSTORE()) PSTORE().put({ id: 'r:' + KEY + ':' + S.last.id, t: S.last.t, qh: String(p.prompt == null ? '' : p.prompt), steps: Array.isArray(p.steps) ? p.steps : null });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -181928,6 +182061,8 @@ if (typeof module !== 'undefined') module.exports = RD;
   // ---------- events ----------
   // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
   var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  // inside the Hub with its database, the whole problem goes to the problem store instead (one row each, no limit)
+  function PSTORE() { try { var pw = window.parent; if (pw && pw !== window && pw.MMS && pw.MMS.__mm7 && pw.MMS.problems && pw.MMS.problems.on()) return pw.MMS.problems; } catch (e) { } return null; }
   function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
@@ -181986,7 +182121,8 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: PSTORE() ? undefined : qhOf(p.prompt) });
+    if (PSTORE()) PSTORE().put({ id: 'r:' + KEY + ':' + S.last.id, t: S.last.t, qh: String(p.prompt == null ? '' : p.prompt), steps: Array.isArray(p.steps) ? p.steps : null });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -205585,6 +205721,8 @@ if (typeof module !== 'undefined') module.exports = RD;
   // ---------- events ----------
   // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
   var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  // inside the Hub with its database, the whole problem goes to the problem store instead (one row each, no limit)
+  function PSTORE() { try { var pw = window.parent; if (pw && pw !== window && pw.MMS && pw.MMS.__mm7 && pw.MMS.problems && pw.MMS.problems.on()) return pw.MMS.problems; } catch (e) { } return null; }
   function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
@@ -205643,7 +205781,8 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: PSTORE() ? undefined : qhOf(p.prompt) });
+    if (PSTORE()) PSTORE().put({ id: 'r:' + KEY + ':' + S.last.id, t: S.last.t, qh: String(p.prompt == null ? '' : p.prompt), steps: Array.isArray(p.steps) ? p.steps : null });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -231456,6 +231595,8 @@ if (typeof module !== 'undefined') module.exports = RD;
   // ---------- events ----------
   // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
   var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  // inside the Hub with its database, the whole problem goes to the problem store instead (one row each, no limit)
+  function PSTORE() { try { var pw = window.parent; if (pw && pw !== window && pw.MMS && pw.MMS.__mm7 && pw.MMS.problems && pw.MMS.problems.on()) return pw.MMS.problems; } catch (e) { } return null; }
   function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
@@ -231514,7 +231655,8 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: PSTORE() ? undefined : qhOf(p.prompt) });
+    if (PSTORE()) PSTORE().put({ id: 'r:' + KEY + ':' + S.last.id, t: S.last.t, qh: String(p.prompt == null ? '' : p.prompt), steps: Array.isArray(p.steps) ? p.steps : null });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -248797,13 +248939,14 @@ var HHI = (function () {
   function items() {
     var CAT = HX.CAT, sig = HX.M().obs.length + '|' + HX.M().now, out = [];
     if (cache && cacheSig === sig) return cache;
+    var keepQh = {}; (cache || []).forEach(function (it) { if (it.qh) keepQh[it.id] = it; });
     // chapter Paths
     CAT.chapters.forEach(function (c) {
       var H = parse(c.appId + '-v1-history'); if (!H || !H.events) return;
       H.events.forEach(function (e) {
         if (e.type !== 'answer') return;
         var lv = CAT.levels['ch' + c.n + ':' + e.k] || {};
-        out.push({ id: 'p' + c.n + ':' + e.id, t: e.t, src: 'path', section: 'Chapter ' + c.n + ' Path', where: (lv.unit || '') + (lv.name ? ' · ' + lv.name : ''), ch: c.n, skills: lv.skills || [], ok: !!e.ok, credit: e.ok ? 1 : 0, ms: e.dt || 0, help: !!e.help, q: e.q || '', qh: e.qh || '', entry: e.entry !== undefined ? e.entry : '', show: e.ans !== undefined ? e.ans : '', unit: e.unit || '' });
+        out.push({ id: 'p:' + c.appId + '-v1:' + e.id, t: e.t, src: 'path', section: 'Chapter ' + c.n + ' Path', where: (lv.unit || '') + (lv.name ? ' · ' + lv.name : ''), ch: c.n, skills: lv.skills || [], ok: !!e.ok, credit: e.ok ? 1 : 0, ms: e.dt || 0, help: !!e.help, q: e.q || '', qh: e.qh || '', entry: e.entry !== undefined ? e.entry : '', show: e.ans !== undefined ? e.ans : '', unit: e.unit || '' });
       });
     });
     // Reviews and Exams
@@ -248812,14 +248955,14 @@ var HHI = (function () {
       if (R && R.events) R.events.forEach(function (e) {
         if (e.type !== 'answer' && e.type !== 'trial') return;
         var en = CAT.entries[e.gid] || {}, tr = e.type === 'trial';
-        out.push({ id: 'r' + gid + ':' + e.id, t: e.t, src: 'review', section: g.title + ' Review', where: (SECN[tr ? 'trial' : e.sec] || e.sec || '') + (en.name ? ' · ' + en.name : tr && e.round ? ' · ' + e.round : ''), ch: (en.chs || g.chapters || [])[0], skills: en.skills || e.skills || [], ok: !!e.ok, credit: e.credit !== undefined ? e.credit : (e.ok ? 1 : 0), ms: e.ms || 0, help: !!e.help, tag: e.tag || '', tier: e.tier,
+        out.push({ id: 'r:' + g.review + ':' + e.id, t: e.t, src: 'review', section: g.title + ' Review', where: (SECN[tr ? 'trial' : e.sec] || e.sec || '') + (en.name ? ' · ' + en.name : tr && e.round ? ' · ' + e.round : ''), ch: (en.chs || g.chapters || [])[0], skills: en.skills || e.skills || [], ok: !!e.ok, credit: e.credit !== undefined ? e.credit : (e.ok ? 1 : 0), ms: e.ms || 0, help: !!e.help, tag: e.tag || '', tier: e.tier,
           q: tr ? 'A timed round of quick questions' + (e.n ? ' (' + (e.right !== undefined ? e.right + ' of ' : '') + e.n + ')' : '') + '. Individual questions in a timed round are not kept.' : (e.q || ''), qh: e.qh || '', entry: tr ? '' : (e.a || ''), show: tr ? '' : (e.show || '') });
       });
       if (X && X.attempts) X.attempts.forEach(function (a) {
         (a.nodes || []).forEach(function (n) {
           if (!n.ans || n.status !== 'done') return;
           var en = CAT.entries[n.eid] || {}, m = n.meta || {}, sn = n.snap || {};
-          out.push({ id: 'x' + gid + ':' + a.id + ':' + n.id, t: (a.created || 0) + (n.ans.at || 0), src: 'exam', section: g.title + ' Exam', where: 'Tier ' + n.tier + (m.gname ? ' · ' + m.gname : ''), ch: (m.chs || en.chs || g.chapters || [])[0], skills: en.skills || [], ok: !!n.ans.ok, credit: n.ans.credit !== undefined ? n.ans.credit : (n.ans.ok ? 1 : 0), ms: n.ans.ms || n.spent || 0, help: false, tag: n.ans.tag || '', tier: n.tier,
+          out.push({ id: 'x:' + g.exam + ':' + a.id + ':' + n.id, t: (a.created || 0) + (n.ans.at || 0), src: 'exam', section: g.title + ' Exam', where: 'Tier ' + n.tier + (m.gname ? ' · ' + m.gname : ''), ch: (m.chs || en.chs || g.chapters || [])[0], skills: en.skills || [], ok: !!n.ans.ok, credit: n.ans.credit !== undefined ? n.ans.credit : (n.ans.ok ? 1 : 0), ms: n.ans.ms || n.spent || 0, help: false, tag: n.ans.tag || '', tier: n.tier,
             q: m.q || '', qh: sn.prompt || '', entry: n.ans.skipped ? '(skipped)' : (n.ans.text || n.ans.input || ''), show: m.show || sn.show || '', steps: sn.steps || null });
         });
       });
@@ -248831,10 +248974,11 @@ var HHI = (function () {
       (s.answers || []).forEach(function (a, i) {
         var sp = plan[a.specId] || {}, ref = a.ref || sp.ref || {}, en = ref.id ? CAT.entries[ref.id] : null, lv = ref.type === 'level' ? CAT.levels['ch' + ref.ch + ':' + ref.key] : null;
         var what = en ? en.name : lv ? 'Chapter ' + ref.ch + ' · ' + lv.unit : ref.type === 'quick' ? 'Quick warm-up' : '';
-        out.push({ id: 'o' + s.id + ':' + (a.specId || i), t: a.t, src: s.kind === 'practice' ? 'practice' : 'onramp', section: s.kind === 'practice' ? 'Practice set' : 'Onramp', where: (sp.phase ? sp.phase.charAt(0).toUpperCase() + sp.phase.slice(1) : '') + (what ? (sp.phase ? ' · ' : '') + what : ''), ch: lv ? ref.ch : en ? (en.chs || [])[0] : (HX.CAT.skills[(a.skills || [])[0]] || {}).ch, skills: a.skills || [], ok: !!a.ok, credit: a.credit !== undefined ? a.credit : (a.ok ? 1 : 0), ms: a.ms || 0, help: !!a.help, tag: a.tag || '',
+        out.push({ id: 'o:' + s.id + ':' + i, t: a.t, src: s.kind === 'practice' ? 'practice' : 'onramp', section: s.kind === 'practice' ? 'Practice set' : 'Onramp', where: (sp.phase ? sp.phase.charAt(0).toUpperCase() + sp.phase.slice(1) : '') + (what ? (sp.phase ? ' · ' : '') + what : ''), ch: lv ? ref.ch : en ? (en.chs || [])[0] : (HX.CAT.skills[(a.skills || [])[0]] || {}).ch, skills: a.skills || [], ok: !!a.ok, credit: a.credit !== undefined ? a.credit : (a.ok ? 1 : 0), ms: a.ms || 0, help: !!a.help, tag: a.tag || '',
           q: a.q || '', qh: a.qh || '', entry: a.entry || '', show: a.show || '', why: sp.why || '' });
       });
     });
+    out.forEach(function (it) { var kq = keepQh[it.id]; if (kq && !it.qh) { it.qh = kq.qh; if (!it.steps) it.steps = kq.steps; } });
     out.forEach(function (it) { it.q = dec(it.q); it.entry = dec(it.entry); it.show = dec(it.show); });
     out.sort(function (a, b) { return b.t - a.t; });
     cache = out; cacheSig = sig;
@@ -248886,7 +249030,12 @@ var HHI = (function () {
   }
   function wire(root) {
     var byId = {}; items().forEach(function (it) { byId[it.id] = it; });
-    root.addEventListener('toggle', function (e) { var d = e.target; if (!d.classList || !d.classList.contains('hh-row') || !d.open) return; var b = d.querySelector('.hh-body'); if (b && !b.firstChild && byId[d.dataset.id]) b.innerHTML = body(byId[d.dataset.id]); }, true);
+    root.addEventListener('toggle', function (e) {
+      var d = e.target; if (!d.classList || !d.classList.contains('hh-row') || !d.open) return; var b = d.querySelector('.hh-body'), it = byId[d.dataset.id]; if (!b || b.firstChild || !it) return;
+      b.innerHTML = body(it);
+      // the whole problem lives in the problem store (one row per problem); fetch it when the row is opened
+      if (!it.qh && typeof MMS !== 'undefined' && MMS.problems && MMS.problems.on()) MMS.problems.get(it.id, function (row) { if (row && (row.qh || row.steps)) { if (row.qh) it.qh = row.qh; if (row.steps && !it.steps) it.steps = row.steps; if (b.isConnected) b.innerHTML = body(it); } });
+    }, true);
     root.addEventListener('click', function (e) { var b = e.target.closest('[data-skill]'); if (b && HX.openSkill) HX.openSkill(b.dataset.skill); });
   }
 
@@ -248949,8 +249098,21 @@ var HHI = (function () {
     // a skill inside a day or week opens to the problems worked on it then
     listEl.addEventListener('toggle', function (e) { var d = e.target; if (!d.classList || !d.classList.contains('hh-sk') || !d.open || !perData) return; var box = d.querySelector('.hh-skrows'), P = perData[d.dataset.per], x = P && P.sk[d.dataset.sk]; if (box && !box.firstChild && x) box.innerHTML = x.items.map(row).join(''); }, true);
   }
-  function init(hx) { HX = hx; }
-  return { init: init, items: items, view: view, _ui: ui, _clean: clean };
+  // ------------------------------------------------------------------ keeping the problem store complete
+  // Every problem gets a row with its facts (section, skills, result, text, answers), merged with the whole problem the app
+  // wrote when it was answered. Exam problems and anything an earlier build kept inline are copied in too. So the store
+  // (and the helper's SQLite file) holds the entire course history, readable without the rest of the record.
+  var synced = {}, syncT = null;
+  function rowOf(it) { return { id: it.id, t: it.t, source: it.src, section: it.section, where: it.where || '', chapter: it.ch || null, skills: it.skills || [], ok: it.ok ? 1 : 0, credit: it.credit, ms: it.ms || 0, help: it.help ? 1 : 0, tag: it.tag || '', tier: it.tier === undefined ? null : it.tier, q: it.q || '', entry: String(it.entry === undefined ? '' : it.entry), show: String(it.show === undefined ? '' : it.show), qh: it.qh || '', steps: it.steps || null }; }
+  function sync(cb) {
+    if (typeof MMS === 'undefined' || !MMS.problems || !MMS.problems.on()) { if (cb) cb(0); return; }
+    var rows = []; items().forEach(function (it) { var sg = it.ok + '|' + (it.qh ? 1 : 0) + '|' + it.skills.length; if (synced[it.id] !== sg) { synced[it.id] = sg; rows.push(rowOf(it)); } });
+    if (!rows.length) { if (cb) cb(0); return; }
+    MMS.problems.merge(rows, function () { if (cb) cb(rows.length); });
+  }
+  function syncSoon() { clearTimeout(syncT); syncT = setTimeout(function () { try { sync(); } catch (e) { } }, 4000); }
+  function init(hx) { HX = hx; try { if (typeof MMS !== 'undefined') { MMS.onChange(syncSoon); MMS.ready(syncSoon); } } catch (e) { } }
+  return { init: init, items: items, view: view, sync: sync, syncSoon: syncSoon, rowOf: rowOf, _ui: ui, _clean: clean };
 })();
 /* ===== HHI END ===== */
 
@@ -249286,6 +249448,7 @@ var HHI = (function () {
   function route() {
     var p = parse(), name = p[0], frameKey = name === 'ch' && p[2] === 'path' ? 'ch' + p[1] : name === 'app' ? p[1] : null;
     closeDrawer(true); X.tip(null); $('hbToast').hidden = true;
+    if (typeof HHI !== 'undefined') HHI.syncSoon();   // keep the problem store complete (cheap when nothing is new)
     if (cur.frame && cur.frame.key === frameKey) { if (p[3]) { cur.frame.pre = p[3]; preselect(); } return; }
     if (cur.frame) closeFrame();
     if (cur.player && name !== 'onramp' && name !== 'practice') leavePlayer();
@@ -249631,7 +249794,7 @@ var HHI = (function () {
     hub = LMS.record(hub, sess, spec, result, CAT) || hub;
     var s2 = hub.onramp.sessions.filter(function (s) { return s.id === P.sess.id; })[0];
     // the problem itself rides along with the answer, for History (the whole problem while it fits a budget; the text always)
-    if (s2 && prob && s2.answers && s2.answers.length) { var la = s2.answers[s2.answers.length - 1]; if (la && la.t === result.t) { la.q = String(prob.q || '').slice(0, 1500); la.entry = String(prob.entry || '').slice(0, 400); la.show = String(prob.show || '').slice(0, 400); var qh = String(prob.qh || ''), used = 0; hub.onramp.sessions.forEach(function (s0) { (s0.answers || []).forEach(function (a0) { if (a0.qh) used += a0.qh.length; }); }); if (qh && qh.length <= 9000 && used + qh.length <= 1200000) la.qh = qh; } }
+    if (s2 && prob && s2.answers && s2.answers.length) { var la = s2.answers[s2.answers.length - 1]; if (la && la.t === result.t) { la.q = String(prob.q || '').slice(0, 1500); la.entry = String(prob.entry || '').slice(0, 400); la.show = String(prob.show || '').slice(0, 400); var qh = String(prob.qh || ''), used = 0; if (MMS.problems.on()) { if (qh) MMS.problems.put({ id: 'o:' + s2.id + ':' + (s2.answers.length - 1), t: la.t, qh: qh }); } else { hub.onramp.sessions.forEach(function (s0) { (s0.answers || []).forEach(function (a0) { if (a0.qh) used += a0.qh.length; }); }); if (qh && qh.length <= 9000 && used + qh.length <= 1200000) la.qh = qh; } } }
     if (s2) { s2.end = result.t; P.sess = s2; if (s2.plan && s2.plan.length === P.specs.length) P.specs = s2.plan; }
     saveHub(hub); dirty = true;
     var last = P.i + 1 >= P.specs.length || Date.now() - P.t0 >= ONRAMP_MS;
@@ -250146,6 +250309,7 @@ var HHI = (function () {
     c.innerHTML = '<div class="hb-srow"><div><h3>Theme</h3><p>Auto follows the device.</p></div><div class="seg" role="group" aria-label="Theme" id="hbTheme">' + ['auto', 'light', 'dark'].map(function (k) { return '<button type="button" data-theme="' + k + '" aria-pressed="' + (t === k) + '">' + k.charAt(0).toUpperCase() + k.slice(1) + '</button>'; }).join('') + '</div></div>' +
       '<div class="hb-srow"><div><h3>Today’s main work</h3><p>Which chapter “Start today’s work” and the onramp’s bridge item use.</p></div><select class="hb-select" id="hbCurrent" aria-label="Main chapter"><option value="">Follow my latest Path work</option>' + CAT.chapters.map(function (c0) { return '<option value="' + c0.n + '"' + (curCh === c0.n ? ' selected' : '') + '>Chapter ' + c0.n + ' · ' + esc(c0.title) + '</option>'; }).join('') + '</select></div>' +
       '<div class="hb-srow"><div><h3>Export the learner record</h3><p>One JSON file with every Path, Review, Exam and hub record in this browser.</p></div><button class="btn ghost sm" type="button" id="hbExport">Export</button><div class="hb-msg" id="hbExportMsg"></div></div>' +
+      '<div class="hb-srow" id="hbFullRow"><div><h3>Export with the full problem history</h3><p>The same learner record plus every whole problem kept on this device (figures and worked steps included). A bigger file; importing it on another device brings the entire History along.</p></div><button class="btn ghost sm" type="button" id="hbExportFull">Export all</button><div class="hb-msg" id="hbExportFullMsg" role="status"></div></div>' +
       '<div class="hb-srow"><div><h3>Import</h3><p>A learner record exported here (it replaces the record in this browser), or an exam report (.html) saved by one of the Exams, whose attempt is added to that exam.</p></div><button class="btn ghost sm" type="button" id="hbImport">Import a file</button><input type="file" id="hbFile" accept=".json,.html,.htm,application/json,text/html" hidden><div class="hb-msg" id="hbImportMsg" role="status"></div></div>' +
       '<div class="hb-srow"><div><h3>Reset</h3><p>Erase every Path, Review, Exam and hub record in this browser. Export first if you might want it back.</p></div><button class="btn ghost sm" type="button" id="hbReset">Reset everything</button><div class="hb-msg" id="hbResetMsg"></div></div>';
     // where the record lives, and (when served as an app) whether it works offline and can be installed
@@ -250169,13 +250333,31 @@ var HHI = (function () {
         } catch (e) { msg.textContent = 'The export could not be made this time.'; setTimeout(function () { throw e; }, 0); }
       });
     }
+    MMS.info(function (o) {
+      if (!o.helper || !o.helper.on || !c.isConnected || $('hbBackupNow')) return;
+      var brow = el('div', 'hb-srow');
+      brow.innerHTML = '<div><h3>Save a backup now</h3><p>The helper is already saving every change to its file. This also writes today’s backup copies (a learner record you can import anywhere, and a copy of the database) into the backups folder beside it.</p></div><button class="btn ghost sm" type="button" id="hbBackupNow">Save backup</button><div class="hb-msg" id="hbBackupMsg" role="status"></div>';
+      c.insertBefore(brow, c.querySelector('#hbFullRow').nextSibling);
+      brow.querySelector('#hbBackupNow').addEventListener('click', function () {
+        var msg = $('hbBackupMsg'); msg.textContent = 'Saving…';
+        var done = function () { MMS.flush(function () { MMS.problems.flush(function () { MMS.saveNow(function (ok, file) { msg.textContent = ok ? 'Saved' + (file ? ' ' + file : '') + ' at ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.' : 'The helper did not answer. Is its window still open?'; deviceStatus(); }); }); }); };
+        if (typeof HHI !== 'undefined') HHI.sync(done); else done();
+      });
+    });
+    c.querySelector('#hbExportFull').addEventListener('click', function () {
+      var msg = $('hbExportFullMsg');
+      if (!MMS.problems.on()) { msg.textContent = 'This browser is keeping the learner record without the separate problem store (that needs the installed app or the helper), so the ordinary export already holds everything there is.'; return; }
+      msg.textContent = 'Gathering…';
+      var go = function () { MMS.problems.all(function (rows) { var o = recordObject(), d = new Date(); o.problems = rows; var name = 'MM7_Learner_Record_Full_' + d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()) + '.json'; X.download(name, JSON.stringify(o)); msg.textContent = 'Saved ' + name + ' with ' + plural(rows.length, 'problem') + '.'; }); };
+      if (typeof HHI !== 'undefined') HHI.sync(function () { MMS.problems.flush(go); }); else go();
+    });
     c.querySelector('#hbExport').addEventListener('click', function () { var r = exportRecord(); $('hbExportMsg').textContent = 'Saved ' + r.name + ' with ' + plural(r.n, 'record') + '.'; });
     var file = c.querySelector('#hbFile');
     c.querySelector('#hbImport').addEventListener('click', function () { file.value = ''; file.click(); });
     file.addEventListener('change', function () { var f = file.files && file.files[0]; if (!f) return; var r = new FileReader(); r.onload = function () { importText(String(r.result), function (msg) { $('hbImportMsg').textContent = msg; }); }; r.onerror = function () { $('hbImportMsg').textContent = 'The file could not be read.'; }; r.readAsText(f); });
     c.querySelector('#hbReset').addEventListener('click', function () {
       confirmBox('Reset everything?', 'This erases every chapter Path, Review, Exam and hub record saved in this browser. It cannot be undone.', 'Erase everything', function () {
-        allKeys().filter(isRecordKey).forEach(removeItem); dirty = true; M = null; applyTheme(); $('hbResetMsg').textContent = 'Everything was erased.'; toast('The learner record was erased.');
+        allKeys().filter(isRecordKey).forEach(removeItem); MMS.problems.clear(); dirty = true; M = null; applyTheme(); $('hbResetMsg').textContent = 'Everything was erased.'; toast('The learner record was erased.');
       });
     });
   }
@@ -250187,6 +250369,8 @@ var HHI = (function () {
       if (o.backend === 'idb') s = 'Saved on this device, in the browser’s own database. ' + (o.persisted ? 'The browser has agreed to keep it.' : 'The browser may clear it if the device runs very low on space, so export a copy now and then.');
       else if (o.backend === 'localStorage') s = 'Saved in this browser only. Export a copy now and then.';
       else s = 'This browser is blocking storage, so nothing is being kept and it will be lost when the tab closes. Export before you leave.';
+      if (o.backend === 'idb') s += ' Whole problems kept: ' + (o.problems || 0) + '.';
+      if (o.helper && o.helper.on) s += ' The helper is running: everything is also saved to ' + (o.helper.file || 'a file on this computer') + (o.helper.unsynced ? ' (' + plural(o.helper.unsynced, 'change') + ' waiting to be written).' : ', and it is up to date' + (o.helper.last ? ' (last written at ' + new Date(o.helper.last).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + ').' : '.')) + (o.helper.restored ? ' ' + plural(o.helper.restored, 'record') + ' were restored from the file when this page opened.' : '');
       if (o.writeFailed) s += ' The last save did not go through; export a copy now.';
       if (P) s += ' ' + (P.offlineReady() ? 'Everything is stored here, so it works without a connection.' : 'Getting ready to work offline…');
       t.textContent = s;
@@ -250226,7 +250410,12 @@ var HHI = (function () {
     if (!keys.length) { say('That learner record is empty.'); return; }
     confirmBox('Replace the learner record?', 'The file has ' + plural(keys.length, 'record') + ' exported ' + (o.exported ? fmtDate(Date.parse(o.exported)) : '') + '. Importing replaces everything saved in this browser with the file’s contents.', 'Replace', function () {
       allKeys().filter(isRecordKey).forEach(removeItem); keys.forEach(function (k) { setItem(k, o.keys[k]); });
-      dirty = true; M = null; splitChecked = false; applyTheme(); say('Imported ' + plural(keys.length, 'record') + '.'); toast('Learner record imported.');   // an older record may hold a Chapters 3–5 Review: divide it again
+      // the whole problems travel with the record when it was exported with them
+      var probs = Array.isArray(o.problems) ? o.problems.filter(function (r) { return r && typeof r.id === 'string'; }) : [];
+      // (whole problems already on this device are kept: they are keyed by the answer they belong to, so a record coming back
+      //  from another device finds them again; only Reset clears them)
+      if (probs.length && MMS.problems.on()) MMS.problems.merge(probs, function () { if (typeof HHI !== 'undefined') HHI.syncSoon(); }); else if (typeof HHI !== 'undefined') HHI.syncSoon();
+      dirty = true; M = null; splitChecked = false; applyTheme(); say('Imported ' + plural(keys.length, 'record') + (probs.length ? ' and ' + plural(probs.length, 'whole problem') : '') + '.'); toast('Learner record imported.');   // an older record may hold a Chapters 3–5 Review: divide it again
     });
   }
 
@@ -250249,7 +250438,7 @@ var HHI = (function () {
     CAT: CAT, GROUPS: GROUPS, skillShort: skillShort, openSkill: function (k) { openSkill(k); }, PRIV: '\uE000' };
   if (TJ) TJ.init(HXO);
   if (typeof HHI !== 'undefined') HHI.init(HXO);
-  MMS.start({ idb: /^https?:$/.test(location.protocol) }, function () { applyTheme(); route(); setTimeout(function () { try { model(); if (TJ) TJ.ensure(); } catch (e) { } }, 1200); });
+  MMS.start({ idb: /^https?:$/.test(location.protocol), helper: /^https?:$/.test(location.protocol) && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) }, function () { applyTheme(); route(); setTimeout(function () { try { model(); if (TJ) TJ.ensure(); } catch (e) { } }, 1200); });
 })();
 /* ===== HUB END ===== */
 
