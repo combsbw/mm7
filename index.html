@@ -1828,9 +1828,7 @@ a.btn { text-decoration: none; display: inline-block; }
 .tj-orbkey .ok-streak { height: 4px; top: 8px; border-radius: 2px; } .tj-orbkey .ok-col { background: linear-gradient(90deg, var(--tj-dn), var(--tj), var(--tj-up)); } .tj-orbkey .ok-halo { background: none; border: 3px solid var(--tj); opacity: .5; }
 /* energy level */
 .tj-level { display: flex; flex-direction: column; } .tj-orb { width: 100%; max-width: 360px; height: auto; display: block; margin: 6px auto 0; }
-.tj-orb .ring { fill: none; stroke: var(--tj-ring); stroke-width: 2; } .tj-orb .ring.done { stroke: var(--tj); opacity: .4; stroke-width: 3; } .tj-orb .ring.new { stroke: var(--tj-up); stroke-width: 5; } .tj-orb .ring.cur { stroke: var(--tj); stroke-width: 5; }
 .tj-orb .rl { font-size: 12.5px; font-weight: 700; fill: var(--ink-2); paint-order: stroke; stroke: var(--surface); stroke-width: 6px; stroke-linejoin: round; } .tj-orb .rl.cur { fill: var(--tj); } .tj-orb .rl.new { fill: var(--tj-up); }
-.tj-orb .climb { fill: none; stroke: var(--tj-up); stroke-width: 7; stroke-linecap: round; }
 .tj-orb .togo { font-size: 13.5px; font-weight: 700; fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 6px; stroke-linejoin: round; }
 .tj-orb .core { fill: var(--tj-held); } .tj-orb .lvn { fill: #fff; font-size: 32px; font-weight: 700; } .tj-orb .lvo { fill: #fff; opacity: .8; font-size: 12px; font-weight: 700; }
 .tj-orb .body { fill: var(--tj-up); stroke: var(--surface); stroke-width: 3; } .tj-orb .orbiter { transform-origin: 170px 170px; animation: tjOrbit 1.2s ease-out; }
@@ -1856,6 +1854,89 @@ a.btn { text-decoration: none; display: inline-block; }
 .tj-strip .k { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--tj); } .tj-strip .t { flex: 1 1 220px; } .tj-strip .go { color: var(--tj); font-weight: 700; }
 .tj-spark { flex: none; } .tj-spark .sp-p { fill: none; stroke: var(--tj); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; } .tj-spark .sp-f { fill: none; stroke: var(--tj); stroke-width: 2; stroke-dasharray: 2 4; stroke-linecap: round; } .tj-spark .sp-n { fill: var(--tj-held); stroke: var(--surface); stroke-width: 2; }
 
+/* path: the body is the orb; the arrow carries velocity (length, flow), momentum (thickness) and acceleration (colour, heads) */
+.tj-pb .o0 { stop-color: #cfe6ff; } .tj-pb .o1 { stop-color: var(--tj); } .tj-pb .o2 { stop-color: #123c73; }
+.tj-pb.up .o0 { stop-color: #d6ffe9; } .tj-pb.up .o1 { stop-color: var(--tj-up); } .tj-pb.up .o2 { stop-color: #0a5a3f; }
+.tj-pb.dn .o0 { stop-color: #ffe6d6; } .tj-pb.dn .o1 { stop-color: var(--tj-dn); } .tj-pb.dn .o2 { stop-color: #7a2f0f; }
+.tj-path .tj-pb .body { stroke: var(--surface); stroke-width: 2.5; }
+.tj-pb .halo { fill: none; stroke: var(--tj); opacity: .28; } .tj-pb.up .halo { stroke: var(--tj-up); } .tj-pb.dn .halo { stroke: var(--tj-dn); }
+.tj-pb .pbands ellipse { fill: #fff; opacity: .15; } .tj-pb .pbands > g { animation: tjSpinP 6s linear infinite; } .tj-pb .shine { fill: #fff; opacity: .5; pointer-events: none; } .tj-pb .pbands { pointer-events: none; }
+.tj-path .tj-pb .vel { stroke: var(--tj-held); stroke-linecap: round; stroke-dasharray: 14 3; animation: tjFlow 1.4s linear infinite; } .tj-pb.up .vel { stroke: var(--tj-up); } .tj-pb.dn .vel { stroke: var(--tj-dn); }
+.tj-pb .head { fill: var(--tj-held); } .tj-pb.up .head { fill: var(--tj-up); } .tj-pb.dn .head { fill: var(--tj-dn); }
+@keyframes tjFlow { from { stroke-dashoffset: 17; } to { stroke-dashoffset: 0; } }
+@keyframes tjSpinP { from { transform: translateX(0); } to { transform: translateX(14px); } }
+@media (prefers-reduced-motion: reduce) { .tj-pb .vel, .tj-pb .pbands > g { animation: none !important; } }
+.tj-key .k-vel { background: linear-gradient(90deg, var(--tj-dn), var(--tj-held), var(--tj-up)); height: 4px; }
+/* gauges with depth */
+.gt0 { stop-color: #eef3f6; } .gt1 { stop-color: #c3d0d8; } .gv0 { stop-color: #7cc0ff; } .gv1 { stop-color: var(--tj); } .gv2 { stop-color: #6a3fd6; }
+.gu0 { stop-color: #8ff0bd; } .gu1 { stop-color: #0e8f63; } .gd0 { stop-color: #ffc08a; } .gd1 { stop-color: #d4481a; } .gk1 { stop-color: #c9d6de; }
+:root[data-theme="dark"] .gt0 { stop-color: #3a4a54; } :root[data-theme="dark"] .gt1 { stop-color: #222e36; } :root[data-theme="dark"] .gk1 { stop-color: #7f97a6; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .gt0 { stop-color: #3a4a54; } :root:not([data-theme="light"]) .gt1 { stop-color: #222e36; } :root:not([data-theme="light"]) .gk1 { stop-color: #7f97a6; } }
+.tj-g .i-dial { stroke: url(#tjGt); stroke-width: 18; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .18)); }
+.tj-g .i-dialv { stroke: url(#tjGv); stroke-width: 18; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .25)); } .tj-g .i-dialv.up { stroke: url(#tjGu); } .tj-g .i-dialv.dn { stroke: url(#tjGd); }
+.tj-g .i-gloss { fill: none; stroke: #fff; stroke-width: 3; opacity: .35; stroke-linecap: round; pointer-events: none; }
+.tj-g .i-knob { fill: url(#tjGk); stroke-width: 3; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .3)); } .tj-g .i-knob { r: 11px; }
+.tj-g .i-mass { opacity: 1; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .25)); } .tj-g .i-held { opacity: .55; } .tj-g .i-shine { fill: #fff; opacity: .5; }
+.tj-g .o0 { stop-color: #cfe6ff; } .tj-g .o1 { stop-color: var(--tj); } .tj-g .o2 { stop-color: #123c73; }
+/* energy level: thick, coloured rings with depth */
+.tj-orb .track { fill: none; stroke: var(--hb-track); } .tj-orb .ring { fill: none; opacity: .92; } .tj-orb .ring.new { opacity: 1; } .tj-orb .ring.cur { opacity: 1; }
+.tj-orb .gloss { fill: none; stroke: #fff; opacity: .38; stroke-linecap: round; pointer-events: none; }
+.tj-orb .climb { fill: none; stroke-linecap: round; stroke-width: 15; }
+.tj-orb .rl { font-size: 11.5px; font-weight: 700; fill: var(--ink-2); stroke: none; paint-order: normal; } .tj-orb .rl.on { fill: #fff; paint-order: stroke; stroke: rgba(0, 0, 0, .35); stroke-width: 2px; }
+.tj-orb .core { stroke: none; } .tj-orb .cshine { fill: #fff; opacity: .4; } .tj-orb .body { stroke: var(--surface); stroke-width: 2.5; }
+.tj-orb .orbiter { transform-origin: 180px 180px; }
+
+/* strands sunburst */
+.hb-sunwrap { display: grid; gap: 14px 26px; align-items: center; } .hb-sunwrap.side { grid-template-columns: auto minmax(0, 1fr); }
+.hb-sun { display: block; max-width: 100%; height: auto; margin: 0 auto; overflow: visible; }
+.hb-sun path { stroke: var(--surface); stroke-width: 1.5; cursor: pointer; transition: opacity .2s; } .hb-sun g.ch { transition: transform .25s ease; } .hb-sun g.dim path { opacity: .38; }
+.hb-sun .e1 { fill: var(--mz-1); } .hb-sun .e2 { fill: var(--mz-2); } .hb-sun .e3 { fill: var(--mz-3); } .hb-sun .e4 { fill: var(--mz-4); } .hb-sun .e0 { fill: var(--surface-2); stroke: var(--line); stroke-dasharray: 3 3; }
+.hb-sun path:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.hb-sun .cl { font-size: 15px; font-weight: 700; fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--surface); stroke-width: 3px; } .hb-sun .sl { font-size: 10.5px; font-weight: 700; fill: var(--ink); pointer-events: none; paint-order: stroke; stroke: var(--surface); stroke-width: 2.5px; }
+.hb-sun .cc { font-size: 15px; font-weight: 700; fill: var(--ink); } .hb-sun .cc2 { font-size: 11.5px; fill: var(--ink-2); }
+.hb-sunpane h3 { font-size: 18px; margin: 0 0 4px; } .hb-sunlist { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; }
+.hb-sunlist .row { display: grid; grid-template-columns: 14px minmax(0, 1fr) 48px 96px; gap: 4px 10px; align-items: center; width: 100%; border: 0; background: none; font: inherit; font-size: 14.5px; color: var(--ink); text-align: left; padding: 6px 8px; border-radius: 10px; cursor: pointer; }
+.hb-sunlist .row:hover, .hb-sunlist .row:focus-visible { background: var(--surface-2); outline: none; }
+.hb-sunlist .sw { width: 12px; height: 12px; border-radius: 4px; display: block; } .hb-sunlist .sw.e1, .hb-sunlist .br .e1 { background: var(--mz-1); } .hb-sunlist .sw.e2, .hb-sunlist .br .e2 { background: var(--mz-2); } .hb-sunlist .sw.e3, .hb-sunlist .br .e3 { background: var(--mz-3); } .hb-sunlist .sw.e4, .hb-sunlist .br .e4 { background: var(--mz-4); } .hb-sunlist .sw.e0 { border: 1.5px dashed var(--line); }
+.hb-sunlist .pc { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; } .hb-sunlist .ct { color: var(--ink-2); font-size: 13px; text-align: right; }
+.hb-sunlist .br { grid-column: 2 / -1; height: 5px; border-radius: 3px; background: var(--hb-track); overflow: hidden; } .hb-sunlist .br i { display: block; height: 100%; border-radius: 3px; }
+/* how the estimates are made */
+.hb-how { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 10px; } .hb-how summary { cursor: pointer; font-weight: 700; font-size: 15.5px; }
+.hb-howb { font-size: 15px; line-height: 1.5; max-width: 70ch; } .hb-howb h4 { font-size: 15.5px; margin: 16px 0 4px; } .hb-howb p { margin: 6px 0; color: var(--ink-2); } .hb-howb b { color: var(--ink); }
+.hb-howb .fx { font-family: var(--mono, ui-monospace, monospace); font-size: 14px; color: var(--ink); background: var(--surface-2); border-radius: 10px; padding: 8px 12px; overflow-x: auto; white-space: nowrap; }
+
+/* ===== History (hub/hub_hist.js) ===== */
+.hh-tabs { margin: 0 0 14px; } .hh-tabs .seg a { text-decoration: none; padding: 6px 16px; border-radius: 7px; font-size: 15px; font-weight: 700; color: var(--ink-2); } .hh-tabs .seg a[aria-current="page"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
+.hh-tools.hb-card { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; padding: 14px 16px; border-radius: 18px; position: sticky; top: 58px; z-index: 5; }
+.hh-f { display: grid; gap: 4px; font-size: 12.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); } .hh-f select { min-width: 0; }
+.hh-search { flex: 1 1 240px; } .hh-q { font: inherit; font-size: 16px; padding: 9px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); width: 100%; } .hh-q:focus { outline: none; border-color: var(--accent); }
+.hh-count { margin: 12px 2px 6px; font-size: 14.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.hh-day { margin: 0 0 16px; } .hh-day h3, .hh-per h3 { font-size: 17px; margin: 14px 2px 8px; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; } .hh-day h3 span, .hh-per h3 span { font-size: 13.5px; font-weight: 500; color: var(--ink-2); }
+.hh-row { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); margin: 0 0 6px; border-left: 4px solid var(--good, #1baf7a); } .hh-row.no { border-left-color: var(--tj-dn); }
+.hh-row summary { display: grid; grid-template-columns: 22px 64px auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 14px; cursor: pointer; list-style: none; font-size: 15px; } .hh-row summary::-webkit-details-marker { display: none; }
+.hh-row .hmk { font-weight: 700; color: var(--good, #1baf7a); } .hh-row.no .hmk { color: var(--tj-dn); } .hh-row .tm { color: var(--ink-2); font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.hh-row .sec { font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 2px 10px; background: var(--tj-soft); color: var(--tj-held); white-space: nowrap; } .hh-row .sec.s-review { background: rgba(196, 63, 140, .12); color: var(--tj-gate); } .hh-row .sec.s-exam { background: rgba(14, 143, 99, .14); color: var(--tj-flag); } .hh-row .sec.s-onramp, .hh-row .sec.s-practice { background: rgba(237, 161, 0, .16); color: #8a5a00; }
+:root[data-theme="dark"] .hh-row .sec.s-onramp, :root[data-theme="dark"] .hh-row .sec.s-practice { color: #f0b93a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .hh-row .sec.s-onramp, :root:not([data-theme="light"]) .hh-row .sec.s-practice { color: #f0b93a; } }
+.hh-row .qx { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; } .hh-row[open] .qx { white-space: normal; }
+.hh-row .sks { display: flex; gap: 4px; min-width: 0; } .hh-skc { font-size: 12px; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; white-space: nowrap; max-width: 170px; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 760px) { .hh-row summary { grid-template-columns: 20px 58px minmax(0, 1fr); } .hh-row .qx { grid-column: 1 / -1; } .hh-row .sks { display: none; } .hh-row .sec { justify-self: start; } }
+.hh-body { padding: 4px 16px 16px; border-top: 1px solid var(--line); } .hh-where { font-size: 13px; color: var(--ink-2); margin: 10px 0; }
+.hh-prob { background: var(--surface-2); border-radius: 14px; padding: 14px 16px; font-size: 17px; overflow-x: auto; } .hh-prob.txt { white-space: pre-wrap; } .hh-prob svg { max-width: 100%; height: auto; }
+.hh-note { font-size: 13.5px; color: var(--ink-2); margin: 8px 0 0; }
+.hh-ans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0 0; } .hh-ans > div { border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 12px; } .hh-ans > div.ok { border-color: var(--good, #1baf7a); } .hh-ans > div.no { border-color: var(--tj-dn); }
+.hh-ans dt { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); } .hh-ans dd { margin: 2px 0 0; font-size: 17px; font-weight: 700; overflow-wrap: anywhere; }
+.hh-steps { margin-top: 10px; font-size: 15px; } .hh-steps summary { cursor: pointer; font-weight: 700; } .hh-meta { font-size: 13.5px; color: var(--ink-2); margin-top: 10px; }
+.hh-skl { display: flex; gap: 6px 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; } .hh-skl .lab { flex: 0 0 100%; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); }
+.hh-skb { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; padding: 5px 10px; font: inherit; font-size: 14px; text-align: left; cursor: pointer; min-height: 34px; } .hh-skb b { color: var(--tj-held); margin-right: 4px; }
+.hh-more { display: block; margin: 10px auto 0; } .hh-none { padding: 22px; }
+.hh-per.hb-card { margin: 0 0 12px; padding: 6px 18px 16px; } .hh-chg h4 { font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin: 12px 0 4px; }
+.hh-sk { border-top: 1px solid var(--line); } .hh-sk > summary { display: grid; grid-template-columns: minmax(0, 1fr) auto 90px; gap: 12px; align-items: center; padding: 8px 2px; cursor: pointer; font-size: 15px; list-style: none; } .hh-sk > summary::-webkit-details-marker { display: none; }
+.hh-sk .nm b { color: var(--tj-held); margin-right: 6px; } .hh-sk .nm i { font-style: normal; color: var(--ink-2); font-size: 13px; margin-left: 8px; } .hh-sk .ct { font-size: 13.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hh-sk .br { height: 7px; border-radius: 4px; background: var(--hb-track); overflow: hidden; } .hh-sk .br i { display: block; height: 100%; background: var(--good, #1baf7a); border-radius: 4px; }
+.hh-skrows { padding: 4px 0 10px 12px; } .hh-skrows .hh-row { box-shadow: none; border: 1px solid var(--line); border-left-width: 4px; }
+@media (max-width: 560px) { .hh-sk > summary { grid-template-columns: minmax(0, 1fr) auto; } .hh-sk .br { display: none; } }
+
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
 .hb-update button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--accent-ink, #fff); color: var(--accent, #2d6a86); cursor: pointer; }
@@ -1873,6 +1954,7 @@ a.btn { text-decoration: none; display: inline-block; }
       <a class="tab" href="#chapters" data-nav="chapters">Chapters</a>
       <a class="tab" href="#reviews" data-nav="reviews"><span class="hb-tlong">Reviews &amp; Exams</span><span class="hb-tshort">Reviews</span></a>
       <a class="tab" href="#dashboard" data-nav="dashboard">Dashboard</a>
+      <a class="tab" href="#history" data-nav="history">History</a>
     </nav>
     <a class="iconbtn hb-gear" href="#settings" data-nav="settings" aria-label="Settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -48437,9 +48519,10 @@ var LMX = (function () {
   function cell(v) { if (v === null || v === undefined) return ''; var s = String(v); return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
   function csv(columns, rows) { return [columns.map(function (c) { return cell(c.name); }).join(',')].concat(rows.map(function (row) { return row.map(cell).join(','); })).join('\r\n') + '\r\n'; }
 
-  function tables(cat, obs, now, traj, hub) {
+  function tables(cat, obs, now, traj, hub, problems) {
     obs = obs.slice().sort(function (a, c) { return (a.t || 0) - (c.t || 0); });
     var T = {}, ss = TJ.sessionsOf(obs), sIdx = 0, m = L.build(obs, now, cat);
+    function sessionOf2(t) { for (var i = 0; i < ss.length; i++) if (t >= ss[i].t0 - 1 && t <= ss[i].t1 + 1) return ss[i].i; return ''; }
     function sessionOf(t) { while (sIdx < ss.length - 1 && t > ss[sIdx].t1) sIdx++; return ss.length && t >= ss[sIdx].t0 - 1 && t <= ss[sIdx].t1 + 1 ? ss[sIdx].i : ''; }
 
     // ---- answers: one row per answer (the raw evidence), and its skills in long form
@@ -48461,6 +48544,15 @@ var LMX = (function () {
       col('exam_group', 'text', '', 'The Review or Exam group (ch12, ch34, ...).'), col('exam_attempt', 'text', '', 'The exam attempt the answer belongs to.'), col('exam_role', 'category', '', 'Its part in the adaptive exam (first, second, probe, summit).')] };
     T.answer_skills = { about: 'One row per answer per skill it draws on (long form of answers.skills), ready for group-by.', rows: AS, columns: [col('answer_id', 'integer', '', 'Joins to answers.'), col('skill_id', 'text', '', 'Joins to skills.'), col('n_skills', 'integer', '', 'How many skills the answer draws on (evidence is shared among them).'), col('correct', 'integer', '0 or 1', 'As in answers.'), col('credit', 'number', '0 to 1', 'As in answers.')] };
 
+    // ---- problems: the History, one row per problem with its text, the answer given and the right answer
+    if (problems) {
+      T.problems = { about: 'One row per problem in the History: where it came from, the skills it uses, the problem text, the answer given and the right answer.', rows: problems.slice().sort(function (a, c) { return a.t - c.t; }).map(function (p, i) {
+        return [i + 1, sessionOf2(p.t), iso(p.t), dLocal(p.t), tLocal(p.t), p.src, p.section, p.where || '', p.ch || '', (p.skills || []).join(';'), (p.skills || []).map(function (k) { return (cat.skills[k] || {}).short || k; }).join('; '), b(p.ok), r(p.credit, 3), p.ms ? r(p.ms / 1000, 1) : '', b(p.help), p.tag || '', p.q || '', String(p.entry === undefined ? '' : p.entry), String(p.show === undefined ? '' : p.show), b(p.qh)]; }), columns: [
+        col('problem_id', 'integer', '', 'Row number, in time order.'), col('session_number', 'integer', '', 'The session it was answered in. Joins to sessions.'), col('timestamp_utc', 'datetime', 'ISO 8601, UTC', 'When it was answered.'), col('date_local', 'date', 'YYYY-MM-DD', 'Local date.'), col('time_local', 'time', 'HH:MM:SS', 'Local time.'),
+        col('source', 'category', '', 'path, review, exam, onramp or practice.'), col('section', 'text', '', 'The part of the system it came from (for example "Chapter 3 Path" or "Chapters 1–2 Review").'), col('where', 'text', '', 'The place inside that section: unit and level, review stage and question family, or exam tier.'), col('chapter', 'integer', '', 'The chapter the problem belongs to.'),
+        col('skills', 'text', 'semicolon-separated', 'Skill ids the problem uses. Joins to skills.skill_id.'), col('skill_descriptions', 'text', 'semicolon-separated', 'The same skills in words.'), col('correct', 'integer', '0 or 1', '1 when the answer was accepted as right.'), col('credit', 'number', '0 to 1', 'Credit given.'), col('seconds', 'number', 's', 'Time taken.'), col('used_help', 'integer', '0 or 1', '1 when help was opened.'), col('error_tag', 'category', '', 'The kind of slip recognised, if any.'),
+        col('question_text', 'text', '', 'The problem as plain text (a figure appears as [figure: description]). Blank for the oldest onramp answers, which did not keep it.'), col('student_answer', 'text', '', 'What was entered.'), col('correct_answer', 'text', '', 'The right answer.'), col('full_problem_kept', 'integer', '0 or 1', '1 when the whole problem as shown (with figures) is kept in the learner record and can be viewed in History.')] };
+    }
     // ---- sessions and the trajectory
     var S = [], SC = [], ts = (traj && traj.sessions) || [];
     ss.forEach(function (s, i) {
@@ -56194,7 +56286,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -56222,6 +56315,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -64321,7 +64418,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -64349,6 +64447,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -72387,7 +72489,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -72415,6 +72518,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -81350,7 +81457,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -81378,6 +81486,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -90561,7 +90673,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -90589,6 +90702,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -100671,7 +100788,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -100699,6 +100817,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -110397,7 +110519,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -110425,6 +110548,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -122119,7 +122246,8 @@ var GEN = (function () {
   var HKEY = KEY + '-history', HVER = 1;
   var H = { v: HVER, app: APP_ID, events: [] };
   try { var hs = JSON.parse(STORE.getItem(HKEY) || 'null'); if (hs && Array.isArray(hs.events)) H = { v: HVER, app: APP_ID, events: hs.events }; } catch (e) { }
-  var hStoreErr = false;
+  var hStoreErr = false, HQ_ONE = 9000, HQ_ALL = 1200000, hqBytes = 0;
+  H.events.forEach(function (e) { if (e.qh) hqBytes += e.qh.length; });
   function hSave() {
     try { hStoreErr = !STORE.setItem(HKEY, JSON.stringify(H)); }
     catch (e) { hStoreErr = true; }
@@ -122147,6 +122275,10 @@ var GEN = (function () {
   function logAnswer(p, key, input, ok, justMastered) {
     var now = Date.now();
     lastEvent = { id: uid(), type: 'answer', t: now, k: key, q: plain(p.prompt), kind: p.kind, entry: entryText(p, input), ans: plain(p.show), ok: !!ok, dt: Math.max(0, now - shownAt), help: false };
+    // the whole problem as it was shown (figures included), for the Hub's History: kept while it fits a budget, so the
+    // record of progress can never be crowded out; the plain text above is always kept
+    var ph = String(p.prompt == null ? '' : p.prompt);
+    if (ph.length <= HQ_ONE && hqBytes + ph.length <= HQ_ALL) { lastEvent.qh = ph; hqBytes += ph.length; }
     if (p.unit) lastEvent.unit = plain(p.unit);
     if (justMastered) lastEvent.mst = 1;
     H.events.push(lastEvent); hSave();
@@ -134792,6 +134924,9 @@ if (typeof module !== 'undefined') module.exports = RD;
   function render(v) { if (v === 'dash') renderDash(); else if (v === 'warm') renderWarm(); else if (v === 'trial') renderTrial(); else if (v === 'transfer') renderTransfer(); else if (v === 'history') renderHistory(); }
 
   // ---------- events ----------
+  // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
+  var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
   // ---------- dashboard ----------
@@ -134849,7 +134984,7 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 200), a: X.cut(g.text || '', 160), show: X.cut(plain(p.show), 160), help: false });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -159101,6 +159236,9 @@ if (typeof module !== 'undefined') module.exports = RD;
   function render(v) { if (v === 'dash') renderDash(); else if (v === 'warm') renderWarm(); else if (v === 'trial') renderTrial(); else if (v === 'transfer') renderTransfer(); else if (v === 'history') renderHistory(); }
 
   // ---------- events ----------
+  // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
+  var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
   // ---------- dashboard ----------
@@ -159158,7 +159296,7 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 200), a: X.cut(g.text || '', 160), show: X.cut(plain(p.show), 160), help: false });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -181788,6 +181926,9 @@ if (typeof module !== 'undefined') module.exports = RD;
   function render(v) { if (v === 'dash') renderDash(); else if (v === 'warm') renderWarm(); else if (v === 'trial') renderTrial(); else if (v === 'transfer') renderTransfer(); else if (v === 'history') renderHistory(); }
 
   // ---------- events ----------
+  // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
+  var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
   // ---------- dashboard ----------
@@ -181845,7 +181986,7 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 200), a: X.cut(g.text || '', 160), show: X.cut(plain(p.show), 160), help: false });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -205442,6 +205583,9 @@ if (typeof module !== 'undefined') module.exports = RD;
   function render(v) { if (v === 'dash') renderDash(); else if (v === 'warm') renderWarm(); else if (v === 'trial') renderTrial(); else if (v === 'transfer') renderTransfer(); else if (v === 'history') renderHistory(); }
 
   // ---------- events ----------
+  // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
+  var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
   // ---------- dashboard ----------
@@ -205499,7 +205643,7 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 200), a: X.cut(g.text || '', 160), show: X.cut(plain(p.show), 160), help: false });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -231310,6 +231454,9 @@ if (typeof module !== 'undefined') module.exports = RD;
   function render(v) { if (v === 'dash') renderDash(); else if (v === 'warm') renderWarm(); else if (v === 'trial') renderTrial(); else if (v === 'transfer') renderTransfer(); else if (v === 'history') renderHistory(); }
 
   // ---------- events ----------
+  // the whole problem as shown, for the Hub's History (within a budget; the plain text is always kept)
+  var QH_ONE = 9000, QH_ALL = 1200000, qhBytes = -1;
+  function qhOf(h) { h = String(h == null ? '' : h); if (qhBytes < 0) { qhBytes = 0; (st.events || []).forEach(function (e) { if (e.qh) qhBytes += e.qh.length; }); } if (h.length > QH_ONE || qhBytes + h.length > QH_ALL) return undefined; qhBytes += h.length; return h; }
   function logEvent(e) { e.id = X.uid(); e.t = Date.now(); st.events.push(e); persist(); return e; }
 
   // ---------- dashboard ----------
@@ -231367,7 +231514,7 @@ if (typeof module !== 'undefined') module.exports = RD;
     var ms = Date.now() - S.shownAt, p = S.p;
     if (g.ok) S.streak++; else { S.streak = 0; if (g.tag) S.wrongTags[g.tag] = (S.wrongTags[g.tag] || 0) + 1; }
     S.lastG = g;
-    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 200), a: X.cut(g.text || '', 160), show: X.cut(plain(p.show), 160), help: false });
+    S.last = logEvent({ type: 'answer', sec: S.cfg.sec, k: S.cfg.key, ms: ms, ok: g.ok, credit: g.credit, tag: g.tag, terr: p.home && XM.TERR_RE.test(p.home) ? p.home : p.terr, tier: p.tier, gid: p.gid, est: p.est, src: p.src || G.srcMain, model: S.model ? 1 : undefined, q: X.cut(plain(p.prompt), 1500), a: X.cut(g.text || '', 400), show: X.cut(plain(p.show), 400), help: false, qh: qhOf(p.prompt) });
     $('pHelpList').innerHTML = X.helpHTML(p);
     if (S.model) { openModel(g); return; }
     finishItem(g);
@@ -248249,7 +248396,7 @@ var HTJ = (function () {
   // ------------------------------------------------------------------ the one line (Today, Dashboard)
   function line() {
     boot(); ensure();
-    var box = el('a', 'hb-tjline'); box.href = '#dashboard/trajectory';
+    var box = el('a', 'hb-tjline'); box.href = '#dashboard';
     function draw() {
       var c = cur;
       if (!c || !c.sessions.length) { box.innerHTML = '<span class="k">Trajectory</span><span class="t">Your first session starts the path.</span>'; return; }
@@ -248339,14 +248486,24 @@ var HTJ = (function () {
       var cp = (ah && ah.checkpoints || []).filter(function (x) { return x.id === e.group; })[0] || { id: e.group, title: e.group, chapters: [] };
       if (!mine(cp) || -e.back < s0) return;
       var ex = xs(-e.back), ey = ys(yAt(-e.back)), top = Math.max(Tm + 16, ey - 46 - (j % 2) * 16), anc = ex > W - 90 ? 'end' : ex < Lm + 60 ? 'start' : 'middle';
-      o += '<g class="flag"' + tip(grpTitle(cp) + (e.n > 1 ? ' (attempt ' + e.n + ')' : ''), 'Checkpoint completed ' + (e.back ? plural(e.back, 'session') + ' back' : 'in the latest session') + '<br>Core ' + pct(e.core) + ' · Stretch ' + pct(e.stretch)) + ' tabindex="0"><line x1="' + f1(ex) + '" x2="' + f1(ex) + '" y1="' + f1(top) + '" y2="' + f1(ey) + '"/><path d="M' + f1(ex) + ' ' + f1(top - 9) + 'l8 9l-8 9l-8 -9z"/><path class="ck" d="M' + f1(ex - 3.6) + ' ' + f1(top) + 'l2.6 2.8l4.6 -5.4"/><text x="' + f1(ex) + '" y="' + f1(top - 14) + '" text-anchor="' + anc + '">' + esc(shortT(cp.title)) + (small ? '' : ' ✓ ' + pct(e.core) + ' / ' + pct(e.stretch)) + '</text></g>';
+      o += '<g class="flag"' + tip(grpTitle(cp) + (e.n > 1 ? ' (attempt ' + e.n + ')' : ''), 'Checkpoint completed ' + (e.back ? plural(e.back, 'session') + ' back' : 'in the latest session') + '<br>Core ' + pct(e.core) + ' · Stretch ' + pct(e.stretch)) + ' tabindex="0"><line x1="' + f1(ex) + '" x2="' + f1(ex) + '" y1="' + f1(top) + '" y2="' + f1(ey) + '"/><path d="M' + f1(ex) + ' ' + f1(top - 9) + 'l8 9l-8 9l-8 -9z"/><path class="ck" d="M' + f1(ex - 3.6) + ' ' + f1(top) + 'l2.6 2.8l4.6 -5.4"/><text x="' + f1(ex) + '" y="' + f1(top - 14) + '" text-anchor="' + anc + '">' + esc(shortT(cp.title)) + '</text></g>';
     });
-    // now: the body (bigger with more blobs) and its velocity
-    var bx = xs(0), by = ys(S.now), R = 8 + 14 * Math.sqrt(S.now / Math.max(1, S.max)), vv = lensOfScope(c, S, opt.lens || ui.lens).v;
-    var dx = (xs(1) - xs(0)), dy = ys(S.now + vv) - ys(S.now), len = Math.sqrt(dx * dx + dy * dy) || 1, A = Math.min(small ? 70 : 96, Math.max(34, 26 + Math.abs(vv) * 1.4));
-    o += '<circle class="glow" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R * 2.3) + '" fill="url(#tjGlow)"/>';
-    if (Math.abs(vv) > 0.01) o += '<line class="vel" x1="' + f1(bx) + '" y1="' + f1(by) + '" x2="' + f1(bx + dx / len * A) + '" y2="' + f1(by + dy / len * A) + '" marker-end="url(#tjArr)"/>';
-    o += '<circle class="body" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R) + '"' + tip('You are here', blobs(S.now) + (S.scope === 'course' ? ' · Level ' + c.now.level : ' of ' + num(S.max) + ' in ' + S.name)) + ' tabindex="0"/>';
+    // now: the same orb as "All four at once" for this lens, and an arrow that carries the metrics too:
+    // direction = where the path is heading, length = velocity, thickness = momentum, colour and extra heads = acceleration
+    var bx = xs(0), by = ys(S.now), R = 9 + 15 * Math.sqrt(S.now / Math.max(1, S.max)), LS = lensOfScope(c, S, opt.lens || ui.lens), vv = LS.v, Lc = c.lens[opt.lens || ui.lens], rf = refs(c);
+    var at = Lc.vPrev === null ? 0 : Math.max(-1, Math.min(1, Lc.a / rf.aTop)), vt = Math.max(0, Math.min(1, Math.abs(vv) / rf.vTop)), pt = Math.max(0, Math.min(1, Math.abs(S.now * vv) / rf.pTop)), cls = at > 0.15 ? 'up' : at < -0.15 ? 'dn' : 'flat', uid = 'tjB' + (opt.mini ? 'm' : 'p') + S.scope.replace(/\W/g, '');
+    var dx = (xs(1) - xs(0)), dy = ys(S.now + vv) - ys(S.now), len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len, A = (small ? 30 : 38) + (small ? 50 : 78) * vt, sw = 4 + 7 * pt, halo = 2 + 9 * pt;
+    o += '<g class="tj-pb ' + cls + '"><defs><radialGradient id="' + uid + 'g" cx="36%" cy="30%" r="75%"><stop offset="0" class="o0"/><stop offset=".55" class="o1"/><stop offset="1" class="o2"/></radialGradient><clipPath id="' + uid + 'c"><circle cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R) + '"/></clipPath></defs>';
+    if (Math.abs(vv) > 0.01) {
+      var x1 = bx + ux * (R + halo), y1 = by + uy * (R + halo), x2 = bx + ux * (R + halo + A), y2 = by + uy * (R + halo + A), hd = 7 + sw * 1.1, nH = 1 + Math.round(Math.abs(at) * 2), ang = Math.atan2(uy, ux) * 180 / Math.PI;
+      o += '<line class="vel" x1="' + f1(x1) + '" y1="' + f1(y1) + '" x2="' + f1(x2 - ux * hd * 0.6) + '" y2="' + f1(y2 - uy * hd * 0.6) + '" stroke-width="' + f1(sw) + '" style="animation-duration:' + f1(Math.max(0.5, 2.2 - 1.7 * vt)) + 's"/>';
+      for (var hI = 0; hI < nH; hI++) { var hx = x2 - ux * hI * hd * 0.95, hy = y2 - uy * hI * hd * 0.95; o += '<path class="head" opacity="' + (1 - hI * 0.3) + '" transform="translate(' + f1(hx) + ' ' + f1(hy) + ') rotate(' + f1(ang) + ')" d="M0 0L' + f1(-hd) + ' ' + f1(-hd * 0.62) + 'L' + f1(-hd * 0.62) + ' 0L' + f1(-hd) + ' ' + f1(hd * 0.62) + 'z"/>'; }
+    }
+    o += '<circle class="glow" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R * 2.1) + '" fill="url(#tjGlow)"/><circle class="halo" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R + halo / 2 + 1.5) + '" stroke-width="' + f1(halo) + '"/>';
+    o += '<circle class="body" cx="' + f1(bx) + '" cy="' + f1(by) + '" r="' + f1(R) + '" style="fill:url(#' + uid + 'g)"' + tip('You are here', blobs(S.now) + (S.scope === 'course' ? ' · Level ' + c.now.level : ' of ' + num(S.max) + ' in ' + S.name) + '<br>Velocity ' + q(vv) + ' · acceleration ' + (Lc.vPrev === null ? '–' : q(Lc.a, true)) + ' · momentum ' + num(S.now * vv)) + ' tabindex="0"/>';
+    o += '<g clip-path="url(#' + uid + 'c)" class="pbands"><g' + (vt > 0.01 ? ' style="animation-duration:' + f1(Math.max(1.6, 9 - 7 * vt)) + 's"' : ' style="animation:none"') + '>';
+    for (var bI = -2; bI < 5; bI++) o += '<ellipse cx="' + f1(bx - R + bI * R * 0.62) + '" cy="' + f1(by) + '" rx="' + f1(R * 0.18) + '" ry="' + f1(R * 1.05) + '"/>';
+    o += '</g></g><ellipse class="shine" cx="' + f1(bx - R * 0.34) + '" cy="' + f1(by - R * 0.42) + '" rx="' + f1(R * 0.3) + '" ry="' + f1(R * 0.17) + '" transform="rotate(-28 ' + f1(bx - R * 0.34) + ' ' + f1(by - R * 0.42) + ')"/></g>';
     o += '<line class="nowl" x1="' + f1(bx) + '" x2="' + f1(bx) + '" y1="' + (H - Bm) + '" y2="' + (H - Bm + 6) + '"/><text class="nowt" x="' + f1(bx) + '" y="' + (H - Bm + 20) + '" text-anchor="middle">now</text>';
     var tk = span <= 10 ? 1 : span <= 24 ? 2 : span <= 60 ? 5 : span <= 140 ? 10 : 20;
     if (small) { var cand = [1, 2, 5, 10, 20, 25, 50, 100]; for (var ci = 0; ci < cand.length; ci++) if (span / cand[ci] <= 6) { tk = cand[ci]; break; } }
@@ -248354,7 +248511,7 @@ var HTJ = (function () {
     o += '<text class="axl" x="' + Lm + '" y="' + (H - 6) + '">' + (small ? 'behind' : 'sessions behind') + '</text><text class="axl" x="' + (W - Rm) + '" y="' + (H - 6) + '" text-anchor="end">sessions ahead</text>';
     return o + '</svg>';
   }
-  var KEY = '<div class="tj-key"><span><i class="k-trail"></i>the trail behind (a bigger mark is a bigger gain)</span><span><i class="k-body"></i>you, now</span><span><i class="k-vel"></i>velocity</span><span><i class="k-mid"></i>the path ahead, with its range</span><span><i class="k-flag"></i>a checkpoint completed</span><span><i class="k-gate"></i>a checkpoint ahead</span></div>';
+  var KEY = '<div class="tj-key"><span><i class="k-trail"></i>the trail behind (a bigger mark is a bigger gain)</span><span><i class="k-body"></i>you, now (the orb)</span><span><i class="k-vel"></i>longer = faster, thicker = more momentum, colour = acceleration</span><span><i class="k-mid"></i>the path ahead, with its range</span><span><i class="k-flag"></i>a checkpoint completed</span><span><i class="k-gate"></i>a checkpoint ahead</span></div>';
   function heroCard(c) {
     var card = el('section', 'hb-card wide tj-hero');
     if (ui.scope !== 'course' && !grpOf(c, ui.scope)) ui.scope = 'course';
@@ -248378,23 +248535,24 @@ var HTJ = (function () {
   }
   function arcPt(cx, cy, r, deg) { var a = deg * Math.PI / 180; return f1(cx + r * Math.cos(a)) + ' ' + f1(cy + r * Math.sin(a)); }
   function arcD(cx, cy, r, a0, a1) { if (a1 < a0) { var t = a0; a0 = a1; a1 = t; } return 'M' + arcPt(cx, cy, r, a0) + ' A' + r + ' ' + r + ' 0 ' + (a1 - a0 > 180 ? 1 : 0) + ' 1 ' + arcPt(cx, cy, r, a1); }
-  function gaugeBox(kind, inner, value, unit, aria) { return '<svg class="tj-g tj-g-' + kind + '" viewBox="0 0 200 172" role="img" aria-label="' + esc(aria) + '">' + inner + '<text class="gv" x="100" y="' + (kind === 'mass' ? 96 : 104) + '" text-anchor="middle">' + value + '</text><text class="gu" x="100" y="' + (kind === 'mass' ? 116 : 124) + '" text-anchor="middle">' + unit + '</text></svg>'; }
+  var GDEF = '<defs><linearGradient id="tjGt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="gt0"/><stop offset="1" class="gt1"/></linearGradient><linearGradient id="tjGv" x1="0" y1="1" x2="1" y2="0"><stop offset="0" class="gv0"/><stop offset=".5" class="gv1"/><stop offset="1" class="gv2"/></linearGradient><linearGradient id="tjGu" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="gu0"/><stop offset="1" class="gu1"/></linearGradient><linearGradient id="tjGd" x1="1" y1="0" x2="0" y2="1"><stop offset="0" class="gd0"/><stop offset="1" class="gd1"/></linearGradient><radialGradient id="tjGk" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset="1" class="gk1"/></radialGradient><radialGradient id="tjGm" cx="36%" cy="30%" r="75%"><stop offset="0" class="o0"/><stop offset=".55" class="o1"/><stop offset="1" class="o2"/></radialGradient><radialGradient id="tjGh" cx="36%" cy="30%" r="80%"><stop offset="0" class="o1"/><stop offset="1" class="o2"/></radialGradient></defs>';
+  function gaugeBox(kind, inner, value, unit, aria) { return '<svg class="tj-g tj-g-' + kind + '" viewBox="0 0 200 172" role="img" aria-label="' + esc(aria) + '">' + GDEF + inner + '<text class="gv" x="100" y="' + (kind === 'mass' ? 96 : 104) + '" text-anchor="middle">' + value + '</text><text class="gu" x="100" y="' + (kind === 'mass' ? 116 : 124) + '" text-anchor="middle">' + unit + '</text></svg>'; }
   function gMass(c) {
     var R = 74, r = R * Math.sqrt(Math.max(0.004, c.now.M / c.now.Mmax)), rh = r * Math.sqrt(Math.max(0, c.now.held || 0));
-    return gaugeBox('mass', '<circle class="i-max" cx="100" cy="86" r="' + R + '"/><circle class="i-mass" cx="100" cy="86" r="' + f1(r) + '"/><circle class="i-held" cx="100" cy="86" r="' + f1(rh) + '"/>', num(c.now.M), 'blobs', num(c.now.M) + ' blobs of ' + num(c.now.Mmax));
+    return gaugeBox('mass', '<circle class="i-max" cx="100" cy="86" r="' + R + '"/><circle class="i-mass" cx="100" cy="86" r="' + f1(r) + '" fill="url(#tjGm)"/><circle class="i-held" cx="100" cy="86" r="' + f1(rh) + '" fill="url(#tjGh)"/><ellipse class="i-shine" cx="' + f1(100 - r * 0.34) + '" cy="' + f1(86 - r * 0.42) + '" rx="' + f1(r * 0.3) + '" ry="' + f1(r * 0.16) + '" transform="rotate(-28 ' + f1(100 - r * 0.34) + ' ' + f1(86 - r * 0.42) + ')"/>', num(c.now.M), 'blobs', num(c.now.M) + ' blobs of ' + num(c.now.Mmax));
   }
   function gVel(c, L, rf) {
     var t = Math.max(0, Math.min(1, L.v / rf.vTop)), tr = Math.max(0, Math.min(1, c.lens.course.v / rf.vTop)), a0 = 150, sw = 240, ticks = '';
     for (var i = 0; i <= 8; i++) ticks += '<line class="i-tick" x1="' + arcPt(100, 96, 80, a0 + sw * i / 8).replace(' ', '" y1="') + '" x2="' + arcPt(100, 96, 86, a0 + sw * i / 8).replace(' ', '" y2="') + '"/>';
-    return gaugeBox('vel', ticks + '<path class="i-dial" d="' + arcD(100, 96, 70, a0, a0 + sw) + '"/>' + (t > 0.004 ? '<path class="i-dialv" d="' + arcD(100, 96, 70, a0, a0 + sw * t) + '"/>' : '') + '<line class="i-ref" x1="' + arcPt(100, 96, 60, a0 + sw * tr).replace(' ', '" y1="') + '" x2="' + arcPt(100, 96, 80, a0 + sw * tr).replace(' ', '" y2="') + '"/><circle class="i-knob" cx="' + arcPt(100, 96, 70, a0 + sw * t).replace(' ', '" cy="') + '" r="8"/>', q(L.v), 'blobs a session', 'Velocity ' + q(L.v) + ' blobs a session');
+    return gaugeBox('vel', ticks + '<path class="i-dial" d="' + arcD(100, 96, 70, a0, a0 + sw) + '"/><path class="i-gloss" d="' + arcD(100, 96, 74, a0, a0 + sw) + '"/>' + (t > 0.004 ? '<path class="i-dialv" d="' + arcD(100, 96, 70, a0, a0 + sw * t) + '"/>' : '') + '<line class="i-ref" x1="' + arcPt(100, 96, 60, a0 + sw * tr).replace(' ', '" y1="') + '" x2="' + arcPt(100, 96, 80, a0 + sw * tr).replace(' ', '" y2="') + '"/><circle class="i-knob" cx="' + arcPt(100, 96, 70, a0 + sw * t).replace(' ', '" cy="') + '" r="8"/>', q(L.v), 'blobs a session', 'Velocity ' + q(L.v) + ' blobs a session');
   }
   function gAcc(c, L, rf) {
     var a = L.vPrev === null ? 0 : L.a, t = Math.max(-1, Math.min(1, a / rf.aTop)), top = 270, end = top + 120 * t, cls = t > 0.02 ? 'up' : t < -0.02 ? 'dn' : 'flat';
-    return gaugeBox('acc', '<path class="i-dial" d="' + arcD(100, 96, 70, 150, 390) + '"/>' + (Math.abs(t) > 0.01 ? '<path class="i-dialv ' + cls + '" d="' + arcD(100, 96, 70, top, end) + '"/>' : '') + '<line class="i-zero" x1="100" y1="16" x2="100" y2="36"/><text class="i-pm" x="34" y="150" text-anchor="middle">−</text><text class="i-pm" x="166" y="150" text-anchor="middle">+</text><circle class="i-knob ' + cls + '" cx="' + arcPt(100, 96, 70, end).replace(' ', '" cy="') + '" r="8"/>', L.vPrev === null ? '–' : q(L.a, true), L.vPrev === null ? 'not enough yet' : 'Δ velocity', 'Acceleration ' + (L.vPrev === null ? 'not known yet' : q(L.a, true)));
+    return gaugeBox('acc', '<path class="i-dial" d="' + arcD(100, 96, 70, 150, 390) + '"/><path class="i-gloss" d="' + arcD(100, 96, 74, 150, 390) + '"/>' + (Math.abs(t) > 0.01 ? '<path class="i-dialv ' + cls + '" d="' + arcD(100, 96, 70, top, end) + '"/>' : '') + '<line class="i-zero" x1="100" y1="16" x2="100" y2="36"/><text class="i-pm" x="34" y="150" text-anchor="middle">−</text><text class="i-pm" x="166" y="150" text-anchor="middle">+</text><circle class="i-knob ' + cls + '" cx="' + arcPt(100, 96, 70, end).replace(' ', '" cy="') + '" r="8"/>', L.vPrev === null ? '–' : q(L.a, true), L.vPrev === null ? 'not enough yet' : 'Δ velocity', 'Acceleration ' + (L.vPrev === null ? 'not known yet' : q(L.a, true)));
   }
   function gMom(c, L, rf) {
     var t = Math.max(0, Math.min(1, Math.abs(L.p) / rf.pTop)), C = 2 * Math.PI * 70;
-    return gaugeBox('mom', '<circle class="i-dial" cx="100" cy="96" r="70"/><circle class="i-dialv' + (L.p < 0 ? ' dn' : '') + '" cx="100" cy="96" r="70" stroke-dasharray="' + f1(C * t) + ' ' + f1(C) + '" transform="rotate(-90 100 96)"/>', num(L.p), num(c.now.M) + ' × ' + q(L.v), 'Momentum ' + num(L.p));
+    return gaugeBox('mom', '<circle class="i-dial" cx="100" cy="96" r="70"/><circle class="i-gloss" cx="100" cy="96" r="74"/><circle class="i-dialv' + (L.p < 0 ? ' dn' : '') + '" cx="100" cy="96" r="70" stroke-dasharray="' + f1(C * t) + ' ' + f1(C) + '" transform="rotate(-90 100 96)"/>', num(L.p), num(c.now.M) + ' × ' + q(L.v), 'Momentum ' + num(L.p));
   }
   // one orb for all four: size is mass, the streaks and the spin are velocity, the colour is acceleration, the halo is momentum
   function orbSvg(c, L, rf) {
@@ -248431,18 +248589,27 @@ var HTJ = (function () {
   }
 
   // ------------------------------------------------------------------ energy level: the rings carry the numbers
+  var RING_HUES = [['#b08cff', '#6a3fd6'], ['#6fb2ff', '#1f5fc4'], ['#4fd6d0', '#0c8f8a'], ['#6fe09a', '#178a4c'], ['#ffd45e', '#d18a00'], ['#ff9a6b', '#d4481a'], ['#ff7fb0', '#c42a72']];
   function levelCard(c) {
-    var L = c.lens[ui.lens], card = el('section', 'hb-card tj-level'), n = c.now.level, S = 340, cx = 170, cy = 170, lo = Math.max(0, n - 2), rings = [], i;
+    var L = c.lens[ui.lens], card = el('section', 'hb-card tj-level'), n = c.now.level, S = 360, cx = 180, cy = 180, lo = Math.max(0, n - 3), rings = [], i, GAP = 23, SW = 15;
     for (i = lo; i <= Math.min(c.now.levelMax, lo + 4); i++) rings.push(i);
-    var rOf = function (lv) { return 58 + (lv - lo) * 24; }, climbedFrom = n - Math.max(0, L.levels), t = Math.max(0.001, Math.min(0.999, c.now.inLevel)), a0 = -90, a1 = a0 + 360 * t, rn = rOf(Math.min(n + 1, rings[rings.length - 1] || n + 1)), rb = rOf(n) + 24 * t;
-    var o = '<svg class="tj-orb" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Energy level ' + n + ' of ' + c.now.levelMax + ', ' + q(c.now.toNext) + ' blobs to level ' + (n + 1) + '">';
-    rings.forEach(function (lv) { var cls = lv === n ? ' cur' : lv < n ? (lv >= climbedFrom ? ' new' : ' done') : ''; o += '<circle class="ring' + cls + '" cx="' + cx + '" cy="' + cy + '" r="' + rOf(lv) + '"/><text class="rl' + cls + '" x="' + (cx - rOf(lv)) + '" y="' + (cy + 4) + '" text-anchor="middle">' + lv + '</text>'; });
-    o += '<path class="climb" d="' + arcD(cx, cy, rn, a0, a1) + '"/>';
-    o += '<g class="orbiter"><circle class="body" cx="' + arcPt(cx, cy, rb, a1).replace(' ', '" cy="') + '" r="9"/></g>';
-    var lx = +arcPt(cx, cy, rn + 16, a1).split(' ')[0], ly = +arcPt(cx, cy, rn + 16, a1).split(' ')[1];
-    o += '<text class="togo" x="' + f1(Math.max(60, Math.min(S - 60, lx))) + '" y="' + f1(Math.max(14, Math.min(S - 8, ly))) + '" text-anchor="middle">' + q(c.now.toNext) + ' to L' + (n + 1) + '</text>';
-    o += '<circle class="core" cx="' + cx + '" cy="' + cy + '" r="40"/><text class="lvn" x="' + cx + '" y="' + (cy + 6) + '" text-anchor="middle">' + n + '</text><text class="lvo" x="' + cx + '" y="' + (cy + 24) + '" text-anchor="middle">of ' + c.now.levelMax + '</text></svg>';
-    card.innerHTML = '<h2>Energy level</h2><p class="sub">Each ring is ' + c.unit.level + ' blobs, the same step all the way up.</p>' + o + '<p class="tj-lvcap">' + (L.levels > 0 ? '<b class="up">' + plural(L.levels, 'level') + '</b> climbed ' + lensOver(ui.lens) + ' (the bright rings).' : L.n ? pct(Math.max(0, L.net) / c.unit.level) + ' of a level ' + lensOver(ui.lens) + '.' : 'No session in ' + lensLower(ui.lens) + ' yet.') + (L.v > 0.5 ? ' Next ring in about ' + plural(Math.max(1, Math.ceil(c.now.toNext / L.v)), 'session') + '.' : '') + '</p>';
+    var rOf = function (lv) { return 62 + (lv - lo) * GAP; }, climbedFrom = n - Math.max(0, L.levels), t = Math.max(0.004, Math.min(0.996, c.now.inLevel)), a0 = -90, a1 = a0 + 360 * t, nxt = n + 1, rn = rOf(nxt), hue = function (lv) { return RING_HUES[((lv % RING_HUES.length) + RING_HUES.length) % RING_HUES.length]; };
+    var o = '<svg class="tj-orb" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Energy level ' + n + ' of ' + c.now.levelMax + ', ' + q(c.now.toNext) + ' blobs to level ' + nxt + '"><defs><filter id="tjRs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-opacity=".28"/></filter><radialGradient id="tjLc" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="' + hue(n)[0] + '"/><stop offset="1" stop-color="' + hue(n)[1] + '"/></radialGradient><radialGradient id="tjLb" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="' + hue(nxt)[0] + '"/><stop offset="1" stop-color="' + hue(nxt)[1] + '"/></radialGradient>';
+    rings.concat([nxt]).forEach(function (lv) { o += '<linearGradient id="tjRg' + lv + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="' + hue(lv)[0] + '"/><stop offset="1" stop-color="' + hue(lv)[1] + '"/></linearGradient>'; });
+    o += '</defs>';
+    rings.forEach(function (lv) {
+      var r = rOf(lv), full = lv <= n, isNew = lv > climbedFrom && lv <= n && L.levels > 0;
+      o += '<circle class="track" cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + SW + '"/>';
+      if (full) o += '<circle class="ring' + (lv === n ? ' cur' : '') + (isNew ? ' new' : '') + '" cx="' + cx + '" cy="' + cy + '" r="' + r + '" style="stroke:url(#tjRg' + lv + ')" stroke-width="' + SW + '" filter="url(#tjRs)"/><circle class="gloss" cx="' + cx + '" cy="' + cy + '" r="' + (r + SW * 0.22) + '" stroke-width="' + f1(SW * 0.22) + '"/>';
+    });
+    // the ring being filled: progress toward the next level, with you (the orb) on its leading end
+    if (rings.indexOf(nxt) >= 0) { o += '<path class="climb" d="' + arcD(cx, cy, rn, a0, a1) + '" style="stroke:url(#tjRg' + nxt + ')" stroke-width="' + SW + '" filter="url(#tjRs)"/><path class="gloss" d="' + arcD(cx, cy, rn + SW * 0.22, a0, a1) + '" stroke-width="' + f1(SW * 0.22) + '"/>'; }
+    rings.forEach(function (lv) { var r = rOf(lv); o += '<text class="rl' + (lv <= n ? ' on' : '') + '" x="' + (cx - r) + '" y="' + (cy + 4) + '" text-anchor="middle">' + lv + '</text>'; });
+    var bp = arcPt(cx, cy, rn, a1).split(' '), lp = arcPt(cx, cy, rn + 26, a1).split(' ');
+    o += '<g class="orbiter"><circle class="body" cx="' + bp[0] + '" cy="' + bp[1] + '" r="' + f1(SW * 0.78) + '" style="fill:url(#tjLb)" filter="url(#tjRs)"/></g>';
+    o += '<text class="togo" x="' + f1(Math.max(66, Math.min(S - 66, +lp[0]))) + '" y="' + f1(Math.max(14, Math.min(S - 8, +lp[1] + 4))) + '" text-anchor="middle">' + q(c.now.toNext) + ' to L' + nxt + '</text>';
+    o += '<circle class="core" cx="' + cx + '" cy="' + cy + '" r="42" fill="url(#tjLc)" filter="url(#tjRs)"/><ellipse class="cshine" cx="' + (cx - 13) + '" cy="' + (cy - 20) + '" rx="15" ry="8" transform="rotate(-25 ' + (cx - 13) + ' ' + (cy - 20) + ')"/><text class="lvn" x="' + cx + '" y="' + (cy + 8) + '" text-anchor="middle">' + n + '</text><text class="lvo" x="' + cx + '" y="' + (cy + 25) + '" text-anchor="middle">of ' + c.now.levelMax + '</text></svg>';
+    card.innerHTML = '<h2>Energy level</h2><p class="sub">Each ring is ' + c.unit.level + ' blobs, the same step all the way up. Full rings are levels reached; the open ring is filling toward the next, and the orb on its end is you.</p>' + o + '<p class="tj-lvcap">' + (L.levels > 0 ? '<b class="up">' + plural(L.levels, 'level') + '</b> climbed ' + lensOver(ui.lens) + '.' : L.n ? pct(Math.max(0, L.net) / c.unit.level) + ' of a level ' + lensOver(ui.lens) + '.' : 'No session in ' + lensLower(ui.lens) + ' yet.') + (L.v > 0.5 ? ' Next ring in about ' + plural(Math.max(1, Math.ceil(c.now.toNext / L.v)), 'session') + '.' : '') + '</p>';
     return card;
   }
 
@@ -248565,7 +248732,7 @@ var HTJ = (function () {
       if (!c || !c.ahead) { card.innerHTML = '<h2>This chapter’s trajectory</h2><p class="hb-muted">' + (stage === 'error' ? 'Not available this time.' : 'Reading your record…') + '</p>'; return; }
       var S = scopeOf(c, 'ch:' + n), m = c.map.filter(function (x) { return x.ch === n; })[0], st = miniStats(c, S), g = grpOfCh(c, n), cp = g && c.ahead.checkpoints.filter(function (x) { return x.id === g.id; })[0];
       var chA = (c.ahead.chapters || []).filter(function (x) { return x.ch === n; })[0], N = c.sessions.length, from = S.first < 0 ? -Math.min(N, 2) : -(N - S.first), to = chA && chA.s ? Math.min(c.ahead.s[c.ahead.s.length - 1], chA.s + 6) : Math.min(c.ahead.s[c.ahead.s.length - 1], 12);
-      card.innerHTML = '<div class="tj-chh"><div class="tj-chv">' + vessel(m, 44, 'tjCv' + n) + '</div><div class="tj-chs"><h2>This chapter’s trajectory</h2><div class="tj-stats"><span><b>' + num(S.now) + '</b> of ' + num(S.max) + ' blobs</span><span><b>' + q(st.L.v) + '</b> blobs a session ' + st.lens + '</span><span>' + (m.M ? '<b>' + pct(m.Mh / m.M) + '</b> held now' : 'nothing held yet') + '</span>' + (chA && !chA.done && chA.s !== null ? '<span>Path complete in about <b>' + plural(chA.s, 'session') + '</b></span>' : '') + '</div><p class="sub">' + esc(cpLine(c, cp)) + ' <a class="hb-link" href="#dashboard/trajectory">The whole trajectory</a></p></div></div><div class="tj-pathbox"></div>';
+      card.innerHTML = '<div class="tj-chh"><div class="tj-chv">' + vessel(m, 44, 'tjCv' + n) + '</div><div class="tj-chs"><h2>This chapter’s trajectory</h2><div class="tj-stats"><span><b>' + num(S.now) + '</b> of ' + num(S.max) + ' blobs</span><span><b>' + q(st.L.v) + '</b> blobs a session ' + st.lens + '</span><span>' + (m.M ? '<b>' + pct(m.Mh / m.M) + '</b> held now' : 'nothing held yet') + '</span>' + (chA && !chA.done && chA.s !== null ? '<span>Path complete in about <b>' + plural(chA.s, 'session') + '</b></span>' : '') + '</div><p class="sub">' + esc(cpLine(c, cp)) + ' <a class="hb-link" href="#dashboard">The whole trajectory</a></p></div></div><div class="tj-pathbox"></div>';
       var box = card.querySelector('.tj-pathbox'), W = Math.max(300, Math.floor(box.clientWidth || card.clientWidth - 44 || 900));
       box.innerHTML = N ? pathSvg(c, W, S, [Math.min(from, -1), Math.max(to, 3)], { H: W < 620 ? 250 : 270, mini: true, lens: 'week' }) : HX.empty('The first session puts the first mark on the path.', 160);
       HX.C.wireTips(box);
@@ -248582,7 +248749,7 @@ var HTJ = (function () {
   }
   function groupStrip(gid) {
     boot(); ensure();
-    var box = el('a', 'tj-strip'); box.href = '#dashboard/trajectory';
+    var box = el('a', 'tj-strip'); box.href = '#dashboard';
     function draw() {
       var c = cur, g = c && grpOf(c, gid);
       if (!c || !c.ahead || !g) { box.innerHTML = '<span class="k">Trajectory</span><span class="t">' + (c && !g ? '' : 'Reading your record…') + '</span>'; box.hidden = !!(c && !g); return; }
@@ -248596,6 +248763,196 @@ var HTJ = (function () {
   return { init: init, ensure: ensure, view: view, line: line, chapterCard: chapterCard, groupStrip: groupStrip, state: state, onChange: onChange, _ui: ui };
 })();
 /* ===== HTJ END ===== */
+
+/* ===== HHI (History: hub/hub_hist.js) START =====
+   Every problem answered anywhere in the system, in one place: chapter Paths, Reviews, Exams, the onramp and practice sets.
+     HHI.init(hx)       hx = hub_ui.js's helper object
+     HHI.items()        every problem, newest first: { id, t, src, section, where, ch, skills[], ok, credit, ms, help, tag, q, qh, entry, show, steps }
+     HHI.view(main, sub)   the History page: 'problems' (search, filters, the whole problem) or 'skills' (what was worked on, by day or week)
+   It reads the records the apps already keep (it writes nothing). The whole problem (qh, the prompt as it was shown) is kept by the
+   apps from November 2026 on; older answers have their text only, and the oldest onramp answers have no text at all.
+   These dates are history, not forecast: they are measured facts and they stay. */
+var HHI = (function () {
+  'use strict';
+  var HX = null, DAY = 86400000, cache = null, cacheSig = '';
+  var ui = { tab: 'problems', q: '', src: 'all', ch: 'all', res: 'all', when: 'all', by: 'day', shown: 60, periods: 10 };
+  var SRC = [['all', 'Everywhere'], ['path', 'Chapter Paths'], ['review', 'Reviews'], ['exam', 'Exams'], ['onramp', 'Onramp'], ['practice', 'Practice sets']];
+  var SECN = { warm: 'Warm-up', set: 'Transfer set', transfer: 'Transfer', chal: 'Challenge', station: 'Station', trial: 'Timed round', models: 'Model', preview: 'Preview' };
+  function esc(s) { return HX.esc(s); }
+  function el(t, c, h) { return HX.el(t, c, h); }
+  function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function parse(k) { try { return JSON.parse(HX.getItem(k) || 'null'); } catch (e) { return null; } }
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], DOW = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  function dayKey(t) { var d = new Date(t); return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); }
+  function dayName(t) { var d = new Date(t); return DOW[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate() + (d.getFullYear() !== new Date().getFullYear() ? ', ' + d.getFullYear() : ''); }
+  function weekStart(t) { var d = new Date(t); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d.getTime(); }
+  function weekName(t) { var a = new Date(weekStart(t)), b = new Date(weekStart(t) + 6 * DAY); return 'Week of ' + MON[a.getMonth()] + ' ' + a.getDate() + ' to ' + (a.getMonth() === b.getMonth() ? '' : MON[b.getMonth()] + ' ') + b.getDate(); }
+  function clock(t) { var d = new Date(t), h = d.getHours(); return (h % 12 || 12) + ':' + two(d.getMinutes()) + (h < 12 ? ' am' : ' pm'); }
+  function secs(ms) { if (!ms) return ''; var s = Math.round(ms / 1000); return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + (s % 60 ? (s % 60) + ' s' : ''); }
+  var decEl = null; function dec(t) { t = String(t == null ? '' : t); if (t.indexOf('&') < 0) return t; decEl = decEl || document.createElement('textarea'); decEl.innerHTML = t; return decEl.value; }
+  function skillName(k) { var s = HX.CAT.skills[k]; return s ? (s.short || s.text || k) : k; }
+
+  // ------------------------------------------------------------------ gathering
+  function items() {
+    var CAT = HX.CAT, sig = HX.M().obs.length + '|' + HX.M().now, out = [];
+    if (cache && cacheSig === sig) return cache;
+    // chapter Paths
+    CAT.chapters.forEach(function (c) {
+      var H = parse(c.appId + '-v1-history'); if (!H || !H.events) return;
+      H.events.forEach(function (e) {
+        if (e.type !== 'answer') return;
+        var lv = CAT.levels['ch' + c.n + ':' + e.k] || {};
+        out.push({ id: 'p' + c.n + ':' + e.id, t: e.t, src: 'path', section: 'Chapter ' + c.n + ' Path', where: (lv.unit || '') + (lv.name ? ' · ' + lv.name : ''), ch: c.n, skills: lv.skills || [], ok: !!e.ok, credit: e.ok ? 1 : 0, ms: e.dt || 0, help: !!e.help, q: e.q || '', qh: e.qh || '', entry: e.entry !== undefined ? e.entry : '', show: e.ans !== undefined ? e.ans : '', unit: e.unit || '' });
+      });
+    });
+    // Reviews and Exams
+    Object.keys(CAT.groups).forEach(function (gid) {
+      var g = CAT.groups[gid], R = parse(g.review), X = parse(g.exam);
+      if (R && R.events) R.events.forEach(function (e) {
+        if (e.type !== 'answer' && e.type !== 'trial') return;
+        var en = CAT.entries[e.gid] || {}, tr = e.type === 'trial';
+        out.push({ id: 'r' + gid + ':' + e.id, t: e.t, src: 'review', section: g.title + ' Review', where: (SECN[tr ? 'trial' : e.sec] || e.sec || '') + (en.name ? ' · ' + en.name : tr && e.round ? ' · ' + e.round : ''), ch: (en.chs || g.chapters || [])[0], skills: en.skills || e.skills || [], ok: !!e.ok, credit: e.credit !== undefined ? e.credit : (e.ok ? 1 : 0), ms: e.ms || 0, help: !!e.help, tag: e.tag || '', tier: e.tier,
+          q: tr ? 'A timed round of quick questions' + (e.n ? ' (' + (e.right !== undefined ? e.right + ' of ' : '') + e.n + ')' : '') + '. Individual questions in a timed round are not kept.' : (e.q || ''), qh: e.qh || '', entry: tr ? '' : (e.a || ''), show: tr ? '' : (e.show || '') });
+      });
+      if (X && X.attempts) X.attempts.forEach(function (a) {
+        (a.nodes || []).forEach(function (n) {
+          if (!n.ans || n.status !== 'done') return;
+          var en = CAT.entries[n.eid] || {}, m = n.meta || {}, sn = n.snap || {};
+          out.push({ id: 'x' + gid + ':' + a.id + ':' + n.id, t: (a.created || 0) + (n.ans.at || 0), src: 'exam', section: g.title + ' Exam', where: 'Tier ' + n.tier + (m.gname ? ' · ' + m.gname : ''), ch: (m.chs || en.chs || g.chapters || [])[0], skills: en.skills || [], ok: !!n.ans.ok, credit: n.ans.credit !== undefined ? n.ans.credit : (n.ans.ok ? 1 : 0), ms: n.ans.ms || n.spent || 0, help: false, tag: n.ans.tag || '', tier: n.tier,
+            q: m.q || '', qh: sn.prompt || '', entry: n.ans.skipped ? '(skipped)' : (n.ans.text || n.ans.input || ''), show: m.show || sn.show || '', steps: sn.steps || null });
+        });
+      });
+    });
+    // the onramp and practice sets
+    var hub = HX.M().hub || {};
+    ((hub.onramp || {}).sessions || []).forEach(function (s) {
+      var plan = {}; (s.plan || []).forEach(function (p) { plan[p.id] = p; });
+      (s.answers || []).forEach(function (a, i) {
+        var sp = plan[a.specId] || {}, ref = a.ref || sp.ref || {}, en = ref.id ? CAT.entries[ref.id] : null, lv = ref.type === 'level' ? CAT.levels['ch' + ref.ch + ':' + ref.key] : null;
+        var what = en ? en.name : lv ? 'Chapter ' + ref.ch + ' · ' + lv.unit : ref.type === 'quick' ? 'Quick warm-up' : '';
+        out.push({ id: 'o' + s.id + ':' + (a.specId || i), t: a.t, src: s.kind === 'practice' ? 'practice' : 'onramp', section: s.kind === 'practice' ? 'Practice set' : 'Onramp', where: (sp.phase ? sp.phase.charAt(0).toUpperCase() + sp.phase.slice(1) : '') + (what ? (sp.phase ? ' · ' : '') + what : ''), ch: lv ? ref.ch : en ? (en.chs || [])[0] : (HX.CAT.skills[(a.skills || [])[0]] || {}).ch, skills: a.skills || [], ok: !!a.ok, credit: a.credit !== undefined ? a.credit : (a.ok ? 1 : 0), ms: a.ms || 0, help: !!a.help, tag: a.tag || '',
+          q: a.q || '', qh: a.qh || '', entry: a.entry || '', show: a.show || '', why: sp.why || '' });
+      });
+    });
+    out.forEach(function (it) { it.q = dec(it.q); it.entry = dec(it.entry); it.show = dec(it.show); });
+    out.sort(function (a, b) { return b.t - a.t; });
+    cache = out; cacheSig = sig;
+    return out;
+  }
+
+  // ------------------------------------------------------------------ filtering
+  function matches(it, words) {
+    if (ui.src !== 'all' && it.src !== ui.src) return false;
+    if (ui.ch !== 'all' && String(it.ch) !== ui.ch) return false;
+    if (ui.res === 'right' && !it.ok) return false;
+    if (ui.res === 'missed' && it.ok) return false;
+    if (ui.res === 'help' && !it.help) return false;
+    if (ui.when !== 'all' && it.t < HX.M().now - (+ui.when) * DAY) return false;
+    if (words.length) {
+      if (!it._hay) it._hay = (it.q + ' ' + it.section + ' ' + it.where + ' ' + it.entry + ' ' + it.show + ' ' + it.skills.join(' ') + ' ' + it.skills.map(skillName).join(' ') + ' ' + it.skills.map(function (k) { return (HX.CAT.skills[k] || {}).group || ''; }).join(' ')).toLowerCase();
+      for (var i = 0; i < words.length; i++) if (it._hay.indexOf(words[i]) < 0) return false;
+    }
+    return true;
+  }
+  function filtered() { var w = ui.q.toLowerCase().split(/\s+/).filter(Boolean); return items().filter(function (it) { return matches(it, w); }); }
+
+  // ------------------------------------------------------------------ one problem
+  // Stored problem HTML is our own, but a record can be imported from a file, so it is cleaned before it is shown.
+  function clean(html) {
+    var t = document.createElement('template'); t.innerHTML = String(html || '');
+    Array.prototype.forEach.call(t.content.querySelectorAll('script, iframe, object, embed, link, meta, style, base, form, foreignObject'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(t.content.querySelectorAll('*'), function (n) {
+      Array.prototype.slice.call(n.attributes).forEach(function (a) { var v = String(a.value).replace(/\s+/g, '').toLowerCase(); if (/^on/i.test(a.name) || a.name === 'id' || ((a.name === 'href' || a.name === 'src' || a.name === 'xlink:href') && !/^#/.test(v) && !/^data:image\//.test(v)) || /javascript:/.test(v)) n.removeAttribute(a.name); });
+      if (/^(INPUT|BUTTON|SELECT|TEXTAREA)$/.test(n.tagName)) n.disabled = true;
+    });
+    return t.innerHTML;
+  }
+  function row(it) {
+    var sk = it.skills.slice(0, 2).map(function (k) { return '<span class="hh-skc">' + esc(skillName(k)) + '</span>'; }).join('') + (it.skills.length > 2 ? '<span class="hh-skc more">+' + (it.skills.length - 2) + '</span>' : '');
+    return '<details class="hh-row ' + (it.ok ? 'ok' : 'no') + '" data-id="' + esc(it.id) + '"><summary><span class="hmk" aria-label="' + (it.ok ? 'Right' : 'Missed') + '">' + (it.ok ? '✓' : '✕') + '</span><span class="tm">' + clock(it.t) + '</span><span class="sec s-' + it.src + '">' + esc(it.section) + '</span><span class="qx">' + esc(it.q || it.where || 'A problem') + '</span><span class="sks">' + sk + '</span></summary><div class="hh-body"></div></details>';
+  }
+  function body(it) {
+    var h = '<div class="hh-where">' + esc(it.section) + (it.where ? ' · ' + esc(it.where) : '') + ' · ' + esc(dayName(it.t)) + ', ' + clock(it.t) + '</div>';
+    if (it.qh) h += '<div class="hh-prob prompt">' + clean(it.qh) + '</div>';
+    else if (it.q) h += '<div class="hh-prob txt">' + esc(it.q) + '</div><p class="hh-note">Only the text of this problem was kept' + (/\[figure/.test(it.q) ? ', so its figure is described in brackets' : '') + '. Problems answered from now on are kept whole.</p>';
+    else h += '<p class="hh-note">The problem itself was not kept for this answer' + (it.why ? ' (' + esc(it.why) + ')' : '') + '. Problems answered from now on are kept whole.</p>';
+    if (it.unit) h += '<p class="hh-note">Answer in: ' + esc(it.unit) + '</p>';
+    h += '<dl class="hh-ans"><div class="' + (it.ok ? 'ok' : 'no') + '"><dt>Your answer</dt><dd>' + (it.entry !== '' ? esc(String(it.entry)) : '<i>not recorded</i>') + '</dd></div>' + (it.show !== '' ? '<div><dt>Correct answer</dt><dd>' + esc(String(it.show)) + '</dd></div>' : '') + '</dl>';
+    if (it.steps && it.steps.length) h += '<details class="hh-steps"><summary>Worked steps</summary><ol>' + it.steps.map(function (s) { return '<li>' + clean(s) + '</li>'; }).join('') + '</ol></details>';
+    h += '<div class="hh-meta">' + [it.ok ? 'Right' : (it.credit > 0 && it.credit < 1 ? 'Partly right (' + Math.round(it.credit * 100) + '%)' : 'Missed'), it.ms ? 'took ' + secs(it.ms) : '', it.help ? 'help was opened' : '', it.tier !== undefined && it.tier !== null ? 'tier ' + it.tier : '', it.tag ? 'slip noticed: ' + ((HX.CAT.tags && HX.CAT.tags[it.tag] && (HX.CAT.tags[it.tag].name || HX.CAT.tags[it.tag].label)) || it.tag) : ''].filter(Boolean).map(esc).join(' · ') + '</div>';
+    if (it.skills.length) h += '<div class="hh-skl"><span class="lab">Skills this problem uses</span>' + it.skills.map(function (k) { return '<button type="button" class="hh-skb" data-skill="' + esc(k) + '"><b>' + esc(k) + '</b> ' + esc(skillName(k)) + '</button>'; }).join('') + '</div>';
+    return h;
+  }
+  function wire(root) {
+    var byId = {}; items().forEach(function (it) { byId[it.id] = it; });
+    root.addEventListener('toggle', function (e) { var d = e.target; if (!d.classList || !d.classList.contains('hh-row') || !d.open) return; var b = d.querySelector('.hh-body'); if (b && !b.firstChild && byId[d.dataset.id]) b.innerHTML = body(byId[d.dataset.id]); }, true);
+    root.addEventListener('click', function (e) { var b = e.target.closest('[data-skill]'); if (b && HX.openSkill) HX.openSkill(b.dataset.skill); });
+  }
+
+  // ------------------------------------------------------------------ the two views
+  function problemsHtml(list) {
+    if (!list.length) return '<div class="hb-card hh-none"><p class="hb-muted">' + (items().length ? 'Nothing matches. Clear a filter or the search to see more.' : 'No problems yet. Everything answered on a Path, in a Review or Exam, in the onramp or in a practice set appears here.') + '</p></div>';
+    var h = '', last = null, n = Math.min(list.length, ui.shown);
+    for (var i = 0; i < n; i++) { var k = dayKey(list[i].t); if (k !== last) { if (last !== null) h += '</div>'; var dn = 0, dok = 0; for (var j = i; j < list.length && dayKey(list[j].t) === k; j++) { dn++; if (list[j].ok) dok++; } h += '<div class="hh-day"><h3>' + esc(dayName(list[i].t)) + '<span>' + dok + ' of ' + plural(dn, 'problem') + ' right</span></h3>'; last = k; } h += row(list[i]); }
+    h += '</div>';
+    if (n < list.length) h += '<button type="button" class="btn ghost hh-more" data-more="rows">Show ' + Math.min(60, list.length - n) + ' more (' + (list.length - n) + ' left)</button>';
+    return h;
+  }
+  function skillsHtml(list) {
+    if (!list.length) return problemsHtml(list);
+    var per = {}, order = [], week = ui.by === 'week';
+    list.forEach(function (it) { var k = week ? weekStart(it.t) : new Date(it.t).setHours(0, 0, 0, 0); if (!per[k]) { per[k] = { t: +k, n: 0, sk: {}, none: [] }; order.push(+k); } var P = per[k]; P.n++; if (!it.skills.length) P.none.push(it); it.skills.forEach(function (s) { var x = P.sk[s] || (P.sk[s] = { k: s, items: [], ok: 0 }); x.items.push(it); if (it.ok) x.ok++; }); });
+    order.sort(function (a, b) { return b - a; });
+    var words = ui.q.toLowerCase().split(/\s+/).filter(Boolean), h = '', shown = Math.min(order.length, ui.periods);
+    for (var i = 0; i < shown; i++) {
+      var P = per[order[i]], sk = Object.keys(P.sk).map(function (k) { return P.sk[k]; });
+      // when searching, keep the skills the search is about (or every skill of a problem whose text matched)
+      if (words.length) { var hit = sk.filter(function (x) { var hay = (x.k + ' ' + skillName(x.k) + ' ' + ((HX.CAT.skills[x.k] || {}).group || '')).toLowerCase(); return words.every(function (w) { return hay.indexOf(w) >= 0; }); }); if (hit.length) sk = hit; }
+      var byCh = {}; sk.forEach(function (x) { var c = (HX.CAT.skills[x.k] || {}).ch || 0; (byCh[c] = byCh[c] || []).push(x); });
+      h += '<section class="hb-card hh-per"><h3>' + esc(week ? weekName(P.t) : dayName(P.t)) + '<span>' + plural(sk.length, 'skill') + ' · ' + plural(P.n, 'problem') + '</span></h3>';
+      Object.keys(byCh).sort(function (a, b) { return a - b; }).forEach(function (c) {
+        h += '<div class="hh-chg"><h4>' + (+c ? 'Chapter ' + c : 'Other') + '</h4>' + byCh[c].sort(function (a, b) { return b.items.length - a.items.length; }).map(function (x) {
+          var n = x.items.length, topic = (HX.CAT.skills[x.k] || {}).group || '';
+          return '<details class="hh-sk" data-per="' + P.t + '" data-sk="' + esc(x.k) + '"><summary><span class="nm"><b>' + esc(x.k) + '</b> ' + esc(skillName(x.k)) + (topic ? '<i>' + esc(topic) + '</i>' : '') + '</span><span class="ct">' + x.ok + ' of ' + n + ' right</span><span class="br" aria-hidden="true"><i style="width:' + Math.round(x.ok / n * 100) + '%"></i></span></summary><div class="hh-skrows"></div></details>';
+        }).join('') + '</div>';
+      });
+      h += '</section>';
+    }
+    if (shown < order.length) h += '<button type="button" class="btn ghost hh-more" data-more="periods">Show earlier ' + (week ? 'weeks' : 'days') + ' (' + (order.length - shown) + ' left)</button>';
+    return { html: h, per: per };
+  }
+
+  function view(main, sub) {
+    ui.tab = sub === 'skills' ? 'skills' : 'problems';
+    var wrap = el('div', 'hb-wrap novar hh'); main.appendChild(wrap);
+    var chs = HX.CAT.chapters.map(function (c) { return c.n; }), all = items(), perData = null;
+    function sel(id, label, opts, val) { return '<label class="hh-f"><span>' + label + '</span><select class="hb-select" id="' + id + '">' + opts.map(function (o) { return '<option value="' + o[0] + '"' + (String(val) === String(o[0]) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>'; }
+    wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">Everything you have worked on</div><h1>History</h1><p>Every problem from the Paths, Reviews, Exams, the onramp and practice sets, with the section it came from and the skills it uses.</p></section>'
+      + '<div class="hh-tabs"><nav class="seg" aria-label="History view"><a href="#history"' + (ui.tab === 'problems' ? ' aria-current="page"' : '') + '>Problems</a><a href="#history/skills"' + (ui.tab === 'skills' ? ' aria-current="page"' : '') + '>Skills by ' + (ui.by === 'week' ? 'week' : 'day') + '</a></nav></div>'
+      + '<div class="hb-card hh-tools"><label class="hh-f hh-search"><span>Search</span><input type="search" class="hh-q" id="hhQ" placeholder="' + (ui.tab === 'skills' ? 'a skill, a topic or words from a problem' : 'words from a problem, a skill, a section') + '" value="' + esc(ui.q) + '" autocomplete="off"></label>'
+      + sel('hhSrc', 'From', SRC, ui.src) + sel('hhCh', 'Chapter', [['all', 'All chapters']].concat(chs.map(function (n) { return [n, 'Chapter ' + n]; })), ui.ch) + sel('hhRes', 'Result', [['all', 'Any result'], ['right', 'Right'], ['missed', 'Missed'], ['help', 'Help was opened']], ui.res) + sel('hhWhen', 'When', [['all', 'All time'], ['7', 'Last 7 days'], ['30', 'Last 30 days'], ['90', 'Last 90 days']], ui.when)
+      + (ui.tab === 'skills' ? sel('hhBy', 'Group by', [['day', 'Day'], ['week', 'Week']], ui.by) : '') + '<button type="button" class="btn ghost sm" id="hhClear">Clear</button></div><p class="hh-count" id="hhCount" role="status"></p><div id="hhList"></div>';
+    var listEl = wrap.querySelector('#hhList');
+    function draw() {
+      var list = filtered(), ok = list.filter(function (x) { return x.ok; }).length;
+      wrap.querySelector('#hhCount').textContent = all.length ? plural(list.length, 'problem') + (list.length !== all.length ? ' of ' + all.length : '') + (list.length ? ' · ' + ok + ' right (' + Math.round(ok / list.length * 100) + '%)' : '') : '';
+      if (ui.tab === 'skills') { var r = skillsHtml(list); if (typeof r === 'string') { listEl.innerHTML = r; perData = null; } else { listEl.innerHTML = r.html; perData = r.per; } }
+      else listEl.innerHTML = problemsHtml(list);
+    }
+    draw(); wire(wrap);
+    function on(id, key, ev) { var e = wrap.querySelector('#' + id); if (e) e.addEventListener(ev || 'change', function () { ui[key] = e.value; ui.shown = 60; ui.periods = 10; if (key === 'by') { var a = wrap.querySelector('.hh-tabs a[href="#history/skills"]'); if (a) a.textContent = 'Skills by ' + ui.by; } draw(); }); }
+    on('hhSrc', 'src'); on('hhCh', 'ch'); on('hhRes', 'res'); on('hhWhen', 'when'); on('hhBy', 'by');
+    var tq = null; wrap.querySelector('#hhQ').addEventListener('input', function (e) { clearTimeout(tq); var v = e.target.value; tq = setTimeout(function () { ui.q = v; ui.shown = 60; ui.periods = 10; draw(); }, 160); });
+    wrap.querySelector('#hhClear').addEventListener('click', function () { ui.q = ''; ui.src = ui.ch = ui.res = ui.when = 'all'; ui.shown = 60; ui.periods = 10; ['hhSrc', 'hhCh', 'hhRes', 'hhWhen'].forEach(function (id) { wrap.querySelector('#' + id).value = 'all'; }); wrap.querySelector('#hhQ').value = ''; draw(); });
+    listEl.addEventListener('click', function (e) { var m = e.target.closest('[data-more]'); if (!m) return; if (m.dataset.more === 'rows') ui.shown += 60; else ui.periods += 10; draw(); });
+    // a skill inside a day or week opens to the problems worked on it then
+    listEl.addEventListener('toggle', function (e) { var d = e.target; if (!d.classList || !d.classList.contains('hh-sk') || !d.open || !perData) return; var box = d.querySelector('.hh-skrows'), P = perData[d.dataset.per], x = P && P.sk[d.dataset.sk]; if (box && !box.firstChild && x) box.innerHTML = x.items.map(row).join(''); }, true);
+  }
+  function init(hx) { HX = hx; }
+  return { init: init, items: items, view: view, _ui: ui, _clean: clean };
+})();
+/* ===== HHI END ===== */
 
 /* ===== HUB (MM7 Learning Hub: screens, dashboards, onramp player, embedded apps) START =====
    Needs (inlined before this file): MM, MMV, kit/figs.js and kit/widgets.js (the figure and manipulative
@@ -248922,7 +249279,7 @@ var HTJ = (function () {
   function parse() { var h = decodeURIComponent(location.hash.replace(/^#/, '')) || 'today', p = h.split('/'); if (p[0] === 'app' && ROUTE_ALIAS[p[1]]) p[1] = ROUTE_ALIAS[p[1]]; return p; }
   function go(h) { if (location.hash === '#' + h) route(); else location.hash = h; }
   function setNav(name) {
-    var map = { today: 'today', onramp: 'today', practice: cur.practice && cur.practice.navFrom || 'chapters', chapters: 'chapters', ch: 'chapters', reviews: 'reviews', app: 'reviews', progress: 'dashboard', dashboard: 'dashboard', settings: 'settings' };
+    var map = { today: 'today', onramp: 'today', practice: cur.practice && cur.practice.navFrom || 'chapters', chapters: 'chapters', ch: 'chapters', reviews: 'reviews', app: 'reviews', progress: 'dashboard', dashboard: 'dashboard', history: 'history', settings: 'settings' };
     var on = map[name] || 'today';
     Array.prototype.forEach.call(document.querySelectorAll('[data-nav]'), function (a) { if (a.dataset.nav === on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   }
@@ -248944,7 +249301,8 @@ var HTJ = (function () {
       else if (name === 'ch' && chOf(+p[1])) { if (p[2] === 'path') viewChapterPath(main, +p[1], p[3]); else viewChapterDash(main, +p[1]); }
       else if (name === 'reviews') viewReviews(main);
       else if (name === 'app' && MANIFEST[p[1]]) viewApp(main, p[1]);
-      else if (name === 'dashboard' || name === 'progress') { var tjOn = TJ && p[1] === 'trajectory'; if (TJ) dashNav(main, tjOn); if (tjOn) TJ.view(main); else viewProgress(main); }   // #progress is the old address of the same page
+      else if (name === 'dashboard' || name === 'progress') { var tjOn = TJ && name === 'dashboard' && p[1] !== 'progress'; if (TJ) dashNav(main, tjOn); if (tjOn) TJ.view(main); else viewProgress(main); }   // #dashboard opens on Trajectory; #dashboard/progress and the old #progress open Progress
+      else if (name === 'history' && typeof HHI !== 'undefined') HHI.view(main, p[1]);
       else if (name === 'settings') viewSettings(main);
       else { go('today'); return; }
     } catch (e) {
@@ -249252,7 +249610,7 @@ var HTJ = (function () {
     if (!P.view.hasInput()) return;
     var g = P.view.grade(); if (g.err) return;
     P.view.lock(g, false);
-    record(P, { ok: !!g.ok, credit: g.credit !== undefined ? g.credit : (g.ok ? 1 : 0), tag: g.tag || null }, P.item.p.show);
+    record(P, { ok: !!g.ok, credit: g.credit !== undefined ? g.credit : (g.ok ? 1 : 0), tag: g.tag || null }, P.item.p.show, { q: X.plain ? X.plain(P.item.p.prompt) : '', qh: P.item.p.prompt, entry: g.text || '', show: X.plain ? X.plain(P.item.p.show) : String(P.item.p.show || '') });
   }
   function answerSprint(P, given) {
     var it = P.item.sprint, j = SP.judge(it, given);
@@ -249261,16 +249619,20 @@ var HTJ = (function () {
     Array.prototype.forEach.call(host.querySelectorAll('button, input'), function (b) { b.disabled = true; });
     if (it.fmt === 'tiles' || it.fmt === 'chips') { var arr = it.fmt === 'tiles' ? it.tiles : it.chips; Array.prototype.forEach.call(host.querySelectorAll('[data-i]'), function (b) { var i = +b.dataset.i; if (arr[i].ok) b.classList.add('is-ok'); else if (i === given) b.classList.add('is-no'); }); }
     var inp = host.querySelector('input'); if (inp) inp.classList.add(j.ok ? 'is-ok' : 'is-no');
-    record(P, { ok: !!j.ok, credit: j.ok ? 1 : 0, tag: j.tag || null }, it.show);
+    var hostQ = host.querySelector('.sp-q, .lead, .disp') || host, arrS = it.fmt === 'tiles' ? it.tiles : it.fmt === 'chips' ? it.chips : null, plainS = function (h) { var d = document.createElement('div'); d.innerHTML = String(h == null ? '' : h); return d.textContent.replace(/\s+/g, ' ').trim(); };
+    record(P, { ok: !!j.ok, credit: j.ok ? 1 : 0, tag: j.tag || null }, it.show, { q: plainS(it.html || hostQ.innerHTML), qh: it.html || '', entry: arrS && arrS[given] ? plainS(arrS[given].t) : String(j.given !== undefined ? j.given : given), show: plainS(it.show) });
   }
-  function record(P, res, show) {
+  function record(P, res, show, prob) {
     P.answered = true;
     var spec = P.specs[P.i];
     var result = { ok: res.ok, credit: res.credit, ms: Date.now() - P.shownAt, tag: res.tag, help: !!P.help, t: Date.now() };
     var hub = loadHub(), sess = hub.onramp.sessions.filter(function (s) { return s.id === P.sess.id; })[0];
     if (!sess) { sess = P.sess; hub.onramp.sessions.push(sess); }
     hub = LMS.record(hub, sess, spec, result, CAT) || hub;
-    var s2 = hub.onramp.sessions.filter(function (s) { return s.id === P.sess.id; })[0]; if (s2) { s2.end = result.t; P.sess = s2; if (s2.plan && s2.plan.length === P.specs.length) P.specs = s2.plan; }
+    var s2 = hub.onramp.sessions.filter(function (s) { return s.id === P.sess.id; })[0];
+    // the problem itself rides along with the answer, for History (the whole problem while it fits a budget; the text always)
+    if (s2 && prob && s2.answers && s2.answers.length) { var la = s2.answers[s2.answers.length - 1]; if (la && la.t === result.t) { la.q = String(prob.q || '').slice(0, 1500); la.entry = String(prob.entry || '').slice(0, 400); la.show = String(prob.show || '').slice(0, 400); var qh = String(prob.qh || ''), used = 0; hub.onramp.sessions.forEach(function (s0) { (s0.answers || []).forEach(function (a0) { if (a0.qh) used += a0.qh.length; }); }); if (qh && qh.length <= 9000 && used + qh.length <= 1200000) la.qh = qh; } }
+    if (s2) { s2.end = result.t; P.sess = s2; if (s2.plan && s2.plan.length === P.specs.length) P.specs = s2.plan; }
     saveHub(hub); dirty = true;
     var last = P.i + 1 >= P.specs.length || Date.now() - P.t0 >= ONRAMP_MS;
     var steps = P.item.p && P.item.p.steps && P.item.p.steps.length;
@@ -249658,7 +250020,7 @@ var HTJ = (function () {
   // The Dashboard has two halves: Progress (the evidence so far) and Trajectory (where the work is heading)
   function dashNav(main, traj) {
     var n = el('div', 'hb-subnav');
-    n.innerHTML = '<nav class="seg" aria-label="Dashboard"><a href="#dashboard"' + (traj ? '' : ' aria-current="page"') + '>Progress</a><a href="#dashboard/trajectory"' + (traj ? ' aria-current="page"' : '') + '>Trajectory</a></nav>';
+    n.innerHTML = '<nav class="seg" aria-label="Dashboard"><a href="#dashboard"' + (traj ? ' aria-current="page"' : '') + '>Trajectory</a><a href="#dashboard/progress"' + (traj ? '' : ' aria-current="page"') + '>Progress</a></nav>';
     main.appendChild(n);
   }
   function viewProgress(main) {
@@ -249690,27 +250052,40 @@ var HTJ = (function () {
   function heatCard() {
     var strands = Object.keys(CAT.strands).sort(function (a, b) { var pa = a.replace(/\d+/, ''), pb = b.replace(/\d+/, ''); return pa === pb ? (+a.replace(/\D/g, '') - +b.replace(/\D/g, '')) : pa < pb ? -1 : 1; });
     var chs = CAT.chapters.map(function (c) { return c.n; });
-    function render() {
-      if (!strands.length) return empty('No strands in the catalog yet.');
-      var h = '<div class="hb-heat" role="table" aria-label="Evidence-based mastery by strand and chapter" style="--n:' + chs.length + '"><div class="hb-hr hb-hh" role="row"><span role="columnheader"></span>' + chs.map(function (n) { return '<span role="columnheader">Ch ' + n + '</span>'; }).join('') + '</div>';
-      var lastG = null;
-      strands.forEach(function (sid) {
-        var g = (CAT.territories[sid] || {}).group, gt = g && CAT.groups && CAT.groups[g] ? CAT.groups[g].title : null;
-        if (gt && g !== lastG) { h += '<div class="hb-hg" role="row"><span role="rowheader">Strands from the ' + esc(gt) + ' review</span></div>'; lastG = g; }
-        h += '<div class="hb-hr" role="row" style="--n:' + chs.length + '"><span class="hb-hn" role="rowheader"><b>' + esc(sid) + '</b>' + esc(terrName(sid)) + '</span>';
-        chs.forEach(function (n) {
-          var c = strandCell(sid, n);
-          if (!c) h += '<span class="hb-hcell na" role="cell" aria-label="no skills">·</span>';
-          else if (!c.started) h += '<span class="hb-hcell e0" role="cell" data-heat="' + sid + '|' + n + '"' + C.tipAttrs(terrName(sid) + ' · Chapter ' + n, plural(c.n, 'skill') + ', none started') + '>–</span>';
-          else h += '<span class="hb-hcell ' + ebin(c.E, true) + '" role="cell" data-heat="' + sid + '|' + n + '"' + C.tipAttrs(pct(c.E) + ' · ' + terrName(sid), 'Chapter ' + n + ': ' + c.started + ' of ' + plural(c.n, 'skill') + ' started, ' + c.secure + ' secure') + '>' + pct(c.E) + '</span>';
+    // a sunburst: one slice per chapter (inner ring), cut again into the strands that chapter carries (outer ring, coloured by
+    // mastery). Tapping a chapter pulls its slice out and lists its strands beside the wheel.
+    var data = chs.map(function (n) { var cells = [], tot = 0, sw = 0, se = 0, st = 0; strands.forEach(function (sid) { var c = strandCell(sid, n); if (c) { cells.push({ sid: sid, c: c }); tot += c.n; if (c.started && c.E !== null) { sw += c.started; se += c.started * c.E; st += c.started; } } }); return { n: n, cells: cells, tot: tot, E: sw ? se / sw : null, started: st }; }).filter(function (d) { return d.tot; });
+    var sel = null;
+    function sector(cx, cy, r0, r1, a0, a1) { var p = function (r, a) { return f1(cx + r * Math.cos(a)) + ' ' + f1(cy + r * Math.sin(a)); }, lg = a1 - a0 > Math.PI ? 1 : 0; return 'M' + p(r0, a0) + 'L' + p(r1, a0) + 'A' + r1 + ' ' + r1 + ' 0 ' + lg + ' 1 ' + p(r1, a1) + 'L' + p(r0, a1) + 'A' + r0 + ' ' + r0 + ' 0 ' + lg + ' 0 ' + p(r0, a0) + 'z'; }
+    function render(W) {
+      if (!strands.length || !data.length) return empty('No strands in the catalog yet.');
+      var side = W >= 760, S = Math.round(Math.min(side ? W * 0.52 : W, 500)), cx = S / 2, cy = S / 2, r0 = S * 0.13, r1 = S * 0.27, r2 = S * 0.43, all = 0, a = -Math.PI / 2, PAD = 0.012;
+      data.forEach(function (d) { all += d.tot; });
+      var o = '<div class="hb-sunwrap' + (side ? ' side' : '') + '"><svg class="hb-sun" viewBox="0 0 ' + S + ' ' + S + '" width="' + S + '" height="' + S + '" role="img" aria-label="Mastery by chapter and strand">';
+      data.forEach(function (d) {
+        var span = d.tot / all * Math.PI * 2, a0 = a + PAD, a1 = a + span - PAD, mid = (a0 + a1) / 2, on = sel === d.n, off = on ? S * 0.035 : 0, tx = f1(Math.cos(mid) * off), ty = f1(Math.sin(mid) * off), ro = on ? r2 + S * 0.03 : r2;
+        o += '<g class="ch' + (on ? ' on' : sel !== null ? ' dim' : '') + '" transform="translate(' + tx + ' ' + ty + ')"><path class="chs ' + ebin(d.E, d.started > 0) + '" d="' + sector(cx, cy, r0, r1 - 2, a0, a1) + '" data-sun="' + d.n + '" tabindex="0" role="button" aria-pressed="' + on + '"' + C.tipAttrs('Chapter ' + d.n + (d.started ? ' · ' + pct(d.E) : ''), plural(d.cells.length, 'strand') + ' · ' + d.started + ' of ' + plural(d.tot, 'skill') + ' started<br>Tap to open it up') + '/>';
+        o += '<text class="cl" x="' + f1(cx + (r0 + r1) / 2 * Math.cos(mid)) + '" y="' + f1(cy + (r0 + r1) / 2 * Math.sin(mid) + 5) + '" text-anchor="middle">' + d.n + '</text>';
+        var b0 = a0;
+        d.cells.forEach(function (x) {
+          var sp = (a1 - a0) * x.c.n / d.tot, b1 = b0 + sp, m2 = (b0 + b1) / 2, arcLen = sp * (r1 + ro) / 2;
+          o += '<path class="st ' + ebin(x.c.E, x.c.started > 0) + '" d="' + sector(cx, cy, r1 + 1, ro, b0 + 0.004, b1 - 0.004) + '" data-sun="' + d.n + '"' + C.tipAttrs(terrName(x.sid) + ' · Chapter ' + d.n, (x.c.started ? pct(x.c.E) + ' · ' : '') + x.c.started + ' of ' + plural(x.c.n, 'skill') + ' started, ' + x.c.secure + ' secure') + '/>';
+          if (arcLen > (on ? 26 : 34)) o += '<text class="sl" x="' + f1(cx + (r1 + ro) / 2 * Math.cos(m2)) + '" y="' + f1(cy + (r1 + ro) / 2 * Math.sin(m2) + 4) + '" text-anchor="middle">' + esc(x.sid) + '</text>';
+          b0 = b1;
         });
-        h += '</div>';
+        o += '</g>'; a += span;
       });
-      return h + '</div>';
+      o += '<text class="cc" x="' + cx + '" y="' + (cy - 2) + '" text-anchor="middle">' + (sel === null ? 'Chapters' : 'Chapter ' + sel) + '</text><text class="cc2" x="' + cx + '" y="' + (cy + 15) + '" text-anchor="middle">' + (sel === null ? 'tap a slice' : 'tap again to close') + '</text></svg>';
+      var d0 = sel === null ? null : data.filter(function (d) { return d.n === sel; })[0], pane = '<div class="hb-sunpane">';
+      if (!d0) pane += '<h3>Inside: chapters. Outside: their strands.</h3><p class="hb-muted">A strand is a big idea from the cross-chapter reviews. Each outer slice is one strand’s skills in that chapter, coloured by evidence-based mastery; a wider slice has more skills. Tap a chapter to open it up.</p><ul class="hb-sunlist">' + data.map(function (d) { return '<li><button type="button" class="row" data-sun="' + d.n + '"><i class="sw ' + ebin(d.E, d.started > 0) + '"></i><span class="nm">Chapter ' + d.n + '</span><span class="pc">' + (d.started ? pct(d.E) : '–') + '</span><span class="ct">' + plural(d.cells.length, 'strand') + '</span></button></li>'; }).join('') + '</ul>';
+      else pane += '<h3>Chapter ' + d0.n + (d0.started ? ' · ' + pct(d0.E) : '') + '</h3><p class="hb-muted">' + d0.started + ' of ' + plural(d0.tot, 'skill') + ' started across ' + plural(d0.cells.length, 'strand') + '. <a class="hb-link" href="#ch/' + d0.n + '">Open Chapter ' + d0.n + '</a></p><ul class="hb-sunlist">' + d0.cells.map(function (x) { return '<li><div class="row" data-heat="' + x.sid + '|' + d0.n + '" role="link" tabindex="0"><i class="sw ' + ebin(x.c.E, x.c.started > 0) + '"></i><span class="nm"><b>' + esc(x.sid) + '</b> ' + esc(terrName(x.sid)) + '</span><span class="pc">' + (x.c.started ? pct(x.c.E) : '–') + '</span><span class="ct">' + x.c.started + '/' + x.c.n + ' started</span><span class="br"><i class="' + ebin(x.c.E, x.c.started > 0) + '" style="width:' + (x.c.started ? Math.round(x.c.E * 100) : 0) + '%"></i></span></div></li>'; }).join('') + '</ul>';
+      return o + pane + '</div></div>';
     }
     var rows = strands.map(function (sid) { return [esc(sid + ' ' + terrName(sid))].concat(chs.map(function (n) { var c = strandCell(sid, n); return !c ? '·' : !c.started ? '–' : pct(c.E) + ' (' + c.started + '/' + c.n + ')'; })); });
-    var card = xcard({ title: 'Strands across chapters', sub: 'Each strand is a big idea from the cross-chapter reviews; each cell is the evidence-based mastery of that idea’s skills in one chapter. A dot means the chapter has none of them.', legend: EBIN_LEG, render: render, table: C.table(['Strand'].concat(chs.map(function (n) { return 'Ch ' + n; })), rows, chs.map(function (_, i) { return i + 1; })) });
+    var card = xcard({ title: 'Strands across chapters', sub: 'Every chapter and the big ideas (strands) inside it, coloured by evidence-based mastery.', legend: EBIN_LEG, render: render, table: C.table(['Strand'].concat(chs.map(function (n) { return 'Ch ' + n; })), rows, chs.map(function (_, i) { return i + 1; })) });
     card.classList.add('wide'); card.id = 'hbHeat';
+    function pick(e) { var t = e.target.closest('[data-sun]'); if (!t || (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ')) return; if (e.type === 'keydown') e.preventDefault(); var n = +t.dataset.sun; sel = sel === n ? null : n; var body = card.querySelector('.xbody'); if (body && body.querySelector('.hb-sunwrap')) { body.innerHTML = render(body.clientWidth || 700); C.wireTips(body); var f = body.querySelector('.ch.on .chs'); if (f && e.type === 'keydown') f.focus(); } }
+    card.addEventListener('click', pick); card.addEventListener('keydown', pick);
     return card;
   }
   function dailyCard() {
@@ -249726,7 +250101,7 @@ var HTJ = (function () {
     var ok = function (b) { return b.n > 0 && b.actual !== null && b.actual !== undefined; };
     var bh = (cal.bins || []).filter(ok), ba = (all.bins || []).filter(ok);
     function render(W) {
-      if (!bh.length && !ba.length) return empty('Once there are a few answers and check-ins, this shows how honest the model’s predictions are.', 200);
+      if (!bh.length && !ba.length) return empty('Once there are a few answers and check-ins, this shows how closely the model’s estimates match the results.', 200);
       var S = Math.min(W, 400), L = 44, R = 16, T = 12, B = 36, P = S - L - R, Hh = P + T + B, xs = function (v) { return L + v * P; }, ys = function (v) { return T + (1 - v) * P; };
       var s = '<svg class="xsvg" viewBox="0 0 ' + S + ' ' + Hh + '" width="' + S + '" height="' + Hh + '" role="img" aria-label="Predicted chance of a right answer against what happened, in bins">';
       [0, 0.25, 0.5, 0.75, 1].forEach(function (v) { s += '<line class="g" x1="' + L + '" x2="' + (L + P) + '" y1="' + f1(ys(v)) + '" y2="' + f1(ys(v)) + '"/><line class="g" y1="' + T + '" y2="' + (T + P) + '" x1="' + f1(xs(v)) + '" x2="' + f1(xs(v)) + '"/><text class="ax" x="' + (L - 6) + '" y="' + (ys(v) + 4) + '" text-anchor="end">' + Math.round(v * 100) + '%</text><text class="ax" x="' + f1(xs(v)) + '" y="' + (T + P + 16) + '" text-anchor="middle">' + Math.round(v * 100) + '%</text>'; });
@@ -249736,11 +250111,23 @@ var HTJ = (function () {
       return s + '</svg><div class="xaxt">Predicted chance (across) · what happened (up). Bigger marks hold more cases.</div>';
     }
     var br = function (c) { return c.brier !== null && c.brier !== undefined ? c.brier.toFixed(3) : '–'; };
-    var sub = 'Are the model’s predictions honest? Marks near the dashed diagonal mean yes.' + (all.n ? ' Every Review, Exam and onramp answer was predicted before it was seen: Brier ' + br(all) + ' over ' + plural(all.n, 'answer') + '.' : '') + (cal.n ? ' Check-ins: Brier ' + br(cal) + ' over ' + plural(cal.n, 'claim') + '.' : '') + (all.n || cal.n ? ' (0 is perfect; 0.25 is a coin flip.)' : '');
+    var sub = 'How closely do the model’s estimates match the results? For each Review, Exam and onramp question, the model works out the chance of a right answer from the record so far, and the result is then compared with it. Marks near the dashed diagonal mean the two agree.' + (all.n ? ' Brier score ' + br(all) + ' over ' + plural(all.n, 'answer') + '.' : '') + (cal.n ? ' Check-ins: ' + br(cal) + ' over ' + plural(cal.n, 'claim') + '.' : '') + (all.n || cal.n ? ' (0 is a perfect match; 0.25 is what saying “50%” every time would score.)' : '');
     var rows = []; (all.bins || []).forEach(function (b) { if (b.n) rows.push(['All answers', pct(b.lo) + '–' + pct(b.hi), String(b.n), pct(b.predicted), pct(b.actual)]); }); (cal.bins || []).forEach(function (b) { if (b.n) rows.push(['Check-ins', pct(b.lo) + '–' + pct(b.hi), String(b.n), pct(b.predicted), pct(b.actual)]); });
-    var card = xcard({ title: 'Calibration', sub: sub, legend: '<span><i class="lgk ok"></i>check-ins (hypotheses)</span><span><i class="lgk s2 sq"></i>all answers</span><span><i class="lgk ln ref"></i>honest: predicted = happened</span>', render: render,
+    var card = xcard({ title: 'Calibration', sub: sub, legend: '<span><i class="lgk ok"></i>check-ins (hypotheses)</span><span><i class="lgk s2 sq"></i>all answers</span><span><i class="lgk ln ref"></i>estimate = result</span>', render: render,
       table: C.table(['Predictions', 'Bin', 'Cases', 'Predicted', 'Happened'], rows, [2, 3, 4]) });
-    card.id = 'hbCal'; return card;
+    card.id = 'hbCal';
+    // how the estimates are made: the model and its formulas, opened on request
+    var K = (LMS._x && LMS._x.K) || {}, how = el('details', 'hb-how');
+    how.innerHTML = '<summary>How the estimates are made</summary><div class="hb-howb">'
+      + '<h4>What is being estimated</h4><p>For every question, the model works out <b>p</b>, the chance of a right answer, using only the answers given before it. Afterwards the result (1 for right, 0 for wrong, or partial credit in between) is compared with p. Nothing is watched beyond the answers themselves: what was asked, whether it was right, how long it took, and whether help was opened.</p>'
+      + '<h4>1. Evidence for each skill</h4><p>Each answer is one observation of the skills its question uses. Its weight is</p><p class="fx">w = (' + K.EV_W0 + ' + ' + K.EV_WD + ' × difficulty) × source weight × 0.5<sup>age in days ÷ ' + K.EV_HALF + '</sup></p><p>so harder questions count more and old answers count less (half as much after ' + K.EV_HALF + ' days). For each skill the model keeps two running totals, successes and misses, and reads them as a Beta distribution:</p><p class="fx">a = 1 + Σ w × credit &nbsp;&nbsp; b = 1 + Σ w × (1 − credit)</p><p class="fx">mastery E = a ÷ (a + b) &nbsp;&nbsp; evidence W = a + b − 2</p><p>E is the model’s best estimate of how reliably the skill is shown; W says how much evidence stands behind it. Starting from a = b = 1 means “no idea yet”, and a single answer cannot swing E to 0% or 100%.</p>'
+      + '<h4>2. Memory for each skill</h4><p>Each learned skill has a stability <b>S</b>: the number of days until recall is expected to fall to 50%. After Δ days without practice,</p><p class="fx">retention R = 2<sup>−Δ ÷ (k × S)</sup></p><p>A successful recall after a gap makes S grow, and it grows more when more had been forgotten (spaced practice is worth more than repeating at once). A miss shrinks S. The multiplier <b>k</b> is this student’s own forgetting speed, fitted from their spaced answers; it starts at 1.</p>'
+      + '<h4>3. From skills to one question</h4><p>For each skill a question uses,</p><p class="fx">p<sub>skill</sub> = σ( logit(E) − ' + K.P_SLOPE + ' × (difficulty − usual difficulty) ) × ( R + (1 − R) × ρ )</p><p>where σ(x) = 1 ÷ (1 + e<sup>−x</sup>) and logit(E) = ln(E ÷ (1 − E)). The first factor is mastery adjusted for how hard this question is compared with the ones the skill was shown on. The second is memory: R, plus a chance ρ of rebuilding a forgotten skill on the spot (higher when there is a lot of evidence for it). A skill never seen starts from ' + pct(K.P_PRIOR) + '. A question that needs several skills gets the geometric mean of their values:</p><p class="fx">p = ( p<sub>1</sub> × p<sub>2</sub> × … × p<sub>n</sub> )<sup>1 ÷ n</sup></p>'
+      + '<h4>4. Checking the estimates: the Brier score</h4><p>The Brier score is the average squared gap between the estimate and the result:</p><p class="fx">Brier = mean of (p − result)²</p><p>If the model says 80% and the answer is right, the gap is 0.2 and its square is 0.04. If the answer is wrong, the gap is 0.8 and its square is 0.64. A score of 0 would mean every estimate was certain and correct; saying 50% for everything scores 0.25; lower is better. The score is named after the meteorologist Glenn Brier, who introduced it in 1950 for checking weather forecasts.</p>'
+      + '<h4>5. Reading the chart</h4><p>Estimates are grouped into bands (0–20%, 20–40%, and so on). For each band the chart puts the average estimate across and the share of answers that were actually right up. If the questions the model called “about 70%” were right about 70% of the time, the mark sits on the diagonal: the model is <b>calibrated</b>. Marks above the diagonal mean the student did better than estimated; below, worse. The model uses this to keep itself in check: the same numbers drive the daily plan and the Trajectory.</p></div>';
+    how.addEventListener('toggle', function () { card.classList.toggle('wide', how.open); });   // the explanation needs the full width
+    card.appendChild(how);
+    return card;
   }
   function onrampHistoryCard() {
     var ss = M.hub.onramp.sessions.filter(function (s) { return s.kind !== 'practice' && s.answers && s.answers.length; }).slice(-14);
@@ -249770,13 +250157,13 @@ var HTJ = (function () {
     // the analysis export: every table as CSV with a data dictionary, in one .zip (hub/lms_export.js)
     if (typeof LMX !== 'undefined' && TJ) {
       var arow = el('div', 'hb-srow');
-      arow.innerHTML = '<div><h3>Export data for analysis</h3><p>A .zip of spreadsheet files (CSV): every answer, session, skill, chapter and checkpoint, the trajectory, and a data dictionary that explains each column and how it is computed. Opens in any spreadsheet or in pandas.</p></div><button class="btn ghost sm" type="button" id="hbExportData">Export data</button><div class="hb-msg" id="hbExportDataMsg" role="status"></div>';
+      arow.innerHTML = '<div><h3>Export data for analysis</h3><p>A .zip of spreadsheet files (CSV): every answer and problem, session, skill, chapter and checkpoint, the trajectory, and a data dictionary that explains each column and how it is computed. Opens in any spreadsheet or in pandas.</p></div><button class="btn ghost sm" type="button" id="hbExportData">Export data</button><div class="hb-msg" id="hbExportDataMsg" role="status"></div>';
       c.insertBefore(arow, c.querySelector('#hbExport').closest('.hb-srow').nextSibling);
       arow.querySelector('#hbExportData').addEventListener('click', function () {
         var msg = $('hbExportDataMsg');
         try {
           var Mm = model(), tr = TJ.state(), d = new Date(), name = 'MM7_Data_' + d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()) + '.zip';
-          var tb = LMX.tables(CAT, Mm.obs, Mm.now, tr.cur && tr.fresh ? tr.cur : (tr.cur || null), Mm.hub), fl = LMX.files(tb, { exported: d.toString(), catalog: (CAT.meta && CAT.meta.generated) || '' }), blob = new Blob([LMX.zip(fl, d)], { type: 'application/zip' });
+          var tb = LMX.tables(CAT, Mm.obs, Mm.now, tr.cur && tr.fresh ? tr.cur : (tr.cur || null), Mm.hub, typeof HHI !== 'undefined' ? HHI.items() : null), fl = LMX.files(tb, { exported: d.toString(), catalog: (CAT.meta && CAT.meta.generated) || '' }), blob = new Blob([LMX.zip(fl, d)], { type: 'application/zip' });
           var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
           msg.textContent = 'Saved ' + name + ' with ' + plural(fl.length, 'file') + (tr.cur && tr.fresh ? '.' : '. The trajectory tables are from the last time it was worked out; open Dashboard, Trajectory first for the newest.');
         } catch (e) { msg.textContent = 'The export could not be made this time.'; setTimeout(function () { throw e; }, 0); }
@@ -249861,6 +250248,7 @@ var HTJ = (function () {
   var HXO = { M: function () { return model(); }, esc: esc, el: el, C: C, xcard: xcard, empty: empty, plural: plural, getItem: getItem, setItem: setItem, loadHub: loadHub, saveHub: saveHub,
     CAT: CAT, GROUPS: GROUPS, skillShort: skillShort, openSkill: function (k) { openSkill(k); }, PRIV: '\uE000' };
   if (TJ) TJ.init(HXO);
+  if (typeof HHI !== 'undefined') HHI.init(HXO);
   MMS.start({ idb: /^https?:$/.test(location.protocol) }, function () { applyTheme(); route(); setTimeout(function () { try { model(); if (TJ) TJ.ensure(); } catch (e) { } }, 1200); });
 })();
 /* ===== HUB END ===== */
