@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `00022ec3a6`
+Build: `4ed65d2708`
 
 ## Install from GitHub Pages (the easy way to get https)
 
@@ -79,6 +79,18 @@ The saved record is not touched by an update.
 | `fonts/` | the typeface (Atkinson Hyperlegible, SIL Open Font License), so it looks the same offline |
 | `serve.py` | runs the folder on your own computer |
 | `_headers` | tells Netlify or Cloudflare Pages to re-check `sw.js` every time, so updates are found |
+
+## The Dojo
+
+The **Dojo** tab is the practice arena. It brings skills back when they are due, strengthens weak ones and mixes in new
+ground, and nothing in it is locked.
+
+- **Blob Roll**: quick reps with friendly numbers against a clock that drains; right answers pour seconds back.
+- **Quest**: a ridiculous story on a treasure map; each stop uses the answer of the stop before.
+- **Superlative**: three full-strength problems that each use several skills, with a multiplier.
+
+Every answer goes into the same learner record as the Paths and Reviews, and appears in History. Easy-number reps refresh
+memory in full and fill a skill up to 4 of its 10 blobs; the rest comes from full-strength problems.
 
 ## On the Mac, with autosave to a file (optional)
 
