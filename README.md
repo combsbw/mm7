@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `4ed65d2708`
+Build: `d4e197962b`
 
 ## Install from GitHub Pages (the easy way to get https)
 
@@ -91,6 +91,15 @@ ground, and nothing in it is locked.
 
 Every answer goes into the same learner record as the Paths and Reviews, and appears in History. Easy-number reps refresh
 memory in full and fill a skill up to 4 of its 10 blobs; the rest comes from full-strength problems.
+
+
+## Skills & Tactics
+
+Every chapter has a **Skills & Tactics** tab: a chapter sheet with the highest-value tactics, a formula bank and two tools,
+followed by one card for every level of the Path (what to do, an example, what to watch for). The tools are a
+words → symbols decoder and a triangle that works for any "a = b · c" relationship (distance = speed · time,
+part = percent · whole, C = π · d, and nine more): tap the letter you want and the formula for it appears. A level's card
+also shows in its level drawer and at the start of its Dojo warm-up. The tab has a Print button for a paper copy.
 
 ## On the Mac, with autosave to a file (optional)
 
