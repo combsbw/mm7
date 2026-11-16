@@ -2182,6 +2182,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-vt .hd { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); } .tv-vt .c { min-width: 42px; text-align: center; border-radius: 8px; padding: 1px 8px; white-space: nowrap; } .tv-vt .c.r-n, .tv-vt .c.r-x { background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); color: var(--c); } .tv-vt .c.v { font-weight: 800; } .tv-vt .s { color: var(--ink-2); }
 .tv-vt .tot { grid-column: 1 / -1; justify-self: end; display: flex; align-items: center; gap: 8px; border-top: 1.6px solid var(--ink-2); padding-top: 6px; margin-top: 2px; } .tv-vt .pl { color: var(--ink-2); font-weight: 800; }
 .tv-grid { display: inline-grid; gap: 4px 6px; align-items: center; justify-items: center; font-size: 16px; font-weight: 700; } .tv-grid .hd { font-size: 18px; font-weight: 800; min-width: 34px; text-align: center; } .tv-grid .lb { justify-self: end; font-size: 13px; color: var(--ink-2); padding-right: 4px; } .tv-grid .c { width: 100%; text-align: center; border-radius: 8px; padding: 1px 0; font-weight: 900; } .tv-grid .c.hit { color: var(--tv-g); background: var(--tv-g-bg); } .tv-grid .c.miss { color: var(--tv-w); background: var(--tv-w-bg); }
+.tc-card { scroll-margin-top: 72px; }
 /* thread marks and the "builds on" chip */
 .tc-card.tv > header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .tv-th { margin-left: auto; display: inline-flex; gap: 6px; }
 .tv-thm { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: .03em; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px 1px 5px; background: var(--surface-2); white-space: nowrap; } .tv-thm em { font-style: normal; } .tv-thm .tv-ic { width: 17px; height: 13.5px; } .tv-thm + .tv-thm em { display: none; } .tv-thm + .tv-thm { padding: 1px 5px; }
@@ -252470,7 +252471,8 @@ var HTC = (function () {
       var s = e.target.closest('[data-show]'); if (s) { wrap.dataset.show = s.dataset.show; Array.prototype.forEach.call(wrap.querySelectorAll('[data-show]'), function (b) { b.setAttribute('aria-pressed', String(b === s)); }); return; }
       if (e.target.closest('[data-print]')) window.print();
     });
-    if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: 'center' }); t.classList.add('flash'); }, 60); }
+    // a deep link: a card taller than the window shows its title, not its middle
+    if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: t.getBoundingClientRect().height > window.innerHeight - 96 ? 'start' : 'center' }); t.classList.add('flash'); }, 60); }
   }
   return { init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
 })();
