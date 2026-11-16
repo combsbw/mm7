@@ -2117,6 +2117,74 @@ a.btn { text-decoration: none; display: inline-block; }
   .tc-wrap[data-show="levels"] .tc-levels { break-before: auto; } .tc-wrap h2 { margin-top: 12px; } .tc-card.flash { outline: 0; }
 }
 .tc-rule, .tc-ex .x { white-space: pre-wrap; }
+/* ===== Skills & Tactics, drawn (hub/tactics_viz.js): role colours, pieces, formula tiles, flash cards ===== */
+:root { --tv-x: #1d5fc4; --tv-x-bg: #e4eefc; --tv-n: #a55300; --tv-n-bg: #fdebd0; --tv-o: #9a2fc4; --tv-o-bg: #f5e6fb; --tv-g: #0b7a5c; --tv-g-bg: #dcf5ec; --tv-w: #c23a2b; --tv-w-bg: #fde6e2; }
+:root[data-theme="dark"] { --tv-x: #8fbdff; --tv-x-bg: rgba(143, 189, 255, .16); --tv-n: #f4b860; --tv-n-bg: rgba(244, 184, 96, .16); --tv-o: #e3a2ff; --tv-o-bg: rgba(227, 162, 255, .17); --tv-g: #5fe3b6; --tv-g-bg: rgba(95, 227, 182, .15); --tv-w: #ff9d93; --tv-w-bg: rgba(255, 157, 147, .15); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --tv-x: #8fbdff; --tv-x-bg: rgba(143, 189, 255, .16); --tv-n: #f4b860; --tv-n-bg: rgba(244, 184, 96, .16); --tv-o: #e3a2ff; --tv-o-bg: rgba(227, 162, 255, .17); --tv-g: #5fe3b6; --tv-g-bg: rgba(95, 227, 182, .15); --tv-w: #ff9d93; --tv-w-bg: rgba(255, 157, 147, .15); } }
+.r-x { --c: var(--tv-x); --cb: var(--tv-x-bg); } .r-n { --c: var(--tv-n); --cb: var(--tv-n-bg); } .r-o { --c: var(--tv-o); --cb: var(--tv-o-bg); } .r-g { --c: var(--tv-g); --cb: var(--tv-g-bg); } .r-w { --c: var(--tv-w); --cb: var(--tv-w-bg); } .r-m { --c: var(--ink-2); --cb: var(--surface-2); }
+span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c); } span.r-m { color: var(--ink-2); }
+.tv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* the card */
+.tc-card.tv { padding: 12px 12px 14px; } .tc-card.tv h4 { margin: 4px 2px 2px; font-size: 18px; }
+.tv-sec { margin-top: 8px; border-radius: 12px; padding: 6px 8px 9px; text-align: center; } .tv-sec > .k { display: block; text-align: left; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 3px; }
+.tv-sec.spot { background: var(--surface-2); } .tv-sec.do { border: 1px dashed var(--line); } .tv-sec.do > * + * { margin-top: 10px; } .tv-sec.tr { padding: 0 2px; } .tv-sec.tr > .k { color: var(--tv-w); }
+.tc-top.tv { padding: 14px 14px 16px; } .tc-top.tv h3 { margin: 0 2px 4px; font-size: 19px; } .tc-top.tv .tv-sec.do { border: 0; padding: 4px 0 0; }
+.tc-toolbtn { display: inline-flex; align-items: center; gap: 6px; } .tc-toolbtn svg { width: 20px; height: 15px; fill: none; stroke: var(--accent); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+/* svg pieces */
+.tv-svg { display: block; width: 100%; height: auto; margin: 0 auto; overflow: visible; }
+.tv-svg text { font-size: 14px; font-weight: 650; fill: var(--ink); font-variant-numeric: tabular-nums; } .tv-svg text.sm { font-size: 12px; } .tv-svg text.xs { font-size: 10.5px; } .tv-svg text.big { font-size: 18px; } .tv-svg text.b { font-weight: 800; }
+.tv-svg text.r-x, .tv-svg text.r-n, .tv-svg text.r-o, .tv-svg text.r-g, .tv-svg text.r-w { fill: var(--c); } .tv-svg text.r-m.sm, .tv-svg text.r-m.xs, .tv-svg text.r-m.big { fill: var(--ink-2); }
+.tv-b { fill: var(--cb, var(--surface-2)); stroke: var(--c, var(--ink-2)); stroke-width: 1.4; } .tv-b.r-m { stroke: var(--line-strong, var(--ink-2)); stroke-opacity: .55; } .tv-b.cov { stroke-dasharray: 3 3; } .tv-b.sect { stroke: none; fill: var(--c); fill-opacity: .4; } .tv-b.sym { stroke-width: 2; }
+.tv-a { fill: none; stroke: var(--c, var(--ink-2)); stroke-width: 1.8; stroke-linecap: round; } .tv-ah { fill: var(--c, var(--ink-2)); stroke: none; }
+.tv-ln { fill: none; stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; } .tv-ln.thick { stroke-width: 2.6; } .tv-ln.thin { stroke-width: 1; }
+.tv-br { fill: none; stroke: var(--c, var(--ink-2)); stroke-width: 1.5; stroke-linejoin: round; } .tv-dotc { fill: var(--ink-2); } .tv-dotc.end { fill: var(--ink); } .tv-dot { fill: var(--c); }
+.tv-road { fill: none; stroke: var(--ink-2); stroke-opacity: .3; stroke-width: 15; stroke-linecap: round; } .tv-roadc { fill: none; stroke: var(--surface); stroke-width: 1.5; stroke-dasharray: 6 6; }
+.tv-rd .tv-b.pill { fill: var(--surface); }
+/* html pieces */
+.tv-fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; line-height: 1.12; font-size: .88em; margin: 0 .12em; } .tv-fr > span:first-child { border-bottom: 1.7px solid currentColor; padding: 0 .28em 1px; } .tv-fr > span:last-child { padding: 1px .28em 0; }
+.tv-x { text-decoration: line-through; text-decoration-color: var(--tv-w); text-decoration-thickness: 2px; } .tv-bx { border: 1.5px solid; border-radius: 6px; padding: 0 5px; }
+.tv-dn { width: 9px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tv-steps { display: grid; gap: 2px; font-size: 17.5px; font-weight: 650; font-variant-numeric: tabular-nums; margin: 2px auto; max-width: 330px; }
+.tv-row { position: relative; display: grid; grid-template-columns: 1fr 1.7em 1fr; align-items: center; padding: 3px 8px; border-radius: 10px; } .tv-row .l { justify-self: end; text-align: right; } .tv-row .e { text-align: center; color: var(--ink-2); } .tv-row .r { justify-self: start; text-align: left; }
+.tv-row.ans { background: var(--tv-g-bg); box-shadow: inset 0 0 0 1.5px var(--tv-g); color: var(--tv-g); font-weight: 800; width: max-content; min-width: 58%; max-width: 100%; margin: 2px auto 0; padding: 4px 14px; } .tv-row.ans .e { color: var(--tv-g); }
+.tv-row.chk { font-size: 13.5px; color: var(--ink-2); padding-top: 1px; } .tv-row .ck { position: absolute; right: 8px; top: 0; color: var(--tv-g); font-weight: 900; font-size: 15px; }
+.tv-row.op { padding: 0 8px; } .tv-opp { display: inline-flex; align-items: center; gap: 4px; color: var(--tv-o); font-size: 13.5px; } .tv-opp b { background: var(--tv-o-bg); border: 1.4px solid var(--tv-o); border-radius: 999px; padding: 0 9px; line-height: 1.55; font-weight: 800; white-space: nowrap; } .tv-opp.soft { color: var(--ink-2); } .tv-opp.soft b { background: none; border: 1.3px dashed var(--ink-2); font-weight: 700; }
+.tv-cue { display: inline-grid; column-gap: 7px; align-items: center; justify-content: center; font-size: 18.5px; font-weight: 650; padding: 0 34px; font-variant-numeric: tabular-nums; }
+.tv-cue.c2 { font-size: 16px; padding: 0 22px; column-gap: 6px; } .tv-cue.c3 { font-size: 14.5px; padding: 0 12px; column-gap: 5px; } .tv-cue.c3 .t.hl { padding: 2px 5px; }
+.tv-cuecol { display: inline-grid; gap: 3px; font-size: 15.5px; font-weight: 650; text-align: left; font-variant-numeric: tabular-nums; } .tv-cuecol .rw { display: flex; align-items: center; gap: 7px; } .tv-cuecol .rw.j { justify-content: flex-start; padding-left: 12px; font-size: 13px; color: var(--ink-2); }
+.tv-cuecol .t.hl { background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); border-radius: 8px; padding: 2px 8px; color: var(--c); white-space: nowrap; } .tv-cuecol .lb { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 800; color: var(--c); white-space: nowrap; } .tv-cuecol .lb em { font-style: normal; } .tv-lf { width: 15px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tv-cue .t { grid-row: 2; white-space: nowrap; } .tv-cue .t.hl { background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); border-radius: 8px; padding: 1px 7px; color: var(--c); }
+.tv-cue .lb { justify-self: center; width: 0; display: flex; justify-content: center; font-size: 12px; font-weight: 800; color: var(--c); white-space: nowrap; } .tv-cue .lb.u { grid-row: 1; } .tv-cue .lb.d { grid-row: 3; } .tv-cue .lb > span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 1px 0; } .tv-cue .lb em { font-style: normal; }
+.tv-flow { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 5px 1px; font-size: 15.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.tv-box { border: 1.4px solid var(--line); border-radius: 9px; padding: 3px 9px; background: var(--surface-2); white-space: nowrap; } .tv-box.hl { background: var(--cb); border-color: var(--c); color: var(--c); font-weight: 800; }
+.tv-arr { display: inline-flex; flex-direction: column; align-items: center; min-width: 34px; color: var(--tv-o); font-size: 11.5px; font-weight: 800; line-height: 1.15; padding: 0 3px; } .tv-arr i { font-style: normal; white-space: nowrap; } .tv-grp { display: inline-flex; align-items: center; gap: 1px; white-space: nowrap; }
+.tv-arr .ln { display: flex; align-items: center; width: 100%; min-width: 28px; } .tv-rt { flex: 1; height: 12px; min-width: 16px; } .tv-rth { width: 8px; height: 12px; flex: none; margin-left: -4px; } .tv-rt path, .tv-rth path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.tv-trap { display: grid; gap: 5px; font-size: 15px; font-weight: 650; text-align: left; font-variant-numeric: tabular-nums; } .tv-trap > span { display: flex; align-items: center; gap: 9px; border-radius: 10px; padding: 4px 10px; min-height: 32px; } .tv-trap b { font-size: 16px; font-weight: 900; flex: none; }
+.tv-trap .no { background: var(--tv-w-bg); box-shadow: inset 0 0 0 1.2px var(--tv-w); } .tv-trap .no b { color: var(--tv-w); } .tv-trap .no > span { opacity: .85; } .tv-trap .yes { background: var(--tv-g-bg); box-shadow: inset 0 0 0 1.2px var(--tv-g); } .tv-trap .yes b { color: var(--tv-g); }
+.tv-inv { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; } .tv-inv .pr { display: inline-flex; align-items: center; gap: 4px; } .tv-inv b { min-width: 36px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 19px; font-weight: 800; background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); padding: 0 8px; } .tv-inv svg { width: 38px; height: 21px; fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tv-test { display: inline-grid; gap: 1px 10px; align-items: center; justify-items: center; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; } .tv-test .hd { justify-self: end; color: var(--ink-2); font-size: 14px; padding-right: 2px; } .tv-test .xv { background: var(--tv-x-bg); box-shadow: inset 0 0 0 1.4px var(--tv-x); color: var(--tv-x); border-radius: 8px; padding: 1px 10px; font-weight: 800; }
+.tv-test .ar { color: var(--ink-2); line-height: 0; } .tv-test .val.hit { color: var(--tv-g); font-weight: 800; } .tv-test .mk { font-weight: 900; font-size: 17px; } .tv-test .mk.hit { color: var(--tv-g); } .tv-test .mk.miss { color: var(--tv-w); }
+/* the formula bank */
+.tc-bank.tv h3 { font-size: 19px; } .tv-sub { margin: 16px 0 8px; font-size: 14px; color: var(--ink-2); font-weight: 700; }
+.tv-ftgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(218px, 1fr)); gap: 10px; }
+.tv-ft { position: relative; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 7px; break-inside: avoid; }
+.tv-ft .hd { display: flex; align-items: center; gap: 8px; min-height: 28px; padding-right: 46px; } .tv-ft .nm { font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); line-height: 1.2; } .tv-ft.g-u .hd { padding-right: 0; min-height: 0; } .tv-ft.g-u .tv-steps { font-size: 16.5px; width: 100%; } .tv-ft.g-u .tv-ic { width: 26px; height: 21px; }
+.tv-ic { width: 34px; height: 27px; flex: none; } .tv-ic .i1 { fill: none; stroke: var(--tv-x); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; } .tv-ic .i1.f { fill: var(--tv-x-bg); } .tv-ic .i1.dash { stroke-dasharray: 4 3.5; } .tv-ic .i2 { fill: var(--tv-n); } .tv-ic .i2l { fill: none; stroke: var(--tv-n); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.tv-ft .fx { margin: auto 0; display: block; font-size: 23px; font-weight: 800; text-align: center; padding: 4px 0; font-variant-numeric: tabular-nums; white-space: nowrap; } .tv-ft .fx.fw { font-size: 15px; } .tv-ft.g-u .fx { font-size: 17px; }
+.tv-ft .alt { display: flex; gap: 6px 16px; flex-wrap: wrap; justify-content: center; font-size: 15.5px; font-weight: 750; padding-top: 7px; border-top: 1px dashed var(--line); } .tv-ft .alt > span { white-space: nowrap; } .tv-ft .alt .fw { font-size: 12.5px; }
+.tv-ft .lg, .tc-fc .lg { display: flex; flex-wrap: wrap; gap: 4px 6px; justify-content: center; font-size: 12px; color: var(--ink-2); } .tv-ft .lg span, .tc-fc .lg span { border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; background: var(--surface); white-space: nowrap; } .tv-ft .lg b, .tc-fc .lg b { color: var(--ink); margin-right: 5px; }
+.tv-ft .dr { position: absolute; top: 10px; right: 10px; font-size: 11.5px; font-weight: 800; color: var(--accent); text-decoration: none; border: 1px solid var(--accent-line); border-radius: 999px; padding: 1px 9px; background: var(--surface); }
+/* flash cards */
+.tc-flash { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px 18px 18px; } .tc-fhead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; } .tc-fhead h3 { margin: 0; font-size: 19px; flex: 1; } .tc-seg.sm button { font-size: 13px; padding: 6px 11px; }
+.tc-fprog { display: flex; gap: 4px; justify-content: center; margin: 14px 0 12px; flex-wrap: wrap; } .tc-fprog i { width: 15px; height: 6px; border-radius: 3px; background: var(--line); } .tc-fprog i.on { background: var(--tv-g); }
+.tc-fc { display: block; width: min(460px, 100%); height: 236px; margin: 0 auto; perspective: 1100px; border: 0; background: none; padding: 0; cursor: pointer; font: inherit; color: var(--ink); border-radius: 20px; }
+.tc-fc .in { position: relative; display: block; width: 100%; height: 100%; transition: transform .45s cubic-bezier(.3, .8, .3, 1); transform-style: preserve-3d; } .tc-fc.flip .in { transform: rotateY(180deg); }
+.tc-fc .face { position: absolute; inset: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 20px; border: 1.5px solid var(--line); background: var(--surface-2); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 18px; }
+.tc-fc .face.back { transform: rotateY(180deg); background: var(--tv-g-bg); border-color: var(--tv-g); } .tc-fc .fq { font-size: 25px; font-weight: 800; text-align: center; line-height: 1.2; } .tc-fc .fq.sm { font-size: 14px; color: var(--ink-2); font-weight: 700; } .tc-fc .fh { font-size: 13.5px; color: var(--ink-2); }
+.tc-fc .tap { position: absolute; bottom: 11px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); } .tc-fc .fa { font-size: 27px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; } .tc-fc .fa.fw { font-size: 18px; } .tc-fc .tv-ic { width: 56px; height: 44px; }
+.tc-fbtns { display: flex; gap: 10px; justify-content: center; margin-top: 14px; min-height: 46px; } .tc-fdone { text-align: center; padding: 26px 0 8px; } .tc-fdone .big { font-size: 36px; font-weight: 800; color: var(--tv-g); } .tc-fdone p { color: var(--ink-2); margin: 6px 0 14px; }
+@media (prefers-reduced-motion: reduce) { .tc-fc .in { transition: none; } }
+@media print { .tc-flash, .tv-ft .dr { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -48988,6 +49056,7 @@ if (typeof module !== 'undefined') module.exports = LMX;
      v        the arithmetic the card states, as pairs of ascii expressions that must be equal (hub/test_tactics.js evaluates them
               with the kit's exact evaluator, so a card cannot state a wrong sum); a third item gives values for letters
    A CHAPTER SHEET  TAC.ch(chapter, { lede, top:[{ h, rule, body, watch?, v? }], bank:[[label, rule], …], tools:['trans', 'tri:dvt', …] })
+     a drawn sheet gives top:[{ h, vis:[pieces], trap?, alt, v? }] and takes its formula bank from hub/formulas.js (FML)
      top      the highest-value tactics of the chapter, consolidated: the handful to keep next to you
      bank     every rule at a glance
    Shared tools: the translation decoder (words → symbols) and the triangle for any a = b · c relationship (cover the one you want). */
@@ -48996,6 +49065,12 @@ var TAC = (function () {
   var CH = {}, LV = {};
   function ch(n, o) { o.top = o.top || []; o.bank = o.bank || []; o.tools = o.tools || []; CH[n] = o; }
   function lv(n, key, t, m, ex, w, o) { o = o || {}; LV['ch' + n + ':' + key] = { t: t, m: m, ex: ex || '', w: w || '', v: o.v || [], tool: o.tool || null }; }
+  // A DRAWN CARD (the redraw of November 2026: a card is overwhelmingly visual, with a handful of words)
+  //   TAC.viz(chapter, 'unit-level', { t, spot, doit:[…], trap:[no, yes], alt, v, tool })
+  //   t     the tactic in a few words          spot  one piece: the pattern as it appears in a problem, with arrows to what matters
+  //   doit  one to three pieces: the tactic applied (pieces are TVZ specs, hub/tactics_viz.js)
+  //   trap  the usual slip and the right way   alt   one or two sentences for a screen reader      v, tool  as above
+  function viz(n, key, o) { LV['ch' + n + ':' + key] = { vis: true, t: o.t, spot: o.spot || null, doit: o.doit || [], trap: o.trap || null, alt: o.alt || '', v: o.v || [], tool: o.tool || null, m: [], ex: '', w: '' }; }
 
   // ---------------------------------------------------------------- the translation decoder (after the owner's Chapter 3 sheet)
   var TRANS = [
@@ -49028,11 +49103,372 @@ var TAC = (function () {
   };
   function forms(id) { var T = TRI[id]; return T ? [T.top + ' = ' + T.l + ' · ' + T.r, T.l + ' = ' + T.top + ' ÷ ' + T.r, T.r + ' = ' + T.top + ' ÷ ' + T.l] : []; }
   function toolsOf(card) { return card && card.tool ? String(card.tool).split(',') : []; }
-  return { ch: ch, lv: lv, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
+  return { ch: ch, lv: lv, viz: viz, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
     level: function (key) { return LV[key] || null; }, chapter: function (n) { return CH[n] || null; } };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
 /* ===== TAC END ===== */
+
+/* ===== TVZ (Skills & Tactics visuals: small infographic pieces as HTML / SVG strings; pure, no DOM, no measuring) START =====
+   A card is drawn, not written. Content files (hub/tactics_ch*.js) give SPECS, ['kind', arg, …], and TVZ.draw(spec) returns markup.
+   Nothing here measures text, so a card renders the same hidden, printed, in a drawer or in Node (hub/test_tactics.js).
+
+   ROLES colour the same thing the same way everywhere (never colour alone: an arrow or a label always says it too):
+     x  the unknown, or the thing to look at      n  the number being moved or removed      o  the move / operation
+     g  the result, the answer                    w  the wrong way                           m  quiet (context)
+   INLINE MATH in any string of an HTML piece:  {x:…} {n:…} {o:…} {g:…} {w:…} {m:…} role · {f:top|bottom} fraction ·
+     {s:…} struck out (cancelled) · {b:…} boxed.  SVG pieces take plain text.
+
+   PIECES
+     steps  [[lhs, rhs, flag?, mid?] | {op:'− 8' | [l, r], soft?}]     an equation ladder; the move is shown under both sides
+     cue    [[text, role, label?, 'd'?]]                               the pattern with arrows from short labels to its parts
+     map    (from[[text, role]], to[[text, role]], link[])             words → symbols, arrows may cross
+     chain  {top[], ops[], bottom[], undo[]}                           do it forwards on top, undo it backwards underneath
+     bal    {L[], R[], tilt?} · bal2 {a, op, b}                        the balance scale ('x' blocks, number weights)
+     bar    {rows:[{parts:[[label, weight, role]], over?, under?}]}    tape diagram with braces
+     seq    {n[], v[], add?, mark?, span?}                             a sequence strip: step on top, value in the box
+     tri    (id, cover)                                                the a = b · c triangle with one letter covered
+     road   {legs:[{d, v, t}], sum?}                                   a trip: distance above, speed on the road, time below
+     clock  {min, a, b, op?}                                           part of an hour, then the conversion
+     flow   [text | {op}]                                              boxes joined by labelled arrows
+     rect   {w, h, a, hi?}                                             a labelled rectangle
+     dots   {steps:[{cap, pts:[[x, y, role]]}]}                        a growing dot pattern
+     test   {expr, want, tries:[[x, value, ok]]}                       try each value
+     inv    [[a, b], …]                                                pairs that undo each other
+     trap   (no, yes)                                                  the slip, crossed out, beside the right way          */
+var TVZ = (function () {
+  'use strict';
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function r1(n) { return Math.round(n * 10) / 10; }
+  function splitTop(s) { var d = 0; for (var i = 0; i < s.length; i++) { if (s[i] === '{') d++; else if (s[i] === '}') d--; else if (s[i] === '|' && !d) return [s.slice(0, i), s.slice(i + 1)]; } return [s, '']; }
+  function fmt(s) {
+    s = String(s); var out = '', i = 0;
+    while (i < s.length) {
+      if (s[i] === '{' && /^[a-z]:/.test(s.substr(i + 1, 2))) {
+        var k = s[i + 1], d = 1, j = i + 3; while (j < s.length && d) { if (s[j] === '{') d++; else if (s[j] === '}') d--; j++; }
+        var inner = s.slice(i + 3, j - 1);
+        if (k === 'f') { var p = splitTop(inner); out += '<span class="tv-fr"><span>' + fmt(p[0]) + '</span><span>' + fmt(p[1]) + '</span></span>'; }
+        else if (k === 's') out += '<s class="tv-x">' + fmt(inner) + '</s>';
+        else if (k === 'b') out += '<span class="tv-bx">' + fmt(inner) + '</span>';
+        else out += '<span class="r-' + k + '">' + fmt(inner) + '</span>';
+        i = j;
+      } else { out += esc(s[i]); i++; }
+    }
+    return out;
+  }
+  function plain(s) {
+    s = String(s); var out = '', i = 0;
+    while (i < s.length) {
+      if (s[i] === '{' && /^[a-z]:/.test(s.substr(i + 1, 2))) {
+        var k = s[i + 1], d = 1, j = i + 3; while (j < s.length && d) { if (s[j] === '{') d++; else if (s[j] === '}') d--; j++; }
+        var inner = s.slice(i + 3, j - 1);
+        if (k === 'f') { var p = splitTop(inner); out += plain(p[0]) + '/' + plain(p[1]); } else out += plain(inner);
+        i = j;
+      } else { out += s[i]; i++; }
+    }
+    return out;
+  }
+  // the same string as an ascii expression (fractions in parentheses, · ÷ − as * / -), for the checks in hub/test_tactics.js
+  var VF = { '½': '1/2', '¼': '1/4', '¾': '3/4', '⅓': '1/3', '⅙': '1/6', '⅔': '2/3' };
+  function ascii(s) {
+    s = String(s); var out = '', i = 0;
+    while (i < s.length) {
+      if (s[i] === '{' && /^[a-z]:/.test(s.substr(i + 1, 2))) {
+        var k = s[i + 1], d = 1, j = i + 3; while (j < s.length && d) { if (s[j] === '{') d++; else if (s[j] === '}') d--; j++; }
+        var inner = s.slice(i + 3, j - 1);
+        if (k === 'f') { var p = splitTop(inner); out += '((' + ascii(p[0]) + ')/(' + ascii(p[1]) + '))'; } else out += ascii(inner);
+        i = j;
+      } else { out += s[i]; i++; }
+    }
+    return out.replace(/(\d)([½¼¾⅓⅙⅔])/g, function (m0, a, b) { return '(' + a + '+' + VF[b] + ')'; }).replace(/[½¼¾⅓⅙⅔]/g, function (c) { return '(' + VF[c] + ')'; })
+      .replace(/[·×]/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/³/g, '^3').replace(/²/g, '^2').replace(/[$,]/g, '').replace(/ₙ/g, '');
+  }
+  // ---------------------------------------------------------------- svg helpers
+  function svg(w, h, body, cls, label) { return '<svg class="tv-svg ' + (cls || '') + '" viewBox="0 0 ' + w + ' ' + h + '" style="max-width:' + Math.round(w * 1.5) + 'px" role="img" aria-label="' + esc(label || '') + '">' + body + '</svg>'; }
+  function tx(x, y, s, cls, anchor) { return '<text x="' + r1(x) + '" y="' + r1(y) + '" class="' + (cls || '') + '" text-anchor="' + (anchor || 'middle') + '">' + esc(s) + '</text>'; }
+  // an arrow from (x1, y1) to (x2, y2); bend pushes the middle sideways (a curve)
+  function arw(x1, y1, x2, y2, cls, bend) {
+    var mx = (x1 + x2) / 2, my = (y1 + y2) / 2, dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy) || 1;
+    var cx = mx - dy / len * (bend || 0), cy = my + dx / len * (bend || 0), ax = x2 - cx, ay = y2 - cy, al = Math.sqrt(ax * ax + ay * ay) || 1; ax /= al; ay /= al;
+    var hx = x2 - ax * 7, hy = y2 - ay * 7;
+    return '<path class="tv-a ' + (cls || '') + '" d="M' + r1(x1) + ' ' + r1(y1) + 'Q' + r1(cx) + ' ' + r1(cy) + ' ' + r1(hx) + ' ' + r1(hy) + '"/><path class="tv-ah ' + (cls || '') + '" d="M' + r1(x2) + ' ' + r1(y2) + 'L' + r1(hx - ay * 4.2) + ' ' + r1(hy + ax * 4.2) + 'L' + r1(hx + ay * 4.2) + ' ' + r1(hy - ax * 4.2) + 'Z"/>';
+  }
+  function box(x, y, w, h, s, cls, tcls) { return '<rect class="tv-b ' + (cls || '') + '" x="' + r1(x) + '" y="' + r1(y) + '" width="' + r1(w) + '" height="' + r1(h) + '" rx="7"/>' + tx(x + w / 2, y + h / 2 + 4.6, s, 'tv-t ' + (tcls || cls || '')); }
+  function brace(x1, x2, y, up, s, cls) { var d = up ? -1 : 1, m = (x1 + x2) / 2; return '<path class="tv-br ' + (cls || '') + '" d="M' + r1(x1) + ' ' + r1(y) + 'v' + (6 * d) + 'H' + r1(m - 5) + 'l5 ' + (5 * d) + 'l5 ' + (-5 * d) + 'H' + r1(x2) + 'v' + (-6 * d) + '"/>' + tx(m, y + (up ? -15 : 26), s, 'tv-t ' + (cls || '')); }
+  var DN = '<svg class="tv-dn" viewBox="0 0 10 16" aria-hidden="true"><path d="M5 0V12M1 8.5l4 5.5 4-5.5"/></svg>', UP = '<svg class="tv-dn" viewBox="0 0 10 16" aria-hidden="true"><path d="M5 16V4M1 7.5l4-5.5 4 5.5"/></svg>';
+  var RT = '<svg class="tv-rt" viewBox="0 0 34 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6H31"/></svg><svg class="tv-rth" viewBox="0 0 8 12" aria-hidden="true"><path d="M1 1.5l6 4.5-6 4.5"/></svg>';
+
+  // ---------------------------------------------------------------- HTML pieces
+  function steps(rows) {
+    return '<div class="tv-steps">' + rows.map(function (r) {
+      if (Array.isArray(r)) return '<div class="tv-row' + (r[2] ? ' ' + r[2] : '') + '"><span class="l">' + fmt(r[0]) + '</span><span class="e">' + (r[2] === 'chk' ? '=' : esc(r[3] || '=')) + '</span><span class="r">' + fmt(r[1]) + '</span>' + (r[2] === 'chk' ? '<span class="ck" aria-label="checks">✓</span>' : '') + '</div>';
+      var a = Array.isArray(r.op) ? r.op : [r.op, r.op], pill = function (t) { return t ? '<span class="tv-opp' + (r.soft ? ' soft' : '') + '">' + DN + '<b>' + fmt(t) + '</b></span>' : ''; };
+      return '<div class="tv-row op"><span class="l">' + pill(a[0]) + '</span><span class="e"></span><span class="r">' + pill(a[1]) + '</span></div>';
+    }).join('') + '</div>';
+  }
+  function cue(toks) {
+    var h = '';
+    toks.forEach(function (t, i) {
+      var col = 'grid-column:' + (i + 1), dn = t[3] === 'd';
+      h += '<span class="t' + (t[1] ? ' hl r-' + t[1] : '') + '" style="' + col + '">' + fmt(t[0]) + '</span>';
+      if (t[2]) h += '<span class="lb ' + (dn ? 'd' : 'u') + ' r-' + (t[1] || 'm') + '" style="' + col + '"><span>' + (dn ? UP : '') + '<em>' + fmt(t[2]) + '</em>' + (dn ? '' : DN) + '</span></span>';
+    });
+    var len = toks.length; toks.forEach(function (t) { len += plain(t[0]).replace(/\/.*$/, '').length; });
+    if (len > 30) {   // too long for one line: one part per row, its label beside it
+      var LF = '<svg class="tv-lf" viewBox="0 0 16 10" aria-hidden="true"><path d="M16 5H3M6.5 1.5L2 5l4.5 3.5"/></svg>';
+      return '<div class="tv-cuecol">' + toks.map(function (t) { return t[1] ? '<div class="rw"><span class="t hl r-' + t[1] + '">' + fmt(t[0]) + '</span>' + (t[2] ? '<span class="lb r-' + t[1] + '">' + LF + '<em>' + fmt(t[2]) + '</em></span>' : '') + '</div>' : '<div class="rw j">' + fmt(t[0]) + '</div>'; }).join('') + '</div>';
+    }
+    return '<div class="tv-cue' + (len > 24 ? ' c3' : len > 17 ? ' c2' : '') + '" style="grid-template-columns:repeat(' + toks.length + ',auto)">' + h + '</div>';
+  }
+  function flow(items) {
+    var h = '', open = false;
+    items.forEach(function (it) {
+      if (typeof it !== 'string' && it.op !== undefined) { h += '<span class="tv-grp"><span class="tv-arr">' + (it.op ? '<i>' + fmt(it.op) + '</i>' : '') + '<span class="ln">' + RT + '</span></span>'; open = true; return; }
+      h += typeof it === 'string' ? '<span class="tv-box">' + fmt(it) + '</span>' : '<span class="tv-box r-' + it.r + ' hl">' + fmt(it.t) + '</span>';
+      if (open) { h += '</span>'; open = false; }
+    });
+    return '<div class="tv-flow">' + h + (open ? '</span>' : '') + '</div>';
+  }
+  function trap(no, yes) { return '<div class="tv-trap"><span class="no"><b aria-label="wrong">✗</b><span>' + fmt(no) + '</span></span><span class="yes"><b aria-label="right">✓</b><span>' + fmt(yes) + '</span></span></div>'; }
+  function inv(pairs) { return '<div class="tv-inv">' + pairs.map(function (p) { return '<span class="pr"><b class="r-n">' + fmt(p[0]) + '</b><svg viewBox="0 0 40 22" aria-hidden="true"><path d="M6 7H32M27 2.5l6 4.5-6 4.5"/><path d="M34 15H8M13 10.5l-6 4.5 6 4.5"/></svg><b class="r-o">' + fmt(p[1]) + '</b></span>'; }).join('') + '</div>'; }
+  function test(o) {
+    var n = o.tries.length, h = '<span class="hd">' + fmt(o.v || 'x') + '</span>';
+    o.tries.forEach(function (t) { h += '<span class="xv">' + fmt(t[0]) + '</span>'; });
+    h += '<span class="hd"></span>'; o.tries.forEach(function () { h += '<span class="ar">' + DN + '</span>'; });
+    h += '<span class="hd">' + fmt(o.expr) + '</span>'; o.tries.forEach(function (t) { h += '<span class="val ' + (t[2] ? 'hit' : 'miss') + '">' + fmt(t[1]) + '</span>'; });
+    h += '<span class="hd">= ' + fmt(o.want) + ' ?</span>'; o.tries.forEach(function (t) { h += '<span class="mk ' + (t[2] ? 'hit' : 'miss') + '">' + (t[2] ? '✓' : '✗') + '</span>'; });
+    return '<div class="tv-test" style="grid-template-columns:auto repeat(' + n + ',1fr)">' + h + '</div>';
+  }
+
+  // ---------------------------------------------------------------- SVG pieces
+  function map(from, to, link) {
+    var n = Math.max(from.length, to.length), mx = 0; from.concat(to).forEach(function (c) { mx = Math.max(mx, String(c[0]).length); });
+    var sw = Math.max(46, mx * 7.4 + 20), gap = 10, W = Math.max(300, n * sw + (n - 1) * gap + 8), h = '';
+    var straight = from.length === to.length && link.every(function (j, i) { return j === i; }), alt = 'Words to symbols: ' + from.map(function (c) { return c[0]; }).join(' ') + ' becomes ' + to.map(function (c) { return c[0]; }).join(' ');
+    if (straight && W > 330) {
+      var lw = 0, rw = 0; from.forEach(function (c) { lw = Math.max(lw, String(c[0]).length * 7.6 + 22); }); to.forEach(function (c) { rw = Math.max(rw, String(c[0]).length * 8 + 26); });
+      var x0 = (300 - lw - 44 - rw) / 2;
+      from.forEach(function (c, i) { var y = 2 + i * 34; h += box(x0, y, lw, 28, c[0], 'r-' + (c[1] || 'm')) + arw(x0 + lw + 5, y + 14, x0 + lw + 39, y + 14, 'r-' + (c[1] || 'm')) + box(x0 + lw + 44, y, rw, 28, to[i][0], 'r-' + (to[i][1] || 'm') + ' sym'); });
+      return svg(300, from.length * 34, h, 'tv-map', alt);
+    }
+    function cx(i, m) { var tot = m * sw + (m - 1) * gap; return (W - tot) / 2 + i * (sw + gap) + sw / 2; }
+    from.forEach(function (c, i) { h += box(cx(i, from.length) - sw / 2, 3, sw, 28, c[0], 'r-' + (c[1] || 'm')); });
+    to.forEach(function (c, i) { h += box(cx(i, to.length) - sw / 2, 79, sw, 30, c[0], 'r-' + (c[1] || 'm') + ' sym'); });
+    link.forEach(function (j, i) { if (j === null || j === undefined) return; var a = cx(i, from.length), b = cx(j, to.length); h += arw(a, 33, b, 77, 'r-' + (from[i][1] || 'm'), (b - a) * 0.12); });
+    return svg(W, 112, h, 'tv-map', alt);
+  }
+  function chain(o) {
+    var k = o.top.length, W = 300, bw = k > 2 ? 70 : 92, h = '', i;
+    function cx(i2) { return k === 1 ? W / 2 : bw / 2 + 4 + i2 * (W - bw - 8) / (k - 1); }
+    for (i = 0; i < k; i++) { h += box(cx(i) - bw / 2, 26, bw, 30, o.top[i], i === 0 ? 'r-x' : 'r-m'); h += box(cx(i) - bw / 2, 92, bw, 30, o.bottom[i], i === 0 ? 'r-g' : i === k - 1 ? 'r-m' : 'r-n'); }
+    for (i = 0; i < k - 1; i++) {
+      h += arw(cx(i) + bw / 2 + 2, 41, cx(i + 1) - bw / 2 - 2, 41, 'r-m') + tx((cx(i) + cx(i + 1)) / 2, 18, o.ops[i], 'tv-t sm r-m');
+      h += arw(cx(i + 1) - bw / 2 - 2, 107, cx(i) + bw / 2 + 2, 107, 'r-o') + tx((cx(i) + cx(i + 1)) / 2, 140, o.undo[i], 'tv-t sm r-o b');
+    }
+    h += tx(cx(k - 1), 79, '=', 'tv-t big') + tx(cx(0), 79, '=', 'tv-t big r-g');
+    return svg(W, 148, h, 'tv-chain', 'Built forwards: ' + o.ops.join(', then ') + '. Undone backwards: ' + o.undo.slice().reverse().join(', then ') + '.');
+  }
+  function pan(cx, y, items) {
+    var h = '<path class="tv-ln" d="M' + (cx - 27) + ' ' + y + 'H' + (cx + 27) + '"/>', n = items.length, rows = Math.ceil(n / 3), sz = 15;
+    items.forEach(function (it, i) {
+      var row = Math.floor(i / 3), inRow = row === rows - 1 ? n - row * 3 : 3, col = i % 3, x = cx - (inRow * (sz + 2) - 2) / 2 + col * (sz + 2), yy = y - 2 - (row + 1) * (sz + 1) + 1;
+      if (it === 'x') h += '<rect class="tv-b r-x" x="' + r1(x) + '" y="' + r1(yy) + '" width="' + sz + '" height="' + sz + '" rx="3"/>' + tx(x + sz / 2, yy + 11.4, 'x', 'tv-t xs r-x b');
+      else h += '<circle class="tv-b r-n" cx="' + r1(x + sz / 2) + '" cy="' + r1(yy + sz / 2) + '" r="' + (sz / 2 + (String(it).length > 1 ? 1.5 : 0)) + '"/>' + tx(x + sz / 2, yy + 11.2, it, 'tv-t xs r-n b');
+    });
+    return h;
+  }
+  function scale1(o, cx) {
+    var t = o.tilt || 0, dy = t * 9, arm = 38;
+    return '<path class="tv-ln thick" d="M' + cx + ' 30V88M' + (cx - 18) + ' 90H' + (cx + 18) + '"/><circle class="tv-dotc" cx="' + cx + '" cy="28" r="3.4"/>' +
+      '<path class="tv-ln thick" d="M' + (cx - arm) + ' ' + (28 - dy) + 'L' + (cx + arm) + ' ' + (28 + dy) + '"/>' +
+      '<path class="tv-ln thin" d="M' + (cx - arm) + ' ' + (28 - dy) + 'l-15 42M' + (cx - arm) + ' ' + (28 - dy) + 'l15 42M' + (cx + arm) + ' ' + (28 + dy) + 'l-15 42M' + (cx + arm) + ' ' + (28 + dy) + 'l15 42"/>' +
+      pan(cx - arm, 70 - dy, o.L) + pan(cx + arm, 70 + dy, o.R);
+  }
+  function bal(o) { return svg(140, 96, scale1(o, 70), 'tv-bal', 'A balance: ' + o.L.join(' and ') + (o.tilt ? ' does not balance ' : ' balances ') + o.R.join(' and ')); }
+  function bal2(o) {
+    return svg(300, 96, scale1(o.a, 68) + scale1(o.b, 232) + arw(136, 40, 164, 40, 'r-o') + tx(150, 30, o.op, 'tv-t sm r-o b') + tx(150, 56, 'both', 'tv-t xs r-o') + tx(150, 67, 'sides', 'tv-t xs r-o'),
+      'tv-bal', 'Take ' + o.op + ' from both sides and the scale still balances');
+  }
+  function bar(o) {
+    var W = 300, x0 = 12, x1 = 288, h = '', y = 4, H = 0;
+    o.rows.forEach(function (row) {
+      if (row.over) y += 22;
+      var tot = 0, x = x0, edges = [x0]; row.parts.forEach(function (p) { tot += p[1]; });
+      var full = row.len ? (x1 - x0) * row.len : (x1 - x0);
+      row.parts.forEach(function (p) { var w = full * p[1] / tot; h += '<rect class="tv-b sq r-' + (p[2] || 'm') + '" x="' + r1(x) + '" y="' + y + '" width="' + r1(w) + '" height="30"/>' + tx(x + w / 2, y + 19.6, p[0], 'tv-t r-' + (p[2] || 'm')); x += w; edges.push(x); });
+      (row.over || []).forEach(function (b) { h += brace(edges[b[0]], edges[b[1]], y - 4, true, b[2], 'r-' + (b[3] || 'm')); });
+      (row.under || []).forEach(function (b) { h += brace(edges[b[0]], edges[b[1]], y + 34, false, b[2], 'r-' + (b[3] || 'm')); });
+      y += 30 + (row.under ? 34 : 8) + (row.gapAfter || 0); H = y;
+    });
+    return svg(W, H + 2, h, 'tv-bar', o.alt || 'A bar model');
+  }
+  function seq(o) {
+    var m = o.n.length, gap = 12, ws = o.v.map(function (v, i) { return o.n[i] === '…' ? 22 : Math.max(38, String(v).length * 8.6 + 14); }), tot = (m - 1) * gap, xs = [], h = '', i, H = 58;
+    ws.forEach(function (w) { tot += w; }); if (tot > 294) { gap = Math.max(5, gap - (tot - 294) / (m - 1)); tot = 0; ws.forEach(function (w) { tot += w; }); tot += (m - 1) * gap; }
+    var x = (300 - tot) / 2; ws.forEach(function (w) { xs.push(x + w / 2); x += w + gap; });
+    function cx(i2) { return xs[i2]; }
+    for (i = 0; i < m; i++) {
+      if (o.n[i] === '…') { h += tx(cx(i), 43, '…', 'tv-t big r-m'); continue; }
+      h += tx(cx(i), 13, (i === 0 ? 'n = ' : '') + o.n[i], 'tv-t xs r-m') + box(cx(i) - ws[i] / 2, 22, ws[i], 30, o.v[i], 'r-' + (o.role && o.role[i] ? o.role[i] : 'm'));
+    }
+    if (o.add) { for (i = 0; i < m - 1; i++) { if (o.n[i] === '…' || o.n[i + 1] === '…') continue; h += arw(cx(i) + 7, 55, cx(i + 1) - 7, 55, 'r-o', 14) + tx((cx(i) + cx(i + 1)) / 2, 80, o.add, 'tv-t sm r-o b'); } H = 86; }
+    if (o.span) { var a = cx(o.span[0]), b = cx(o.span[1]); h += arw(a + 6, 55, b - 6, 55, 'r-o', 34) + tx((a + b) / 2, 92, o.span[2], 'tv-t r-o b') + (o.span[3] ? tx((a + b) / 2, 108, o.span[3], 'tv-t sm r-n b') : ''); H = o.span[3] ? 114 : 98; }
+    if (o.mark) { Object.keys(o.mark).forEach(function (k) { h += arw(cx(+k), H + 12, cx(+k), 56, 'r-x') + tx(cx(+k), H + 26, o.mark[k], 'tv-t sm r-x b'); }); H += 32; }
+    return svg(300, H, h, 'tv-seq', o.alt || 'A sequence');
+  }
+  function tri(id, cover) {
+    var T = TAC.TRI[id], f = TAC.forms(id), i = cover === 'top' ? 0 : cover === 'l' ? 1 : 2, P = { top: [75, 44], l: [50, 84], r: [100, 84] }, h = '';
+    h += '<path class="tv-ln thick" d="M75 6L142 98H8Z"/><path class="tv-ln" d="M40 56H110M75 60V94"/>';
+    ['top', 'l', 'r'].forEach(function (p) { var c = P[p]; if (p === cover) h += '<rect class="tv-b r-o cov" x="' + (c[0] - 19) + '" y="' + (c[1] - 17) + '" width="38" height="24" rx="6"/>' + tx(c[0], c[1], '?', 'tv-t r-o b'); else h += tx(c[0], c[1], T[p], 'tv-t big'); });
+    h += arw(150, 54, 176, 54, 'r-o');
+    var parts = f[i].split(' = ');
+    h += tx(238, 50, parts[0] + ' =', 'tv-t r-o b') + tx(238, 72, parts[1], 'tv-t big r-g b');
+    return svg(300, 104, h, 'tv-tri', 'Cover ' + T[cover] + ': ' + f[i]);
+  }
+  function road(o) {
+    var n = o.legs.length, W = 300, x0 = 16, x1 = 284, lw = (x1 - x0) / n, h = '', i;
+    h += '<path class="tv-road" d="M' + x0 + ' 58H' + x1 + '"/><path class="tv-roadc" d="M' + (x0 + 6) + ' 58H' + (x1 - 6) + '"/>';
+    for (i = 0; i <= n; i++) h += '<circle class="tv-dotc' + (i === 0 || i === n ? ' end' : '') + '" cx="' + r1(x0 + i * lw) + '" cy="58" r="5"/>';
+    o.legs.forEach(function (L, i2) {
+      var a = x0 + i2 * lw, c = a + lw / 2;
+      h += '<path class="tv-br r-n" d="M' + r1(a + 5) + ' 30v-5M' + r1(a + 5) + ' 27H' + r1(a + lw - 5) + 'M' + r1(a + lw - 5) + ' 30v-5"/>' + tx(c, 18, L.d, 'tv-t r-n b');
+      h += box(c - 28, 47, 56, 22, L.v, 'r-x pill', 'sm r-x b');
+      if (L.t) h += arw(c, 72, c, 88, 'r-g') + tx(c, 104, L.t, 'tv-t r-g b');
+    });
+    var H = o.legs[0].t ? 112 : 76;
+    if (o.sum) { h += '<rect class="tv-b r-g" x="20" y="' + (H + 4) + '" width="260" height="28" rx="8"/>' + tx(150, H + 23, o.sum, 'tv-t r-g b'); H += 38; }
+    return svg(W, H, h, 'tv-rd', o.alt || 'A trip in ' + n + ' leg' + (n > 1 ? 's' : ''));
+  }
+  function clock(o) {
+    var cx = 44, cy = 46, r = 36, a = o.min / 60 * 2 * Math.PI, ex = cx + r * Math.sin(a), ey = cy - r * Math.cos(a), h = '<circle class="tv-b r-m" cx="' + cx + '" cy="' + cy + '" r="' + r + '"/>';
+    h += '<path class="tv-b r-x sect" d="M' + cx + ' ' + cy + 'V' + (cy - r) + 'A' + r + ' ' + r + ' 0 ' + (o.min > 30 ? 1 : 0) + ' 1 ' + r1(ex) + ' ' + r1(ey) + 'Z"/>';
+    for (var i = 0; i < 12; i++) { var t = i / 12 * 2 * Math.PI; h += '<path class="tv-ln thin" d="M' + r1(cx + (r - 5) * Math.sin(t)) + ' ' + r1(cy - (r - 5) * Math.cos(t)) + 'L' + r1(cx + r * Math.sin(t)) + ' ' + r1(cy - r * Math.cos(t)) + '"/>'; }
+    h += '<circle class="tv-dotc" cx="' + cx + '" cy="' + cy + '" r="2.6"/>';
+    h += box(96, 31, 70, 30, o.a, 'r-x') + arw(170, 46, 214, 46, 'r-o') + tx(192, 36, o.op || '÷ 60', 'tv-t sm r-o b') + box(218, 31, 74, 30, o.b, 'r-g');
+    if (o.note) h += tx(194, 84, o.note, 'tv-t sm r-m');
+    return svg(300, 92, h, 'tv-clk', o.a + ' is ' + o.b);
+  }
+  function rect(o) {
+    var h = '<rect class="tv-b sq r-m" x="70" y="24" width="170" height="70"/>';
+    h += tx(155, 16, o.w, 'tv-t ' + (o.hi === 'w' ? 'r-x b' : 'r-n b')) + tx(62, 64, o.h, 'tv-t ' + (o.hi === 'h' ? 'r-x b' : 'r-n b'), 'end') + tx(155, 64, o.a, 'tv-t ' + (o.hi === 'a' ? 'r-x b' : 'r-g b'));
+    if (o.hi === 'h') h += '<path class="tv-a r-x" d="M70 24V94"/>'; if (o.hi === 'w') h += '<path class="tv-a r-x" d="M70 24H240"/>';
+    return svg(300, 102, h, 'tv-rect', 'A rectangle: ' + o.w + ' by ' + o.h + ', area ' + o.a);
+  }
+  function dots(o) {
+    var n = o.steps.length, W = 300, bw = W / n, h = '', sp = o.sp || 13, maxY = 0;
+    o.steps.forEach(function (s) { s.pts.forEach(function (p) { maxY = Math.max(maxY, p[1]); }); });
+    var top = 8, H = top + (maxY + 1) * sp + 22;
+    o.steps.forEach(function (s, i) {
+      var mxx = 0; s.pts.forEach(function (p) { mxx = Math.max(mxx, p[0]); });
+      var ox = i * bw + (bw - mxx * sp) / 2, my = 0; s.pts.forEach(function (p) { my = Math.max(my, p[1]); });
+      s.pts.forEach(function (p) { h += '<circle class="tv-dot r-' + (p[2] || 'x') + '" cx="' + r1(ox + p[0] * sp) + '" cy="' + r1(top + 5 + (maxY - my) * sp / 2 + (my - p[1]) * sp) + '" r="5"/>'; });
+      h += tx(i * bw + bw / 2, H - 3, s.cap, 'tv-t sm r-m');
+    });
+    return svg(W, H, h, 'tv-dots', o.alt || 'A growing pattern of dots');
+  }
+  // small line icons for the formula tiles
+  var IC = {
+    road: '<path class="i1" d="M4 26C14 8 30 34 44 12"/><circle class="i2" cx="4" cy="26" r="3"/><circle class="i2" cx="44" cy="12" r="3"/>',
+    gauge: '<path class="i1" d="M6 28a18 18 0 0 1 36 0"/><path class="i2l" d="M24 28L34 14"/><circle class="i2" cx="24" cy="28" r="3"/>',
+    clock: '<circle class="i1" cx="24" cy="18" r="14"/><path class="i2l" d="M24 9V18L31 22"/>',
+    rect: '<rect class="i1 f" x="6" y="7" width="36" height="22"/>',
+    perim: '<rect class="i1 dash" x="6" y="7" width="36" height="22"/><path class="i2l" d="M6 7H42"/>',
+    tag: '<path class="i1" d="M6 8H26L42 20L26 32H6Z"/><circle class="i2" cx="14" cy="20" r="3"/>',
+    stairs: '<path class="i1" d="M4 32H14V24H24V16H34V8H44"/><circle class="i2" cx="4" cy="32" r="3"/>',
+    bal: '<path class="i1" d="M24 6V30M14 32H34M6 12H42"/><path class="i2l" d="M6 12l-4 12h8zM42 12l-4 12h8z"/>',
+    undo: '<path class="i1" d="M10 14H30a9 9 0 0 1 0 18H16"/><path class="i2l" d="M16 7l-7 7 7 7"/>',
+    avg: '<path class="i1" d="M4 26H20M28 26H44"/><path class="i2l" d="M4 12H44"/><circle class="i2" cx="24" cy="26" r="3"/>',
+    flip: '<path class="i1" d="M12 8V30M36 30V8"/><path class="i2l" d="M6 14l6-7 6 7M30 24l6 7 6-7"/>'
+  };
+  function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
+
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap };
+  function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
+  // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
+  function strings(spec) { var out = []; (function walk(x) { if (typeof x === 'string') out.push(plain(x)); else if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') Object.keys(x).forEach(function (k) { if (k !== 'alt') walk(x[k]); }); })(spec.slice(1)); return out; }
+  return { draw: draw, fmt: fmt, plain: plain, ascii: ascii, esc: esc, icon: icon, KINDS: KINDS, strings: strings, ICONS: IC };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = TVZ;
+/* ===== TVZ END ===== */
+
+/* ===== FML (the formula registry: one list for the formula bank tiles, the flash cards and the Dojo's formula moves) START =====
+   Pure data, no DOM. An entry:
+     { id, ch, grp, name, f, plain, lit:[lhs, rhs], wrong:[[display, src], …], sk:[catalog ids], leg:[[symbol, word]], ic, of, ask }
+     grp    'f' a formula · 'u' an undo rule (what to do to both sides)
+     name   what it gives, in a few words (the front of the flash card)
+     f      the formula with roles for colour (TVZ.fmt markup) · plain: the same as plain text (the right tile in the Dojo)
+     lit    the formula as ascii, [left, right]: the Dojo verifier solves it for sample values, so a right tile is proved right
+     wrong  look-alikes that are NOT equivalent, each with the ascii of its right side (the verifier proves each one wrong)
+     leg    the letters and what they stand for (tiles; flash-card back)     ic  the tile's icon (TVZ.ICONS)
+     of     the id of the formula this one is a rearrangement of (shown on the same tile)
+     an undo rule also has: ask (the equation), lab (a two-word label), st (the rule as a TVZ steps ladder), v + sol (solved for v)
+   Chapters whose tactics are not redrawn yet have name / plain / lit / wrong / sk only: enough for the Dojo.                */
+var FML = (function () {
+  'use strict';
+  var ALL = [], BY = {};
+  function F(id, ch, o) { o.id = id; o.ch = ch; o.grp = o.grp || 'f'; o.sk = o.sk || []; ALL.push(o); BY[id] = o; }
+
+  // ---------------------------------------------------------------- Chapter 3: equations, motion, sequences
+  F('dvt', 3, { name: 'Distance', f: '{g:d} = {x:v} · {n:t}', plain: 'd = v · t', lit: ['d', 'v*t'], wrong: [['d = v ÷ t', 'v/t'], ['d = v + t', 'v+t'], ['d = t ÷ v', 't/v']], sk: ['U20'], leg: [['d', 'distance'], ['v', 'speed'], ['t', 'time']], ic: 'road', tri: 'dvt', move: 'drt.plug' });
+  F('spd', 3, { of: 'dvt', name: 'Speed', f: '{g:v} = {f:{x:d}|{n:t}}', plain: 'v = d ÷ t', lit: ['v', 'd/t'], wrong: [['v = d · t', 'd*t'], ['v = t ÷ d', 't/d'], ['v = d − t', 'd-t']], sk: ['U22', 'U26'] });
+  F('tim', 3, { of: 'dvt', name: 'Time', f: '{g:t} = {f:{x:d}|{n:v}}', plain: 't = d ÷ v', lit: ['t', 'd/v'], wrong: [['t = d · v', 'd*v'], ['t = v ÷ d', 'v/d'], ['t = d − v', 'd-v']], sk: ['U20', 'U26'] });
+  F('avg', 3, { name: 'Average speed', f: '{g:avg} = {f:{x:total distance}|{n:total time}}', plain: 'total distance ÷ total time', lit: ['a', 'D/T'], wrong: [['total time ÷ total distance', 'T/D'], ['add the speeds, ÷ 2', '(D+T)/2'], ['total distance · total time', 'D*T']], sk: ['U22', 'U25'], leg: [['whole trip', 'every leg added']], ic: 'avg', move: 'form.avg' });
+  F('hrs', 3, { name: 'Minutes → hours', f: '{g:hours} = {x:minutes} ÷ {n:60}', plain: 'hours = minutes ÷ 60', lit: ['h', 'm/60'], wrong: [['hours = minutes ÷ 100', 'm/100'], ['hours = minutes · 60', 'm*60'], ['hours = minutes ÷ 10', 'm/10']], sk: ['U21'], leg: [['1 h', '60 min']], ic: 'clock', move: 'drt.time' });
+  F('mins', 3, { of: 'hrs', name: 'Hours → minutes', f: '{g:minutes} = {x:hours} · {n:60}', plain: 'minutes = hours · 60', lit: ['m', 'h*60'], wrong: [['minutes = hours · 100', 'h*100'], ['minutes = hours ÷ 60', 'h/60'], ['minutes = hours + 60', 'h+60']], sk: ['U21'] });
+  F('area', 3, { name: 'Area of a rectangle', f: '{g:A} = {x:l} · {n:w}', plain: 'A = l · w', lit: ['A', 'l*w'], wrong: [['A = l + w', 'l+w'], ['A = 2l + 2w', '2*l+2*w'], ['A = l ÷ w', 'l/w']], sk: ['S26', 'U16'], leg: [['A', 'area'], ['l', 'length'], ['w', 'width']], ic: 'rect', tri: 'area', move: 'form.rect' });
+  F('side', 3, { of: 'area', name: 'A side, from the area', f: '{g:w} = {f:{x:A}|{n:l}}', plain: 'w = A ÷ l', lit: ['w', 'A/l'], wrong: [['w = A · l', 'A*l'], ['w = A − l', 'A-l'], ['w = l ÷ A', 'l/A']], sk: ['U16'] });
+  F('per', 3, { name: 'Perimeter of a rectangle', f: '{g:P} = {o:2}{x:l} + {o:2}{n:w}', plain: 'P = 2l + 2w', lit: ['P', '2*l+2*w'], wrong: [['P = l · w', 'l*w'], ['P = l + w', 'l+w'], ['P = 2 · l · w', '2*l*w']], sk: ['U16', 'E17'], leg: [['P', 'all the way round']], ic: 'perim', move: 'form.rect' });
+  F('cost', 3, { name: 'Total cost', f: '{g:T} = {x:p} · {n:n}', plain: 'T = p · n', lit: ['T', 'p*n'], wrong: [['T = p + n', 'p+n'], ['T = p ÷ n', 'p/n'], ['T = n ÷ p', 'n/p']], sk: ['U17', 'P11'], leg: [['T', 'total'], ['p', 'price of one'], ['n', 'how many']], ic: 'tag', tri: 'cost', move: 'form.cost' });
+  F('each', 3, { of: 'cost', name: 'Price of one', f: '{g:p} = {f:{x:T}|{n:n}}', plain: 'p = T ÷ n', lit: ['p', 'T/n'], wrong: [['p = T · n', 'T*n'], ['p = n ÷ T', 'n/T'], ['p = T − n', 'T-n']], sk: ['U17'] });
+  F('seq', 3, { name: 'Step n of a sequence', f: '{g:dₙ} = {o:a} · n + {x:b}', plain: 'dₙ = a · n + b', lit: ['d', 'a*n+b'], wrong: [['dₙ = b · n + a', 'b*n+a'], ['dₙ = a · (n + b)', 'a*(n+b)'], ['dₙ = a + b + n', 'a+b+n']], sk: ['U28', 'U31'], leg: [['a', 'added each step'], ['b', 'start (step 0)']], ic: 'stairs', move: 'pat.rule' });
+  F('add', 3, { of: 'seq', name: 'Amount added per step', f: '{o:a} = {f:{x:change in value}|{n:change in step}}', plain: 'change in value ÷ change in step', lit: ['a', 'V/S'], wrong: [['change in step ÷ change in value', 'S/V'], ['change in value · change in step', 'V*S'], ['change in value − change in step', 'V-S']], sk: ['U29'] });
+  F('u1', 3, { grp: 'u', lab: 'Undo +', st: [['x {n:+ n}', 'c'], { op: '− n' }, ['x', 'c − n', 'ans']], name: 'x + n = c', ask: 'x + n = c', f: '{o:− n}  →  {g:x} = c − n', plain: 'x = c − n', lit: ['x+n', 'c'], v: 'x', sol: 'c-n', wrong: [['x = c + n', 'c+n'], ['x = n − c', 'n-c'], ['x = c ÷ n', 'c/n']], sk: ['U5'], ic: 'undo' });
+  F('u2', 3, { grp: 'u', lab: 'Undo −', st: [['x {n:− n}', 'c'], { op: '+ n' }, ['x', 'c + n', 'ans']], name: 'x − n = c', ask: 'x − n = c', f: '{o:+ n}  →  {g:x} = c + n', plain: 'x = c + n', lit: ['x-n', 'c'], v: 'x', sol: 'c+n', wrong: [['x = c − n', 'c-n'], ['x = n − c', 'n-c'], ['x = c · n', 'c*n']], sk: ['U5'], ic: 'undo' });
+  F('u3', 3, { grp: 'u', lab: 'Undo ×', st: [['{n:n} · x', 'c'], { op: '÷ n' }, ['x', '{f:c|n}', 'ans']], name: 'n · x = c', ask: 'n · x = c', f: '{o:÷ n}  →  {g:x} = {f:c|n}', plain: 'x = c ÷ n', lit: ['n*x', 'c'], v: 'x', sol: 'c/n', wrong: [['x = c · n', 'c*n'], ['x = n ÷ c', 'n/c'], ['x = c − n', 'c-n']], sk: ['U6'], ic: 'undo' });
+  F('u4', 3, { grp: 'u', lab: 'Undo ÷', st: [['{f:x|{n:n}}', 'c'], { op: '· n' }, ['x', 'c · n', 'ans']], name: 'x ÷ n = c', ask: '{f:x|n} = c', f: '{o:· n}  →  {g:x} = c · n', plain: 'x = c · n', lit: ['x/n', 'c'], v: 'x', sol: 'c*n', wrong: [['x = c ÷ n', 'c/n'], ['x = n ÷ c', 'n/c'], ['x = c + n', 'c+n']], sk: ['U6'], ic: 'undo' });
+  F('u5', 3, { grp: 'u', lab: 'Undo a fraction', st: [['{f:{n:a}|{n:b}} · x', 'c'], { op: '· {f:b|a}' }, ['x', 'c · {f:b|a}', 'ans']], name: '(a/b) · x = c', ask: '{f:a|b} · x = c', f: '{o:· {f:b|a}}  →  {g:x} = c · {f:b|a}', plain: 'x = c · b/a', lit: ['(a/b)*x', 'c'], v: 'x', sol: 'c*b/a', wrong: [['x = c · a/b', 'c*a/b'], ['x = c − a/b', 'c-a/b'], ['x = c ÷ b', 'c/b']], sk: ['U6'], ic: 'flip' });
+  F('u6', 3, { grp: 'u', lab: 'Undo −x', st: [['{n:−}x', 'n'], { op: '· (−1)' }, ['x', '−n', 'ans']], name: '−x = n', ask: '−x = n', f: '{o:· (−1)}  →  {g:x} = −n', plain: 'x = −n', lit: ['-x', 'n'], v: 'x', sol: '-n', wrong: [['x = n', 'n'], ['x = 1 ÷ n', '1/n'], ['x = n − 1', 'n-1']], sk: ['U9'], ic: 'flip' });
+
+  // ---------------------------------------------------------------- Chapter 6 (Dojo only for now)
+  F('urate', 6, { name: 'Unit rate', plain: 'amount ÷ quantity', lit: ['k', 'y/x'], wrong: [['quantity ÷ amount', 'x/y'], ['amount · quantity', 'y*x'], ['amount − quantity', 'y-x']], sk: ['P8'] });
+  F('ykx', 6, { name: 'A proportional relationship', plain: 'y = k · x', lit: ['y', 'k*x'], wrong: [['y = k + x', 'k+x'], ['y = x ÷ k', 'x/k'], ['y = k · x + 5', 'k*x+5']], sk: ['P16'] });
+  F('prop', 6, { name: 'a/b = c/d, solved for a', plain: 'a = b · c ÷ d', lit: ['a/b', 'c/d'], v: 'a', sol: 'b*c/d', wrong: [['a = c · d ÷ b', 'c*d/b'], ['a = b · d ÷ c', 'b*d/c'], ['a = b + c − d', 'b+c-d']], sk: ['P28', 'P29'] });
+  F('sf', 6, { name: 'Scale factor', plain: 'new length ÷ old length', lit: ['k', 'N/O'], wrong: [['old length ÷ new length', 'O/N'], ['new length − old length', 'N-O'], ['new length · old length', 'N*O']], sk: ['P40'] });
+  F('sarea', 6, { name: 'Area after scaling every length by k', plain: 'k² · area', lit: ['B', 'k^2*A'], wrong: [['k · area', 'k*A'], ['k³ · area', 'k^3*A'], ['area ÷ k', 'A/k']], sk: ['P44'] });
+  F('mapr', 6, { name: 'Real length from a 1 : n map', plain: 'n · map length', lit: ['R', 'n*m'], wrong: [['map length ÷ n', 'm/n'], ['n ÷ map length', 'n/m'], ['n + map length', 'n+m']], sk: ['P48'] });
+  F('slope', 6, { name: 'Slope', plain: 'rise ÷ run', lit: ['m', 'r/u'], wrong: [['run ÷ rise', 'u/r'], ['rise · run', 'r*u'], ['rise − run', 'r-u']], sk: ['P57'] });
+  F('line', 6, { name: 'A line with slope m and start b', plain: 'y = m · x + b', lit: ['y', 'm*x+b'], wrong: [['y = b · x + m', 'b*x+m'], ['y = m · (x + b)', 'm*(x+b)'], ['y = m + x + b', 'm+x+b']], sk: ['P59'] });
+  // ---------------------------------------------------------------- Chapter 7 (Dojo only for now)
+  F('part', 7, { name: 'The part', plain: 'percent · whole', lit: ['P', 'r*W'], wrong: [['whole ÷ percent', 'W/r'], ['percent ÷ whole', 'r/W'], ['percent + whole', 'r+W']], sk: ['C8'] });
+  F('pct', 7, { name: 'The percent', plain: 'part ÷ whole', lit: ['r', 'P/W'], wrong: [['whole ÷ part', 'W/P'], ['part · whole', 'P*W'], ['whole − part', 'W-P']], sk: ['C10'] });
+  F('whole', 7, { name: 'The whole', plain: 'part ÷ percent', lit: ['W', 'P/r'], wrong: [['part · percent', 'P*r'], ['percent ÷ part', 'r/P'], ['part − percent', 'P-r']], sk: ['C12'] });
+  F('up', 7, { name: 'After an increase of r', plain: '(1 + r) · original', lit: ['N', '(1+r)*O'], wrong: [['(1 − r) · original', '(1-r)*O'], ['r · original', 'r*O'], ['original + r', 'O+r']], sk: ['C21'] });
+  F('down', 7, { name: 'After a discount of r', plain: '(1 − r) · original', lit: ['N', '(1-r)*O'], wrong: [['(1 + r) · original', '(1+r)*O'], ['r · original', 'r*O'], ['original − r', 'O-r']], sk: ['C21', 'C23'] });
+  F('orig', 7, { name: 'The original, before a discount of r', plain: 'new ÷ (1 − r)', lit: ['O', 'N/(1-r)'], wrong: [['new · (1 − r)', 'N*(1-r)'], ['new · (1 + r)', 'N*(1+r)'], ['new ÷ r', 'N/r']], sk: ['C13'] });
+  F('chg', 7, { name: 'Percent change', plain: 'change ÷ original', lit: ['c', '(N-O)/O'], wrong: [['change ÷ new', '(N-O)/N'], ['new ÷ original', 'N/O'], ['original ÷ change', 'O/(N-O)']], sk: ['C31'] });
+  F('intr', 7, { name: 'Simple interest', plain: 'I = P · r · t', lit: ['I', 'P*r*t'], wrong: [['I = P + r + t', 'P+r+t'], ['I = P · r ÷ t', 'P*r/t'], ['I = P · (r + t)', 'P*(r+t)']], sk: ['C38'] });
+  // ---------------------------------------------------------------- Chapter 8 (Dojo only for now); p stands for π
+  F('circ', 8, { name: 'Circumference', plain: 'C = π · d', lit: ['C', 'p*d'], wrong: [['C = π · d²', 'p*d^2'], ['C = 2 · π · d', '2*p*d'], ['C = π + d', 'p+d']], sk: ['G12'] });
+  F('carea', 8, { name: 'Area of a circle', plain: 'A = π · r²', lit: ['A', 'p*r^2'], wrong: [['A = 2 · π · r', '2*p*r'], ['A = (π · r)²', '(p*r)^2'], ['A = π · r', 'p*r']], sk: ['G14'] });
+  F('par', 8, { name: 'Area of a parallelogram', plain: 'A = b · h', lit: ['A', 'b*h'], wrong: [['A = ½ · b · h', 'b*h/2'], ['A = 2b + 2h', '2*b+2*h'], ['A = b + h', 'b+h']], sk: ['G23'] });
+  F('tria', 8, { name: 'Area of a triangle', plain: 'A = ½ · b · h', lit: ['A', 'b*h/2'], wrong: [['A = b · h', 'b*h'], ['A = b + h', 'b+h'], ['A = 2 · b · h', '2*b*h']], sk: ['G23'] });
+  F('trap', 8, { name: 'Area of a trapezoid', plain: 'A = ½ · (a + b) · h', lit: ['A', '(a+b)*h/2'], wrong: [['A = (a + b) · h', '(a+b)*h'], ['A = ½ · a · b · h', 'a*b*h/2'], ['A = a + b + h', 'a+b+h']], sk: ['G24'] });
+  F('vol', 8, { name: 'Volume of a prism or a cylinder', plain: 'V = base area · height', lit: ['V', 'B*h'], wrong: [['V = base area + height', 'B+h'], ['V = ½ · base area · height', 'B*h/2'], ['V = base area ÷ height', 'B/h']], sk: ['G59'] });
+  F('poly', 8, { name: 'Angle sum of a polygon with n sides', plain: '(n − 2) · 180°', lit: ['S', '(n-2)*180'], wrong: [['n · 180°', 'n*180'], ['(n − 1) · 180°', '(n-1)*180'], ['(n + 2) · 180°', '(n+2)*180']], sk: ['G69'] });
+  F('pyth', 8, { name: 'Right triangle with hypotenuse c', plain: 'c² = a² + b²', lit: ['C', 'a^2+b^2'], wrong: [['c² = (a + b)²', '(a+b)^2'], ['c² = a² − b²', 'a^2-b^2'], ['c² = 2a + 2b', '2*a+2*b']], sk: ['G70'] });
+
+  function list(ch, grp) { return ALL.filter(function (e) { return e.ch === ch && (!grp || e.grp === grp); }); }
+  // flash cards for a chapter: every formula and every rearrangement, then the undo rules
+  function cards(ch) {
+    return list(ch).filter(function (e) { return e.f; }).map(function (e) {
+      var root = e.of ? BY[e.of] : e;
+      return { id: e.id, grp: e.grp, front: e.grp === 'u' ? e.ask : e.name, hint: e.grp === 'u' ? 'What undoes it?' : 'What is the formula?', back: e.f, leg: e.leg || root.leg || [], ic: e.ic || root.ic || 'undo' };
+    });
+  }
+  return { ALL: ALL, BY: BY, list: list, cards: cards, get: function (id) { return BY[id] || null; } };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = FML;
+/* ===== FML END ===== */
 
 /* --- tactics_ch1.js --- */
 /* Skills & Tactics, Chapter 1: The Language of Algebra. Format: hub/tactics_core.js. Source: the owner's Chapter 1 sheet, regrouped by this system's units and levels. */
@@ -49161,63 +49597,131 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
 })();
 
 /* --- tactics_ch3.js --- */
-/* Skills & Tactics, Chapter 3: One-Step Equations. Format: hub/tactics_core.js. Source: the owner's Chapter 3 sheet (balance model, translation
-   quick reference, word-problem recipe, the speed triangle), regrouped by this system's units and levels; Unit 9 was added in this system. */
+/* Skills & Tactics, Chapter 3: One-Step Equations. DRAWN cards (TAC.viz; pieces: hub/tactics_viz.js; formulas: hub/formulas.js).
+   Source: the owner's Chapter 3 sheet (balance model, translation quick reference, word-problem recipe, the speed triangle),
+   regrouped by this system's units and levels; Unit 9 was added in this system. Every calculation a card shows is listed in v. */
 (function () {
   'use strict';
-  var L = function (k, t, m, ex, w, o) { TAC.lv(3, k, t, m, ex, w, o); };
+  var V = function (k, o) { TAC.viz(3, k, o); };
+  // dot patterns: a cross with four arms of n − 1 dots (4n − 3), and two rows of n + 1 dots (2n + 2)
+  function cross(n) { var c = n - 1, p = [[c, c, 'n']], k; for (k = 1; k < n; k++) p.push([c + k, c, 'x'], [c - k, c, 'x'], [c, c + k, 'x'], [c, c - k, 'x']); return p; }
+  function rows2(n) { var p = [], i; for (i = 0; i <= n; i++) p.push([i, 0, i ? 'o' : 'x'], [i, 1, i ? 'o' : 'x']); return p; }
+
   TAC.ch(3, {
-    lede: 'Solving by doing the same thing to both sides, turning words into equations, and distance, speed and time. Keep this next to you for any Chapter 3 problem.',
+    lede: 'Do the same thing to both sides, turn words into equations, and use distance = speed · time.',
     tools: ['trans', 'tri:dvt', 'tri:eqn', 'tri:cost', 'tri:area'],
     top: [
-      { h: 'The balance and the four legal moves', rule: 'same move, both sides', body: 'An equation is a balance scale. You may add, subtract, multiply or divide, as long as you do it to both sides. The goal is the unknown alone on one side. Write the move in the margin or under the equation.', watch: 'Always check: put your answer back into the original equation.' },
-      { h: 'Undo what was done to x', rule: 'x + 4 = 9 → subtract 4      5x = 35 → divide by 5', body: 'Undo adding with subtracting and multiplying with dividing, and the other way round. If x is divided by a number, multiply both sides by it. A fraction in front of x: multiply by its reciprocal.', watch: 'If a side needs tidying (2x − 7x = 36 + 19), combine like terms on each side first.', v: [['9-4', '5'], ['35/5', '7']] },
-      { h: 'x on the right, and the hidden negative', rule: '−x = 6  means  x = −6', body: '−9 = x − 2 is the same equation as x − 2 = −9: flip the sides, or solve it as it stands. In 8 − x = 3 the minus in front of x does not vanish: subtract 8 to get −x = −5, so x = 5.', watch: '−x = 6 is not finished. The opposite of x is 6, so x is −6.', v: [['8-5', '3']] },
-      { h: 'Two steps: adding first, then multiplying', rule: '2x + 14 = 20  →  2x = 6  →  x = 3', body: 'Undo the addition or subtraction first, then the multiplication or division. That is the order of operations run backwards.', watch: 'Do the first move to the whole side, not to one term.', v: [['2*3+14', '20']] },
-      { h: 'Words into an equation', rule: 'let x = the unknown  →  equation  →  solve  →  sentence with units', body: 'Name the unknown. Find the equals word (is, gives, was). Translate each side with the decoder below. Solve on both sides. Answer in a sentence, with the unit.', watch: '“7 less than x” is x − 7. A discount of 1/4 leaves 3/4 of the price.' },
-      { h: 'Distance, speed, time', rule: 'd = v · t      v = d ÷ t      t = d ÷ v', body: 'Speed is distance <b>per</b> time, and per means divide. Cover the letter you want on the triangle below: the other two show what to do. The same triangle works for any “a = b · c”: cost, area, 5x = 35.', watch: 'Minutes are not decimal hours. 2 h 6 min is 2.1 h, because 6 ÷ 60 = 0.1.', v: [['2+6/60', '21/10']] },
-      { h: 'Match the units before you plug in', rule: 'minutes ÷ 60 = hours      hours · 60 = minutes', body: 'A speed in km per hour needs the time in hours. Convert first, then use the formula. For average speed over a whole trip, divide the total distance by the total time.', watch: 'The average of two speeds is not the average speed.', v: [['(30+30)/(30/60+30/15)', '24']] },
-      { h: 'Sequences: start + add × step', rule: 'dₙ = a · n + b', body: 'b is the value at step 0 (the start) and a is the amount added each step. From two far-apart steps: the change in value ÷ the change in step gives a; then walk back to step 0 for b.', watch: 'From step 4 to step 12 is 8 steps, not 12.', v: [['(43-19)/(12-4)', '3'], ['19-3*4', '7']] }
-    ],
-    bank: [['BALANCE', 'same move, both sides'], ['x + n = c', 'subtract n'], ['x − n = c', 'add n'], ['n · x = c', 'divide by n'], ['x ÷ n = c', 'multiply by n'], ['(a/b) x = c', 'multiply by b/a'], ['−x = n', 'x = −n'], ['CHECK', 'substitute into the original'], ['“7 LESS THAN x”', 'x − 7'], ['“TWICE AS … AS”', 'coefficient 2'], ['RECTANGLE', 'area = side · side'], ['SPEED', 'd = v · t'], ['TIME', '60 min = 1 h'], ['AVERAGE SPEED', 'total distance ÷ total time'], ['SEQUENCE', 'start + add × step']]
+      { h: 'Same move, both sides', vis: [['bal2', { a: { L: ['x', 'x', '3'], R: ['11'] }, op: '− 3', b: { L: ['x', 'x'], R: ['8'] } }], ['steps', [['2x {n:+ 3}', '11'], { op: '− 3' }, ['{x:2}x', '8'], { op: '÷ 2' }, ['x', '4', 'ans']]]],
+        trap: ['2x + 3 {o:− 3} = 11', '2x + 3 {o:− 3} = 11 {o:− 3}'], alt: 'An equation is a balance. Take 3 from both sides, then halve both sides: x = 4.', v: [['11-3', '8'], ['8/2', '4'], ['2*4+3', '11']] },
+      { h: 'Undo it with the opposite', vis: [['inv', [['+', '−'], ['·', '÷']]], ['steps', [['x {n:+ 4}', '9'], { op: '− 4' }, ['x', '5', 'ans']]], ['steps', [['{n:5}x', '35'], { op: '÷ 5' }, ['x', '7', 'ans']]]],
+        alt: 'Adding is undone by subtracting, multiplying by dividing, and the other way round.', v: [['9-4', '5'], ['35/5', '7']] },
+      { h: 'The hidden negative', vis: [['steps', [['8 {x:− x}', '3'], { op: '− 8' }, ['{x:−x}', '−5'], { op: '· (−1)' }, ['x', '5', 'ans']]]],
+        trap: ['−x = 6  →  x = 6', '−x = 6  →  x = −6'], alt: 'In 8 − x = 3 the minus in front of x stays: −x = −5, so x = 5.', v: [['3-8', '-5'], ['8-5', '3']] },
+      { h: 'Two steps: undo in reverse order', vis: [['chain', { top: ['x', '2x', '2x + 14'], ops: ['· 2', '+ 14'], bottom: ['3', '6', '20'], undo: ['÷ 2', '− 14'] }]],
+        trap: ['{w:÷ 2} first', '{o:− 14} first'], alt: '2x + 14 = 20 was built by multiplying by 2, then adding 14. Undo it backwards: subtract 14, then divide by 2. x = 3.', v: [['20-14', '6'], ['6/2', '3'], ['2*3+14', '20']] },
+      { h: 'Words → equation', vis: [['map', [['7', 'n'], ['less than', 'o'], ['x', 'x']], [['x', 'x'], ['−', 'o'], ['7', 'n']], [2, 1, 0]], ['flow', ['name it', { op: '' }, 'equation', { op: '' }, 'solve', { op: '' }, { t: 'answer + unit', r: 'g' }]]],
+        trap: ['7 − x', 'x − 7'], alt: '“7 less than x” is x − 7: the order flips. Name the unknown, write the equation, solve, answer with the unit.' },
+      { h: 'd = v · t: cover what you want', vis: [['tri', 'dvt', 'l'], ['tri', 'dvt', 'r']],
+        alt: 'Cover the letter you want on the triangle. Speed: v = d ÷ t. Time: t = d ÷ v. Distance: d = v · t.' },
+      { h: 'Match the units first', vis: [['clock', { min: 6, a: '2 h 6 min', b: '2.1 h', op: '6 ÷ 60' }], ['flow', ['43 km/h', { op: '· 2.1 h' }, { t: '90.3 km', r: 'g' }]]],
+        trap: ['2 h 6 min = 2.6 h', '2 h 6 min = 2.1 h'], alt: 'A speed per hour needs the time in hours: 6 minutes is 6 ÷ 60 = 0.1 h.', v: [['2+6/60', '21/10'], ['43*(21/10)', '903/10']] },
+      { h: 'Average speed: total ÷ total', vis: [['road', { legs: [{ d: '30 km', v: '60 km/h', t: '½ h' }, { d: '30 km', v: '15 km/h', t: '2 h' }], sum: '60 km ÷ 2½ h = 24 km/h' }]],
+        trap: ['(60 + 15) ÷ 2', '60 ÷ 2½'], alt: 'Find the time of each leg, add the distances, add the times, then divide the totals.', v: [['30/60', '1/2'], ['30/15', '2'], ['(30+30)/(1/2+2)', '24']] },
+      { h: 'Sequences: start + add × step', vis: [['seq', { n: ['0', '1', '2', '3'], v: ['7', '10', '13', '16'], add: '+ 3', mark: { 0: 'start' }, role: { 0: 'x' } }], ['cue', [['dₙ =', ''], ['3', 'o', 'add'], ['· n', ''], ['+ 7', 'x', 'start', 'd']]]],
+        alt: 'The start is the value at step 0. Each step adds the same amount. Rule: amount added times n, plus the start.', v: [['3*1+7', '10'], ['3*3+7', '16']] }
+    ]
   });
 
   // Unit 1: Balance and Equality
-  L('1-1', 'Same move, both sides', ['Whatever you do to one side, do to the other.', 'The two sides stay equal after every move.', 'Follow both sides step by step.'], '8 + 2 = 10.  Subtract 4: both sides are 6.  Multiply by 4: both sides are 24.', 'A move done to one side only tips the scale.', { v: [['(8+2-4)*4', '(10-4)*4']] });
-  L('1-2', 'Do the opposite to get x alone', ['See what is with x on its side.', 'Do the opposite to both sides.', 'Write the move in the margin.'], 'x + 1 = 6   | − 1   →   x = 5', 'The move goes on both sides, every time.', { v: [['5+1', '6']] });
-  L('1-3', 'A root makes it true', ['Substitute each value from the set.', 'Work out the left side and compare it with the right.', 'Keep every value that makes the two sides equal.'], '2/(x + 3) = −1 with x = −5:  2 ÷ (−2) = −1 ✓', 'Check every value. There can be more than one root, or none.', { v: [['2/(-5+3)', '-1']] });
+  V('1-1', { t: 'Same move, both sides', spot: ['cue', [['6 + 2', 'x', '÷ 2'], ['=', ''], ['8', 'x', '÷ 2', 'd']]],
+    doit: [['steps', [['6 + 2', '8'], { op: '÷ 2' }, ['4', '4'], { op: '· (−3)' }, ['−12', '−12', 'ans']]], ['bal2', { a: { L: ['x', '3'], R: ['8'] }, op: '− 3', b: { L: ['x'], R: ['5'] } }]],
+    trap: ['6 + 2 {o:− 4} = 8', '6 + 2 {o:− 4} = 8 {o:− 4}'], alt: 'Whatever is done to one side is done to the other, and the two sides stay equal.', v: [['(6+2)/2', '8/2'], ['(6+2)/2*(-3)', '-12'], ['8-3', '5']] });
+  V('1-2', { t: 'Do the opposite', spot: ['cue', [['6', 'n', 'times 6'], ['x', 'x'], ['=', ''], ['54', '']]],
+    doit: [['inv', [['+', '−'], ['·', '÷']]], ['steps', [['{n:6}x', '54'], { op: '÷ 6' }, ['x', '9', 'ans']]]],
+    trap: ['x + 1 = 6  →  {w:+ 1}', 'x + 1 = 6  →  {o:− 1}'], alt: 'See what is done to x and do the opposite to both sides. 6x = 54: divide both sides by 6.', v: [['54/6', '9'], ['6-1', '5']] });
+  V('1-3', { t: 'A root makes it true: test each value', spot: ['map', [['x cubed', 'x'], ['equals', 'o'], ['27', 'n']], [['x³', 'x'], ['=', 'o'], ['27', 'n']], [0, 1, 2]],
+    doit: [['test', { v: 'x', expr: 'x³', want: '27', tries: [['−3', '−27', false], ['2', '8', false], ['3', '27', true]] }]],
+    trap: ['(−3)³ = 27', '(−3)³ = −27'], alt: 'Substitute each value. A value that makes the two sides equal is a root.', v: [['(-3)^3', '-27'], ['2^3', '8'], ['3^3', '27']] });
   // Unit 2: Add and Subtract Equations
-  L('2-1', 'Undo + with −, and − with +', ['x + n: subtract n from both sides.', 'x − n: add n to both sides.', 'Check in the original equation.'], 'z + 1 = −1   | − 1   →   z = −2.   Check: −2 + 1 = −1 ✓', 'With negatives, use the integer rules carefully: −1 − 1 is −2.', { v: [['-2+1', '-1']] });
-  L('2-2', 'Tidy each side, then solve', ['Combine the plain numbers on each side first.', 'Then undo what is left with x.', 'x on the right is fine: solve it there, or flip the two sides.'], '−7 = −2 + 8 + s  →  −7 = s + 6  →  s = −13', '−9 = x − 2 and x − 2 = −9 are the same equation.', { v: [['-2+8+(-13)', '-7']] });
-  L('2-3', 'The hidden negative', ['In a − x = b, subtract a from both sides. The minus in front of x stays.', 'You now have −x = a number.', 'The opposite of x is that number, so x is its opposite.'], '10 − x = −4   | − 10   →   −x = −14   →   x = 14', '−x = −14 is not the answer yet. Flip the sign.', { v: [['10-14', '-4']] });
+  V('2-1', { t: 'Undo + with −, and − with +', spot: ['cue', [['x', ''], ['+ 7', 'n', 'undo this'], ['=', ''], ['−2', '']]],
+    doit: [['steps', [['x {n:+ 7}', '−2'], { op: '− 7' }, ['x', '−9', 'ans'], ['−9 + 7', '−2', 'chk']]], ['inv', [['+ n', '− n']]]],
+    trap: ['−2 − 7 = −5', '−2 − 7 = −9'], alt: 'x + 7 = −2: subtract 7 from both sides. x = −9. Check: −9 + 7 = −2.', v: [['-2-7', '-9'], ['-9+7', '-2']] });
+  V('2-2', { t: 'Tidy each side, then solve', spot: ['cue', [['−3 − 19', 'n', 'tidy'], ['=', ''], ['s', 'x'], ['+ (−8) + 4', 'n', 'tidy', 'd']]],
+    doit: [['steps', [['{n:−3 − 19}', 's {n:+ (−8) + 4}'], { op: ['tidy', 'tidy'], soft: 1 }, ['−22', 's − 4'], { op: '+ 4' }, ['−18', 's', 'ans']]], ['flow', ['−18 = s', { op: 'flip' }, { t: 's = −18', r: 'g' }]]],
+    trap: ['{w:−3 − 19 − 8 + 4} = s', '{n:−22} = s {n:− 4}'], alt: 'Combine the plain numbers on each side separately, then undo what is left with the letter. The letter may sit on the right.', v: [['-3-19', '-22'], ['-8+4', '-4'], ['-22+4', '-18'], ['-18+(-8)+4', '-3-19']] });
+  V('2-3', { t: 'The hidden negative', spot: ['cue', [['10', ''], ['− x', 'x', 'the minus stays'], ['=', ''], ['−4', '']]],
+    doit: [['steps', [['10 {x:− x}', '−4'], { op: '− 10' }, ['{x:−x}', '−14'], { op: '· (−1)' }, ['x', '14', 'ans'], ['10 − 14', '−4', 'chk']]]],
+    trap: ['−x = −14  →  x = −14', '−x = −14  →  x = 14'], alt: 'Subtract 10 from both sides: −x = −14. The opposite of x is −14, so x is 14.', v: [['-4-10', '-14'], ['10-14', '-4']] });
   // Unit 3: Multiply and Divide Equations
-  L('3-1', 'x multiplied → divide both sides', ['The number in front of x multiplies it.', 'Divide both sides by that number.', 'Simplify the fraction by cancelling the shared factor.'], '104 = 8s   | ÷ 8   →   s = 13.   Check: 8 · 13 = 104 ✓', 'Divide by the number in front of the letter, sign included: −3x = 12 gives x = −4.', { v: [['8*13', '104'], ['12/(-3)', '-4']], tool: 'tri:eqn' });
-  L('3-2', 'x divided → multiply both sides', ['Tidy each side first.', 'x over a number: multiply both sides by that number.', 'Check in the original equation.'], 'y/7 = 17 + (−7)  →  y/7 = 10   | · 7   →   y = 70', 'Multiply the whole other side by the number.', { v: [['70/7', '17+(-7)']] });
-  L('3-3', 'A fraction in front of x → use the reciprocal', ['(1/3)x means x ÷ 3.', 'Multiply both sides by the reciprocal of the fraction.', 'For 2/5 x: multiply by 5/2.'], '(1/3)x = 4   | · 3   →   x = 12        (2/5)x = 6   | · 5/2   →   x = 15', 'The reciprocal flips the fraction. It does not change its sign.', { v: [['(1/3)*12', '4'], ['(2/5)*15', '6']] });
+  V('3-1', { t: 'x is multiplied: divide both sides', spot: ['cue', [['104', ''], ['=', ''], ['8', 'n', 'times 8'], ['s', 'x']]],
+    doit: [['steps', [['104', '{n:8}s'], { op: '÷ 8' }, ['13', 's', 'ans'], ['8 · 13', '104', 'chk']]], ['flow', ['{f:−{s:3}x|{s:3}}', { op: 'cancel' }, { t: '−x', r: 'g' }]]],
+    trap: ['−3x = 12  →  x = 4', '−3x = 12  →  x = −4'], alt: 'Divide both sides by the number in front of the letter, sign included. A shared factor on top and bottom cancels.', v: [['104/8', '13'], ['8*13', '104'], ['12/(-3)', '-4']], tool: 'tri:eqn' });
+  V('3-2', { t: 'x is divided: multiply both sides', spot: ['cue', [['{f:x|7}', 'x', 'divided by 7'], ['=', ''], ['−10', '']]],
+    doit: [['steps', [['{f:x|{n:7}}', '−10'], { op: '· 7' }, ['x', '−70', 'ans'], ['−70 ÷ 7', '−10', 'chk']]]],
+    trap: ['x = −10 ÷ 7', 'x = −10 · 7'], alt: 'x over 7 equals −10: multiply both sides by 7. x = −70.', v: [['-10*7', '-70'], ['-70/7', '-10']] });
+  V('3-3', { t: 'A fraction in front: use the reciprocal', spot: ['cue', [['{f:2|5}', 'n', 'flip it'], ['x', 'x'], ['=', ''], ['6', '']]],
+    doit: [['flow', [{ t: '{f:2|5}', r: 'n' }, { op: 'flip' }, { t: '{f:5|2}', r: 'o' }]], ['steps', [['{f:{n:2}|{n:5}}x', '6'], { op: '· {f:5|2}' }, ['x', '15', 'ans'], ['{f:2|5} · 15', '6', 'chk']]]],
+    trap: ['x = 6 · {f:2|5}', 'x = 6 · {f:5|2}'], alt: 'Multiply both sides by the reciprocal of the fraction in front of x. Two fifths x = 6 gives x = 6 times five halves = 15.', v: [['6*(5/2)', '15'], ['(2/5)*15', '6']] });
   // Unit 4: Two-Step Equations and Patterns
-  L('4-1', 'Undo the adding first, then the multiplying', ['Add or subtract to get the x-term alone.', 'Then divide by the number in front of x.', 'The answer can be a fraction. Check it.'], '2x + 14 = 1   | − 14   →   2x = −13   | ÷ 2   →   x = −6½', 'Do not divide first unless every term divides evenly.', { v: [['2*(-13/2)+14', '1']] });
-  L('4-2', 'Find the rule in the picture', ['Count steps 1, 2 and 3.', 'Link the shape to the step number: an n-by-n square, plus what?', 'Use the rule for a far step.'], 'Steps have 2, 5, 10 dots: an n-by-n square and one more, n² + 1.  Step 25: 626.', 'Check the rule on step 3 before trusting it.', { v: [['25^2+1', '626'], ['3^2+1', '10']] });
-  L('4-3', 'Which step has that many?', ['Set the rule equal to the number you want.', 'Solve the two-step equation.', 'The answer must be a whole step number.'], '4n + 4 = 120  →  4n = 116  →  n = 29', '“How many at step n” is substituting. “Which step has N” is solving.', { v: [['4*29+4', '120']] });
+  V('4-1', { t: 'Undo + − first, then × ÷', spot: ['cue', [['7', 'x', '2nd'], ['n', ''], ['− 14', 'n', '1st'], ['=', ''], ['−28', '']]],
+    doit: [['chain', { top: ['n', '7n', '7n − 14'], ops: ['· 7', '− 14'], bottom: ['−2', '−14', '−28'], undo: ['÷ 7', '+ 14'] }], ['steps', [['7n {n:− 14}', '−28'], { op: '+ 14' }, ['{x:7}n', '−14'], { op: '÷ 7' }, ['n', '−2', 'ans']]]],
+    trap: ['{w:÷ 7} first', '{o:+ 14} first'], alt: '7n − 14 = −28: add 14 to both sides, then divide both sides by 7. n = −2.', v: [['-28+14', '-14'], ['-14/7', '-2'], ['7*(-2)-14', '-28']] });
+  V('4-2', { t: 'Find the rule in the picture', spot: ['dots', { steps: [{ cap: 'n = 1 → 1', pts: cross(1) }, { cap: 'n = 2 → 5', pts: cross(2) }, { cap: 'n = 3 → 9', pts: cross(3) }], alt: 'A cross of dots: 1, 5, 9 dots' }],
+    doit: [['seq', { n: ['1', '2', '3', '…', 'n'], v: ['1', '5', '9', '…', '4n − 3'], add: '+ 4', role: { 4: 'g' } }], ['cue', [['4', 'o', 'added each step'], ['n', ''], ['− 3', 'n', 'so step 1 is 1', 'd']]]],
+    trap: ['rule: 4n', 'rule: 4n − 3'], alt: 'Count the first three steps. What is added each step multiplies n. Then adjust so that step 1 fits.', v: [['4*1-3', '1'], ['4*2-3', '5'], ['4*3-3', '9']] });
+  V('4-3', { t: 'Which step has that many? Solve', spot: ['cue', [['2n − 1', 'x', 'the rule'], ['=', ''], ['37', 'n', 'dots wanted', 'd']]],
+    doit: [['steps', [['2n {n:− 1}', '37'], { op: '+ 1' }, ['{x:2}n', '38'], { op: '÷ 2' }, ['n', '19', 'ans']]], ['flow', [{ t: 'step n', r: 'x' }, { op: 'plug in' }, 'dots']], ['flow', ['dots', { op: 'solve' }, { t: 'step n', r: 'x' }]]],
+    trap: ['2 · 37 − 1', '2n − 1 = 37'], alt: 'To find which step has 37 dots, set the rule equal to 37 and solve. Substituting goes the other way.', v: [['(37+1)/2', '19'], ['2*19-1', '37']] });
   // Unit 5: Writing Equations
-  L('5-1', 'What fraction is left?', ['A discount of 1/4 leaves 3/4 of the price.', 'Write the equation with the part that is left, or as price minus discount.', 'Test a simple price in the story and in the equation.'], '1/4 off, now $24:  (3/4)p = 24, or p − p/4 = 24.  Test p = 32: 32 − 8 = 24 ✓', 'The $24 is 3/4 of the price, not 1/4 of it.', { v: [['32-32/4', '24'], ['(3/4)*32', '24']], tool: 'trans' });
-  L('5-2', 'Use the formula you know', ['Write the formula: area = side · side, total = price · how many.', 'Put in the numbers you know.', 'Solve for the one that is left.'], 'Area 7,395 m², one side 85 m:  85w = 7395   | ÷ 85   →   w = 87 m', 'Answer with the unit: metres for a side, m² for an area.', { v: [['85*87', '7395']], tool: 'tri:area' });
-  L('5-3', 'The four-step recipe', ['Let a letter stand for what you are asked to find.', 'Write the equation the story tells.', 'Solve on both sides, then answer in a sentence with the unit.'], 'Burned 2 cm per hour for 3 hours, now 11 cm:  L − 2 · 3 = 11  →  L = 17 cm', 'A rate times a time is one amount: work out 2 · 3 before moving it.', { v: [['17-2*3', '11']], tool: 'trans' });
+  V('5-1', { t: 'Parts make the whole', spot: ['bar', { rows: [{ parts: [['40', 40, 'm'], ['x', 37, 'x'], ['22', 22, 'm']], over: [[0, 3, '99', 'n']] }], alt: 'A bar of 99 split into 40, x and 22' }],
+    doit: [['steps', [['40 + x + 22', '99'], { op: ['tidy', ''], soft: 1 }, ['x {n:+ 62}', '99'], { op: '− 62' }, ['x', '37', 'ans']]], ['bar', { rows: [{ parts: [['¼', 1, 'm'], ['¼', 1, 'm'], ['¼', 1, 'm'], ['off', 1, 'w']], over: [[0, 4, 'price p', 'x']], under: [[0, 3, '$24', 'n']] }], alt: 'A quarter off leaves three quarters of the price' }], ['flow', ['{f:3|4}p = 24', { op: '' }, { t: 'p = 32', r: 'g' }]]],
+    trap: ['{f:1|4}p = 24', '{f:3|4}p = 24'], alt: 'Draw the whole as a bar and its parts inside. The parts add up to the whole. A quarter off leaves three quarters.', v: [['40+37+22', '99'], ['99-62', '37'], ['(3/4)*32', '24']] });
+  V('5-2', { t: 'Use the formula you know', spot: ['rect', { w: '23 m', h: 'w = ?', a: '598 m²', hi: 'h' }],
+    doit: [['tri', 'area', 'r'], ['steps', [['{n:23} · w', '598'], { op: '÷ 23' }, ['w', '26 m', 'ans']]]],
+    trap: ['w = 26 m²', 'w = 26 m'], alt: 'Write the formula, put in what you know, solve for what is left. Area 598, one side 23: the other side is 598 ÷ 23 = 26 m.', v: [['598/23', '26'], ['23*26', '598']], tool: 'tri:area' });
+  V('5-3', { t: 'Story → equation → answer', spot: ['map', [['total cost', 'x'], ['split 3 ways', 'o'], ['is', 'm'], ['$7,400 each', 'n']], [['C', 'x'], ['÷ 3', 'o'], ['=', 'm'], ['7400', 'n']], [0, 1, 2, 3]],
+    doit: [['flow', ['name it', { op: '' }, 'equation', { op: '' }, 'solve', { op: '' }, { t: 'answer + unit', r: 'g' }]], ['steps', [['{f:C|{n:3}}', '7400'], { op: '· 3' }, ['C', '$22,200', 'ans']]]],
+    trap: ['3C = 7400', '{f:C|3} = 7400'], alt: 'Name the unknown, translate the story into an equation, solve on both sides, answer with the unit.', v: [['7400*3', '22200']], tool: 'trans' });
   // Unit 6: Distance, Rate, and Time
-  L('6-1', 'Minutes ÷ 60 = hours', ['Keep the whole hours.', 'Divide the minutes by 60.', 'Add the two. Back again: decimal part · 60 = minutes.'], '2 h 56 min = 2 + 56/60 ≈ 2.933 h        0.25 h = 0.25 · 60 = 15 min', '2 h 30 min is 2.5 h, not 2.3 h. An hour has 60 minutes, not 100.', { v: [['30/60', '1/2'], ['(1/4)*60', '15']] });
-  L('6-2', 'Cover the letter you want', ['Which is missing: distance, speed or time?', 'Cover it on the triangle: d = v · t, v = d ÷ t, t = d ÷ v.', 'Put the numbers in.'], '213.5 miles in 3.5 hours:  v = 213.5 ÷ 3.5 = 61 mph', 'Speed is distance per time: “per” means divide.', { v: [['2135/35', '61']], tool: 'tri:dvt' });
-  L('6-3', 'Units first, then the formula', ['Is the speed per hour? Then the time must be in hours.', 'Convert the minutes: ÷ 60.', 'Then use d = v · t.'], '43 km/h for 2 h 6 min:  2.1 h, so d = 43 · 2.1 = 90.3 km', '2 h 6 min is 2.1 h, not 2.6 h and not 2.06 h.', { v: [['43*(2+6/60)', '903/10']], tool: 'tri:dvt' });
+  V('6-1', { t: 'Minutes ÷ 60 = hours', spot: ['cue', [['2 h', 'm', 'keep'], ['12 min', 'x', '÷ 60']]],
+    doit: [['clock', { min: 12, a: '12 min', b: '0.2 h' }], ['flow', ['2 h 12 min', { op: '' }, { t: '2.2 h', r: 'g' }]], ['flow', ['0.75 h', { op: '· 60' }, { t: '45 min', r: 'g' }]]],
+    trap: ['2 h 30 min = 2.3 h', '2 h 30 min = 2.5 h'], alt: 'Keep the whole hours and divide the minutes by 60. Back again: multiply the decimal part by 60.', v: [['12/60', '2/10'], ['2+12/60', '22/10'], ['(3/4)*60', '45'], ['30/60', '1/2']] });
+  V('6-2', { t: 'Cover the letter you want', spot: ['cue', [['29 mph', 'x', 'v', 'd'], ['69.6 miles', 'n', 'd', 'd'], ['how long?', 'o', 't = ?', 'd']]],
+    doit: [['tri', 'dvt', 'r'], ['flow', ['69.6 ÷ 29', { op: '' }, { t: '2.4 h', r: 'g' }]]],
+    trap: ['t = v ÷ d', 't = d ÷ v'], alt: 'Name what you know and what you want. Cover the wanted letter on the triangle: time is distance divided by speed.', v: [['(696/10)/29', '24/10']], tool: 'tri:dvt' });
+  V('6-3', { t: 'Units first, then the formula', spot: ['cue', [['30 mph', 'x', 'per hour'], ['·', ''], ['45 min', 'w', 'not hours!', 'd']]],
+    doit: [['clock', { min: 45, a: '45 min', b: '¾ h' }], ['flow', ['30 · {f:3|4}', { op: '' }, { t: '22.5 miles', r: 'g' }]]],
+    trap: ['d = 30 · 45', 'd = 30 · {f:3|4}'], alt: 'A speed per hour needs the time in hours. Convert the minutes first, then use d = v · t.', v: [['45/60', '3/4'], ['30*(3/4)', '225/10']], tool: 'tri:dvt' });
   // Unit 7: Average Speed
-  L('7-1', 'Dividing by a fraction: multiply by its reciprocal', ['A speed is distance over time, even when the time is a fraction of an hour.', 'The long bar means divide.', 'Flip the bottom fraction and multiply.'], '130 mi ÷ 2/3 h = 130 · 3/2 = 195 mph', 'Less than an hour gives a speed bigger than the distance.', { v: [['130/(2/3)', '195']] });
-  L('7-2', 'Speed = distance ÷ time, in hours', ['Write the minutes as a fraction of an hour.', 'Divide the distance by that time.', 'Or scale up: 10 minutes is a sixth of an hour, so multiply by 6.'], '2 miles in 10 minutes:  2 ÷ 1/6 = 12 mph', 'Do not divide by 10. That would be miles per minute.', { v: [['2/(10/60)', '12']], tool: 'tri:dvt' });
-  L('7-3', 'Same unit, then compare', ['Work out each speed in the same unit.', 'Compare the two numbers.', 'Say which is faster and by how much.'], '12 miles in 30 min = 24 mph;  5 miles in 15 min = 20 mph.  The first is faster by 4 mph.', 'Comparing distances alone is not fair if the times differ.', { v: [['12/(30/60)', '24'], ['5/(15/60)', '20']] });
+  V('7-1', { t: 'Divide by a fraction: flip and multiply', spot: ['cue', [['{f:63 mi|{f:3|7} h}', 'x', 'a fraction underneath']]],
+    doit: [['flow', ['63 ÷ {f:3|7}', { op: 'flip' }, '63 · {f:7|3}', { op: '' }, { t: '147 mph', r: 'g' }]]],
+    trap: ['63 · {f:3|7}', '63 · {f:7|3}'], alt: 'The long bar means divide. Dividing by three sevenths is multiplying by seven thirds: 147 mph.', v: [['63/(3/7)', '147'], ['63*(7/3)', '147']] });
+  V('7-2', { t: 'Per hour: scale up to 60 minutes', spot: ['cue', [['8 miles', 'n', 'd'], ['in', ''], ['10 min', 'w', 'not hours!', 'd']]],
+    doit: [['steps', [['8 mi', '10 min', '', 'in'], { op: '· 6' }, ['48 mi', '60 min', 'ans', 'in']]], ['clock', { min: 10, a: '10 min', b: '⅙ h' }], ['flow', ['8 ÷ {f:1|6}', { op: '' }, { t: '48 mph', r: 'g' }]]],
+    trap: ['8 ÷ 10 = 0.8 mph', '8 ÷ {f:1|6} = 48 mph'], alt: 'Miles per hour needs the time in hours. Ten minutes is a sixth of an hour, so multiply by 6: 48 mph.', v: [['8/(10/60)', '48'], ['8*6', '48'], ['10*6', '60']], tool: 'tri:dvt' });
+  V('7-3', { t: 'Same unit, then compare', spot: ['cue', [['36 mi in 45 min', 'x', 'car 1'], ['or', ''], ['12 mi in 36 min', 'n', 'car 2', 'd']]],
+    doit: [['flow', [{ t: '36 ÷ {f:3|4}', r: 'x' }, { op: '' }, '48 mph']], ['flow', [{ t: '12 ÷ {f:3|5}', r: 'n' }, { op: '' }, '20 mph']], ['bar', { rows: [{ parts: [['48 mph', 48, 'x']] }, { parts: [['20 mph', 20, 'n'], ['28 faster', 28, 'g']] }], alt: '48 mph against 20 mph: 28 mph faster' }]],
+    trap: ['36 mi > 12 mi', '48 mph > 20 mph'], alt: 'Work out both speeds in the same unit before comparing: 48 mph and 20 mph, a difference of 28 mph.', v: [['36/(45/60)', '48'], ['12/(36/60)', '20'], ['48-20', '28']] });
   // Unit 8: Multi-Leg Trips
-  L('8-1', 'One leg at a time', ['For each leg: time = distance ÷ speed.', 'Add the times.', 'Convert to the unit asked for.'], '15 km at 4 km/h, then 14 km at 4 km/h:  3.75 h + 3.5 h = 7.25 h = 435 min', 'Hours to minutes: multiply by 60.', { v: [['(15/4+14/4)*60', '435']], tool: 'tri:dvt' });
-  L('8-2', 'Average speed = total distance ÷ total time', ['Find the time of each leg.', 'Add the distances and add the times.', 'Divide the totals.'], '30 km at 60 km/h and 30 km at 15 km/h:  60 km in 0.5 + 2 = 2.5 h  →  24 km/h', 'It is not the average of 60 and 15. The slow leg takes longer, so it counts for more.', { v: [['(30+30)/(30/60+30/15)', '24']] });
-  L('8-3', 'Compare with the normal trip', ['Work out the normal time: distance ÷ speed.', 'Split the changed trip into legs, each with its own distance and speed.', 'Add the leg times and compare.'], '72 miles at 6 mph is 12 h.  18 miles at 3 mph (6 h) + 54 miles at 12 mph (4.5 h) = 10.5 h: early.', 'A quarter of the distance is not a quarter of the time.', { v: [['72/6', '12'], ['18/3+54/12', '21/2']] });
+  V('8-1', { t: 'One leg at a time', spot: ['cue', [['18 km at 4 km/h', 'x', 'leg 1'], ['then', ''], ['14 km at 5 km/h', 'n', 'leg 2', 'd']]],
+    doit: [['road', { legs: [{ d: '18 km', v: '4 km/h', t: '18 ÷ 4 = 4.5 h' }, { d: '14 km', v: '5 km/h', t: '14 ÷ 5 = 2.8 h' }], sum: '4.5 + 2.8 = 7.3 h = 438 min' }]],
+    trap: ['(18 + 14) ÷ (4 + 5)', '18 ÷ 4 + 14 ÷ 5'], alt: 'Find the time of each leg, distance divided by speed, then add the times.', v: [['18/4', '45/10'], ['14/5', '28/10'], ['(18/4+14/5)*60', '438']], tool: 'tri:dvt' });
+  V('8-2', { t: 'Average speed = total ÷ total', spot: ['cue', [['120 km at 15 km/h', 'x', 'leg 1'], ['+', ''], ['120 km at 60 km/h', 'n', 'leg 2', 'd']]],
+    doit: [['road', { legs: [{ d: '120 km', v: '15 km/h', t: '8 h' }, { d: '120 km', v: '60 km/h', t: '2 h' }], sum: '240 km ÷ 10 h = 24 km/h' }]],
+    trap: ['(15 + 60) ÷ 2 = 37.5', '240 ÷ 10 = 24'], alt: 'Average speed is the total distance divided by the total time, not the average of the two speeds.', v: [['120/15', '8'], ['120/60', '2'], ['240/10', '24'], ['(15+60)/2', '375/10']] });
+  V('8-3', { t: 'Compare with the normal trip', spot: ['cue', [['¼ of the way', 'x', '18 of 72 mi'], ['at', ''], ['⅓ of the speed', 'n', '2 of 6 mph', 'd']]],
+    doit: [['road', { legs: [{ d: '72 miles', v: '6 mph', t: '12 h' }], alt: 'The normal trip: 72 miles at 6 mph takes 12 hours' }], ['road', { legs: [{ d: '18 mi', v: '2 mph', t: '9 h' }, { d: '54 mi', v: '18 mph', t: '3 h' }], sum: '9 + 3 = 12 h: on time' }]],
+    trap: ['¼ of the way = ¼ of the time', '¼ of the way = 9 of 12 h'], alt: 'Work out the normal time. Split the changed trip into legs, each with its own distance and speed, and add the times.', v: [['72/6', '12'], ['72/4', '18'], ['6/3', '2'], ['18/2', '9'], ['54/18', '3'], ['9+3', '12']] });
   // Unit 9: Sequences: Start and Step (added in this system)
-  L('9-1', 'Start + add × step', ['Find the start: the value at step 0.', 'Find the amount added each step.', 'Rule: (amount added) · n + start.'], 'Start 4, add 4 each step:  dₙ = 4n + 4.  Step 14: 4 · 14 + 4 = 60', 'The start is step 0, not step 1.', { v: [['4*14+4', '60']] });
-  L('9-2', 'Change in value ÷ change in step', ['Count how many steps lie between the two known steps.', 'Divide the change in value by that count: that is the amount added.', 'Walk back to step 0 to get the start.'], 'Step 4 is 20 and step 8 is 40:  20 more in 4 steps → 5 a step.  Start: 20 − 5 · 4 = 0.  Rule 5n.', 'Or write one equation for each step and subtract: the start cancels.', { v: [['(40-20)/(8-4)', '5'], ['20-5*4', '0']] });
-  L('9-3', 'From the story to the rule', ['Pick out two steps and their values from the story.', 'Amount added = change in value ÷ change in step.', 'Find the start, write the rule, then use it.'], 'Week 4: 19 stands. Week 12: 43.  (43 − 19) ÷ 8 = 3 a week.  Start: 19 − 12 = 7.  Rule 3n + 7.', 'Use the rule for the week you are asked about, not the last week given.', { v: [['(43-19)/(12-4)', '3'], ['19-3*4', '7'], ['3*12+7', '43']] });
+  V('9-1', { t: 'Start + add × step', spot: ['dots', { steps: [{ cap: 'n = 1 → 4', pts: rows2(1) }, { cap: 'n = 2 → 6', pts: rows2(2) }, { cap: 'n = 3 → 8', pts: rows2(3) }], alt: 'Two rows of dots: 4, 6, 8 dots' }],
+    doit: [['seq', { n: ['0', '1', '2', '3'], v: ['2', '4', '6', '8'], add: '+ 2', mark: { 0: 'start' }, role: { 0: 'x' } }], ['cue', [['dₙ =', ''], ['2', 'o', 'add'], ['· n', ''], ['+ 2', 'x', 'start', 'd']]]],
+    trap: ['start = step 1', 'start = step 0'], alt: 'The start is the value at step 0. Each step adds the same amount. Rule: amount added times n, plus the start.', v: [['2*1+2', '4'], ['2*3+2', '8'], ['4-2', '2']] });
+  V('9-2', { t: 'Change in value ÷ change in step', spot: ['seq', { n: ['4', '…', '9'], v: ['12', '…', '27'], span: [0, 2, '+ 15', '5 steps'], alt: 'Step 4 is 12 and step 9 is 27' }],
+    doit: [['flow', ['{f:+ 15|5 steps}', { op: '' }, { t: '+ 3 a step', r: 'o' }]], ['flow', ['12 − 3 · 4', { op: 'back to 0' }, { t: 'start 0', r: 'x' }]], ['cue', [['dₙ =', ''], ['3', 'o', 'add'], ['· n', ''], ['+ 0', 'x', 'start', 'd']]]],
+    trap: ['15 ÷ 9', '15 ÷ (9 − 4)'], alt: 'Divide the change in value by the number of steps between the two known steps. Then walk back to step 0 for the start.', v: [['27-12', '15'], ['9-4', '5'], ['15/5', '3'], ['12-3*4', '0'], ['3*9', '27']] });
+  V('9-3', { t: 'Story → two steps → rule', spot: ['map', [['week 3: 19 stands', 'x'], ['week 11: 51 stands', 'n']], [['n = 3,  d = 19', 'x'], ['n = 11,  d = 51', 'n']], [0, 1]],
+    doit: [['seq', { n: ['3', '…', '11'], v: ['19', '…', '51'], span: [0, 2, '+ 32', '8 weeks'], alt: 'Week 3 is 19 and week 11 is 51' }], ['flow', ['32 ÷ 8', { op: '' }, { t: '+ 4 a week', r: 'o' }]], ['flow', ['19 − 4 · 3', { op: '' }, { t: 'start 7', r: 'x' }]], ['flow', [{ t: 'dₙ = 4n + 7', r: 'g' }, { op: 'n = 20' }, '87']]],
+    trap: ['dₙ = 4n + 19', 'dₙ = 4n + 7'], alt: 'Take two known steps from the story. Amount added: change in value over change in step. Walk back to step 0, write the rule, use it.', v: [['(51-19)/(11-3)', '4'], ['19-4*3', '7'], ['4*11+7', '51'], ['4*20+7', '87']] });
 })();
 
 /* --- tactics_ch4.js --- */
@@ -49676,6 +50180,9 @@ var DJG = (function () {
     { id: 'geo', name: 'Angles, circles, area and volume', ch: [8], blurb: 'Angle facts, circle measure, areas, units, volume, right triangles.' }
   ];
   var MOVES = [], BY = {};
+  // a focus area may also borrow moves that live in another one (ALSO[styleId] = [move ids]): "Applied formulas" gathers every move that uses a formula
+  var ALSO = {};
+  function inStyle(m, id) { return m.style === id || !!(ALSO[id] && ALSO[id].indexOf(m.id) >= 0); }
   function mv(id, name, skills, card, gen) { var m = { id: id, style: id.split('.')[0], name: name, skills: skills, card: { h: card[0], b: card[1] }, gen: gen }; MOVES.push(m); BY[id] = m; }
 
   // ============================================================== SIGNS AND INTEGERS (Chapter 2)
@@ -50049,7 +50556,7 @@ var DJG = (function () {
   }
 
   return {
-    STYLES: STYLES, MOVES: MOVES, byId: BY, mv: mv, make: make, raw: raw, verify: verify, rejected: rejected, same: same, ev: ev,
+    STYLES: STYLES, MOVES: MOVES, byId: BY, mv: mv, ALSO: ALSO, inStyle: inStyle, make: make, raw: raw, verify: verify, rejected: rejected, same: same, ev: ev,
     _h: { Q: Q, q: q, R: R, nz: nz, pick: pick, shuffle: shuffle, f: f, pn: pn, P: P, D: D, L: L, fr: fr, sup: sup, until: until, s: s, sy: sy, T: T, C: C, B: B, E: E, X: X, EQ: EQ, IQ: IQ, lin: lin }
   };
 })();
@@ -50586,6 +51093,112 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
 })();
 /* ===== DJG part 4 END ===== */
 
+/* --- dojo: dojo_gens5.js --- */
+/* ===== DJG part 5 (Applied formulas: name the formula, plug in, work it backwards; November 2026) START =====
+   Same contract as hub/dojo_gens.js. Needs FML (hub/formulas.js), the registry the Skills & Tactics formula bank and flash cards
+   use, so a formula is written once. "Applied formulas" is a focus area of its own; besides the moves here it borrows every
+   move elsewhere that uses a formula (DJG.ALSO.form), so one roll can mix d = vt, percent, circles and the rest.
+     form.r3 / r6 / r7 / r8   recall, by chapter: name → formula (look-alikes are proved wrong by the verifier), formula → name,
+                              and at level 3 the choice is among the chapter's other real formulas
+     form.cost   total = price · how many (forwards, backwards, in dollars and cents)
+     form.rect   rectangle: area, perimeter, a side from either, and which of the two a story needs
+     form.avg    average speed = total distance ÷ total time (one leg, two legs, two legs that first need their times)
+     form.tri    any a = b · c: pick the form for the letter you want, then use it                                           */
+(function () {
+  'use strict';
+  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, pick = h.pick, shuffle = h.shuffle, f = h.f, D = h.D, L = h.L, until = h.until, T = h.T, C = h.C, B = h.B, mv = DJG.mv;
+  function story(t) { return '<p class="lead dj-story">' + t + '</p>'; }
+  function money(v) { return Q.of(v).toNumber().toFixed(2); }
+  var WHO = ['Zorp', 'Captain Pickle', 'Grandma Thunder', 'Sir Fluffington', 'Professor Wobble', 'Duchess Banana', 'Agent Waffles', 'Chef Kaboom', 'Mayor Turnip', 'Bigfoot'];
+  DJG.STYLES.push({ id: 'form', name: 'Applied formulas', ch: [3, 5, 6, 7, 8], blurb: 'Name the formula, plug in, work it backwards.' });
+  DJG.ALSO.form = ['drt.run', 'drt.form', 'drt.plug', 'drt.time', 'eq2.rearr', 'pat.rule', 'rate.unit', 'rate.k', 'rate.scale', 'rate.slope', 'pct.type', 'pct.change', 'pct.interest', 'geo.circ', 'geo.form', 'geo.area', 'geo.vol', 'geo.pyth', 'geo.poly'];
+
+  // ---------------------------------------------------------------- RECALL, one move per chapter
+  function rightTile(e) { return { t: e.plain, src: e.sol || e.lit[1] }; }
+  function recall(ch, title, skills, card) {
+    mv('form.r' + ch, title, skills, card, function (lv) {
+      var all = FML.list(ch), fs = all.filter(function (e) { return e.grp === 'f'; }), e, others;
+      if (lv === 1) {
+        e = pick(all);
+        return [C(e.grp === 'u' ? D(e.name) + L('Get x alone. Which one is right?') : L('Which one gives this?') + D(e.name), rightTile(e), e.wrong.map(function (w) { return { t: w[0], src: w[1] }; }),
+          { ver: { lit: { eq: e.lit, v: e.v || e.lit[0] } }, sk: e.sk, why: e.name + ': ' + e.plain + '.' })];
+      }
+      e = pick(fs); others = shuffle(fs.filter(function (x) { return x.id !== e.id && x.name !== e.name && x.plain !== e.plain; })).slice(0, 3);
+      if (lv === 2) return [C(D(e.plain) + L('What does this give?'), e.name, others.map(function (x) { return x.name; }), { ver: { fix: 1 }, sk: e.sk, why: e.plain + ' gives ' + e.name.charAt(0).toLowerCase() + e.name.slice(1) + '.' })];
+      return [C(L('Which one gives this?') + D(e.name), e.plain, others.map(function (x) { return x.plain; }), { ver: { fix: 1 }, sk: e.sk, why: e.name + ': ' + e.plain + '. The others are real formulas, for something else.' })];
+    });
+  }
+  recall(3, 'Name that formula: equations and motion', ['U20', 'U22', 'U21', 'U16', 'U17', 'U28', 'U5', 'U6', 'U9'], ['Say the formula before you touch a number', 'Distance d = v · t. Area A = l · w. Total cost T = p · n. A sequence: dₙ = a · n + b. To undo a move on x, do the opposite to both sides.']);
+  recall(6, 'Name that formula: rates and scale', ['P8', 'P16', 'P28', 'P40', 'P44', 'P48', 'P57', 'P59'], ['Rate, scale and slope are all divisions', 'Unit rate = amount ÷ quantity. Scale factor = new ÷ old. Slope = rise ÷ run. Proportional: y = k · x. A line: y = m · x + b.']);
+  recall(7, 'Name that formula: percent', ['C8', 'C10', 'C12', 'C13', 'C21', 'C31', 'C38'], ['part = percent · whole', 'Cover what you want: percent = part ÷ whole, whole = part ÷ percent. Up r: × (1 + r). Down r: × (1 − r). Change: change ÷ original. Interest: I = P · r · t.']);
+  recall(8, 'Name that formula: geometry', ['G12', 'G14', 'G23', 'G24', 'G59', 'G69', 'G70'], ['Lengths add, areas multiply two lengths', 'C = π · d. A = π · r². Parallelogram b · h, triangle ½ · b · h, trapezoid ½ · (a + b) · h. Volume = base area · height. Right triangle: c² = a² + b².']);
+
+  // ---------------------------------------------------------------- TOTAL = PRICE · HOW MANY
+  var THINGS = [['glow-in-the-dark socks', 'pair'], ['jars of pickled balloons', 'jar'], ['umbrellas for snails', 'umbrella'], ['left-handed spoons', 'spoon'], ['invisible hats', 'hat'], ['trumpets for ducks', 'trumpet'], ['square watermelons', 'watermelon']];
+  mv('form.cost', 'Total = price × how many', ['U17', 'P11'], ['T = p · n: cover what you want', 'Total = price of one · how many. Want the price of one? Total ÷ how many. Want how many? Total ÷ price of one.'], function (lv) {
+    var who = pick(WHO), th = pick(THINGS), p = R(2, 9), n = R(3, 9), tot = p * n;
+    if (lv === 1) return [T(story(who + ' buys ' + n + ' ' + th[0] + ' at $' + p + ' each.') + D('Total = ▢'), tot, { pre: '$', wrongs: [p + n], ver: { ev: p + '*' + n }, why: 'T = p · n = ' + p + ' · ' + n + ' = ' + tot + '.' })];
+    if (lv === 2) {
+      if (pick([0, 1])) return [T(story(who + ' pays $' + tot + ' for ' + n + ' ' + th[0] + '.') + D('Price of one = ▢'), p, { pre: '$', wrongs: [tot * n, tot - n], ver: { sol: [n + '*x', String(tot)], v: 'x' }, why: 'p = T ÷ n = ' + tot + ' ÷ ' + n + ' = ' + p + '.' })];
+      return [T(story(who + ' spends $' + tot + ' on ' + th[0] + ' at $' + p + ' each.') + D('How many? ▢'), n, { wrongs: [tot * p, tot - p], ver: { sol: [p + '*x', String(tot)], v: 'x' }, why: 'n = T ÷ p = ' + tot + ' ÷ ' + p + ' = ' + n + '.' })];
+    }
+    var pc = pick([150, 250, 125, 175, 225, 350, 75]), n3 = pick([2, 4, 6, 8]), t3 = q(pc * n3, 100), want = pick(['p', 'n']);
+    var forms = { p: { t: 'p = T ÷ n', src: 'T/n' }, n: { t: 'n = T ÷ p', src: 'T/p' } }, wr = want === 'p' ? [{ t: 'p = T · n', src: 'T*n' }, { t: 'p = n ÷ T', src: 'n/T' }, { t: 'p = T − n', src: 'T-n' }] : [{ t: 'n = T · p', src: 'T*p' }, { t: 'n = p ÷ T', src: 'p/T' }, { t: 'n = T − p', src: 'T-p' }];
+    var st = story(want === 'p' ? who + ' pays $' + money(t3) + ' for ' + n3 + ' ' + th[0] + '.' : who + ' spends $' + money(t3) + ' on ' + th[0] + ' at $' + money(q(pc, 100)) + ' each.');
+    return [C(st + L('T = p · n. You want ' + (want === 'p' ? 'the price of one' : 'how many') + '. Which form?'), forms[want], wr, { step: 'Pick the form', ver: { lit: { eq: ['T', 'p*n'], v: want } }, why: 'T = p · n. Divide both sides by what you know: ' + forms[want].t + '.' }),
+      want === 'p' ? T(st + D('Price of one = ▢'), q(pc, 100), { pre: '$', show: money(q(pc, 100)), step: 'Plug in', wrongs: [t3.mul(n3)], ver: { ev: '(' + t3.toFrac() + ')/' + n3 }, why: 'p = ' + money(t3) + ' ÷ ' + n3 + ' = ' + money(q(pc, 100)) + '.' })
+        : T(st + D('How many? ▢'), n3, { step: 'Plug in', wrongs: [], ver: { ev: '(' + t3.toFrac() + ')/(' + pc + '/100)' }, why: 'n = ' + money(t3) + ' ÷ ' + money(q(pc, 100)) + ' = ' + n3 + '.' })];
+  });
+
+  // ---------------------------------------------------------------- RECTANGLE: AREA AND PERIMETER
+  var PLOTS = ['a trampoline for elephants', 'a napping mat for dragons', 'a dance floor for penguins', 'a picnic rug for giants', 'a parking spot for a blimp', 'a pond for rubber ducks'];
+  mv('form.rect', 'Rectangle: area and perimeter', ['S26', 'U16', 'E17'], ['Area fills, perimeter goes round', 'Area = l · w, in square units: it covers the inside. Perimeter = 2l + 2w, in plain units: it is the walk round the edge.'], function (lv) {
+    var d = until(function () { return [R(3, 12), R(2, 9)]; }, function (z) { return z[0] > z[1] && z[0] * z[1] !== 2 * z[0] + 2 * z[1]; }), l = d[0], w = d[1], A = l * w, P = 2 * l + 2 * w, what = PLOTS[R(0, PLOTS.length - 1)];
+    if (lv === 1) {
+      if (pick([0, 1])) return [T(story(what.charAt(0).toUpperCase() + what.slice(1) + ' is ' + l + ' m long and ' + w + ' m wide.') + D('Area = ▢'), A, { unit: 'm²', wrongs: [P, l + w], ver: { ev: l + '*' + w }, why: 'A = l · w = ' + l + ' · ' + w + ' = ' + A + ' m².' })];
+      return [T(story(what.charAt(0).toUpperCase() + what.slice(1) + ' is ' + l + ' m long and ' + w + ' m wide.') + D('Perimeter = ▢'), P, { unit: 'm', wrongs: [A, l + w], ver: { ev: '2*' + l + '+2*' + w }, why: 'P = 2l + 2w = ' + (2 * l) + ' + ' + (2 * w) + ' = ' + P + ' m.' })];
+    }
+    if (lv === 2) {
+      if (pick([0, 1])) { var edge = pick([['A fence all the way round ' + what, true], ['A ribbon along every edge of ' + what, true], ['Paint to cover ' + what, false], ['Grass seed for the whole of ' + what, false]]);
+        return [B(story(edge[0] + '.') + L('Which one do you need?'), 'perimeter', 'area', edge[1], { ver: { fix: 1 }, why: edge[1] ? 'Going round the edge is a length: perimeter.' : 'Covering the inside is an area.' })]; }
+      return [T(story(what.charAt(0).toUpperCase() + what.slice(1) + ' has an area of ' + A + ' m² and is ' + l + ' m long.') + D('Width = ▢'), w, { unit: 'm', wrongs: [A - l, A * l], ver: { sol: [l + '*x', String(A)], v: 'x' }, why: 'A = l · w, so w = A ÷ l = ' + A + ' ÷ ' + l + ' = ' + w + ' m.' })];
+    }
+    return [T(story('The edge of ' + what + ' is ' + P + ' m in all. It is ' + l + ' m long.') + D('2 · ' + l + ' + 2w = ' + P + '<br>w = ▢'), w, { unit: 'm', wrongs: [P - l, P - 2 * l, q(P, 2)], ver: { sol: ['2*' + l + '+2*x', String(P)], v: 'x' }, why: 'Take away the two lengths: ' + P + ' − ' + (2 * l) + ' = ' + (2 * w) + '. That is two widths, so w = ' + w + ' m.' })];
+  });
+
+  // ---------------------------------------------------------------- AVERAGE SPEED
+  var RIDES = ['on a unicycle', 'by pogo stick', 'on a very slow camel', 'in a bathtub with wheels', 'on roller skates', 'in a hot-air balloon', 'on a giant tortoise'];
+  var SAME = [[60, 30, 60, 40], [60, 20, 60, 30], [30, 15, 30, 20], [40, 10, 40, 16], [90, 45, 90, 60], [12, 4, 12, 6], [60, 15, 60, 24], [20, 5, 20, 8], [60, 30, 120, 40], [30, 10, 30, 15]];   // s1, s2, distance of each leg, average
+  mv('form.avg', 'Average speed: total ÷ total', ['U22', 'U25'], ['Total distance ÷ total time', 'Add up all the distance. Add up all the time. Divide. It is not the average of the speeds: the slow leg takes longer, so it counts for more.'], function (lv) {
+    var who = pick(WHO), ride = pick(RIDES);
+    if (lv === 1) { var v = pick([4, 5, 6, 8, 12, 15, 20, 25, 30, 40, 50, 60]), t = R(2, 5); return [T(story(who + ' goes ' + (v * t) + ' km ' + ride + ' in ' + t + ' hours.') + D('Speed = ▢'), v, { unit: 'km/h', wrongs: [v * t * t, v * t - t], ver: { ev: (v * t) + '/' + t }, why: 'v = d ÷ t = ' + (v * t) + ' ÷ ' + t + ' = ' + v + ' km/h.' })]; }
+    if (lv === 2) {
+      var z = until(function () { var av = pick([12, 15, 20, 24, 30, 36, 40, 45, 50]), t1 = R(1, 3), t2 = R(1, 3), s1 = av + pick([-2, -1, 1, 2]) * pick([3, 4, 5, 6]) * t2; return { av: av, t1: t1, t2: t2, d1: s1 * t1, d2: av * (t1 + t2) - s1 * t1, s1: s1 }; }, function (o) { return o.d1 > 0 && o.d2 > 0 && o.s1 > 0 && o.d1 !== o.d2; });
+      return [T(story(who + ' travels ' + ride + ': ' + z.d1 + ' km in ' + z.t1 + (z.t1 === 1 ? ' hour' : ' hours') + ', then ' + z.d2 + ' km in ' + z.t2 + (z.t2 === 1 ? ' hour' : ' hours') + '.') + D('Average speed = ▢'), z.av, { unit: 'km/h', wrongs: [q(z.d1, z.t1).add(q(z.d2, z.t2)).div(2)], ver: { ev: '(' + z.d1 + '+' + z.d2 + ')/(' + z.t1 + '+' + z.t2 + ')' }, why: 'Total distance ' + (z.d1 + z.d2) + ' km ÷ total time ' + (z.t1 + z.t2) + ' h = ' + z.av + ' km/h.' })];
+    }
+    var s = pick(SAME), t1 = s[2] / s[0], t2 = s[2] / s[1], st = story(who + ' goes ' + s[2] + ' km ' + ride + ' at ' + s[0] + ' km/h, then ' + s[2] + ' km more at ' + s[1] + ' km/h.');
+    return [T(st + D('Time for the first leg = ▢'), t1, { unit: 'h', step: 'Leg 1', wrongs: [s[2] * s[0]], ver: { ev: s[2] + '/' + s[0] }, why: 't = d ÷ v = ' + s[2] + ' ÷ ' + s[0] + ' = ' + t1 + ' h.' }),
+      T(st + D('Time for the second leg = ▢'), t2, { unit: 'h', step: 'Leg 2', wrongs: [s[2] * s[1]], ver: { ev: s[2] + '/' + s[1] }, why: 't = d ÷ v = ' + s[2] + ' ÷ ' + s[1] + ' = ' + t2 + ' h.' }),
+      T(st + D((2 * s[2]) + ' km in ' + (t1 + t2) + ' h<br>Average speed = ▢'), s[3], { unit: 'km/h', step: 'Total ÷ total', wrongs: [q(s[0] + s[1], 2)], ver: { ev: '(' + s[2] + '+' + s[2] + ')/(' + s[2] + '/' + s[0] + '+' + s[2] + '/' + s[1] + ')' }, why: (2 * s[2]) + ' ÷ ' + (t1 + t2) + ' = ' + s[3] + ' km/h. Not ' + f(q(s[0] + s[1], 2)) + ', the average of the two speeds.' })];
+  });
+
+  // ---------------------------------------------------------------- ANY a = b · c: COVER THE LETTER
+  var TRIS = [{ a: 'd', b: 'v', c: 't', n: ['distance', 'speed', 'time'], sk: ['U20', 'U26'] }, { a: 'T', b: 'p', c: 'n', n: ['total cost', 'price of one', 'how many'], sk: ['U17'] }, { a: 'A', b: 'l', c: 'w', n: ['area', 'length', 'width'], sk: ['U16', 'S26'] },
+    { a: 'y', b: 'k', c: 'x', n: ['amount', 'unit rate', 'quantity'], sk: ['P16', 'P11'] }, { a: 'V', b: 'B', c: 'h', n: ['volume', 'base area', 'height'], sk: ['G59'] }];
+  mv('form.tri', 'Cover the letter you want', ['U26', 'U20', 'U17', 'U16', 'P16', 'G59'], ['Product on top, the two factors underneath', 'For any a = b · c: want a, multiply b · c. Want b, divide a ÷ c. Want c, divide a ÷ b. The same triangle works for distance, cost, area, rates and volume.'], function (lv) {
+    var t = pick(TRIS), want = pick(lv === 1 ? ['b', 'c', 'a'] : ['b', 'c']), o = want === 'b' ? 'c' : 'b', say = t.a + ' = ' + t.b + ' · ' + t.c;
+    var right = want === 'a' ? { t: t.a + ' = ' + t.b + ' · ' + t.c, src: t.b + '*' + t.c } : { t: t[want] + ' = ' + t.a + ' ÷ ' + t[o], src: t.a + '/' + t[o] };
+    var wrongs = want === 'a' ? [{ t: t.a + ' = ' + t.b + ' ÷ ' + t.c, src: t.b + '/' + t.c }, { t: t.a + ' = ' + t.c + ' ÷ ' + t.b, src: t.c + '/' + t.b }, { t: t.a + ' = ' + t.b + ' + ' + t.c, src: t.b + '+' + t.c }]
+      : [{ t: t[want] + ' = ' + t.a + ' · ' + t[o], src: t.a + '*' + t[o] }, { t: t[want] + ' = ' + t[o] + ' ÷ ' + t.a, src: t[o] + '/' + t.a }, { t: t[want] + ' = ' + t.a + ' − ' + t[o], src: t.a + '-' + t[o] }];
+    var idx = want === 'a' ? 0 : want === 'b' ? 1 : 2, pickIt = C(D(say) + L('You want the ' + t.n[idx] + '. Which form?'), right, wrongs, { step: 'Pick the form', sk: t.sk, ver: { lit: { eq: [t.a, t.b + '*' + t.c], v: t[want] } }, why: want === 'a' ? 'The two factors sit side by side: multiply.' : 'Divide both sides of ' + say + ' by ' + t[o] + ': ' + right.t + '.' });
+    if (lv === 1) return [pickIt];
+    var bv = lv === 2 ? R(2, 9) : pick([q(5, 2), q(3, 2), q(7, 2), q(5, 4), q(9, 2)]), cv = lv === 2 ? R(2, 9) : pick([2, 4, 6, 8]), av = Q.of(bv).mul(cv), known = want === 'b' ? cv : bv, ans = want === 'b' ? bv : cv;
+    var use = T(D(say + '<br>' + t.a + ' = ' + f(av) + ',  ' + t[o] + ' = ' + f(known) + '<br>' + t[want] + ' = ▢'), ans, { step: 'Plug in', sk: t.sk, wrongs: [av.mul(known), av.sub(known)], ver: { ev: '(' + av.toFrac() + ')/(' + Q.of(known).toFrac() + ')' }, why: t[want] + ' = ' + t.a + ' ÷ ' + t[o] + ' = ' + f(av) + ' ÷ ' + f(known) + ' = ' + f(ans) + '.' });
+    return lv === 2 ? [use] : [pickIt, use];
+  });
+})();
+/* ===== DJG part 5 END ===== */
+
 /* --- dojo: dojo_quests.js --- */
 /* ===== DJG quests (the Dojo's Quest mode: one story, several steps, each step uses the answer of the step before) START =====
    DJG.quest(id, lv) -> { id, title, intro, outro, nodes:[{ place, item }] }      lv 1 = 3 steps, lv 2 = 4, lv 3 = all of them (5 or 6)
@@ -50798,7 +51411,7 @@ var DJ = (function () {
   function focusMoves(cat, focus) {
     if (!focus) return DJG.MOVES.slice();
     if (focus.moves) return focus.moves.map(function (id) { return DJG.byId[id]; }).filter(Boolean);
-    if (focus.style) return DJG.MOVES.filter(function (m) { return m.style === focus.style; });
+    if (focus.style) return DJG.MOVES.filter(function (m) { return DJG.inStyle(m, focus.style); });
     var sk = focus.skills || (focus.level && cat.levels[focus.level] ? cat.levels[focus.level].skills : []);
     var direct = DJG.MOVES.filter(function (m) { return m.skills.some(function (s) { return sk.indexOf(s) >= 0; }); });
     if (direct.length) return direct;
@@ -50865,7 +51478,7 @@ var DJ = (function () {
   function supPool(model, cat, opts) {
     opts = opts || {};
     var lv = opts.lv || 1, rnd = opts.rnd || Math.random, cur = opts.cur || (model && model.curCh) || null, fsk = focusSkills(cat, opts.focus), styleSk = null, out = [], id;
-    if (opts.focus && opts.focus.style) { styleSk = {}; DJG.MOVES.forEach(function (m) { if (m.style === opts.focus.style) m.skills.forEach(function (s) { styleSk[s] = 1; }); }); }
+    if (opts.focus && opts.focus.style) { styleSk = {}; DJG.MOVES.forEach(function (m) { if (DJG.inStyle(m, opts.focus.style)) m.skills.forEach(function (s) { styleSk[s] = 1; }); }); }
     function wanted(sk) { if (fsk) return sk.some(function (s) { return fsk.indexOf(s) >= 0; }); if (styleSk) return sk.some(function (s) { return styleSk[s]; }); return true; }
     var tiers = lv === 1 ? [2] : lv === 2 ? [3] : [4, 3], levs = lv === 1 ? [2] : [3];
     for (id in cat.entries) { var e = cat.entries[id]; if (e.onramp === false || (e.skills || []).length < 2 || tiers.indexOf(e.tier) < 0 || !wanted(e.skills)) continue; var u = unitUrgency(model, cat, e.skills, cur); out.push({ ref: { type: 'entry', id: id }, entry: id, level: null, skills: e.skills.slice(), diff: e.tier, name: e.name, terr: e.terr, kind: u.kind, why: WHY[u.raw || u.kind], score: u.score + (e.tier === tiers[0] ? 0.05 : 0) + rnd() * 0.2 }); }
@@ -50890,9 +51503,9 @@ var DJ = (function () {
     for (id in cat.skills) { var u = urgency(model, cat, id, cur); o[u.kind]++; if (u.kind === 'due') { if (R0[id].moves.length) o.dueMove++; else o.dueKata++; } }
     DJG.STYLES.forEach(function (st) {
       var sk = {}, n = 0, due = 0, weak = 0, started = 0, sumR = 0, nR = 0, mq = 0;
-      DJG.MOVES.forEach(function (m) { if (m.style === st.id) m.skills.forEach(function (s) { sk[s] = 1; }); });
+      DJG.MOVES.forEach(function (m) { if (DJG.inStyle(m, st.id)) m.skills.forEach(function (s) { sk[s] = 1; }); });
       Object.keys(sk).forEach(function (s) { var m = model && model.skills[s]; n++; if (!m || !m.n) return; started++; mq += m.mq || 0; if (m.S !== null) { sumR += m.Rnow; nR++; if (m.Rnow < LMS.K.DUE_R) due++; } if (m.E < K.WEAK_E) weak++; });
-      o.styles[st.id] = { n: n, started: started, due: due, weak: weak, R: nR ? sumR / nR : null, mq: mq, max: n * LMS.K.MASS_Q, moves: DJG.MOVES.filter(function (m) { return m.style === st.id; }).length };
+      o.styles[st.id] = { n: n, started: started, due: due, weak: weak, R: nR ? sumR / nR : null, mq: mq, max: n * LMS.K.MASS_Q, moves: DJG.MOVES.filter(function (m) { return DJG.inStyle(m, st.id); }).length };
     });
     return o;
   }
@@ -251393,9 +252006,16 @@ var HHI = (function () {
 var HTC = (function () {
   'use strict';
   var HX = null, esc, el, CAT, LVN = ['Foundation', 'Fluency', 'Transfer'];
+  var TOOLIC = { trans: '<svg viewBox="0 0 22 16" aria-hidden="true"><path d="M2 4h7M2 8h5M2 12h7M13 8h6M16 5l3 3-3 3"/></svg>', tri: '<svg viewBox="0 0 22 16" aria-hidden="true"><path d="M11 2L20 14H2Z"/><path d="M6.5 9h9M11 9v5"/></svg>' };
+  function toolBtns(tools, opt) { return tools.length && !opt.bare ? '<div class="tc-tools">' + tools.map(function (t) { return '<button type="button" class="tc-toolbtn" data-tool="' + esc(t) + '">' + (t === 'trans' ? TOOLIC.trans + 'Words → symbols' : TOOLIC.tri + esc(TAC.TRI[t.slice(4)].say)) + '</button>'; }).join('') + '</div>' : ''; }
   function cardHTML(key, opt) {
     opt = opt || {}; var c = TAC.level(key); if (!c) return '';
     var L = CAT.levels[key] || {}, k = key.replace(/^ch\d+:/, ''), tools = TAC.toolsOf(c);
+    if (c.vis) return '<article class="tc-card tv lv' + (L.level || 1) + '" id="tc-' + esc(key.replace(':', '-')) + '" data-level="' + esc(key) + '"><header><span class="tc-lv">' + esc(L.name || LVN[(L.level || 1) - 1]) + '</span>' + (opt.unit ? '<span class="tc-un">' + esc(L.unit || '') + '</span>' : '') + '</header><h4>' + esc(c.t) + '</h4>' +
+      (c.spot ? '<div class="tv-sec spot"><span class="k">Spot it</span>' + TVZ.draw(c.spot) + '</div>' : '') +
+      '<div class="tv-sec do"><span class="k">Do it</span>' + c.doit.map(TVZ.draw).join('') + '</div>' +
+      (c.trap ? '<div class="tv-sec tr"><span class="k">Trap</span>' + TVZ.draw(['trap', c.trap[0], c.trap[1]]) + '</div>' : '') + '<p class="tv-sr">' + esc(c.alt) + '</p>' + toolBtns(tools, opt) +
+      (opt.links ? '<footer class="tc-links"><a href="#ch/' + L.ch + '/path/' + esc(k) + '">Open this level</a>' + (typeof HDJ !== 'undefined' ? '<a href="#dojo/warm/' + esc(key) + '">Warm up in the Dojo</a>' : '') + '</footer>' : '') + '</article>';
     return '<article class="tc-card lv' + (L.level || 1) + '" id="tc-' + esc(key.replace(':', '-')) + '" data-level="' + esc(key) + '"><header><span class="tc-lv">' + esc(L.name || LVN[(L.level || 1) - 1]) + '</span>' + (opt.unit ? '<span class="tc-un">' + esc(L.unit || '') + '</span>' : '') + '</header>' +
       '<h4>' + c.t + '</h4><ol class="tc-moves">' + c.m.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' +
       '<div class="tc-ex"><span class="k">Like this</span><span class="x">' + c.ex + '</span></div>' + (c.w ? '<div class="tc-watch"><span class="k">Watch out</span><span class="x">' + c.w + '</span></div>' : '') +
@@ -251404,7 +252024,7 @@ var HTC = (function () {
   }
   // ---------------------------------------------------------------- the translation decoder
   function transHTML() {
-    return '<section class="tc-tool tc-trans" id="tc-trans"><h3>Words → symbols decoder</h3><p class="sub">Scan the sentence for the phrase, find the symbol. Read it twice: once for the operations, once for where the equals sign goes.</p>' +
+    return '<section class="tc-tool tc-trans" id="tc-trans"><h3>Words → symbols decoder</h3><p class="sub">Find the phrase, read off the symbol. Find the equals word first.</p>' +
       '<div class="tc-tgrid">' + TAC.TRANS.map(function (r) { return '<div class="tc-trow ' + r.cls + '"><b>' + r.sym + '</b><div><span class="w">' + r.words + '</span>' + (r.note ? '<span class="n">' + r.note + '</span>' : '') + '</div></div>'; }).join('') + '</div>' +
       '<div class="tc-mistake"><div class="no"><span class="k">Common mistake</span>“7 less than x” → 7 − x<small>Reading left to right feels natural here, but it is backwards.</small></div><div class="yes"><span class="k">Correct</span>“7 less than x” → x − 7<small>The thing being changed comes first. Reword it: “x, less 7”.</small></div></div>' +
       '<div class="tc-decode"><span class="k">Decode it</span><div class="row"><span class="c1">a number</span><span class="c2">increased by 6</span><span class="c3">gives</span><span class="c4">20</span></div><div class="arrow" aria-hidden="true">↓</div><div class="row m"><span class="c1">n</span><span class="c2">+ 6</span><span class="c3">=</span><span class="c4">20</span></div></div></section>';
@@ -251417,7 +252037,7 @@ var HTC = (function () {
   }
   function triHTML(ids, first) {
     var id = first && ids.indexOf(first) >= 0 ? first : ids[0], T = TAC.TRI[id];
-    return '<section class="tc-tool tc-triangle" id="tc-tri" data-tri="' + esc(id) + '" data-ids="' + esc(ids.join(',')) + '"><h3>The triangle: any “a = b · c” relationship</h3><p class="sub">The product sits on top, the two things multiplied sit side by side. Tap the one you want: what is left shows what to do. Side by side → multiply. Over and under → divide.</p>' +
+    return '<section class="tc-tool tc-triangle" id="tc-tri" data-tri="' + esc(id) + '" data-ids="' + esc(ids.join(',')) + '"><h3>The triangle: any “a = b · c” relationship</h3><p class="sub">Tap the letter you want. Side by side → multiply. Over and under → divide.</p>' +
       (ids.length > 1 ? '<div class="tc-trichips" role="group" aria-label="Which relationship">' + ids.map(function (x) { return '<button type="button" data-tripick="' + x + '" aria-pressed="' + (x === id) + '">' + esc(TAC.TRI[x].say) + '</button>'; }).join('') + '</div>' : '') +
       '<div class="tc-tribody">' + triBody(id, null) + '</div></section>';
   }
@@ -251439,26 +252059,81 @@ var HTC = (function () {
   function openTool(t) {
     HX.openDrawer(t === 'trans' ? 'Words → symbols' : 'The triangle', function (b) { b.classList.add('novar', 'tc-drawer'); b.innerHTML = t === 'trans' ? transHTML() : triHTML(Object.keys(TAC.TRI), t.slice(4)); wire(b); });
   }
+  // ---------------------------------------------------------------- the formula bank: every formula drawn, all visible
+  function wd(f) { return /[a-z]{4,}/.test(TVZ.plain(f)) ? ' fw' : ''; }   // a formula written in words is set smaller
+  function tile(e) {
+    var kids = FML.ALL.filter(function (x) { return x.of === e.id && x.f; }), dj = e.move && typeof DJG !== 'undefined' && DJG.byId[e.move];
+    if (e.st) return '<div class="tv-ft g-u" data-f="' + esc(e.id) + '"><div class="hd">' + TVZ.icon(e.ic) + '<span class="nm">' + esc(e.lab) + '</span></div>' + TVZ.draw(['steps', e.st]) + '</div>';
+    return '<div class="tv-ft g-' + e.grp + '" data-f="' + esc(e.id) + '"><div class="hd">' + TVZ.icon(e.ic) + '<span class="nm">' + (e.grp === 'u' ? TVZ.fmt(e.ask) : esc(e.name)) + '</span></div><div class="fx' + wd(e.f) + '">' + TVZ.fmt(e.f) + '</div>' +
+      (kids.length ? '<div class="alt">' + kids.map(function (k) { return '<span class="' + wd(k.f).trim() + '" title="' + esc(k.name) + '">' + TVZ.fmt(k.f) + '</span>'; }).join('') + '</div>' : '') +
+      (e.leg && e.leg.length ? '<div class="lg">' + e.leg.map(function (l) { return '<span><b>' + esc(l[0]) + '</b>' + esc(l[1]) + '</span>'; }).join('') + '</div>' : '') +
+      (dj ? '<a class="dr" href="#dojo/move/' + esc(e.move) + '" aria-label="Drill ' + esc(e.name) + ' in the Dojo">Drill</a>' : '') + '</div>';
+  }
+  function bankHTML(n) {
+    var fs = FML.list(n, 'f').filter(function (e) { return e.f && !e.of; }), us = FML.list(n, 'u').filter(function (e) { return e.f; });
+    return '<div class="tc-bank tv" id="tc-bank"><h3>Formula bank</h3><div class="tv-ftgrid">' + fs.map(tile).join('') + '</div>' +
+      (us.length ? '<h4 class="tv-sub">Undo rules: what to do to both sides</h4><div class="tv-ftgrid u">' + us.map(tile).join('') + '</div>' : '') + '</div>' + flashHTML(n);
+  }
+  // ---------------------------------------------------------------- flash cards: self quiz on the formulas (nothing here is graded or kept)
+  function flashHTML(n) {
+    var hasU = FML.list(n, 'u').length > 0, dj = typeof DJG !== 'undefined' && DJG.byId['form.r' + n];
+    return '<section class="tc-flash" id="tc-flash" data-ch="' + n + '"><div class="tc-fhead"><h3>Flash cards</h3><div class="tc-seg sm" role="group" aria-label="Which cards"><button type="button" data-deck="all" aria-pressed="true">All</button><button type="button" data-deck="f" aria-pressed="false">Formulas</button>' + (hasU ? '<button type="button" data-deck="u" aria-pressed="false">Undo rules</button>' : '') + '</div>' +
+      (dj ? '<a class="btn ghost sm" href="#dojo/move/form.r' + n + '">Drill in the Dojo</a>' : '') + '</div><div class="tc-fbody"></div></section>';
+  }
+  function flashWire(sec) {
+    var n = +sec.dataset.ch, body = sec.querySelector('.tc-fbody'), St = null;
+    function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function start(deck) { var cs = FML.cards(n).filter(function (c) { return deck === 'all' || c.grp === deck; }); St = { deck: deck, total: cs.length, q: shuffle(cs.slice()), got: 0, again: 0, flip: false }; draw(); }
+    function draw() {
+      if (!St.q.length) { body.innerHTML = '<div class="tc-fdone"><div class="big">' + St.total + ' of ' + St.total + '</div><p>Every card answered.' + (St.again ? ' ' + St.again + ' came round again.' : '') + '</p><button type="button" class="btn primary" data-fc="restart">Go again</button></div>'; return; }
+      var c = St.q[0], dots = ''; for (var i = 0; i < St.total; i++) dots += '<i class="' + (i < St.got ? 'on' : '') + '"></i>';
+      body.innerHTML = '<div class="tc-fprog" role="img" aria-label="' + St.got + ' of ' + St.total + ' done">' + dots + '</div>' +
+        '<button type="button" class="tc-fc' + (St.flip ? ' flip' : '') + '" data-fc="flip" aria-label="' + (St.flip ? 'Answer shown. ' : 'Flash card: ') + esc(TVZ.plain(c.front)) + (St.flip ? ': ' + esc(TVZ.plain(c.back)) : '. Flip it') + '"><span class="in">' +
+        '<span class="face front">' + TVZ.icon(c.ic) + '<span class="fq">' + TVZ.fmt(c.front) + '</span><span class="fh">' + esc(c.hint) + '</span><span class="tap">tap to flip</span></span>' +
+        '<span class="face back"><span class="fq sm">' + TVZ.fmt(c.front) + '</span><span class="fa' + wd(c.back) + '">' + TVZ.fmt(c.back) + '</span>' + (c.leg.length ? '<span class="lg">' + c.leg.map(function (l) { return '<span><b>' + esc(l[0]) + '</b>' + esc(l[1]) + '</span>'; }).join('') + '</span>' : '') + '</span></span></button>' +
+        '<div class="tc-fbtns">' + btns() + '</div>';
+    }
+    function btns() { return St.flip ? '<button type="button" class="btn ghost" data-fc="again">↺ Again</button><button type="button" class="btn primary" data-fc="got">✓ Got it</button>' : '<button type="button" class="btn primary" data-fc="flip">Flip</button>'; }
+    function act(a) {
+      if (a === 'restart') return start(St.deck);
+      if (a === 'flip') {
+        St.flip = !St.flip; var fc = body.querySelector('.tc-fc'), c0 = St.q[0], hadFocus = sec.contains(document.activeElement);
+        fc.classList.toggle('flip', St.flip); fc.setAttribute('aria-label', (St.flip ? 'Answer shown. ' : 'Flash card: ') + TVZ.plain(c0.front) + (St.flip ? ': ' + TVZ.plain(c0.back) : '. Flip it'));
+        body.querySelector('.tc-fbtns').innerHTML = btns(); if (hadFocus) (St.flip ? body.querySelector('[data-fc="got"]') : fc).focus(); return;
+      }
+      if (!St.flip) return;
+      var c = St.q.shift(); if (a === 'got') St.got++; else { St.again++; St.q.splice(Math.min(St.q.length, 3), 0, c); }
+      St.flip = false; draw(); var nb = body.querySelector('.tc-fc, [data-fc="restart"]'); if (nb) nb.focus();
+    }
+    sec.addEventListener('click', function (e) {
+      var d = e.target.closest('[data-deck]'); if (d) { Array.prototype.forEach.call(sec.querySelectorAll('[data-deck]'), function (b) { b.setAttribute('aria-pressed', String(b === d)); }); start(d.dataset.deck); return; }
+      var f = e.target.closest('[data-fc]'); if (f) act(f.dataset.fc);
+    });
+    sec.addEventListener('keydown', function (e) { if (!St || !St.flip || e.target.closest('[data-deck]')) return; if (e.key === 'ArrowRight') { e.preventDefault(); act('got'); } else if (e.key === 'ArrowLeft') { e.preventDefault(); act('again'); } });
+    start('all');
+  }
   // ---------------------------------------------------------------- the chapter page
   function view(main, n, at, head) {
     var S = TAC.chapter(n), C0 = CAT.chapters.filter(function (c) { return c.n === n; })[0], wrap = el('div', 'hb-wrap tc-wrap novar'); main.appendChild(wrap);
     if (!S) { wrap.innerHTML = head + '<div class="hb-card">The Skills &amp; Tactics for this chapter are not written yet.</div>'; return; }
+    var drawn = typeof FML !== 'undefined' && FML.list(n).some(function (e) { return e.f; }) && S.top.some(function (t) { return t.vis; });
     var tri = S.tools.filter(function (t) { return /^tri:/.test(t); }).map(function (t) { return t.slice(4); }), units = {};
     Object.keys(CAT.levels).forEach(function (k) { var L = CAT.levels[k]; if (L.ch === n) (units[L.type] || (units[L.type] = [])).push(k); });
     var h = head + '<div class="tc-bar"><div><div class="eyebrow">Skills &amp; Tactics</div><p class="sub">' + esc(S.lede) + '</p></div><div class="tc-baracts"><div class="tc-seg" role="group" aria-label="What to show"><button type="button" data-show="all" aria-pressed="true">Everything</button><button type="button" data-show="sheet" aria-pressed="false">Chapter sheet</button><button type="button" data-show="levels" aria-pressed="false">Level by level</button></div><button type="button" class="btn ghost sm" data-print="1">Print</button></div></div>' +
-      '<section class="tc-sheet"><h2><small>Chapter ' + n + ' · ' + esc(C0.title) + '</small>The chapter sheet: the highest-value tactics</h2><div class="tc-topgrid">' + S.top.map(function (t) { return '<article class="tc-top"><h3>' + t.h + '</h3><div class="tc-rule">' + t.rule + '</div><p>' + t.body + '</p>' + (t.watch ? '<div class="tc-watch"><span class="k">Watch out</span><span class="x">' + t.watch + '</span></div>' : '') + '</article>'; }).join('') + '</div>' +
+      '<section class="tc-sheet"><h2><small>Chapter ' + n + ' · ' + esc(C0.title) + '</small>The chapter sheet: the highest-value tactics</h2><div class="tc-topgrid">' + S.top.map(function (t) { return t.vis ? '<article class="tc-top tv"><h3>' + esc(t.h) + '</h3><div class="tv-sec do">' + t.vis.map(TVZ.draw).join('') + '</div>' + (t.trap ? '<div class="tv-sec tr"><span class="k">Trap</span>' + TVZ.draw(['trap', t.trap[0], t.trap[1]]) + '</div>' : '') + '<p class="tv-sr">' + esc(t.alt || '') + '</p></article>' : '<article class="tc-top"><h3>' + t.h + '</h3><div class="tc-rule">' + t.rule + '</div><p>' + t.body + '</p>' + (t.watch ? '<div class="tc-watch"><span class="k">Watch out</span><span class="x">' + t.watch + '</span></div>' : '') + '</article>'; }).join('') + '</div>' +
       (S.tools.indexOf('trans') >= 0 ? transHTML() : '') + (tri.length ? triHTML(tri) : '') +
-      '<div class="tc-bank"><h3>Formula bank: every rule at a glance</h3><div class="tc-bankgrid">' + S.bank.map(function (b) { return '<span><b>' + b[0] + '</b>' + b[1] + '</span>'; }).join('') + '</div></div></section>' +
-      '<section class="tc-levels"><h2>Level by level</h2><p class="sub">One card for each level of the Path: what to do, an example, and what to watch for.</p>' +
+      (drawn ? bankHTML(n) : '<div class="tc-bank"><h3>Formula bank: every rule at a glance</h3><div class="tc-bankgrid">' + S.bank.map(function (b) { return '<span><b>' + b[0] + '</b>' + b[1] + '</span>'; }).join('') + '</div></div>') + '</section>' +
+      '<section class="tc-levels"><h2>Level by level</h2><p class="sub">One card for each level of the Path.</p>' +
       Object.keys(units).sort(function (a, b) { return a - b; }).map(function (u) { var ks = units[u].sort(function (a, b) { return CAT.levels[a].level - CAT.levels[b].level; }); return '<div class="tc-unit"><h3><small>Unit ' + u + '</small>' + esc(CAT.levels[ks[0]].unit) + '</h3><div class="tc-unitgrid">' + ks.map(function (k) { return cardHTML(k, { links: true }); }).join('') + '</div></div>'; }).join('') + '</section>';
     wrap.innerHTML = h; wire(wrap);
+    if (drawn) { wrap.classList.add('drawn'); flashWire(wrap.querySelector('.tc-flash')); }
     wrap.addEventListener('click', function (e) {
       var s = e.target.closest('[data-show]'); if (s) { wrap.dataset.show = s.dataset.show; Array.prototype.forEach.call(wrap.querySelectorAll('[data-show]'), function (b) { b.setAttribute('aria-pressed', String(b === s)); }); return; }
       if (e.target.closest('[data-print]')) window.print();
     });
     if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: 'center' }); t.classList.add('flash'); }, 60); }
   }
-  return { init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML };
+  return { init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
 })();
 /* ===== HTC END ===== */
 
@@ -251880,7 +252555,7 @@ var HDJ = (function () {
       '<div class="dj-modes">' + modeCard('roll', 'dojo/roll', '<div class="dj-art a-roll" aria-hidden="true"><i></i><i></i><i></i></div>') + modeCard('quest', 'dojo/quest', '<div class="dj-art a-quest" aria-hidden="true"><svg viewBox="0 0 260 60" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="djm-rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--dj-well-lo)"/><stop offset="1" style="stop-color:var(--dj-well-hi)"/></linearGradient><radialGradient id="djm-floor" cx="66%" cy="68%" r="75%"><stop offset="0" style="stop-color:var(--dj-well-f2)"/><stop offset="1" style="stop-color:var(--dj-well-f1)"/></radialGradient><radialGradient id="djm-dome" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#d9fff2"/><stop offset=".5" stop-color="#3fd6a6"/><stop offset="1" stop-color="#127a5f"/></radialGradient></defs><path class="rt" d="M34 40C70 4 96 58 130 26S196 8 226 34"/><path class="tr" d="M34 40C70 4 96 58 130 26"/><circle cx="34" cy="40" r="11" fill="url(#djm-dome)"/><ellipse cx="30.5" cy="35.5" rx="3.4" ry="1.9" fill="#fff" opacity=".7" transform="rotate(-28 30.5 35.5)"/><circle class="rg" cx="130" cy="26" r="16"/><circle cx="130" cy="26" r="12" fill="url(#djm-rim)"/><circle cx="130" cy="26" r="9.5" fill="url(#djm-floor)"/><g class="mb"><ellipse cx="130" cy="26.5" rx="7" ry="6.3" fill="url(#djm-dome)"/><circle cx="127.8" cy="26" r="1.1" fill="#0c2a24"/><circle cx="132.2" cy="26" r="1.1" fill="#0c2a24"/></g><circle cx="226" cy="34" r="13" fill="url(#djm-rim)"/><circle cx="226" cy="34" r="10.3" fill="url(#djm-floor)"/></svg></div>') + modeCard('sup', 'dojo/sup', '<div class="dj-art a-sup" aria-hidden="true"><b>×1.5</b></div>') + '</div>' +
       '<section class="hb-card dj-focus"><div class="dj-focus-h"><div><h2>Focus</h2><p class="sub">Pick an area to train, or leave it to the Sensei’s mix. The focus applies to all three modes.</p></div><button type="button" class="btn ' + (fo ? 'ghost' : 'primary') + ' sm" data-style="">Sensei’s mix</button></div>' +
       '<div class="dj-styles">' + DJG.STYLES.map(function (st) { var o = ov.styles[st.id] || {}, held = o.max ? o.mq / o.max : 0; return '<button type="button" class="dj-style' + (fo === st.id ? ' on' : '') + '" data-style="' + st.id + '" aria-pressed="' + (fo === st.id) + '"><span class="n">' + esc(st.name) + '</span><span class="b">' + esc(st.blurb) + '</span><span class="m"><i style="width:' + (held * 100).toFixed(0) + '%"></i></span><span class="c">' + (o.due ? '<em class="due">' + o.due + ' due</em>' : '') + (o.weak ? '<em class="weak">' + o.weak + ' weak</em>' : '') + '<em>' + o.started + ' of ' + o.n + ' skills met</em><em>Ch ' + st.ch.join(', ') + '</em></span></button>'; }).join('') + '</div>' +
-      (fo ? '<div class="dj-movelist"><div class="eyebrow">Moves in ' + esc(styleName(fo)) + ' · tap one to drill it alone, with no clock</div>' + DJG.MOVES.filter(function (mv) { return mv.style === fo; }).map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(DJ.WHY[u.raw || u.kind]) + '</span></a>'; }).join('') + '</div>' : '') + '</section>' +
+      (fo ? '<div class="dj-movelist"><div class="eyebrow">Moves in ' + esc(styleName(fo)) + ' · tap one to drill it alone, with no clock</div>' + DJG.MOVES.filter(function (mv) { return DJG.inStyle(mv, fo); }).map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(DJ.WHY[u.raw || u.kind]) + '</span></a>'; }).join('') + '</div>' : '') + '</section>' +
       '<section class="hb-card dj-recent"><h2>Recent sessions</h2>' + (sessions.length ? '<div class="dj-rlist">' + sessions.slice(-8).reverse().map(function (s) { var md = s.mode === 'warm' ? 'Warm-up' : s.mode === 'drill' ? 'Drill' : DJ.MODES[s.mode] ? DJ.MODES[s.mode].name : s.mode, nA = (s.answers || []).length, ok = (s.answers || []).filter(function (a) { return a.ok; }).length; return '<div class="r"><b>' + esc(md) + '</b><span>' + new Date(s.start).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span><span>' + ok + ' of ' + nA + ' right</span><span class="g">' + sgn(s.gain || 0, 2) + ' blobs</span></div>'; }).join('') + '</div><a class="hb-link" href="#history">Every problem is in History</a>' : '<p class="hb-muted">Nothing yet. Pick a mode above.</p>') + '</section>' +
       '<details class="hb-card hb-how dj-how"><summary>How the Dojo decides, and what counts</summary><div class="body"><p><b>What comes up.</b> Each skill has a memory strength in the learner model. A skill whose recall has dropped below ' + Math.round(LMS.K.DUE_R * 100) + '% is <i>due</i>; between that and ' + Math.round(DJ.K.FADE_HI * 100) + '% it is <i>fading</i>; a started skill with mastery under ' + Math.round(DJ.K.WEAK_E * 100) + '% is <i>to strengthen</i>; a skill never met is <i>new ground</i>. Blob Roll fills its queue in the pattern due, due, strengthen, new, and never repeats a move within ' + DJ.K.GAP + ' turns. ' + ov.dueKata + ' due skills have no quick move, so they come back as a full problem (a kata) with the clock stopped.</p>' +
       '<p><b>What counts.</b> Every answer here goes into the same learner model as the Paths and Reviews. Blob Roll and Quest steps are easy-number reps: they refresh memory in full, and fill a skill up to ' + LMS.K.EASY_CAP + ' of its ' + LMS.K.MASS_Q + ' blobs (they never make a skill Secure alone). Katas and Superlative problems are full-strength evidence. In Superlative a right answer on a problem with k skills counts 1 + ' + LMS.K.SUP_STEP + '(k − 1) times, up to ' + LMS.K.SUP_MAX + ', for each of them; a miss is spread thin because it does not say which skill failed.</p>' +

@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `c65cbe0239`
+Build: `e089d67929`
 
 ## Install from GitHub Pages (the easy way to get https)
 
@@ -95,11 +95,15 @@ memory in full and fill a skill up to 4 of its 10 blobs; the rest comes from ful
 
 ## Skills & Tactics
 
-Every chapter has a **Skills & Tactics** tab: a chapter sheet with the highest-value tactics, a formula bank and two tools,
-followed by one card for every level of the Path (what to do, an example, what to watch for). The tools are a
-words → symbols decoder and a triangle that works for any "a = b · c" relationship (distance = speed · time,
-part = percent · whole, C = π · d, and nine more): tap the letter you want and the formula for it appears. A level's card
-also shows in its level drawer and at the start of its Dojo warm-up. The tab has a Print button for a paper copy.
+Every chapter has a **Skills & Tactics** tab: a chapter sheet with the highest-value tactics, a formula bank, flash cards
+and two tools, followed by one card for every level of the Path. The tools are a words → symbols decoder and a triangle
+that works for any "a = b · c" relationship: tap the letter you want and the formula for it appears. A level's card also
+shows in its level drawer and at the start of its Dojo warm-up. The tab has a Print button.
+
+Chapter 3 is drawn rather than written: each card shows the pattern with arrows to what matters, the tactic applied as a
+small infographic, and the usual slip beside the right way. Its formula bank shows every formula at once, and the flash
+cards quiz them (flip, then "Again" or "Got it"). The other chapters are redrawn the same way next. In the Dojo, the
+"Applied formulas" focus drills the same formulas with answers that count.
 
 ## On the Mac, with autosave to a file (optional)
 
