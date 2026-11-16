@@ -2183,6 +2183,10 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-vt .tot { grid-column: 1 / -1; justify-self: end; display: flex; align-items: center; gap: 8px; border-top: 1.6px solid var(--ink-2); padding-top: 6px; margin-top: 2px; } .tv-vt .pl { color: var(--ink-2); font-weight: 800; }
 .tv-grid { display: inline-grid; gap: 4px 6px; align-items: center; justify-items: center; font-size: 16px; font-weight: 700; } .tv-grid .hd { font-size: 18px; font-weight: 800; min-width: 34px; text-align: center; } .tv-grid .lb { justify-self: end; font-size: 13px; color: var(--ink-2); padding-right: 4px; } .tv-grid .c { width: 100%; text-align: center; border-radius: 8px; padding: 1px 0; font-weight: 900; } .tv-grid .c.hit { color: var(--tv-g); background: var(--tv-g-bg); } .tv-grid .c.miss { color: var(--tv-w); background: var(--tv-w-bg); }
 .tc-card { scroll-margin-top: 72px; }
+/* pieces added for Chapter 2: number line, counters, differences, the plane */
+.tv-a.ray { stroke-width: 4.2; stroke-linecap: round; } .tv-dot.open { fill: var(--surface); stroke: var(--c); stroke-width: 2.4; } .tv-chips .dim { opacity: .5; } .tv-ln.zp { stroke-dasharray: 3 3; } .tv-ln.gridl { stroke-opacity: .28; } .tv-ln.dash { stroke-dasharray: 3 4; }
+.tv-grid { column-gap: 10px; } .tv-grid .hd.wd { font-size: 13px; color: var(--ink-2); } .tv-grid .lb.sy { font-size: 18px; font-weight: 800; color: var(--ink); justify-self: center; padding-right: 0; } .tv-grid .c.wd { font-size: 14px; font-weight: 700; white-space: nowrap; padding: 1px 4px; }
+.tv-grid .c.pl { color: var(--tv-x); background: var(--tv-x-bg); } .tv-grid .c.mi { color: var(--tv-n); background: var(--tv-n-bg); }
 /* thread marks and the "builds on" chip */
 .tc-card.tv > header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .tv-th { margin-left: auto; display: inline-flex; gap: 6px; }
 .tv-thm { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: .03em; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px 1px 5px; background: var(--surface-2); white-space: nowrap; } .tv-thm em { font-style: normal; } .tv-thm .tv-ic { width: 17px; height: 13.5px; } .tv-thm + .tv-thm em { display: none; } .tv-thm + .tv-thm { padding: 1px 5px; }
@@ -31991,8 +31995,9 @@ var GEN = (function () {
     return mc(lead('Which inequality does the graph show?') + inqSVG(b, op), right, opts.filter(function (x) { return x !== right; }), inqSteps(b, op).concat([right]));
   }
   function t2l3() {
-    var n = R(2, 60) * (Math.random() < 0.3 ? 10 : 1);
-    var T = pick([
+    // a temperature keeps a size a thermometer can show (the race: 5 to 30 below zero; the freezer: 10 to 40 below)
+    var kind = R(0, 6), n = kind === 4 ? R(5, 30) : kind === 5 ? R(10, 40) : R(2, 60) * (Math.random() < 0.3 ? 10 : 1);
+    var T = ([
       { s: 'The pit is at most ' + n + ' m deep. Let e be the elevation of the bottom of the pit, in meters.', v: 'e', op: '>=', st: 'At most ' + n + ' m deep means the bottom is at −' + n + ' m or higher.' },
       { s: 'The pit is at least ' + n + ' m deep. Let e be the elevation of the bottom of the pit, in meters.', v: 'e', op: '<=', st: 'At least ' + n + ' m deep means the bottom is at −' + n + ' m or lower.' },
       { s: 'Tim’s debt is no more than $' + n + '. Let b be his account balance, in dollars.', v: 'b', op: '>=', st: 'A debt of at most $' + n + ' means a balance of −' + n + ' or higher.' },
@@ -32000,7 +32005,7 @@ var GEN = (function () {
       { s: 'For the ski race to take place, the temperature t must be warmer than ' + n + ' degrees below zero.', v: 't', op: '>', st: 'Warmer than −' + n + ' means greater than −' + n + ', not including it.' },
       { s: 'The freezer temperature t should be colder than ' + n + ' degrees below zero.', v: 't', op: '<', st: 'Colder than −' + n + ' means less than −' + n + ', not including it.' },
       { s: 'The submarine may not go deeper than ' + n + ' m. Let e be its elevation, in meters.', v: 'e', op: '>=', st: 'Not deeper than ' + n + ' m means at −' + n + ' m or higher.' }
-    ]);
+    ])[kind];
     if (Math.random() < 0.65) {
       var opts = OPS.map(function (o) { return T.v + ' ' + sym(o) + ' −' + n; }), right = opts[OPS.indexOf(T.op)];
       return mc(lead('Write an inequality.') + '<p class="q">' + T.s + '</p>', right, opts.filter(function (x) { return x !== right; }), [T.st, right]);
@@ -32257,8 +32262,12 @@ var GEN = (function () {
     var n = R(3, 4), ev = [];
     var s0 = R(2, 30), owed = Math.random() < 0.6;
     ev.push({ t: owed ? 'owed $' + s0 : 'had $' + s0, v: owed ? -s0 : s0, alt: owed ? 'had $' + s0 : 'owed $' + s0 });
-    var kinds = [['borrowed $%', -1, 'earned $%'], ['earned $%', 1, 'spent $%'], ['spent $%', -1, 'earned $%'], ['paid off $% of debt', 1, 'borrowed $%'], ['took on another $% of debt', -1, 'paid off $% of debt']];
-    for (var i = 1; i < n; i++) { var k = pick(kinds), amt = R(2, 40); ev.push({ t: k[0].replace('%', amt), v: k[1] * amt, alt: k[2].replace('%', amt) }); }
+    // every event moves the money itself, so one integer tracks it: money coming in is positive, money going out is negative, and a
+    // total below zero is money owed. (An earlier list had "borrowed" and "paid off a debt", which move cash and debt in opposite
+    // directions; "had $21, earned $22, paid off $33 of debt" was keyed as $76.)
+    var kinds = [['earned $%', 1, 'spent $%'], ['spent $%', -1, 'earned $%'], ['was given $%', 1, 'paid a $% bill'], ['paid a $% bill', -1, 'was given $%'], ['was charged a $% fee', -1, 'got a $% refund'], ['got a $% refund', 1, 'was charged a $% fee']];
+    function fill(t, amt) { return t.replace('a $%', (amt === 8 || amt === 11 || amt === 18 ? 'an' : 'a') + ' $%').replace('%', amt); }   // "an $8 fee"
+    for (var i = 1; i < n; i++) { var k = pick(kinds), amt = R(2, 40); ev.push({ t: fill(k[0], amt), v: k[1] * amt, alt: fill(k[2], amt) }); }
     return ev;
   }
   function storyText(who, ev, flip) {
@@ -32267,7 +32276,7 @@ var GEN = (function () {
   function t6l3() {
     var v = R(0, 2), who = pick(NAMES), ev = moneyEvents(), vals = ev.map(function (e) { return e.v; }), total = sumArr(vals), expr = chainAdd(vals);
     if (v === 0) {
-      return num(lead(storyText(who, ev, -1) + ' Write one integer for ' + who + '’s money situation now, in dollars.'), total, ['Money had or earned is positive; debts and spending are negative: ' + expr + '.'].concat(groupSteps(vals), [total < 0 ? who + ' owes $' + (-total) + '.' : total === 0 ? who + ' has nothing and owes nothing.' : who + ' has $' + total + '.']), { unit: 'dollars' });
+      return num(lead(storyText(who, ev, -1) + ' Write one integer for ' + who + '’s money situation now, in dollars.'), total, ['Money had or coming in is positive; money owed or going out is negative: ' + expr + '.'].concat(groupSteps(vals), [total < 0 ? who + ' owes $' + (-total) + '.' : total === 0 ? who + ' has nothing and owes nothing.' : who + ' has $' + total + '.']), { unit: 'dollars' });
     }
     var wrongs = [], tried = 0;
     while (wrongs.length < 3 && tried++ < 40) {
@@ -32277,7 +32286,7 @@ var GEN = (function () {
     if (v === 1) return mc(lead('Which expression matches the story?') + '<p class="q">' + storyText(who, ev, -1) + '</p>', expr, wrongs, ['Each event becomes a term: ' + ev.map(function (e) { return e.t + ' → ' + f(e.v); }).join('; ') + '.', expr]);
     var right = storyText(who, ev, -1), ws = [];
     for (var j = 0; j < ev.length && ws.length < 3; j++) { var st = storyText(who, ev, j); if (st !== right && ws.indexOf(st) < 0) ws.push(st); }
-    return mc(lead('Which story matches this expression?') + E(expr), right, ws, ['Read each term: positive means money had or earned, negative means a debt or spending.', ev.map(function (e) { return f(e.v) + ': ' + e.t; }).join('; ')]);
+    return mc(lead('Which story matches this expression?') + E(expr), right, ws, ['Read each term: positive means money had or coming in, negative means money owed or going out.', ev.map(function (e) { return f(e.v) + ': ' + e.t; }).join('; ')]);
   }
 
   // =================================================================== 7  Distance
@@ -49103,7 +49112,8 @@ var TAC = (function () {
     bal: { name: 'Same move, both sides', ic: 'bal' }, undo: { name: 'Undo it', ic: 'undo' }, tri: { name: 'a = b · c', ic: 'tri' }, bar: { name: 'Part and whole', ic: 'bar' },
     step: { name: 'Start + add × n', ic: 'stairs' }, line: { name: 'Number line', ic: 'line' }, words: { name: 'Words → symbols', ic: 'map' }, units: { name: 'Units first', ic: 'clock' },
     scale: { name: 'Scale by k', ic: 'scale' }, area: { name: 'Rectangles multiply', ic: 'rect' }, test: { name: 'Substitute to test', ic: 'test' },
-    pow: { name: 'Exponent counts factors', ic: 'pow' }, ops: { name: 'Order of operations', ic: 'tiers' }, like: { name: 'Like things combine', ic: 'sort' }
+    pow: { name: 'Exponent counts factors', ic: 'pow' }, ops: { name: 'Order of operations', ic: 'tiers' }, like: { name: 'Like things combine', ic: 'sort' },
+    zero: { name: 'Opposites make zero', ic: 'pair' }, sign: { name: 'Signs: count the negatives', ic: 'pm' }
   };
   // RULES: every rule a card states, once, in one wording. A rule that sharpens an earlier one names it (refines), so nothing is silently replaced.
   var RULES = {}, RORDER = [];
@@ -49182,6 +49192,10 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
      cmp    {v, a, b, tries:[[x, value of a, value of b]], say?, rel?} two expressions at the same values: = or ≠ (rel: <, =, >)
      vt     {cols?, rows:[[each, how many, value]], sum, eq?}          worth of one · how many = value, row by row, then the total
      grid   {head[], rows:[[label, cell, …]]}                          a small yes / no table
+     nline  {min, max, marks?, pts?, jumps?, ray?, dist?, step?}       the number line: labelled marks, points, jumps (arcs), a ray for an inequality, a distance
+     chips  {pos, neg, val?}                                           counters: + and − in zero pairs that cancel, what is left over
+     dev    {guess, vals[], caps?, sum?, mean?}                        differences from a guess as bars above and below a line (guess 0: a bar chart)
+     plane  {pts:[[x, y]], k, out?}                                    a figure on the coordinate grid and its image when every coordinate is multiplied by k
      chain without undo draws the forward direction only (an expression built step by step, with its values).               */
 var TVZ = (function () {
   'use strict';
@@ -49368,7 +49382,7 @@ var TVZ = (function () {
     function cx(i2) { return xs[i2]; }
     for (i = 0; i < m; i++) {
       if (o.n[i] === '…') { h += tx(cx(i), 43, '…', 'tv-t big r-m'); continue; }
-      h += tx(cx(i), 13, (i === 0 ? 'n = ' : '') + o.n[i], 'tv-t xs r-m') + box(cx(i) - ws[i] / 2, 22, ws[i], 30, o.v[i], 'r-' + (o.role && o.role[i] ? o.role[i] : 'm'));
+      h += tx(cx(i), 13, (o.pre !== undefined ? o.pre : i === 0 ? 'n = ' : '') + o.n[i], 'tv-t xs r-m') + box(cx(i) - ws[i] / 2, 22, ws[i], 30, o.v[i], 'r-' + (o.role && o.role[i] ? o.role[i] : 'm'));
     }
     if (o.add) { for (i = 0; i < m - 1; i++) { if (o.n[i] === '…' || o.n[i + 1] === '…') continue; h += arw(cx(i) + 7, 55, cx(i + 1) - 7, 55, 'r-o', 14) + tx((cx(i) + cx(i + 1)) / 2, 80, o.add, 'tv-t sm r-o b'); } H = 86; }
     if (o.span) { var a = cx(o.span[0]), b = cx(o.span[1]); h += arw(a + 6, 55, b - 6, 55, 'r-o', 34) + tx((a + b) / 2, 92, o.span[2], 'tv-t r-o b') + (o.span[3] ? tx((a + b) / 2, 108, o.span[3], 'tv-t sm r-n b') : ''); H = o.span[3] ? 114 : 98; }
@@ -49436,7 +49450,7 @@ var TVZ = (function () {
     var bw = Math.max(28, est(b, 8.8) + 14), gap = 16, pw = o.pre ? Math.max(28, est(o.pre, 8.8) + 14) : 0, tot = e * bw + (e - 1) * gap + (o.pre ? pw + gap : 0);
     if (tot > 290) { gap = 9; bw = Math.min(bw, (290 - (e - 1) * gap - (o.pre ? pw + gap : 0)) / e); tot = e * bw + (e - 1) * gap + (o.pre ? pw + gap : 0); }
     var x = (300 - tot) / 2, yb = y + 25, i, x1;
-    if (o.pre) { h += box(x, yb, pw, 28, o.pre, 'r-m') + tx(x + pw + gap / 2, yb + 19, '·', 'tv-t r-m'); x += pw + gap; }
+    if (o.pre) { h += box(x, yb, pw, 28, o.pre, 'r-m') + (o.pre === '−' ? '' : tx(x + pw + gap / 2, yb + 19, '·', 'tv-t r-m')); x += pw + gap; }
     x1 = x;
     for (i = 0; i < e; i++) { h += box(x, yb, bw, 28, b, 'r-x') + (i < e - 1 ? tx(x + bw + gap / 2, yb + 19, '·', 'tv-t r-m') : ''); x += bw + gap; }
     h += brace(x1, x - gap, yb + 32, false, e + ' factors', 'r-o');
@@ -49513,9 +49527,65 @@ var TVZ = (function () {
     return '<div class="tv-vt">' + h + '</div>';
   }
   function grid(o) {
-    var n = o.head.length, h = o.head.map(function (c) { return '<span class="hd">' + fmt(c) + '</span>'; }).join('');
-    o.rows.forEach(function (r) { r.forEach(function (c, i) { h += i === 0 ? '<span class="lb">' + fmt(c) + '</span>' : '<span class="c' + (c === '✓' ? ' hit' : c === '✗' ? ' miss' : '') + '">' + fmt(c) + '</span>'; }); });
+    var n = o.head.length, h = o.head.map(function (c) { return '<span class="hd' + (plain(c).length > 6 ? ' wd' : '') + '">' + fmt(c) + '</span>'; }).join('');
+    o.rows.forEach(function (r) { r.forEach(function (c, i) { h += i === 0 ? '<span class="lb' + (plain(c).length <= 2 ? ' sy' : '') + '">' + fmt(c) + '</span>' : '<span class="c' + (plain(c).length > 3 ? ' wd' : '') + (c === '✓' ? ' hit' : c === '✗' ? ' miss' : c === '+' ? ' pl' : c === '−' ? ' mi' : '') + '">' + fmt(c) + '</span>'; }); });
     return '<div class="tv-grid" style="grid-template-columns:auto repeat(' + (n - 1) + ',minmax(34px,auto))">' + h + '</div>';
+  }
+
+  // ---------------------------------------------------------------- pieces added for Chapter 2 (the number line, counters, differences, the plane)
+  function sgn(v) { return String(v).replace(/^-/, '−'); }
+  function nline(o) {
+    var min = o.min, max = o.max, span = max - min, x0 = 18, x1 = 282, hasJ = o.jumps && o.jumps.length, lab = (o.pts || []).some(function (p) { return p[2]; });
+    var y = hasJ ? 62 : (o.dist || lab) ? 46 : 22, h = '', v, alt = [];
+    function X(val) { return x0 + (val - min) / span * (x1 - x0); }
+    h += '<path class="tv-ln" d="M5 ' + y + 'H295"/><path class="tv-ln" d="M10 ' + (y - 4) + 'l-5 4 5 4M290 ' + (y - 4) + 'l5 4-5 4" fill="none"/>';
+    var step = o.step === undefined ? (span <= 24 ? 1 : 0) : o.step;
+    if (step) for (v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) h += '<path class="tv-ln thin" d="M' + r1(X(v)) + ' ' + (y - 4) + 'v8"/>';
+    (o.marks || []).forEach(function (m) { var val = typeof m === 'number' ? m : m[0], t = typeof m === 'number' ? sgn(m) : m[1]; h += '<path class="tv-ln" d="M' + r1(X(val)) + ' ' + (y - 6) + 'v12"/>' + tx(X(val), y + 23, t, 'tv-t sm ' + (val === 0 ? 'b' : 'r-m')); });
+    if (o.ray) { var R = o.ray, xr = X(R.at), xe = R.dir === 'r' ? 293 : 7, rr = 'r-' + (R.role || 'x');
+      h += '<path class="tv-a ' + rr + ' ray" d="M' + r1(xr) + ' ' + y + 'H' + xe + '"/><path class="tv-a ' + rr + ' ray" d="M' + (R.dir === 'r' ? 286 : 14) + ' ' + (y - 6) + 'L' + xe + ' ' + y + 'L' + (R.dir === 'r' ? 286 : 14) + ' ' + (y + 6) + '" fill="none"/>';
+      h += '<circle class="tv-dot ' + rr + (R.closed ? '' : ' open') + '" cx="' + r1(xr) + '" cy="' + y + '" r="6.5"/>';
+      alt.push('a ray from ' + sgn(R.at) + ' to the ' + (R.dir === 'r' ? 'right' : 'left') + ', ' + (R.closed ? 'closed circle' : 'open circle')); }
+    (o.dist || []).forEach(function (d) { h += brace(X(Math.min(d[0], d[1])), X(Math.max(d[0], d[1])), y - 12, true, d[2], 'r-' + (d[3] || 'o')); alt.push('from ' + sgn(d[0]) + ' to ' + sgn(d[1]) + ' is ' + d[2]); });
+    (o.jumps || []).forEach(function (j) { var xa = X(j[0]), xb = X(j[1]), B = Math.min(40, 16 + Math.abs(xb - xa) * 0.22), up = (xb > xa ? -1 : 1) * B;
+      h += arw(xa, y - 9, xb, y - 9, 'r-' + (j[2] || 'o'), up) + (j[3] ? tx((xa + xb) / 2, y - 14 - B / 2, j[3], 'tv-t sm r-' + (j[2] || 'o') + ' b') : ''); alt.push('a jump from ' + sgn(j[0]) + ' to ' + sgn(j[1])); });
+    (o.pts || []).forEach(function (p) { h += '<circle class="tv-dot r-' + (p[1] || 'x') + '" cx="' + r1(X(p[0])) + '" cy="' + y + '" r="5.5"/>' + (p[2] ? tx(X(p[0]), y - 13, p[2], 'tv-t sm r-' + (p[1] || 'x') + ' b') : ''); });
+    return svg(300, y + 30, h, 'tv-nl', o.alt || ('A number line from ' + sgn(min) + ' to ' + sgn(max) + (alt.length ? ': ' + alt.join('; ') : '')) + '.');
+  }
+  function chips(o) {
+    var pairs = Math.min(o.pos, o.neg), cols = Math.max(o.pos, o.neg), sp = Math.min(27, 270 / cols), x = (300 - cols * sp) / 2 + sp / 2, h = '', i, rad = Math.min(11, sp / 2 - 2);
+    function chip(cx, cy, plus, dim) { return '<g' + (dim ? ' class="dim"' : '') + '><circle class="tv-b r-' + (plus ? 'x' : 'n') + '" cx="' + r1(cx) + '" cy="' + cy + '" r="' + rad + '"/>' + tx(cx, cy + 5, plus ? '+' : '−', 'tv-t r-' + (plus ? 'x' : 'n') + ' b') + '</g>'; }
+    for (i = 0; i < cols; i++) {
+      var cx = x + i * sp; if (i < o.pos) h += chip(cx, 22, true, i < pairs); if (i < o.neg) h += chip(cx, 50, false, i < pairs);
+      if (i < pairs) h += '<rect class="tv-ln thin zp" x="' + r1(cx - sp / 2 + 1.5) + '" y="8" width="' + r1(sp - 3) + '" height="56" rx="' + r1(sp / 2 - 2) + '" fill="none"/>';
+    }
+    if (pairs) h += brace(x - sp / 2 + 2, x + (pairs - 1) * sp + sp / 2 - 2, 68, false, '0', 'r-m');
+    if (cols > pairs) h += brace(x + pairs * sp - sp / 2 + 2, x + (cols - 1) * sp + sp / 2 - 2, 68, false, o.val !== undefined ? sgn(o.val) : '', 'r-g');
+    return svg(300, 102, h, 'tv-chips', o.pos + ' positive and ' + o.neg + ' negative counters: ' + pairs + ' zero pairs cancel' + (o.val !== undefined ? ', leaving ' + sgn(o.val) : '') + '.');
+  }
+  function dev(o) {
+    var g = shown(o.guess), ds = o.vals.map(function (v) { return Math.round((shown(v) - g) * 1000) / 1000; }), mx = 1, n = ds.length, h = '', bw = Math.min(30, 200 / n), gap = Math.min(14, 60 / n), tot = n * bw + (n - 1) * gap, x = 70 + (224 - tot) / 2, y = 62, i;
+    ds.forEach(function (d) { mx = Math.max(mx, Math.abs(d)); });
+    h += '<path class="tv-ln" d="M62 ' + y + 'H296"/>' + tx(56, y + 5, o.guess, 'tv-t r-m b', 'end');
+    for (i = 0; i < n; i++) { var d = ds[i], hh = Math.max(2, Math.abs(d) / mx * 36), up = d >= 0, r = d === 0 ? 'm' : up ? 'x' : 'n';
+      h += '<rect class="tv-b sq r-' + r + '" x="' + r1(x) + '" y="' + r1(up ? y - hh : y) + '" width="' + r1(bw) + '" height="' + r1(hh) + '"/>' + tx(x + bw / 2, up ? y - hh - 5 : y + hh + 14, (g === 0 ? '' : d > 0 ? '+' : '') + sgn(d), 'tv-t sm r-' + r + ' b');
+      if (o.caps) h += tx(x + bw / 2, 124, o.caps[i], 'tv-t xs r-m'); x += bw + gap; }
+    return svg(300, o.caps ? 130 : 116, h, 'tv-dev', o.alt || ((g === 0 ? 'The values ' : 'Differences from ' + o.guess + ': ') + ds.map(sgn).join(', ') + '.'));
+  }
+  function plane(o) {
+    var k = o.k, R = 1, h = '', i;
+    o.pts.forEach(function (p) { R = Math.max(R, Math.abs(p[0]), Math.abs(p[1]), Math.abs(p[0] * k), Math.abs(p[1] * k)); }); R += 1;
+    var c = Math.min(11, 72 / R), ox = 150, oy = 8 + R * c;
+    function P(p) { return r1(ox + p[0] * c) + ' ' + r1(oy - p[1] * c); }
+    for (i = -R; i <= R; i++) h += '<path class="tv-ln thin gridl" d="M' + r1(ox + i * c) + ' ' + r1(oy - R * c) + 'V' + r1(oy + R * c) + 'M' + r1(ox - R * c) + ' ' + r1(oy + i * c) + 'H' + r1(ox + R * c) + '"/>';
+    h += '<path class="tv-ln" d="M' + r1(ox - R * c) + ' ' + oy + 'H' + r1(ox + R * c) + 'M' + ox + ' ' + r1(oy - R * c) + 'V' + r1(oy + R * c) + '"/>';
+    var img = o.pts.map(function (p) { return [p[0] * k, p[1] * k]; });
+    o.pts.forEach(function (p, j) { h += '<path class="tv-ln thin dash" d="M' + ox + ' ' + oy + 'L' + P(img[j]) + '"/>'; });
+    if (o.pts.length > 2) h += '<path class="tv-b sq r-x" d="M' + o.pts.map(P).join('L') + 'Z"/><path class="tv-b sq r-g" d="M' + img.map(P).join('L') + 'Z"/>';
+    o.pts.forEach(function (p, j) { h += '<circle class="tv-dot r-x" cx="' + P(p).split(' ')[0] + '" cy="' + P(p).split(' ')[1] + '" r="3.6"/><circle class="tv-dot r-g" cx="' + P(img[j]).split(' ')[0] + '" cy="' + P(img[j]).split(' ')[1] + '" r="3.6"/>'; });
+    var a = o.pts[0], b = img[0];
+    h += tx(40, oy - 8, '(' + sgn(a[0]) + ', ' + sgn(a[1]) + ')', 'tv-t sm r-x b') + tx(40, oy + 10, '· ' + (k < 0 ? '(' + sgn(k) + ')' : k), 'tv-t sm r-o b') + tx(262, oy + 2, '(' + sgn(b[0]) + ', ' + sgn(b[1]) + ')', 'tv-t sm r-g b');
+    return svg(300, oy + R * c + 8, h, 'tv-plane', 'Every coordinate times ' + sgn(k) + ': ' + o.pts.map(function (p, j) { return '(' + sgn(p[0]) + ', ' + sgn(p[1]) + ') goes to (' + sgn(img[j][0]) + ', ' + sgn(img[j][1]) + ')'; }).join('; ') + '.');
   }
   // small line icons for the formula tiles
   var IC = {
@@ -49541,17 +49611,20 @@ var TVZ = (function () {
     sort: '<rect class="i1" x="4" y="21" width="16" height="13" rx="3"/><rect class="i1" x="28" y="21" width="16" height="13" rx="3"/><path class="i2l" d="M24 3L12 16M24 3L36 16"/>',
     arcs: '<path class="i1" d="M6 31H42"/><path class="i2l" d="M8 25C10 6 23 6 25 22M8 25C12 -4 38 -2 41 22"/>',
     swap: '<path class="i1" d="M6 12H38M32 6l6 6-6 6"/><path class="i2l" d="M42 27H10M16 21l-6 6 6 6"/>',
+    pair: '<circle class="i1" cx="15" cy="19" r="10"/><circle class="i1" cx="35" cy="19" r="10"/><path class="i2l" d="M11 19h8M15 15v8M31 19h8"/>',
+    pm: '<path class="i1" d="M12 13H36M24 3V23"/><path class="i2l" d="M12 33H36"/>',
+    bars: '<path class="i1" d="M4 20H44"/><path class="i2l" d="M11 20V8M21 20V30M31 20V12M40 20V26"/>',
     cube: '<path class="i1" d="M8 14l10-8h22v18l-10 8H8Z"/><path class="i2l" d="M8 14H30V32M30 14l10-8"/>',
     group: '<path class="i1" d="M10 7C4 14 4 24 10 31M27 7C33 14 33 24 27 31"/><circle class="i2" cx="14" cy="19" r="3"/><circle class="i2" cx="23" cy="19" r="3"/><circle class="i2" cx="41" cy="19" r="3"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
     var out = []; (function walk(x) { if (typeof x === 'string') out.push(plain(x)); else if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') Object.keys(x).forEach(function (k) { if (k !== 'alt' && k !== 'at') walk(x[k]); }); })(spec.slice(1));
-    if (spec[0] === 'pow') out.push('factors' + (spec[1].lab ? ' base how many' : '')); if (spec[0] === 'sqcube') out.push('area volume'); if (spec[0] === 'vt' && !spec[1].cols) out.push('each how many value'); if (spec[0] === 'test' && spec[1].whole) out.push('whole');
+    if (spec[0] === 'pow') out.push('factors' + (spec[1].lab ? ' base how many' : '')); if (spec[0] === 'sqcube') out.push('area volume'); if (spec[0] === 'nline' || spec[0] === 'dev' || spec[0] === 'plane' || spec[0] === 'chips') { out = out.filter(function (t) { return !/^[a-z]$/.test(t); }); } if (spec[0] === 'vt' && !spec[1].cols) out.push('each how many value'); if (spec[0] === 'test' && spec[1].whole) out.push('whole');
     return out;
   }
   return { draw: draw, fmt: fmt, plain: plain, ascii: ascii, esc: esc, icon: icon, KINDS: KINDS, strings: strings, ICONS: IC, gather: gather, rel: rel };
@@ -49590,6 +49663,20 @@ var FML = (function () {
   F('cm2', 1, { of: 'cm', name: 'Commutative, for ×', f: '{x:a} · {n:b} = {n:b} · {x:a}', plain: 'a · b = b · a', lit: ['E', 'a*b'], sol: 'b*a', wrong: [['a − b = b − a', 'a-b'], ['a ÷ b = b ÷ a', 'a/b'], ['a · b = a + b', 'a+b']], sk: ['S18'] });
   F('as', 1, { name: 'Associative: change the grouping', f: '({x:a} + {n:b}) + c = {x:a} + ({n:b} + c)', plain: '(a + b) + c = a + (b + c)', lit: ['E', '(a+b)+c'], sol: 'a+(b+c)', wrong: [['(a − b) − c = a − (b − c)', 'a-(b-c)'], ['(a ÷ b) ÷ c = a ÷ (b ÷ c)', 'a/(b/c)'], ['(a + b) + c = a + bc', 'a+b*c']], sk: ['S19'], leg: [['+  ·', 'yes'], ['−  ÷', 'no']], ic: 'group' });
   F('as2', 1, { of: 'as', name: 'Associative, for ×', f: '({x:a}{n:b})c = {x:a}({n:b}c)', plain: '(ab)c = a(bc)', lit: ['E', '(a*b)*c'], sol: 'a*(b*c)', wrong: [['(a − b) − c = a − (b − c)', 'a-(b-c)'], ['(a ÷ b) ÷ c = a ÷ (b ÷ c)', 'a/(b/c)'], ['(ab)c = ab + c', 'a*b+c']], sk: ['S19'] });
+
+  // ---------------------------------------------------------------- Chapter 2: integers (identities: E stands for the left side)
+  F('i-opp', 2, { move: 'int.cmp', name: 'The opposite of the opposite', f: '{o:−}({n:−a}) = {x:a}', plain: '−(−a) = a', lit: ['E', '-(-a)'], sol: 'a', wrong: [['−(−a) = −a', '-a'], ['−(−a) = −2a', '-2*a'], ['−(−a) = 0', '0']], sk: ['T5'], leg: [['−a', 'the opposite of a']], ic: 'pm' });
+  F('i-zero', 2, { move: 'int.add', name: 'A number plus its opposite', f: '{x:a} + ({n:−a}) = 0', plain: 'a + (−a) = 0', lit: ['E', 'a+(-a)'], sol: '0', wrong: [['a + (−a) = 2a', '2*a'], ['a + (−a) = −2a', '-2*a'], ['a + (−a) = a', 'a']], sk: ['T13'], leg: [['zero pair', 'cancels']], ic: 'pair' });
+  F('i-sub', 2, { move: 'int.sub', name: 'Subtracting: add the opposite', f: '{x:a} {o:−} {n:b} = {x:a} {o:+} ({n:−b})', plain: 'a − b = a + (−b)', lit: ['E', 'a-b'], sol: 'a+(-b)', wrong: [['a − b = b − a', 'b-a'], ['a − b = −a + (−b)', '-a+(-b)'], ['a − b = a + b', 'a+b']], sk: ['T17'], leg: [['−', 'becomes + the opposite']], ic: 'undo' });
+  F('i-subneg', 2, { of: 'i-sub', name: 'Subtracting a negative', f: '{x:a} {o:− (−}{n:b}{o:)} = {x:a} {o:+} {n:b}', plain: 'a − (−b) = a + b', lit: ['E', 'a-(-b)'], sol: 'a+b', wrong: [['a − (−b) = a − b', 'a-b'], ['a − (−b) = −a − b', '-a-b'], ['a − (−b) = −a + b', '-a+b']], sk: ['T18'] });
+  F('i-addneg', 2, { of: 'i-sub', name: 'Adding a negative', f: '{x:a} {o:+ (−}{n:b}{o:)} = {x:a} {o:−} {n:b}', plain: 'a + (−b) = a − b', lit: ['E', 'a+(-b)'], sol: 'a-b', wrong: [['a + (−b) = a + b', 'a+b'], ['a + (−b) = b − a', 'b-a'], ['a + (−b) = −a − b', '-a-b']], sk: ['T18'] });
+  F('i-dist', 2, { move: 'int.abs', name: 'Distance between two numbers', f: '{g:distance} = {x:larger} − {n:smaller}', plain: 'distance = larger − smaller', lit: ['d', 'L-s'], wrong: [['distance = larger + smaller', 'L+s'], ['distance = smaller − larger', 's-L'], ['distance = larger · smaller', 'L*s']], sk: ['T22', 'T23'], leg: [['|a − b|', 'the same, in symbols']], ic: 'line' });
+  F('i-mnn', 2, { move: 'int.mul', name: 'Negative times negative', f: '({n:−a}) · ({n:−b}) = {g:ab}', plain: '(−a) · (−b) = ab', lit: ['E', '(-a)*(-b)'], sol: 'a*b', wrong: [['(−a) · (−b) = −ab', '-a*b'], ['(−a) · (−b) = −a − b', '-a-b'], ['(−a) · (−b) = a + b', 'a+b']], sk: ['T26', 'T29'], leg: [['same signs', '+'], ['different signs', '−']], ic: 'pm' });
+  F('i-mpn', 2, { of: 'i-mnn', name: 'Negative times positive', f: '({n:−a}) · b = {n:−ab}', plain: '(−a) · b = −ab', lit: ['E', '(-a)*b'], sol: '-a*b', wrong: [['(−a) · b = ab', 'a*b'], ['(−a) · b = −a + b', '-a+b'], ['(−a) · b = a − b', 'a-b']], sk: ['T26'] });
+  F('i-dnn', 2, { of: 'i-mnn', name: 'Negative divided by negative', f: '({n:−a}) ÷ ({n:−b}) = {g:a ÷ b}', plain: '(−a) ÷ (−b) = a ÷ b', lit: ['E', '(-a)/(-b)'], sol: 'a/b', wrong: [['(−a) ÷ (−b) = −(a ÷ b)', '-(a/b)'], ['(−a) ÷ (−b) = b ÷ a', 'b/a'], ['(−a) ÷ (−b) = a · b', 'a*b']], sk: ['T26'] });
+  F('i-nf', 2, { name: 'A negative fraction', f: '{f:{n:−}a|b} = {f:a|{n:−}b} = {n:−}{f:a|b}', plain: '(−a)/b = a/(−b) = −(a/b)', lit: ['E', '(-a)/b'], sol: '-(a/b)', wrong: [['(−a)/b = a/b', 'a/b'], ['(−a)/b = (−a)/(−b)', '(-a)/(-b)'], ['(−a)/b = b/a', 'b/a']], sk: ['T32'], leg: [['one minus sign', 'in front']], ic: 'pm' });
+  F('i-sq', 2, { name: 'A negative, squared', f: '({n:−a}){o:²} = {g:a²}', plain: '(−a)² = a²', lit: ['E', '(-a)^2'], sol: 'a^2', wrong: [['(−a)² = −a²', '-(a^2)'], ['(−a)² = −2a', '-2*a'], ['(−a)² = a', 'a']], sk: ['T34'], leg: [['−a²', 'is −(a · a)']], ic: 'pow' });
+  F('i-mean', 2, { name: 'Mean (average)', f: '{g:mean} = {f:{x:sum}|{n:how many}}', plain: 'mean = sum ÷ how many', lit: ['M', 's/n'], wrong: [['mean = sum · how many', 's*n'], ['mean = sum − how many', 's-n'], ['mean = how many ÷ sum', 'n/s']], sk: ['T40'], leg: [['differences from the mean', 'add to 0']], ic: 'bars' });
 
   // ---------------------------------------------------------------- Chapter 3: equations, motion, sequences
   F('dvt', 3, { name: 'Distance', f: '{g:d} = {x:v} · {n:t}', plain: 'd = v · t', lit: ['d', 'v*t'], wrong: [['d = v ÷ t', 'v/t'], ['d = v + t', 'v+t'], ['d = t ÷ v', 't/v']], sk: ['U20'], leg: [['d', 'distance'], ['v', 'speed'], ['t', 'time']], ic: 'road', tri: 'dvt', move: 'drt.plug' });
@@ -49699,6 +49786,35 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   R('factor', 'Factoring is distributing backwards: take out the greatest factor every term shares.', { refines: 'dist' });
   R('divparts', 'To divide a sum, divide every term.', { refines: 'dist' });
   R('periarea', 'Perimeter adds the sides. Area multiplies two sides.');
+  // ---- Chapter 2: integers
+  R.ch = 2;
+  R('left', 'On the number line, left is less and right is greater.');
+  R('absval', '|a| is the distance from a to zero. It is never negative.');
+  R('minus3', 'A minus sign can mean subtract, negative, or the opposite of.');
+  R('opp', '−a is the opposite of a: the same distance from zero, on the other side. −(−a) = a.');
+  R('context', 'In a story the sign gives the direction and the absolute value gives the size.');
+  R('circle', '< and > leave the endpoint out (open circle). ≤ and ≥ include it (closed circle).');
+  R('solineq', 'A solution of an inequality makes it true. There are usually many.', { refines: 'root' });
+  R('depth', 'Deeper, colder, owing more: a smaller number, farther left.', { refines: 'left' });
+  R('jump', 'Adding moves right, subtracting moves left. A negative number reverses the move.');
+  R('zeropair', 'A number plus its opposite is zero.', { refines: 'opp' });
+  R('addsign', 'Same signs: add the sizes, keep the sign. Different signs: subtract the sizes, sign of the larger.');
+  R('negparen', 'A negative number right after an operation sign goes in parentheses.');
+  R('addopp', 'Subtracting is adding the opposite: a − b = a + (−b).', { refines: 'zeropair' });
+  R('shortcut', '+ (−a) is − a, and − (−a) is + a.', { refines: 'addopp' });
+  R('subless', 'Subtracting less leaves more.');
+  R('group', 'To add several integers, gather the positives and the negatives, then combine.', { refines: 'comm' });
+  R('distab', 'The distance between a and b is |a − b|, and |a − b| = |b − a|.', { refines: 'absval' });
+  R('twoside', 'A given distance from a point lands on two numbers, one on each side.', { refines: 'distab' });
+  R('signrule', 'Multiplying or dividing: same signs give a positive, different signs give a negative.');
+  R('oddeven', 'Several factors: an even number of negatives gives +, an odd number gives −.', { refines: 'signrule' });
+  R('divmul', 'Division undoes multiplication: a ÷ b = c means c · b = a.', { refines: 'inverse' });
+  R('negfrac', 'A negative fraction has one minus sign, written in front. Two minus signs cancel.', { refines: 'signrule' });
+  R('divzero', 'Division by zero is undefined: no number times 0 gives a number that is not 0.');
+  R('negpow', '−2² is −(2 · 2) = −4. (−2)² is (−2) · (−2) = 4.', { refines: 'reach' });
+  R('mean', 'Mean = sum ÷ how many.');
+  R('adjust', 'Guess the mean, average the differences from the guess, then adjust the guess.', { refines: 'mean' });
+  R('scalek', 'Every coordinate times k: k times as far from the origin. A negative k also flips it through.');
   // ---- Chapter 3: one-step equations
   R.ch = 3;
   R('both', 'Do the same thing to both sides of an equation.');
@@ -51427,7 +51543,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
    Same contract as hub/dojo_gens.js. Needs FML (hub/formulas.js), the registry the Skills & Tactics formula bank and flash cards
    use, so a formula is written once. "Applied formulas" is a focus area of its own; besides the moves here it borrows every
    move elsewhere that uses a formula (DJG.ALSO.form), so one roll can mix d = vt, percent, circles and the rest.
-     form.r1 / r3 / r6 / r7 / r8   recall, by chapter: name → formula (look-alikes are proved wrong by the verifier), formula → name,
+     form.r1 / r2 / r3 / r6 / r7 / r8   recall, by chapter: name → formula (look-alikes are proved wrong by the verifier), formula → name,
                               and at level 3 the choice is among the chapter's other real formulas
      form.cost   total = price · how many (forwards, backwards, in dollars and cents)
      form.rect   rectangle: area, perimeter, a side from either, and which of the two a story needs
@@ -51439,7 +51555,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
   function story(t) { return '<p class="lead dj-story">' + t + '</p>'; }
   function money(v) { return Q.of(v).toNumber().toFixed(2); }
   var WHO = ['Zorp', 'Captain Pickle', 'Grandma Thunder', 'Sir Fluffington', 'Professor Wobble', 'Duchess Banana', 'Agent Waffles', 'Chef Kaboom', 'Mayor Turnip', 'Bigfoot'];
-  DJG.STYLES.push({ id: 'form', name: 'Applied formulas', ch: [1, 3, 5, 6, 7, 8], blurb: 'Name the formula, plug in, work it backwards.' });
+  DJG.STYLES.push({ id: 'form', name: 'Applied formulas', ch: [1, 2, 3, 5, 6, 7, 8], blurb: 'Name the formula, plug in, work it backwards.' });
   DJG.ALSO.form = ['drt.run', 'drt.form', 'drt.plug', 'drt.time', 'eq2.rearr', 'pat.rule', 'rate.unit', 'rate.k', 'rate.scale', 'rate.slope', 'pct.type', 'pct.change', 'pct.interest', 'geo.circ', 'geo.form', 'geo.area', 'geo.vol', 'geo.pyth', 'geo.poly'];
 
   // ---------------------------------------------------------------- RECALL, one move per chapter
@@ -51460,6 +51576,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
     });
   }
   recall(1, 'Name that rule: powers, terms and properties', ['S1', 'S3', 'S18', 'S19', 'S23', 'S25', 'S32', 'S35', 'S36', 'S26'], ['Say the rule before you use it', 'A power counts factors: a³ = a · a · a. Like terms add: ax + bx = (a + b)x. Multiplying counts the letters: ax · bx = abx². Distribute: a(b + c) = ab + ac. Order and grouping may change for + and ×, never for − and ÷.'],
+    { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
+  recall(2, 'Name that rule: integers', ['T5', 'T13', 'T17', 'T18', 'T22', 'T26', 'T32', 'T34', 'T40'], ['One minus sign in front, and count the negatives', 'A number plus its opposite is zero. Subtracting is adding the opposite: a − b = a + (−b), so a − (−b) = a + b. Multiplying or dividing: same signs give +, different signs give −. (−a)² = a², but −a² is negative. Mean = sum ÷ how many.'],
     { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
   recall(3, 'Name that formula: equations and motion', ['U20', 'U22', 'U21', 'U16', 'U17', 'U28', 'U5', 'U6', 'U9'], ['Say the formula before you touch a number', 'Distance d = v · t. Area A = ℓ · w. Total cost T = p · n. A sequence: dₙ = a · n + b. To undo a move on x, do the opposite to both sides.']);
   recall(6, 'Name that formula: rates and scale', ['P8', 'P16', 'P28', 'P40', 'P44', 'P48', 'P57', 'P59'], ['Rate, scale and slope are all divisions', 'Unit rate = amount ÷ quantity. Scale factor = new ÷ old. Slope = rise ÷ run. Proportional: y = k · x. A line: y = m · x + b.']);
@@ -66734,8 +66852,9 @@ var GEN = (function () {
     return mc(lead('Which inequality does the graph show?') + inqSVG(b, op), right, opts.filter(function (x) { return x !== right; }), inqSteps(b, op).concat([right]));
   }
   function t2l3() {
-    var n = R(2, 60) * (Math.random() < 0.3 ? 10 : 1);
-    var T = pick([
+    // a temperature keeps a size a thermometer can show (the race: 5 to 30 below zero; the freezer: 10 to 40 below)
+    var kind = R(0, 6), n = kind === 4 ? R(5, 30) : kind === 5 ? R(10, 40) : R(2, 60) * (Math.random() < 0.3 ? 10 : 1);
+    var T = ([
       { s: 'The pit is at most ' + n + ' m deep. Let e be the elevation of the bottom of the pit, in meters.', v: 'e', op: '>=', st: 'At most ' + n + ' m deep means the bottom is at −' + n + ' m or higher.' },
       { s: 'The pit is at least ' + n + ' m deep. Let e be the elevation of the bottom of the pit, in meters.', v: 'e', op: '<=', st: 'At least ' + n + ' m deep means the bottom is at −' + n + ' m or lower.' },
       { s: 'Tim’s debt is no more than $' + n + '. Let b be his account balance, in dollars.', v: 'b', op: '>=', st: 'A debt of at most $' + n + ' means a balance of −' + n + ' or higher.' },
@@ -66743,7 +66862,7 @@ var GEN = (function () {
       { s: 'For the ski race to take place, the temperature t must be warmer than ' + n + ' degrees below zero.', v: 't', op: '>', st: 'Warmer than −' + n + ' means greater than −' + n + ', not including it.' },
       { s: 'The freezer temperature t should be colder than ' + n + ' degrees below zero.', v: 't', op: '<', st: 'Colder than −' + n + ' means less than −' + n + ', not including it.' },
       { s: 'The submarine may not go deeper than ' + n + ' m. Let e be its elevation, in meters.', v: 'e', op: '>=', st: 'Not deeper than ' + n + ' m means at −' + n + ' m or higher.' }
-    ]);
+    ])[kind];
     if (Math.random() < 0.65) {
       var opts = OPS.map(function (o) { return T.v + ' ' + sym(o) + ' −' + n; }), right = opts[OPS.indexOf(T.op)];
       return mc(lead('Write an inequality.') + '<p class="q">' + T.s + '</p>', right, opts.filter(function (x) { return x !== right; }), [T.st, right]);
@@ -67000,8 +67119,12 @@ var GEN = (function () {
     var n = R(3, 4), ev = [];
     var s0 = R(2, 30), owed = Math.random() < 0.6;
     ev.push({ t: owed ? 'owed $' + s0 : 'had $' + s0, v: owed ? -s0 : s0, alt: owed ? 'had $' + s0 : 'owed $' + s0 });
-    var kinds = [['borrowed $%', -1, 'earned $%'], ['earned $%', 1, 'spent $%'], ['spent $%', -1, 'earned $%'], ['paid off $% of debt', 1, 'borrowed $%'], ['took on another $% of debt', -1, 'paid off $% of debt']];
-    for (var i = 1; i < n; i++) { var k = pick(kinds), amt = R(2, 40); ev.push({ t: k[0].replace('%', amt), v: k[1] * amt, alt: k[2].replace('%', amt) }); }
+    // every event moves the money itself, so one integer tracks it: money coming in is positive, money going out is negative, and a
+    // total below zero is money owed. (An earlier list had "borrowed" and "paid off a debt", which move cash and debt in opposite
+    // directions; "had $21, earned $22, paid off $33 of debt" was keyed as $76.)
+    var kinds = [['earned $%', 1, 'spent $%'], ['spent $%', -1, 'earned $%'], ['was given $%', 1, 'paid a $% bill'], ['paid a $% bill', -1, 'was given $%'], ['was charged a $% fee', -1, 'got a $% refund'], ['got a $% refund', 1, 'was charged a $% fee']];
+    function fill(t, amt) { return t.replace('a $%', (amt === 8 || amt === 11 || amt === 18 ? 'an' : 'a') + ' $%').replace('%', amt); }   // "an $8 fee"
+    for (var i = 1; i < n; i++) { var k = pick(kinds), amt = R(2, 40); ev.push({ t: fill(k[0], amt), v: k[1] * amt, alt: fill(k[2], amt) }); }
     return ev;
   }
   function storyText(who, ev, flip) {
@@ -67010,7 +67133,7 @@ var GEN = (function () {
   function t6l3() {
     var v = R(0, 2), who = pick(NAMES), ev = moneyEvents(), vals = ev.map(function (e) { return e.v; }), total = sumArr(vals), expr = chainAdd(vals);
     if (v === 0) {
-      return num(lead(storyText(who, ev, -1) + ' Write one integer for ' + who + '’s money situation now, in dollars.'), total, ['Money had or earned is positive; debts and spending are negative: ' + expr + '.'].concat(groupSteps(vals), [total < 0 ? who + ' owes $' + (-total) + '.' : total === 0 ? who + ' has nothing and owes nothing.' : who + ' has $' + total + '.']), { unit: 'dollars' });
+      return num(lead(storyText(who, ev, -1) + ' Write one integer for ' + who + '’s money situation now, in dollars.'), total, ['Money had or coming in is positive; money owed or going out is negative: ' + expr + '.'].concat(groupSteps(vals), [total < 0 ? who + ' owes $' + (-total) + '.' : total === 0 ? who + ' has nothing and owes nothing.' : who + ' has $' + total + '.']), { unit: 'dollars' });
     }
     var wrongs = [], tried = 0;
     while (wrongs.length < 3 && tried++ < 40) {
@@ -67020,7 +67143,7 @@ var GEN = (function () {
     if (v === 1) return mc(lead('Which expression matches the story?') + '<p class="q">' + storyText(who, ev, -1) + '</p>', expr, wrongs, ['Each event becomes a term: ' + ev.map(function (e) { return e.t + ' → ' + f(e.v); }).join('; ') + '.', expr]);
     var right = storyText(who, ev, -1), ws = [];
     for (var j = 0; j < ev.length && ws.length < 3; j++) { var st = storyText(who, ev, j); if (st !== right && ws.indexOf(st) < 0) ws.push(st); }
-    return mc(lead('Which story matches this expression?') + E(expr), right, ws, ['Read each term: positive means money had or earned, negative means a debt or spending.', ev.map(function (e) { return f(e.v) + ': ' + e.t; }).join('; ')]);
+    return mc(lead('Which story matches this expression?') + E(expr), right, ws, ['Read each term: positive means money had or coming in, negative means money owed or going out.', ev.map(function (e) { return f(e.v) + ': ' + e.t; }).join('; ')]);
   }
 
   // =================================================================== 7  Distance
@@ -252472,7 +252595,7 @@ var HTC = (function () {
       if (e.target.closest('[data-print]')) window.print();
     });
     // a deep link: a card taller than the window shows its title, not its middle
-    if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: t.getBoundingClientRect().height > window.innerHeight - 96 ? 'start' : 'center' }); t.classList.add('flash'); }, 60); }
+    if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: t.getBoundingClientRect().height > window.innerHeight - 240 ? 'start' : 'center' }); t.classList.add('flash'); }, 60); }
   }
   return { init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
 })();
