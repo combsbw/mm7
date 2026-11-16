@@ -2163,7 +2163,25 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-trap .no { background: var(--tv-w-bg); box-shadow: inset 0 0 0 1.2px var(--tv-w); } .tv-trap .no b { color: var(--tv-w); } .tv-trap .no > span { opacity: .85; } .tv-trap .yes { background: var(--tv-g-bg); box-shadow: inset 0 0 0 1.2px var(--tv-g); } .tv-trap .yes b { color: var(--tv-g); }
 .tv-inv { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; } .tv-inv .pr { display: inline-flex; align-items: center; gap: 4px; } .tv-inv b { min-width: 36px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 19px; font-weight: 800; background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); padding: 0 8px; } .tv-inv svg { width: 38px; height: 21px; fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tv-test { display: inline-grid; gap: 1px 10px; align-items: center; justify-items: center; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; } .tv-test .hd { justify-self: end; color: var(--ink-2); font-size: 14px; padding-right: 2px; } .tv-test .xv { background: var(--tv-x-bg); box-shadow: inset 0 0 0 1.4px var(--tv-x); color: var(--tv-x); border-radius: 8px; padding: 1px 10px; font-weight: 800; }
-.tv-test .ar { color: var(--ink-2); line-height: 0; } .tv-test .val.hit { color: var(--tv-g); font-weight: 800; } .tv-test .mk { font-weight: 900; font-size: 17px; } .tv-test .mk.hit { color: var(--tv-g); } .tv-test .mk.miss { color: var(--tv-w); }
+.tv-test .ar { color: var(--ink-2); line-height: 0; } .tv-test .val.hit { color: var(--tv-g); font-weight: 800; } .tv-test .tm { font-weight: 900; font-size: 17px; } .tv-test .tm.hit { color: var(--tv-g); } .tv-test .tm.miss { color: var(--tv-w); }
+/* pieces added for Chapter 1: powers, order of operations, like terms, tables */
+.tv-svg text.pw { font-size: 23px; font-weight: 800; } .tv-svg tspan.r-x, .tv-svg tspan.r-n, .tv-svg tspan.r-o, .tv-svg tspan.r-g, .tv-svg tspan.r-w { fill: var(--c); } .tv-svg tspan.r-m { fill: var(--ink-2); }
+.tv-a.peri { stroke-width: 2.4; stroke-dasharray: 7 5; } .tv-ln.hatch { stroke: var(--tv-w); stroke-opacity: .55; }
+.tv-fold { display: inline-grid; min-width: 72%; max-width: 100%; font-size: 17.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.tv-fold .rw { display: grid; grid-template-columns: 3em 1fr 3em; align-items: center; min-height: 31px; } .tv-fold .ex { grid-column: 2; text-align: center; white-space: nowrap; }
+.tv-fold .tg { grid-column: 1; justify-self: start; font-size: 11.5px; font-weight: 800; color: var(--tv-o); background: var(--tv-o-bg); border: 1.3px solid var(--tv-o); border-radius: 999px; padding: 0 7px; line-height: 1.6; white-space: nowrap; }
+.tv-fold .ex span[class^="r-"] { display: inline-block; background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); border-radius: 7px; padding: 0 5px; line-height: 1.35; } .tv-fold .ex .tv-fr span[class^="r-"] { display: inline-block; margin: 1px 0; }
+.tv-fold .dn, .tv-sort .dn { text-align: center; color: var(--ink-2); line-height: 0; height: 12px; } .tv-fold .dn .tv-dn, .tv-sort .dn .tv-dn { height: 11px; }
+.tv-flow.tight .tv-arr { min-width: 16px; padding: 0 1px; } .tv-flow.tight .tv-arr .ln { min-width: 14px; } .tv-flow.tight .tv-rt { min-width: 8px; width: 10px; flex: none; } .tv-flow.tight .tv-box { padding-left: 7px; padding-right: 7px; }
+.tv-fold .at { display: flex; gap: 6px; justify-content: center; } .tv-fold .at span { font-size: 14.5px; font-weight: 800; color: var(--tv-n); background: var(--tv-n-bg); box-shadow: inset 0 0 0 1.4px var(--tv-n); border-radius: 8px; padding: 1px 9px; }
+.tv-fold .rw.ans b { display: inline-block; background: var(--tv-g-bg); box-shadow: inset 0 0 0 1.5px var(--tv-g); color: var(--tv-g); border-radius: 10px; padding: 3px 18px; font-weight: 800; }
+.tv-sort { display: grid; gap: 4px; justify-items: center; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; } .tv-sort .all { display: flex; flex-wrap: wrap; gap: 4px 5px; align-items: center; justify-content: center; }
+.tv-sort .ch { background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); color: var(--c); border-radius: 8px; padding: 1px 7px; white-space: nowrap; } .tv-sort .dt { color: var(--ink-2); } .tv-sort .bins { display: grid; gap: 5px; justify-items: center; } .tv-sort .bin { display: flex; align-items: center; gap: 2px; }
+.tv-cmp { display: grid; gap: 7px; justify-items: center; } .tv-test .hd.ea { color: var(--tv-x); font-weight: 800; font-size: 15px; } .tv-test .hd.eb { color: var(--tv-n); font-weight: 800; font-size: 15px; } .tv-test .tm.ne { color: var(--tv-n); }
+.tv-vt { display: inline-grid; grid-template-columns: repeat(5, auto); gap: 4px 9px; align-items: center; justify-items: center; font-size: 16.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.tv-vt .hd { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); } .tv-vt .c { min-width: 42px; text-align: center; border-radius: 8px; padding: 1px 8px; white-space: nowrap; } .tv-vt .c.r-n, .tv-vt .c.r-x { background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); color: var(--c); } .tv-vt .c.v { font-weight: 800; } .tv-vt .s { color: var(--ink-2); }
+.tv-vt .tot { grid-column: 1 / -1; justify-self: end; display: flex; align-items: center; gap: 8px; border-top: 1.6px solid var(--ink-2); padding-top: 6px; margin-top: 2px; } .tv-vt .pl { color: var(--ink-2); font-weight: 800; }
+.tv-grid { display: inline-grid; gap: 4px 6px; align-items: center; justify-items: center; font-size: 16px; font-weight: 700; } .tv-grid .hd { font-size: 18px; font-weight: 800; min-width: 34px; text-align: center; } .tv-grid .lb { justify-self: end; font-size: 13px; color: var(--ink-2); padding-right: 4px; } .tv-grid .c { width: 100%; text-align: center; border-radius: 8px; padding: 1px 0; font-weight: 900; } .tv-grid .c.hit { color: var(--tv-g); background: var(--tv-g-bg); } .tv-grid .c.miss { color: var(--tv-w); background: var(--tv-w-bg); }
 /* thread marks and the "builds on" chip */
 .tc-card.tv > header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .tv-th { margin-left: auto; display: inline-flex; gap: 6px; }
 .tv-thm { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: .03em; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px 1px 5px; background: var(--surface-2); white-space: nowrap; } .tv-thm em { font-style: normal; } .tv-thm .tv-ic { width: 17px; height: 13.5px; } .tv-thm + .tv-thm em { display: none; } .tv-thm + .tv-thm { padding: 1px 5px; }
@@ -2178,6 +2196,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-ft .alt { display: flex; gap: 6px 16px; flex-wrap: wrap; justify-content: center; font-size: 15.5px; font-weight: 750; padding-top: 7px; border-top: 1px dashed var(--line); } .tv-ft .alt > span { white-space: nowrap; } .tv-ft .alt .fw { font-size: 12.5px; }
 .tv-ft .lg, .tc-fc .lg { display: flex; flex-wrap: wrap; gap: 4px 6px; justify-content: center; font-size: 12px; color: var(--ink-2); } .tv-ft .lg span, .tc-fc .lg span { border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; background: var(--surface); white-space: nowrap; } .tv-ft .lg b, .tc-fc .lg b { color: var(--ink); margin-right: 5px; }
 .tv-ft .dr { position: absolute; top: 10px; right: 10px; font-size: 11.5px; font-weight: 800; color: var(--accent); text-decoration: none; border: 1px solid var(--accent-line); border-radius: 999px; padding: 1px 9px; background: var(--surface); }
+.tv-ft .fx.fl { font-size: 18px; } .tv-ft .fx.fl2 { font-size: 14.5px; } .tv-ft .alt .fl { font-size: 13.5px; } .tv-ft .alt .fl2 { font-size: 12.5px; } .tc-fc .fa.fl { font-size: 23px; } .tc-fc .fa.fl2 { font-size: 19px; }
 /* flash cards */
 .tc-flash { margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px 18px 18px; } .tc-fhead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; } .tc-fhead h3 { margin: 0; font-size: 19px; flex: 1; } .tc-seg.sm button { font-size: 13px; padding: 6px 11px; }
 .tc-fprog { display: flex; gap: 4px; justify-content: center; margin: 14px 0 12px; flex-wrap: wrap; } .tc-fprog i { width: 15px; height: 6px; border-radius: 3px; background: var(--line); } .tc-fprog i.on { background: var(--tv-g); }
@@ -2188,7 +2207,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tc-fc .tap { position: absolute; bottom: 11px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); } .tc-fc .fa { font-size: 27px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; } .tc-fc .fa.fw { font-size: 18px; } .tc-fc .tv-ic { width: 56px; height: 44px; }
 .tc-fbtns { display: flex; gap: 10px; justify-content: center; margin-top: 14px; min-height: 46px; } .tc-fdone { text-align: center; padding: 26px 0 8px; } .tc-fdone .big { font-size: 36px; font-weight: 800; color: var(--tv-g); } .tc-fdone p { color: var(--ink-2); margin: 6px 0 14px; }
 @media (prefers-reduced-motion: reduce) { .tc-fc .in { transition: none; } }
-@media print { .tc-flash, .tv-ft .dr, .tv-from { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+@media print { .tc-flash, .tv-ft .dr, .tv-from { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv, .tv-fold .ex span, .tv-fold .rw.ans b, .tv-sort .ch, .tv-vt .c, .tv-grid .c { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -49082,11 +49101,12 @@ var TAC = (function () {
   var THREADS = {
     bal: { name: 'Same move, both sides', ic: 'bal' }, undo: { name: 'Undo it', ic: 'undo' }, tri: { name: 'a = b · c', ic: 'tri' }, bar: { name: 'Part and whole', ic: 'bar' },
     step: { name: 'Start + add × n', ic: 'stairs' }, line: { name: 'Number line', ic: 'line' }, words: { name: 'Words → symbols', ic: 'map' }, units: { name: 'Units first', ic: 'clock' },
-    scale: { name: 'Scale by k', ic: 'scale' }, area: { name: 'Rectangles multiply', ic: 'rect' }, test: { name: 'Substitute to test', ic: 'test' }
+    scale: { name: 'Scale by k', ic: 'scale' }, area: { name: 'Rectangles multiply', ic: 'rect' }, test: { name: 'Substitute to test', ic: 'test' },
+    pow: { name: 'Exponent counts factors', ic: 'pow' }, ops: { name: 'Order of operations', ic: 'tiers' }, like: { name: 'Like things combine', ic: 'sort' }
   };
   // RULES: every rule a card states, once, in one wording. A rule that sharpens an earlier one names it (refines), so nothing is silently replaced.
   var RULES = {}, RORDER = [];
-  function rule(id, text, o) { if (RULES[id]) throw new Error('rule defined twice: ' + id); RULES[id] = { id: id, text: text, refines: (o && o.refines) || null }; RORDER.push(id); }
+  function rule(id, text, o) { if (RULES[id]) throw new Error('rule defined twice: ' + id); RULES[id] = { id: id, text: text, refines: (o && o.refines) || null, ch: rule.ch || 0 }; RORDER.push(id); }
 
   // ---------------------------------------------------------------- the translation decoder (after the owner's Chapter 3 sheet)
   var TRANS = [
@@ -49106,7 +49126,7 @@ var TAC = (function () {
   var TRI = {
     dvt: { top: 'd', l: 'v', r: 't', names: ['distance', 'speed', 'time'], say: 'd = v · t', eg: '60 mph for 2 h → d = 60 · 2 = 120 miles' },
     cost: { top: 'T', l: 'p', r: 'n', names: ['total cost', 'price of one', 'how many'], say: 'T = p · n', eg: '$3 each, 7 of them → T = 3 · 7 = $21' },
-    area: { top: 'A', l: 'l', r: 'w', names: ['area', 'length', 'width'], say: 'A = l · w', eg: 'A = 48, l = 8 → w = 48 ÷ 8 = 6' },
+    area: { top: 'A', l: 'ℓ', r: 'w', names: ['area', 'length', 'width'], say: 'A = ℓ · w', eg: 'A = 48, ℓ = 8 → w = 48 ÷ 8 = 6' },
     fact: { top: 'c', l: 'a', r: 'b', names: ['product', 'factor', 'factor'], say: 'c = a · b', eg: '6 · (−7) = −42, so −42 ÷ 6 = −7 and −42 ÷ (−7) = 6' },
     eqn: { top: 'b', l: 'a', r: 'x', names: ['result', 'coefficient', 'unknown'], say: 'b = a · x', eg: '5x = 35 → x = 35 ÷ 5 = 7' },
     rate: { top: 'y', l: 'k', r: 'x', names: ['amount', 'unit rate', 'quantity'], say: 'y = k · x', eg: '$4 per kg, 6 kg → y = 4 · 6 = $24' },
@@ -49151,7 +49171,17 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
      dots   {steps:[{cap, pts:[[x, y, role]]}]}                        a growing dot pattern
      test   {expr, want, tries:[[x, value, ok]]}                       try each value
      inv    [[a, b], …]                                                pairs that undo each other
-     trap   (no, yes)                                                  the slip, crossed out, beside the right way          */
+     trap   (no, yes)                                                  the slip, crossed out, beside the right way
+     pow    {b, e, val?, par?, pre?, lab?}                             a power written out as its factors (the exponent counts them)
+     sqcube {s, a?, v?}                                                a square (side², area) beside a cube (edge³, volume)
+     fold   [[expr, tier?], …], {at?}                                  order of operations: the part done next is marked, line by line
+     sort   {op?, terms:[[text, kind]], bins:[{r, sum}], out}          like terms gathered by kind, then combined
+     amodel {h, parts:[[width, area, role, weight?]], whole?, total?, eq?}   the area model: one height, the widths side by side
+     dist   {k, terms[], out[]}                                        the factor outside reaches every term inside
+     cmp    {v, a, b, tries:[[x, value of a, value of b]], say?, rel?} two expressions at the same values: = or ≠ (rel: <, =, >)
+     vt     {cols?, rows:[[each, how many, value]], sum, eq?}          worth of one · how many = value, row by row, then the total
+     grid   {head[], rows:[[label, cell, …]]}                          a small yes / no table
+     chain without undo draws the forward direction only (an expression built step by step, with its values).               */
 var TVZ = (function () {
   'use strict';
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -49185,7 +49215,7 @@ var TVZ = (function () {
     return out;
   }
   // the same string as an ascii expression (fractions in parentheses, · ÷ − as * / -), for the checks in hub/test_tactics.js
-  var VF = { '½': '1/2', '¼': '1/4', '¾': '3/4', '⅓': '1/3', '⅙': '1/6', '⅔': '2/3' };
+  var VF = { '½': '1/2', '¼': '1/4', '¾': '3/4', '⅓': '1/3', '⅙': '1/6', '⅔': '2/3', '⅛': '1/8', '⅜': '3/8', '⅝': '5/8', '⅞': '7/8', '⅕': '1/5' };
   function ascii(s) {
     s = String(s); var out = '', i = 0;
     while (i < s.length) {
@@ -49196,8 +49226,8 @@ var TVZ = (function () {
         i = j;
       } else { out += s[i]; i++; }
     }
-    return out.replace(/(\d)([½¼¾⅓⅙⅔])/g, function (m0, a, b) { return '(' + a + '+' + VF[b] + ')'; }).replace(/[½¼¾⅓⅙⅔]/g, function (c) { return '(' + VF[c] + ')'; })
-      .replace(/[·×]/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/³/g, '^3').replace(/²/g, '^2').replace(/[$,]/g, '').replace(/ₙ/g, '');
+    return out.replace(/(\d)([½¼¾⅓⅙⅔⅛⅜⅝⅞⅕])/g, function (m0, a, b) { return '(' + a + '+' + VF[b] + ')'; }).replace(/[½¼¾⅓⅙⅔⅛⅜⅝⅞⅕]/g, function (c) { return '(' + VF[c] + ')'; })
+      .replace(/[·×]/g, '*').replace(/÷/g, '/').replace(/−/g, '-').replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, function (m0) { return '^' + m0.split('').map(function (c) { return '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c); }).join(''); }).replace(/[$,]/g, '').replace(/ₙ/g, '');
   }
   // ---------------------------------------------------------------- svg helpers
   function svg(w, h, body, cls, label) { return '<svg class="tv-svg ' + (cls || '') + '" viewBox="0 0 ' + w + ' ' + h + '" style="max-width:' + Math.round(w * 1.5) + 'px" role="img" aria-label="' + esc(label || '') + '">' + body + '</svg>'; }
@@ -49236,14 +49266,14 @@ var TVZ = (function () {
     }
     return '<div class="tv-cue' + (len > 24 ? ' c3' : len > 17 ? ' c2' : '') + '" style="grid-template-columns:repeat(' + toks.length + ',auto)">' + h + '</div>';
   }
-  function flow(items) {
+  function flow(items, opt) {
     var h = '', open = false;
     items.forEach(function (it) {
       if (typeof it !== 'string' && it.op !== undefined) { h += '<span class="tv-grp"><span class="tv-arr">' + (it.op ? '<i>' + fmt(it.op) + '</i>' : '') + '<span class="ln">' + RT + '</span></span>'; open = true; return; }
       h += typeof it === 'string' ? '<span class="tv-box">' + fmt(it) + '</span>' : '<span class="tv-box r-' + it.r + ' hl">' + fmt(it.t) + '</span>';
       if (open) { h += '</span>'; open = false; }
     });
-    return '<div class="tv-flow">' + h + (open ? '</span>' : '') + '</div>';
+    return '<div class="tv-flow' + (opt && opt.tight ? ' tight' : '') + '">' + h + (open ? '</span>' : '') + '</div>';
   }
   function trap(no, yes) { return '<div class="tv-trap"><span class="no"><b aria-label="wrong">✗</b><span>' + fmt(no) + '</span></span><span class="yes"><b aria-label="right">✓</b><span>' + fmt(yes) + '</span></span></div>'; }
   function inv(pairs) { return '<div class="tv-inv">' + pairs.map(function (p) { return '<span class="pr"><b class="r-n">' + fmt(p[0]) + '</b><svg viewBox="0 0 40 22" aria-hidden="true"><path d="M6 7H32M27 2.5l6 4.5-6 4.5"/><path d="M34 15H8M13 10.5l-6 4.5 6 4.5"/></svg><b class="r-o">' + fmt(p[1]) + '</b></span>'; }).join('') + '</div>'; }
@@ -49252,12 +49282,13 @@ var TVZ = (function () {
     o.tries.forEach(function (t) { h += '<span class="xv">' + fmt(t[0]) + '</span>'; });
     h += '<span class="hd"></span>'; o.tries.forEach(function () { h += '<span class="ar">' + DN + '</span>'; });
     h += '<span class="hd">' + fmt(o.expr) + '</span>'; o.tries.forEach(function (t) { h += '<span class="val ' + (t[2] ? 'hit' : 'miss') + '">' + fmt(t[1]) + '</span>'; });
-    h += '<span class="hd">= ' + fmt(o.want) + ' ?</span>'; o.tries.forEach(function (t) { h += '<span class="mk ' + (t[2] ? 'hit' : 'miss') + '">' + (t[2] ? '✓' : '✗') + '</span>'; });
+    h += '<span class="hd">' + (o.whole ? 'whole?' : '= ' + fmt(o.want) + ' ?') + '</span>'; o.tries.forEach(function (t) { h += '<span class="tm ' + (t[2] ? 'hit' : 'miss') + '">' + (t[2] ? '✓' : '✗') + '</span>'; });
     return '<div class="tv-test" style="grid-template-columns:auto repeat(' + n + ',1fr)">' + h + '</div>';
   }
 
   // ---------------------------------------------------------------- SVG pieces
-  function map(from, to, link) {
+  function map(from, to, link, opt) {
+    if (opt && opt.fit) return mapFit(from, to, link);
     var n = Math.max(from.length, to.length), mx = 0; from.concat(to).forEach(function (c) { mx = Math.max(mx, String(c[0]).length); });
     var sw = Math.max(46, mx * 7.4 + 20), gap = 10, W = Math.max(300, n * sw + (n - 1) * gap + 8), h = '';
     var straight = from.length === to.length && link.every(function (j, i) { return j === i; }), alt = 'Words to symbols: ' + from.map(function (c) { return c[0]; }).join(' ') + ' becomes ' + to.map(function (c) { return c[0]; }).join(' ');
@@ -49273,14 +49304,25 @@ var TVZ = (function () {
     link.forEach(function (j, i) { if (j === null || j === undefined) return; var a = cx(i, from.length), b = cx(j, to.length); h += arw(a, 33, b, 77, 'r-' + (from[i][1] || 'm'), (b - a) * 0.12); });
     return svg(W, 112, h, 'tv-map', alt);
   }
+  function mapFit(from, to, link) {
+    function ws(a, px, pad) { return a.map(function (c) { return Math.max(34, String(c[0]).length * px + pad); }); }
+    function xs(w, W) { var tot = (w.length - 1) * 9, x, out = []; w.forEach(function (v) { tot += v; }); x = (W - tot) / 2; w.forEach(function (v) { out.push(x + v / 2); x += v + 9; }); return out; }
+    function total(w) { var t = (w.length - 1) * 9; w.forEach(function (v) { t += v; }); return t; }
+    var wf = ws(from, 7.4, 18), wt = ws(to, 8.4, 22), W = Math.max(300, total(wf) + 8, total(wt) + 8), xf = xs(wf, W), xt = xs(wt, W), h = '';
+    from.forEach(function (c, i) { h += box(xf[i] - wf[i] / 2, 3, wf[i], 28, c[0], 'r-' + (c[1] || 'm')); });
+    to.forEach(function (c, i) { h += box(xt[i] - wt[i] / 2, 79, wt[i], 30, c[0], 'r-' + (c[1] || 'm') + ' sym'); });
+    link.forEach(function (j, i) { if (j === null || j === undefined) return; h += arw(xf[i], 33, xt[j], 77, 'r-' + (from[i][1] || 'm'), (xt[j] - xf[i]) * 0.12); });
+    return svg(W, 112, h, 'tv-map', 'Words to symbols: ' + from.map(function (c) { return c[0]; }).join(' ') + ' becomes ' + to.map(function (c) { return c[0]; }).join(' '));
+  }
   function chain(o) {
-    var k = o.top.length, W = 300, bw = k > 2 ? 70 : 92, h = '', i;
+    var k = o.top.length, W = 300, bw = k > 2 ? 70 : 92, h = '', i, fw = !o.undo;
     function cx(i2) { return k === 1 ? W / 2 : bw / 2 + 4 + i2 * (W - bw - 8) / (k - 1); }
-    for (i = 0; i < k; i++) { h += box(cx(i) - bw / 2, 26, bw, 30, o.top[i], i === 0 ? 'r-x' : 'r-m'); h += box(cx(i) - bw / 2, 92, bw, 30, o.bottom[i], i === 0 ? 'r-g' : i === k - 1 ? 'r-m' : 'r-n'); }
+    for (i = 0; i < k; i++) { h += box(cx(i) - bw / 2, 26, bw, 30, o.top[i], i === 0 ? 'r-x' : 'r-m'); h += box(cx(i) - bw / 2, 92, bw, 30, o.bottom[i], fw ? (i === 0 ? 'r-x' : i === k - 1 ? 'r-g' : 'r-m') : (i === 0 ? 'r-g' : i === k - 1 ? 'r-m' : 'r-n')); }
     for (i = 0; i < k - 1; i++) {
-      h += arw(cx(i) + bw / 2 + 2, 41, cx(i + 1) - bw / 2 - 2, 41, 'r-m') + tx((cx(i) + cx(i + 1)) / 2, 18, o.ops[i], 'tv-t sm r-m');
-      h += arw(cx(i + 1) - bw / 2 - 2, 107, cx(i) + bw / 2 + 2, 107, 'r-o') + tx((cx(i) + cx(i + 1)) / 2, 140, o.undo[i], 'tv-t sm r-o b');
+      h += arw(cx(i) + bw / 2 + 2, 41, cx(i + 1) - bw / 2 - 2, 41, fw ? 'r-o' : 'r-m') + tx((cx(i) + cx(i + 1)) / 2, 18, o.ops[i], 'tv-t sm ' + (fw ? 'r-o b' : 'r-m'));
+      if (!fw) h += arw(cx(i + 1) - bw / 2 - 2, 107, cx(i) + bw / 2 + 2, 107, 'r-o') + tx((cx(i) + cx(i + 1)) / 2, 140, o.undo[i], 'tv-t sm r-o b');
     }
+    if (fw) { for (i = 0; i < k; i++) h += tx(cx(i), 79, '=', 'tv-t big ' + (i === k - 1 ? 'r-g' : 'r-m')); return svg(W, 126, h, 'tv-chain', 'Built step by step: ' + o.top[0] + ', then ' + o.ops.join(', then ') + '. With ' + o.top[0] + ' = ' + o.bottom[0] + ' the value is ' + o.bottom[k - 1] + '.'); }
     h += tx(cx(k - 1), 79, '=', 'tv-t big') + tx(cx(0), 79, '=', 'tv-t big r-g');
     return svg(W, 148, h, 'tv-chain', 'Built forwards: ' + o.ops.join(', then ') + '. Undone backwards: ' + o.undo.slice().reverse().join(', then ') + '.');
   }
@@ -49365,10 +49407,10 @@ var TVZ = (function () {
     return svg(300, 92, h, 'tv-clk', o.a + ' is ' + o.b);
   }
   function rect(o) {
-    var h = '<rect class="tv-b sq r-m" x="70" y="24" width="170" height="70"/>';
+    var h = o.p ? '<rect class="tv-b sq r-m" x="70" y="24" width="170" height="70"/><rect class="tv-a r-x peri" x="70" y="24" width="170" height="70"/>' : '<rect class="tv-b sq r-m" x="70" y="24" width="170" height="70"/>';
     h += tx(155, 16, o.w, 'tv-t ' + (o.hi === 'w' ? 'r-x b' : 'r-n b')) + tx(62, 64, o.h, 'tv-t ' + (o.hi === 'h' ? 'r-x b' : 'r-n b'), 'end') + tx(155, 64, o.a, 'tv-t ' + (o.hi === 'a' ? 'r-x b' : 'r-g b'));
     if (o.hi === 'h') h += '<path class="tv-a r-x" d="M70 24V94"/>'; if (o.hi === 'w') h += '<path class="tv-a r-x" d="M70 24H240"/>';
-    return svg(300, 102, h, 'tv-rect', 'A rectangle: ' + o.w + ' by ' + o.h + ', area ' + o.a);
+    return svg(300, 102, h, 'tv-rect', 'A rectangle: ' + o.w + ' by ' + o.h + (o.p ? ', all the way round ' : ', area ') + o.a);
   }
   function dots(o) {
     var n = o.steps.length, W = 300, bw = W / n, h = '', sp = o.sp || 13, maxY = 0;
@@ -49381,6 +49423,98 @@ var TVZ = (function () {
       h += tx(i * bw + bw / 2, H - 3, s.cap, 'tv-t sm r-m');
     });
     return svg(W, H, h, 'tv-dots', o.alt || 'A growing pattern of dots');
+  }
+
+  // ---------------------------------------------------------------- pieces added for Chapter 1 (powers, order, like terms, area model)
+  function est(t, px) { return String(t).length * px; }   // a width estimate: nothing here measures text
+  function pow(o) {
+    var e = o.e, b = String(o.b), expr = o.par ? '(' + b + ')' : b, full = (o.pre ? o.pre + ' ' : '') + expr, wf = est(full, 11.6), xr = 150 + wf / 2 - 5, y = 28, h = '';
+    h += '<text x="' + r1(xr) + '" y="' + y + '" class="tv-t pw" text-anchor="end">' + (o.pre ? '<tspan class="r-m">' + esc(o.pre) + ' </tspan>' : '') + '<tspan class="r-x">' + esc(expr) + '</tspan></text>' + tx(xr + 2, y - 11, e, 'tv-t r-o b', 'start');
+    if (o.lab) h += tx(xr - wf - 17, y - 4, 'base', 'tv-t sm r-x b', 'end') + arw(xr - wf - 13, y - 8, xr - wf - 4, y - 8, 'r-x') + tx(xr + 38, y - 11, 'how many', 'tv-t sm r-o b', 'start') + arw(xr + 34, y - 15, xr + 15, y - 15, 'r-o');
+    h += arw(150, y + 8, 150, y + 21, 'r-m');
+    var bw = Math.max(28, est(b, 8.8) + 14), gap = 16, pw = o.pre ? Math.max(28, est(o.pre, 8.8) + 14) : 0, tot = e * bw + (e - 1) * gap + (o.pre ? pw + gap : 0);
+    if (tot > 290) { gap = 9; bw = Math.min(bw, (290 - (e - 1) * gap - (o.pre ? pw + gap : 0)) / e); tot = e * bw + (e - 1) * gap + (o.pre ? pw + gap : 0); }
+    var x = (300 - tot) / 2, yb = y + 25, i, x1;
+    if (o.pre) { h += box(x, yb, pw, 28, o.pre, 'r-m') + tx(x + pw + gap / 2, yb + 19, '·', 'tv-t r-m'); x += pw + gap; }
+    x1 = x;
+    for (i = 0; i < e; i++) { h += box(x, yb, bw, 28, b, 'r-x') + (i < e - 1 ? tx(x + bw + gap / 2, yb + 19, '·', 'tv-t r-m') : ''); x += bw + gap; }
+    h += brace(x1, x - gap, yb + 32, false, e + ' factors', 'r-o');
+    var H = yb + 64;
+    if (o.val) { var vw = est('= ' + o.val, 8.8) + 22; h += box(150 - vw / 2, H + 2, vw, 28, '= ' + o.val, 'r-g'); H += 34; }
+    return svg(300, H, h, 'tv-pow', full + ' to the power ' + e + ' means ' + e + ' factors of ' + b + (o.val ? ', which is ' + o.val : ''));
+  }
+  function sqcube(o) {
+    var s = o.s || 's', x = 182, y = 40, a = 56, d = 20, h = '';
+    h += '<rect class="tv-b sq r-x" x="36" y="30" width="66" height="66"/>' + tx(69, 68, o.a || s + '²', 'tv-t r-x b') + tx(69, 112, s, 'tv-t sm r-n b') + tx(30, 67, s, 'tv-t sm r-n b', 'end') + tx(69, 20, 'area', 'tv-t sm r-m');
+    h += '<path class="tv-b sq r-o" d="M' + x + ' ' + y + 'l' + d + ' ' + (-d) + 'h' + a + 'l' + (-d) + ' ' + d + 'Z"/><path class="tv-b sq r-o" d="M' + (x + a) + ' ' + y + 'l' + d + ' ' + (-d) + 'v' + a + 'l' + (-d) + ' ' + d + 'Z"/><rect class="tv-b sq r-o" x="' + x + '" y="' + y + '" width="' + a + '" height="' + a + '"/>';
+    h += tx(x + a / 2, y + a / 2 + 5, o.v || s + '³', 'tv-t r-o b') + tx(x + a / 2, y + a + 16, s, 'tv-t sm r-n b') + tx(x - 6, y + a / 2 + 4, s, 'tv-t sm r-n b', 'end') + tx(x + a + d / 2 + 6, y + a - d / 2 + 12, s, 'tv-t sm r-n b', 'start') + tx(x + a / 2 + d / 2, 12, 'volume', 'tv-t sm r-m');
+    return svg(300, 118, h, 'tv-sq', 'A square with side ' + s + ' has area ' + (o.a || s + ' squared') + '. A cube with edge ' + s + ' has volume ' + (o.v || s + ' cubed') + '.');
+  }
+  function fold(rows, opt) {
+    var h = opt && opt.at ? '<div class="at"><span>' + Object.keys(opt.at).map(function (k) { return esc(k) + ' = ' + fmt(opt.at[k]); }).join('</span><span>') + '</span></div><div class="dn">' + DN + '</div>' : '';
+    rows.forEach(function (r, i) {
+      var last = i === rows.length - 1;
+      h += '<div class="rw' + (last ? ' ans' : '') + '">' + (r[1] ? '<span class="tg">' + esc(r[1]) + '</span>' : '') + '<span class="ex">' + (last ? '<b>' + fmt(r[0]) + '</b>' : fmt(r[0])) + '</span></div>' + (last ? '' : '<div class="dn">' + DN + '</div>');
+    });
+    return '<div class="tv-fold">' + h + '</div>';
+  }
+  // the terms of one kind, written as one expression (shown in the bin; re-computed by hub/test_tactics.js)
+  function gather(o, r) { var ts = o.terms.filter(function (t) { return t[1] === r; }).map(function (t) { return t[0]; }); return o.op === '·' ? ts.join(' · ') : ts.join(' ').replace(/^\+\s*/, ''); }
+  function sort(o) {
+    var mul = o.op === '·', AR = '<span class="tv-arr"><span class="ln">' + RT + '</span></span>';
+    var all = o.terms.map(function (t, i) { return (mul && i ? '<span class="dt">·</span>' : '') + '<span class="ch r-' + t[1] + '">' + fmt(t[0]) + '</span>'; }).join('');
+    var bins = o.bins.map(function (b) { return '<div class="bin"><span class="ch r-' + b.r + '">' + fmt(gather(o, b.r)) + '</span>' + AR + '<span class="tv-box hl r-' + b.r + '">' + fmt(b.sum) + '</span></div>'; }).join('');
+    return '<div class="tv-sort"><div class="all">' + all + '</div><div class="dn">' + DN + '</div><div class="bins">' + bins + '</div><div class="dn">' + DN + '</div><span class="tv-box hl r-g">' + fmt(o.out) + '</span></div>';
+  }
+  function amodel(o) {
+    var x0 = 66, x1 = 286, top = o.whole ? 48 : 28, HH = 52, tot = 0, x = x0, h = '', hasW = false, i;
+    o.parts.forEach(function (p) { tot += p[3] || 1; });
+    o.parts.forEach(function (p) {
+      var w = (x1 - x0) * (p[3] || 1) / tot, r = p[2] || 'm';
+      h += '<rect class="tv-b sq r-' + r + '" x="' + r1(x) + '" y="' + top + '" width="' + r1(w) + '" height="' + HH + '"/>';
+      if (r === 'w') { hasW = true; var d = ''; for (i = 0; i + HH <= w + 0.5; i += 11) d += 'M' + r1(x + i) + ' ' + (top + HH) + 'l' + HH + ' ' + (-HH); h += '<path class="tv-ln thin r-w hatch" d="' + d + '"/>'; }
+      h += tx(x + w / 2, top + HH / 2 + 5, p[1], 'tv-t r-' + r + ' b') + tx(x + w / 2, top - 7, p[0], 'tv-t r-' + (r === 'w' ? 'w' : 'n') + ' b'); x += w;
+    });
+    if (o.whole) h += brace(x0, x1, 24, true, o.whole, 'r-n');
+    h += tx(x0 - 10, top + HH / 2 + 6, o.h, 'tv-t big r-o b', 'end');
+    var H = top + HH + 6;
+    if (o.total) { h += brace(x0, x1, top + HH + 4, false, o.total, 'r-g'); H += 30; }
+    var eq = o.eq === undefined ? (hasW ? '' : o.h + '(' + o.parts.map(function (p) { return p[0]; }).join(' + ') + ') = ' + o.parts.map(function (p) { return p[1]; }).join(' + ')) : o.eq;
+    if (eq) { h += tx(150, H + 16, plain(eq), 'tv-t b'); H += 24; }
+    return svg(300, H, h, 'tv-am', 'A rectangle ' + o.h + ' tall, split into widths ' + o.parts.map(function (p) { return p[0]; }).join(' and ') + ': the parts have areas ' + o.parts.map(function (p) { return p[1]; }).join(' and ') + '.');
+  }
+  function dist(o) {
+    var wk = est(o.k, 10.4) + 6, ws = o.terms.map(function (t, i) { return Math.max(est(t, 9.6), est(o.out[i], 9.6)) + 14; }), tot = wk + 22, h = '', y = 56, xs = [];
+    ws.forEach(function (w) { tot += w; });
+    var x = Math.max(2, (300 - tot) / 2), xk = x + wk / 2;
+    h += tx(xk, y, o.k, 'tv-t big r-o b'); x += wk; h += tx(x + 5, y, '(', 'tv-t big'); x += 11;
+    ws.forEach(function (w, j) { xs.push(x + w / 2); h += tx(x + w / 2, y, o.terms[j], 'tv-t big'); x += w; });
+    h += tx(x + 4, y, ')', 'tv-t big');
+    xs.forEach(function (c, j) { h += arw(xk, y - 19, c, y - 19, 'r-o', -(26 + j * 14)) + tx(c, y + 38, o.out[j], 'tv-t big r-g b'); });
+    h += tx(xk, y + 38, '=', 'tv-t big r-m');
+    return svg(300, 104, h, 'tv-dist', o.k + ' times every term inside: ' + o.out.join(' '));
+  }
+  function shown(t) { var p = plain(String(t)).replace(/−/g, '-').replace(/[$,\s]/g, ''), m = p.match(/^\(?(-?[\d.]+)\)?\/\(?(-?[\d.]+)\)?$/); return m ? parseFloat(m[1]) / parseFloat(m[2]) : parseFloat(p); }
+  function rel(a, b) { var x = shown(a), y = shown(b); return Math.abs(x - y) < 1e-9 ? '=' : x < y ? '<' : '>'; }
+  function cmp(o) {
+    var vs = Array.isArray(o.v) ? o.v : [o.v || 'x'], n = o.tries.length, h = '<span class="hd">' + fmt(vs.join(', ')) + '</span>', all = true;
+    o.tries.forEach(function (t) { h += '<span class="xv">' + fmt((Array.isArray(t[0]) ? t[0] : [t[0]]).join(', ')) + '</span>'; });
+    h += '<span class="hd"></span>'; o.tries.forEach(function () { h += '<span class="ar">' + DN + '</span>'; });
+    h += '<span class="hd ea">' + fmt(o.a) + '</span>'; o.tries.forEach(function (t) { h += '<span class="val">' + fmt(t[1]) + '</span>'; });
+    h += '<span class="hd eb">' + fmt(o.b) + '</span>'; o.tries.forEach(function (t) { h += '<span class="val">' + fmt(t[2]) + '</span>'; });
+    h += '<span class="hd"></span>'; o.tries.forEach(function (t) { var same = plain(t[1]) === plain(t[2]); if (!same) all = false; h += '<span class="tm ' + (same ? 'hit' : 'ne') + '">' + (same ? '=' : o.rel ? rel(t[1], t[2]) : '≠') + '</span>'; });
+    return '<div class="tv-cmp"><div class="tv-test" style="grid-template-columns:auto repeat(' + n + ',1fr)">' + h + '</div>' + (o.say ? '<span class="tv-box hl r-' + (all ? 'g' : 'n') + '">' + fmt(o.say) + '</span>' : '') + '</div>';
+  }
+  function vt(o) {
+    var cols = o.cols || ['each', 'how many', 'value'], h = '<span class="hd">' + esc(cols[0]) + '</span><span></span><span class="hd">' + esc(cols[1]) + '</span><span></span><span class="hd">' + esc(cols[2]) + '</span>';
+    o.rows.forEach(function (r) { h += '<span class="c r-n">' + fmt(r[0]) + '</span><span class="s">×</span><span class="c r-x">' + fmt(r[1]) + '</span><span class="s">=</span><span class="c v">' + fmt(r[2]) + '</span>'; });
+    h += '<span class="tot"><span class="pl">+</span><span class="tv-box hl r-g">' + fmt(o.sum) + '</span>' + (o.eq ? '<span class="s">=</span><span class="tv-box">' + fmt(o.eq) + '</span>' : '') + '</span>';
+    return '<div class="tv-vt">' + h + '</div>';
+  }
+  function grid(o) {
+    var n = o.head.length, h = o.head.map(function (c) { return '<span class="hd">' + fmt(c) + '</span>'; }).join('');
+    o.rows.forEach(function (r) { r.forEach(function (c, i) { h += i === 0 ? '<span class="lb">' + fmt(c) + '</span>' : '<span class="c' + (c === '✓' ? ' hit' : c === '✗' ? ' miss' : '') + '">' + fmt(c) + '</span>'; }); });
+    return '<div class="tv-grid" style="grid-template-columns:auto repeat(' + (n - 1) + ',minmax(34px,auto))">' + h + '</div>';
   }
   // small line icons for the formula tiles
   var IC = {
@@ -49400,15 +49534,26 @@ var TVZ = (function () {
     line: '<path class="i1" d="M3 22H45M8 17V27M24 17V27M40 17V27"/><path class="i2l" d="M9 14C13 5 20 5 23 14"/>',
     map: '<rect class="i1" x="4" y="5" width="16" height="10" rx="3"/><rect class="i1" x="28" y="23" width="16" height="10" rx="3"/><path class="i2l" d="M14 17C16 26 22 28 27 28M23 24l4 4-4 4"/>',
     scale: '<rect class="i1" x="4" y="20" width="12" height="12"/><rect class="i1" x="22" y="6" width="22" height="26"/><path class="i2l" d="M10 16L20 9"/>',
-    test: '<path class="i1" d="M6 10H22M6 19H22M6 28H16"/><path class="i2l" d="M28 20l6 7 10-15"/>'
+    test: '<path class="i1" d="M6 10H22M6 19H22M6 28H16"/><path class="i2l" d="M28 20l6 7 10-15"/>',
+    pow: '<rect class="i1" x="7" y="13" width="21" height="21" rx="3"/><rect class="i2l" x="32" y="4" width="10" height="10" rx="2"/>',
+    tiers: '<path class="i1" d="M5 32H43M11 22H37M17 12H31"/><path class="i2l" d="M24 3V8"/>',
+    sort: '<rect class="i1" x="4" y="21" width="16" height="13" rx="3"/><rect class="i1" x="28" y="21" width="16" height="13" rx="3"/><path class="i2l" d="M24 3L12 16M24 3L36 16"/>',
+    arcs: '<path class="i1" d="M6 31H42"/><path class="i2l" d="M8 25C10 6 23 6 25 22M8 25C12 -4 38 -2 41 22"/>',
+    swap: '<path class="i1" d="M6 12H38M32 6l6 6-6 6"/><path class="i2l" d="M42 27H10M16 21l-6 6 6 6"/>',
+    cube: '<path class="i1" d="M8 14l10-8h22v18l-10 8H8Z"/><path class="i2l" d="M8 14H30V32M30 14l10-8"/>',
+    group: '<path class="i1" d="M10 7C4 14 4 24 10 31M27 7C33 14 33 24 27 31"/><circle class="i2" cx="14" cy="19" r="3"/><circle class="i2" cx="23" cy="19" r="3"/><circle class="i2" cx="41" cy="19" r="3"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
-  function strings(spec) { var out = []; (function walk(x) { if (typeof x === 'string') out.push(plain(x)); else if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') Object.keys(x).forEach(function (k) { if (k !== 'alt') walk(x[k]); }); })(spec.slice(1)); return out; }
-  return { draw: draw, fmt: fmt, plain: plain, ascii: ascii, esc: esc, icon: icon, KINDS: KINDS, strings: strings, ICONS: IC };
+  function strings(spec) {
+    var out = []; (function walk(x) { if (typeof x === 'string') out.push(plain(x)); else if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') Object.keys(x).forEach(function (k) { if (k !== 'alt' && k !== 'at') walk(x[k]); }); })(spec.slice(1));
+    if (spec[0] === 'pow') out.push('factors' + (spec[1].lab ? ' base how many' : '')); if (spec[0] === 'sqcube') out.push('area volume'); if (spec[0] === 'vt' && !spec[1].cols) out.push('each how many value'); if (spec[0] === 'test' && spec[1].whole) out.push('whole');
+    return out;
+  }
+  return { draw: draw, fmt: fmt, plain: plain, ascii: ascii, esc: esc, icon: icon, KINDS: KINDS, strings: strings, ICONS: IC, gather: gather, rel: rel };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = TVZ;
 /* ===== TVZ END ===== */
@@ -49423,12 +49568,27 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TVZ;
      wrong  look-alikes that are NOT equivalent, each with the ascii of its right side (the verifier proves each one wrong)
      leg    the letters and what they stand for (tiles; flash-card back)     ic  the tile's icon (TVZ.ICONS)
      of     the id of the formula this one is a rearrangement of (shown on the same tile)
+     also   other chapters whose bank shows this formula too (area and cost are first used in Chapter 1)
      an undo rule also has: ask (the equation), lab (a two-word label), st (the rule as a TVZ steps ladder), v + sol (solved for v)
    Chapters whose tactics are not redrawn yet have name / plain / lit / wrong / sk only: enough for the Dojo.                */
 var FML = (function () {
   'use strict';
   var ALL = [], BY = {};
   function F(id, ch, o) { o.id = id; o.ch = ch; o.grp = o.grp || 'f'; o.sk = o.sk || []; ALL.push(o); BY[id] = o; }
+
+  // ---------------------------------------------------------------- Chapter 1: powers, properties, like terms (identities: E stands for the left side)
+  F('pw', 1, { name: 'A power', f: '{x:a}{o:³} = {x:a} · {x:a} · {x:a}', plain: 'a³ = a · a · a', lit: ['P', 'a*a*a'], sol: 'a^3', wrong: [['a³ = 3 · a', '3*a'], ['a³ = a + a + a', 'a+a+a'], ['a³ = a · a', 'a*a']], sk: ['S1', 'S2'], leg: [['a', 'base'], ['³', 'how many factors']], ic: 'pow' });
+  F('sq1', 1, { name: 'Area of a square', f: '{g:A} = {x:s}{o:²}', plain: 'A = s²', lit: ['A', 's^2'], wrong: [['A = 4s', '4*s'], ['A = s³', 's^3'], ['A = s + s + s', 's+s+s']], sk: ['S3', 'S4'], leg: [['s', 'side']], ic: 'rect' });
+  F('cu1', 1, { name: 'Volume of a cube', f: '{g:V} = {x:s}{o:³}', plain: 'V = s³', lit: ['V', 's^3'], wrong: [['V = 3s', '3*s'], ['V = s²', 's^2'], ['V = 6s²', '6*s^2']], sk: ['S3', 'S4'], leg: [['s', 'edge']], ic: 'cube' });
+  F('lk', 1, { name: 'Adding like terms', f: '{o:a}{x:x} + {o:b}{x:x} = {o:(a + b)}{x:x}', plain: 'ax + bx = (a + b)x', lit: ['E', 'a*x+b*x'], sol: '(a+b)*x', wrong: [['ax + bx = abx', 'a*b*x'], ['ax + bx = (a + b)x²', '(a+b)*x^2'], ['ax + bx = abx²', 'a*b*x^2']], sk: ['S23'], leg: [['same letters', 'add the numbers']], ic: 'sort' });
+  F('xx', 1, { name: 'Multiplying terms', f: '{o:a}{x:x} · {o:b}{x:x} = {o:ab}{x:x²}', plain: 'ax · bx = abx²', lit: ['E', 'a*x*b*x'], sol: 'a*b*x^2', wrong: [['ax · bx = abx', 'a*b*x'], ['ax · bx = (a + b)x²', '(a+b)*x^2'], ['ax · bx = (a + b)x', '(a+b)*x']], sk: ['S25', 'S24'], leg: [['numbers', 'multiply'], ['letters', 'count them']], ic: 'pow' });
+  F('dst', 1, { name: 'Distributive property', f: '{o:a}({x:b} + {n:c}) = {o:a}{x:b} + {o:a}{n:c}', plain: 'a(b + c) = ab + ac', lit: ['E', 'a*(b+c)'], sol: 'a*b+a*c', wrong: [['a(b + c) = ab + c', 'a*b+c'], ['a(b + c) = a + bc', 'a+b*c'], ['a(b + c) = abc', 'a*b*c']], sk: ['S32'], leg: [['a', 'reaches every term']], ic: 'arcs' });
+  F('fct', 1, { of: 'dst', name: 'Factoring', f: '{o:a}{x:b} + {o:a}{n:c} = {o:a}({x:b} + {n:c})', plain: 'ab + ac = a(b + c)', lit: ['E', 'a*b+a*c'], sol: 'a*(b+c)', wrong: [['ab + ac = a(b + ac)', 'a*(b+a*c)'], ['ab + ac = (a + b)c', '(a+b)*c'], ['ab + ac = 2a(b + c)', '2*a*(b+c)']], sk: ['S35'] });
+  F('dvp', 1, { of: 'dst', name: 'Dividing a sum', f: '{f:{x:b} + {n:c}|{o:a}} = {f:{x:b}|{o:a}} + {f:{n:c}|{o:a}}', plain: '(b + c) ÷ a = b ÷ a + c ÷ a', lit: ['E', '(b+c)/a'], sol: 'b/a+c/a', wrong: [['(b + c) ÷ a = b ÷ a + c', 'b/a+c'], ['(b + c) ÷ a = b + c ÷ a', 'b+c/a'], ['(b + c) ÷ a = a ÷ b + a ÷ c', 'a/b+a/c']], sk: ['S36'] });
+  F('cm', 1, { name: 'Commutative: change the order', f: '{x:a} + {n:b} = {n:b} + {x:a}', plain: 'a + b = b + a', lit: ['E', 'a+b'], sol: 'b+a', wrong: [['a − b = b − a', 'b-a'], ['a ÷ b = b ÷ a', 'b/a'], ['a + b = ab', 'a*b']], sk: ['S18'], leg: [['+  ·', 'yes'], ['−  ÷', 'no']], ic: 'swap' });
+  F('cm2', 1, { of: 'cm', name: 'Commutative, for ×', f: '{x:a} · {n:b} = {n:b} · {x:a}', plain: 'a · b = b · a', lit: ['E', 'a*b'], sol: 'b*a', wrong: [['a − b = b − a', 'a-b'], ['a ÷ b = b ÷ a', 'a/b'], ['a · b = a + b', 'a+b']], sk: ['S18'] });
+  F('as', 1, { name: 'Associative: change the grouping', f: '({x:a} + {n:b}) + c = {x:a} + ({n:b} + c)', plain: '(a + b) + c = a + (b + c)', lit: ['E', '(a+b)+c'], sol: 'a+(b+c)', wrong: [['(a − b) − c = a − (b − c)', 'a-(b-c)'], ['(a ÷ b) ÷ c = a ÷ (b ÷ c)', 'a/(b/c)'], ['(a + b) + c = a + bc', 'a+b*c']], sk: ['S19'], leg: [['+  ·', 'yes'], ['−  ÷', 'no']], ic: 'group' });
+  F('as2', 1, { of: 'as', name: 'Associative, for ×', f: '({x:a}{n:b})c = {x:a}({n:b}c)', plain: '(ab)c = a(bc)', lit: ['E', '(a*b)*c'], sol: 'a*(b*c)', wrong: [['(a − b) − c = a − (b − c)', 'a-(b-c)'], ['(a ÷ b) ÷ c = a ÷ (b ÷ c)', 'a/(b/c)'], ['(ab)c = ab + c', 'a*b+c']], sk: ['S19'] });
 
   // ---------------------------------------------------------------- Chapter 3: equations, motion, sequences
   F('dvt', 3, { name: 'Distance', f: '{g:d} = {x:v} · {n:t}', plain: 'd = v · t', lit: ['d', 'v*t'], wrong: [['d = v ÷ t', 'v/t'], ['d = v + t', 'v+t'], ['d = t ÷ v', 't/v']], sk: ['U20'], leg: [['d', 'distance'], ['v', 'speed'], ['t', 'time']], ic: 'road', tri: 'dvt', move: 'drt.plug' });
@@ -49437,10 +49597,10 @@ var FML = (function () {
   F('avg', 3, { name: 'Average speed', f: '{g:avg} = {f:{x:total distance}|{n:total time}}', plain: 'total distance ÷ total time', lit: ['a', 'D/T'], wrong: [['total time ÷ total distance', 'T/D'], ['add the speeds, ÷ 2', '(D+T)/2'], ['total distance · total time', 'D*T']], sk: ['U22', 'U25'], leg: [['whole trip', 'every leg added']], ic: 'avg', move: 'form.avg' });
   F('hrs', 3, { name: 'Minutes → hours', f: '{g:hours} = {x:minutes} ÷ {n:60}', plain: 'hours = minutes ÷ 60', lit: ['h', 'm/60'], wrong: [['hours = minutes ÷ 100', 'm/100'], ['hours = minutes · 60', 'm*60'], ['hours = minutes ÷ 10', 'm/10']], sk: ['U21'], leg: [['1 h', '60 min']], ic: 'clock', move: 'drt.time' });
   F('mins', 3, { of: 'hrs', name: 'Hours → minutes', f: '{g:minutes} = {x:hours} · {n:60}', plain: 'minutes = hours · 60', lit: ['m', 'h*60'], wrong: [['minutes = hours · 100', 'h*100'], ['minutes = hours ÷ 60', 'h/60'], ['minutes = hours + 60', 'h+60']], sk: ['U21'] });
-  F('area', 3, { name: 'Area of a rectangle', f: '{g:A} = {x:l} · {n:w}', plain: 'A = l · w', lit: ['A', 'l*w'], wrong: [['A = l + w', 'l+w'], ['A = 2l + 2w', '2*l+2*w'], ['A = l ÷ w', 'l/w']], sk: ['S26', 'U16'], leg: [['A', 'area'], ['l', 'length'], ['w', 'width']], ic: 'rect', tri: 'area', move: 'form.rect' });
-  F('side', 3, { of: 'area', name: 'A side, from the area', f: '{g:w} = {f:{x:A}|{n:l}}', plain: 'w = A ÷ l', lit: ['w', 'A/l'], wrong: [['w = A · l', 'A*l'], ['w = A − l', 'A-l'], ['w = l ÷ A', 'l/A']], sk: ['U16'] });
-  F('per', 3, { name: 'Perimeter of a rectangle', f: '{g:P} = {o:2}{x:l} + {o:2}{n:w}', plain: 'P = 2l + 2w', lit: ['P', '2*l+2*w'], wrong: [['P = l · w', 'l*w'], ['P = l + w', 'l+w'], ['P = 2 · l · w', '2*l*w']], sk: ['U16', 'E17'], leg: [['P', 'all the way round']], ic: 'perim', move: 'form.rect' });
-  F('cost', 3, { name: 'Total cost', f: '{g:T} = {x:p} · {n:n}', plain: 'T = p · n', lit: ['T', 'p*n'], wrong: [['T = p + n', 'p+n'], ['T = p ÷ n', 'p/n'], ['T = n ÷ p', 'n/p']], sk: ['U17', 'P11'], leg: [['T', 'total'], ['p', 'price of one'], ['n', 'how many']], ic: 'tag', tri: 'cost', move: 'form.cost' });
+  F('area', 3, { also: [1], name: 'Area of a rectangle', f: '{g:A} = {x:ℓ} · {n:w}', plain: 'A = ℓ · w', lit: ['A', 'l*w'], wrong: [['A = ℓ + w', 'l+w'], ['A = 2ℓ + 2w', '2*l+2*w'], ['A = ℓ ÷ w', 'l/w']], sk: ['S26', 'U16'], leg: [['A', 'area'], ['ℓ', 'length'], ['w', 'width']], ic: 'rect', tri: 'area', move: 'form.rect' });
+  F('side', 3, { of: 'area', name: 'A side, from the area', f: '{g:w} = {f:{x:A}|{n:ℓ}}', plain: 'w = A ÷ ℓ', lit: ['w', 'A/l'], wrong: [['w = A · ℓ', 'A*l'], ['w = A − ℓ', 'A-l'], ['w = ℓ ÷ A', 'l/A']], sk: ['U16'] });
+  F('per', 3, { also: [1], name: 'Perimeter of a rectangle', f: '{g:P} = {o:2}{x:ℓ} + {o:2}{n:w}', plain: 'P = 2ℓ + 2w', lit: ['P', '2*l+2*w'], wrong: [['P = ℓ · w', 'l*w'], ['P = ℓ + w', 'l+w'], ['P = 2 · ℓ · w', '2*l*w']], sk: ['U16', 'E17'], leg: [['P', 'all the way round']], ic: 'perim', move: 'form.rect' });
+  F('cost', 3, { also: [1], name: 'Total cost', f: '{g:T} = {x:p} · {n:n}', plain: 'T = p · n', lit: ['T', 'p*n'], wrong: [['T = p + n', 'p+n'], ['T = p ÷ n', 'p/n'], ['T = n ÷ p', 'n/p']], sk: ['U17', 'P11'], leg: [['T', 'total'], ['p', 'price of one'], ['n', 'how many']], ic: 'tag', tri: 'cost', move: 'form.cost' });
   F('each', 3, { of: 'cost', name: 'Price of one', f: '{g:p} = {f:{x:T}|{n:n}}', plain: 'p = T ÷ n', lit: ['p', 'T/n'], wrong: [['p = T · n', 'T*n'], ['p = n ÷ T', 'n/T'], ['p = T − n', 'T-n']], sk: ['U17'] });
   F('seq', 3, { name: 'Step n of a sequence', f: '{g:dₙ} = {o:a} · n + {x:b}', plain: 'dₙ = a · n + b', lit: ['d', 'a*n+b'], wrong: [['dₙ = b · n + a', 'b*n+a'], ['dₙ = a · (n + b)', 'a*(n+b)'], ['dₙ = a + b + n', 'a+b+n']], sk: ['U28', 'U31'], leg: [['a', 'added each step'], ['b', 'start (step 0)']], ic: 'stairs', move: 'pat.rule' });
   F('add', 3, { of: 'seq', name: 'Amount added per step', f: '{o:a} = {f:{x:change in value}|{n:change in step}}', plain: 'change in value ÷ change in step', lit: ['a', 'V/S'], wrong: [['change in step ÷ change in value', 'S/V'], ['change in value · change in step', 'V*S'], ['change in value − change in step', 'V-S']], sk: ['U29'] });
@@ -49479,7 +49639,8 @@ var FML = (function () {
   F('poly', 8, { name: 'Angle sum of a polygon with n sides', plain: '(n − 2) · 180°', lit: ['S', '(n-2)*180'], wrong: [['n · 180°', 'n*180'], ['(n − 1) · 180°', '(n-1)*180'], ['(n + 2) · 180°', '(n+2)*180']], sk: ['G69'] });
   F('pyth', 8, { name: 'Right triangle with hypotenuse c', plain: 'c² = a² + b²', lit: ['C', 'a^2+b^2'], wrong: [['c² = (a + b)²', '(a+b)^2'], ['c² = a² − b²', 'a^2-b^2'], ['c² = 2a + 2b', '2*a+2*b']], sk: ['G70'] });
 
-  function list(ch, grp) { return ALL.filter(function (e) { return e.ch === ch && (!grp || e.grp === grp); }); }
+  function inCh(e, ch) { return e.ch === ch || (e.also || []).indexOf(ch) >= 0; }   // a formula can sit in an earlier chapter's bank too (also)
+  function list(ch, grp) { return ALL.filter(function (e) { return inCh(e, ch) && (!grp || e.grp === grp); }); }
   // flash cards for a chapter: every formula and every rearrangement, then the undo rules
   function cards(ch) {
     return list(ch).filter(function (e) { return e.f; }).map(function (e) {
@@ -49487,31 +49648,66 @@ var FML = (function () {
       return { id: e.id, grp: e.grp, front: e.grp === 'u' ? e.ask : e.name, hint: e.grp === 'u' ? 'What undoes it?' : 'What is the formula?', back: e.f, leg: e.leg || root.leg || [], ic: e.ic || root.ic || 'undo' };
     });
   }
-  return { ALL: ALL, BY: BY, list: list, cards: cards, get: function (id) { return BY[id] || null; } };
+  return { ALL: ALL, BY: BY, list: list, cards: cards, inCh: inCh, get: function (id) { return BY[id] || null; } };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 /* ===== FML END ===== */
 
 /* The rules register: every rule a Skills & Tactics card states, once, in one wording, in course order.
    TAC.rule(id, text, { refines }) — a rule that sharpens an earlier one names it, so a later card never silently replaces an earlier
-   rule. Cards cite rules by id (r: ['both']). hub/test_tactics.js checks that every cited rule exists, every rule is cited, and a
-   refinement comes after what it refines. The chapter and course audits read this file for duplicates and conflicts. */
+   rule. Cards cite rules by id (r: ['both']). hub/test_tactics.js checks that every cited rule exists, every rule of a drawn chapter
+   is cited, and a refinement comes after what it refines. The chapter and course audits read this file for duplicates and conflicts.
+   A rule sits in the chapter that first states it (R.ch); later chapters cite the same id. */
 (function () {
   'use strict';
   var R = TAC.rule;
-  // ---- Chapter 3
-  R('both', 'Do the same thing to both sides of an equation.');
-  R('inverse', 'Undo an operation with its opposite: + with −, × with ÷.');
+  // ---- Chapter 1: the language of algebra
+  R.ch = 1;
+  R('power', 'aⁿ means n factors of a.');
+  R('reach', 'An exponent reaches only what it sits on. Parentheses make it reach everything inside.', { refines: 'power' });
+  R('sqcube', 'Side² is the area of a square. Edge³ is the volume of a cube.');
+  R('pemdas', 'Order: parentheses, exponents, × ÷ from the left, then + − from the left.');
+  R('inside', 'Parentheses inside parentheses: innermost first.', { refines: 'pemdas' });
+  R('fracbar', 'A fraction bar groups its whole top and its whole bottom.', { refines: 'pemdas' });
+  R('divbar', '÷ reaches only its two neighbours. Rewrite it as a bar to see what is divided.', { refines: 'fracbar' });
+  R('subst', 'Substitute: put the value in parentheses where the letter was, then follow the order.');
+  R('agree', 'Two expressions can agree at one value and differ at the others.');
+  R('signal', 'Find the operation word, then write the parts in the order the words mean.');
+  R('flip', '“Less than” and “subtracted from” flip the order.', { refines: 'signal' });
+  R('quantity', '“The quantity” means parentheses.', { refines: 'signal' });
+  R('known', 'Start from the amount you know: more → add, less → subtract, times as many → multiply.', { refines: 'flip' });
+  R('parts', 'The parts add up to the whole.');
+  R('try', 'Test what you wrote with a number that is easy to check.');
+  R('value', 'Value of a group = worth of one × how many. Add the groups.');
+  R('once', 'A one-time amount is added once, with no letter.', { refines: 'value' });
   R('root', 'A root makes the two sides equal. Substitute to test or to check.');
+  R('iseq', '“Is”, “gives”, “equals”: that is where the = goes.', { refines: 'signal' });
+  R('inverse', 'Undo an operation with its opposite: + with −, × with ÷.');
+  R('comm', 'Commutative: + and × let you change the order. − and ÷ do not.');
+  R('assoc', 'Associative: + and × let you change the grouping. − and ÷ do not.');
+  R('equiv', 'Equivalent expressions agree for every value.', { refines: 'agree' });
+  R('counter', 'One counterexample, one value where it fails, shows that a rule is not always true.', { refines: 'equiv' });
+  R('term', 'Terms are the pieces between + and −. The coefficient is the number in front.');
+  R('like', 'Like terms have the same letter part: add the coefficients, keep the letter part.');
+  R('xx', 'Multiplying: multiply the numbers, count each letter into an exponent.', { refines: 'power' });
+  R('sumprod', 'Sum or product? Decide first. A sum combines like terms only; a product multiplies everything.');
+  R('see-n', 'Describe each part of the picture with the step number n, then add the parts.');
+  R('check-n', 'Check a rule on a step you can count.', { refines: 'try' });
+  R('solve-n', 'Which step has that many? Set the rule equal to it and solve.');
+  R('dist', 'a(b + c) = ab + ac: the factor outside reaches every term inside.');
+  R('factor', 'Factoring is distributing backwards: take out the greatest factor every term shares.', { refines: 'dist' });
+  R('divparts', 'To divide a sum, divide every term.', { refines: 'dist' });
+  R('periarea', 'Perimeter adds the sides. Area multiplies two sides.');
+  // ---- Chapter 3: one-step equations
+  R.ch = 3;
+  R('both', 'Do the same thing to both sides of an equation.');
+  R('recipe', 'Word problem: name the unknown, write the equation, solve, answer with the unit.');
   R('tidy', 'Simplify each side on its own before moving anything across.');
   R('neg1', '−x = n means x = −n.', { refines: 'inverse' });
   R('recip', 'Undo a fraction in front of x by multiplying by its reciprocal.', { refines: 'inverse' });
-  R('order', 'Two steps: undo + − first, then × ÷.', { refines: 'inverse' });
-  R('rule-n', 'A pattern rule: what is added each step, times n, adjusted so step 1 fits.');
-  R('solve-n', 'Which step has that many? Set the rule equal to it and solve.');
-  R('parts', 'The parts add up to the whole.');
+  R('order', 'Undo in reverse: what was done last is undone first. For ax + b: + − first, then × ÷.', { refines: 'inverse' });
+  R('rule-n', 'A pattern rule: what is added each step, times n, adjusted so step 1 fits.', { refines: 'see-n' });
   R('formula', 'Write the formula, put in what you know, solve for what is left.');
-  R('recipe', 'Word problem: name the unknown, write the equation, solve, answer with the unit.');
   R('min60', 'Minutes ÷ 60 = hours. Hours · 60 = minutes.');
   R('tri', 'For a = b · c, cover what you want: side by side multiply, over and under divide.');
   R('units', 'Match the units before you compute.');
@@ -49523,66 +49719,146 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 })();
 
 /* --- tactics_ch1.js --- */
-/* Skills & Tactics, Chapter 1: The Language of Algebra. Format: hub/tactics_core.js. Source: the owner's Chapter 1 sheet, regrouped by this system's units and levels. */
+/* Skills & Tactics, Chapter 1: The Language of Algebra. DRAWN cards (TAC.viz; pieces: hub/tactics_viz.js; formulas: hub/formulas.js).
+   Source: the owner's Chapter 1 sheet, regrouped by this system's units and levels. Plain wording, no names (owner's rule for
+   Chapters 1–2). Thread plan: hub/staging/threads_ch1.md. Every calculation a card shows is listed in v. */
 (function () {
   'use strict';
-  var L = function (k, t, m, ex, w, o) { TAC.lv(1, k, t, m, ex, w, o); };
+  var V = function (k, o) { TAC.viz(1, k, o); };
+  // dot patterns: two rows of n + 1 dots, coloured by column (n pairs + 2) or by row (2 rows of n + 1); an n-by-n square with one extra dot
+  function rows2(n) { var p = [], i; for (i = 0; i <= n; i++) p.push([i, 0, i ? 'x' : 'n'], [i, 1, i ? 'x' : 'n']); return p; }
+  function rowsA(n) { var p = [], i; for (i = 0; i <= n; i++) p.push([i, 0, 'x'], [i, 1, 'o']); return p; }
+  function sq1(n) { var p = [[(n - 1) / 2, n, 'n']], i, j; for (i = 0; i < n; i++) for (j = 0; j < n; j++) p.push([i, j, 'x']); return p; }
+  function plus(n) { var c = n - 1, p = [[c, c, 'n']], k; for (k = 1; k < n; k++) p.push([c + k, c, 'x'], [c - k, c, 'x'], [c, c + k, 'x'], [c, c - k, 'x']); return p; }
+  var TIERS = ['flow', [{ t: 'P ( )', r: 'x' }, { op: '' }, { t: 'E xⁿ', r: 'o' }, { op: '' }, { t: 'MD × ÷', r: 'n' }, { op: '' }, { t: 'AS + −', r: 'g' }], { tight: 1 }];
+
   TAC.ch(1, {
-    lede: 'Reading, writing and rewriting expressions. Keep this next to you for any Chapter 1 problem.',
+    lede: 'Read, write and rewrite expressions: powers, the order of operations, words into symbols, like terms, the distributive property.',
     tools: ['trans', 'tri:cost', 'tri:area'],
     top: [
-      { h: 'Order of operations', rule: 'P → E → MD → AS', body: 'Parentheses, exponents, then × and ÷ from left to right, then + and − from left to right. A fraction bar groups everything above it and everything below it, like invisible parentheses.', watch: '2 + 3 · 4 is 14, not 20. Multiply before you add.', v: [['2+3*4', '14']] },
-      { h: 'What the exponent touches', rule: '(5m)³ = 125m³   but   5m³ = 5 · m³', body: 'An exponent counts factors: 2³ = 2 · 2 · 2. It only touches what it sits on. With parentheses it hits everything inside.', watch: '2³ is 8, not 2 · 3.', v: [['2^3', '8'], ['(5*2)^3', '1000'], ['5*2^3', '40']] },
-      { h: 'Expression or equation?', rule: 'expression: evaluate   ·   equation: solve', body: 'An expression has no equals sign: substitute and simplify to <b>evaluate</b> it. An equation joins two expressions with =: <b>solve</b> it by finding the value (the root) that makes it true.', watch: 'When you substitute, write the value in parentheses where the letter was: 2x at x = 3 is 2(3), not 23.' },
-      { h: 'Words into symbols', rule: '“7 less than x”  →  x − 7', body: 'Find the signal word, then put things in the order the words mean. “Less than” and “subtracted from” flip the order. “The quantity” means parentheses. The decoder below has every phrase.', watch: 'Test your expression with a number: if Betty is 20 and Alice is 11 years younger, B − 11 gives 9. Sensible.' },
-      { h: 'Like terms: add or multiply?', rule: 'y + 3y = 4y      y · 3y = 3y²', body: 'Like terms have exactly the same letter part. <b>Adding</b>: add the coefficients, keep the letter part. <b>Multiplying</b>: multiply the numbers and count the letters. 2x + 7y stays as it is.', watch: 'Decide first whether the expression is a sum or a product. Everything else follows from that.', v: [['5+3*5', '4*5'], ['5*3*5', '3*5^2']] },
-      { h: 'The distributive property', rule: 'a(b + c) = ab + ac', body: 'Every term inside gets multiplied, and signs come along: 8(s − t + 5) = 8s − 8t + 40. Backwards it is factoring: 5x + 45 = 5(x + 9). It divides too: (6x + 12)/2 = 3x + 6. For mental math: 7 · 98 = 7(100 − 2) = 686.', watch: '3(x + 4) is 3x + 12, not 3x + 4.', v: [['7*98', '686'], ['3*(2+4)', '3*2+12'], ['(6*5+12)/2', '3*5+6']] },
-      { h: 'Reorder and regroup', rule: 'a + b = b + a      (ab)c = a(bc)', body: 'Addition and multiplication let you swap the order (commutative) and move the parentheses (associative). Subtraction and division do not. One counterexample is enough to show a rule fails.', watch: '6 − 4 is not 4 − 6.' },
-      { h: 'Patterns into formulas', rule: 'say what step n does, once, for every step', body: 'Tie each part of the picture to the step number n. Different ways of seeing a shape give different-looking formulas that are equal: 2n + 2 and 2(n + 1). Check with a value of n.', watch: 'Always test your formula on a step you can count.', v: [['2*3+2', '2*(3+1)']] }
-    ],
-    bank: [['ORDER', 'P → E → MD → AS'], ['FRACTION BAR', 'groups top and bottom'], ['POWER', 'aⁿ = n factors of a'], ['EVALUATE', 'substitute, then simplify'], ['SOLVE', 'find the root'], ['COMMUTATIVE', 'a + b = b + a,  ab = ba'], ['ASSOCIATIVE', '(a + b) + c = a + (b + c)'], ['LIKE TERMS', 'same letter part only'], ['ADD', 'y + 3y = 4y'], ['MULTIPLY', 'y · 3y = 3y²'], ['DISTRIBUTE', 'a(b + c) = ab + ac'], ['FACTOR', 'ab + ac = a(b + c)'], ['RECTANGLE', 'A = l · w,  P = 2l + 2w']]
+      { h: 'An exponent counts factors', vis: [['pow', { b: '2', e: 4, val: '16', lab: 1 }]],
+        trap: ['(5 cm)³ = 5 cm³', '(5 cm)³ = 125 cm³'], alt: 'The exponent says how many times the base is a factor: 2⁴ = 2 · 2 · 2 · 2 = 16. It reaches only what it sits on; parentheses make it reach everything inside.', v: [['2^4', '16'], ['5^3', '125']] },
+      { h: 'P → E → MD → AS, and a bar groups', vis: [TIERS, ['fold', [['{f:{x:6²} − 14|8 + 5}', 'E'], ['{f:{x:36 − 14}|{x:8 + 5}}', 'bar'], ['{f:22|13}']]]],
+        trap: ['2 + 3 · 4 = 20', '2 + 3 · 4 = 14'], alt: 'Parentheses, exponents, multiply and divide from the left, add and subtract from the left. A fraction bar groups its whole top and its whole bottom: finish both, then divide.', v: [['(6^2-14)/(8+5)', '22/13'], ['2+3*4', '14']] },
+      { h: 'Substitute, then compare', vis: [['flow', ['2{x:x}² − {x:x}', { op: 'x = 3' }, '2 · {n:(3)}² − {n:(3)}']], ['cmp', { v: 'x', a: '10x − 6', b: '2x', tries: [['{f:1|2}', '−1', '1'], ['{f:3|4}', '{f:3|2}', '{f:3|2}']], say: 'equal at {f:3|4}: a root' }], ['cmp', { v: ['a', 'b'], a: 'a + 4b', b: 'b + 4a', tries: [[['1', '2'], '9', '6'], [['2', '2'], '10', '10']], say: 'some values only' }]],
+        trap: ['one match  →  equivalent', 'one miss  →  not equivalent'], alt: 'Write the value in parentheses where the letter was, then follow the order. Two expressions that are equal at one value have a root there; only if they are equal at every value are they equivalent.', v: [['2*x^2-x', '15', { x: 3 }], ['10*(3/4)-6', '2*(3/4)'], ['1+4*2', '9'], ['2+4*1', '6']] },
+      { h: 'Words → symbols', vis: [['map', [['8', 'n'], ['less than', 'o'], ['x to the fifth', 'x']], [['x⁵', 'x'], ['−', 'o'], ['8', 'n']], [2, 1, 0], { fit: 1 }], ['map', [['the quantity', 'o'], ['is · gives · equals', 'g']], [['(  )', 'o'], ['=', 'g']], [0, 1]]],
+        trap: ['7 less than x  →  7 − x', '7 less than x  →  x − 7'], alt: 'Find the operation word. “Less than” flips the order, “the quantity” means parentheses, and “is” marks the equals sign.', v: [['2^5-8', '24']] },
+      { h: 'Worth × how many, then add', vis: [['vt', { cols: ['each', 'how many', 'cost'], rows: [['$2', 'x', '2x'], ['$8', 'y', '8y'], ['$4', 'once', '4']], sum: '2x + 8y + 4' }]],
+        trap: ['x + y + 4', '2x + 8y + 4'], alt: 'For each kind, multiply what one is worth by how many there are, then add the kinds. A one-time amount is added once, with no letter.', v: [['2*3+8*5+4', '50']] },
+      { h: 'Parts make the whole', vis: [['bar', { rows: [{ parts: [['t', 1, 'x'], ['22 − t', 1.4, 'g']], over: [[0, 2, '22', 'n']] }], alt: '22 shared: one part is t, the rest is 22 − t' }], ['bar', { rows: [{ parts: [['7', 1, 'g'], ['7', 1, 'g'], ['off', 1, 'w']], over: [[0, 3, 'price', 'x']], under: [[0, 2, '14', 'n']] }], alt: 'A price in thirds: one third off, the two thirds left are 14, so the price is 21' }]],
+        trap: ['w − {f:1|8} = 35', '{f:7w|8} = 35'], alt: 'Draw the whole as a bar and mark the parts. The rest of a total is the total minus the part. One third off leaves two thirds; a fraction of an amount is that fraction times the amount, never the bare fraction.', v: [['21-21/3', '14'], ['7*40/8', '35']] },
+      { h: 'Undo with the opposite, backwards', vis: [['chain', { top: ['n', '2n', '2n + 2'], ops: ['· 2', '+ 2'], bottom: ['19', '38', '40'], undo: ['÷ 2', '− 2'] }]],
+        trap: ['x − {f:3|8} = {f:1|8}  →  x = {f:3|8} − {f:1|8}', 'x − {f:3|8} = {f:1|8}  →  x = {f:1|8} + {f:3|8}'], alt: 'An expression is built step by step. To find the number you started from, undo each step with the opposite operation, last step first: 2n + 2 = 40, so 2n = 38 and n = 19.', v: [['(40-2)/2', '19'], ['1/8+3/8', '1/2']] },
+      { h: 'Like terms: add or multiply?', vis: [['sort', { terms: [['7x', 'x'], ['+ 13', 'n'], ['− 2x', 'x'], ['− 7', 'n'], ['+ 5x', 'x']], bins: [{ r: 'x', sum: '10x' }, { r: 'n', sum: '6' }], out: '10x + 6' }], ['flow', [{ t: 'y + 3y = 4y', r: 'x' }, { t: 'y · 3y = 3y²', r: 'n' }]]],
+        trap: ['x + x = x²', 'x + x = 2x'], alt: 'Adding like terms: add the coefficients and keep the letter part. Multiplying: multiply the numbers and count the letters.', v: [['7*3+13-2*3-7+5*3', '10*3+6'], ['5+3*5', '4*5'], ['5*3*5', '3*5^2']] },
+      { h: 'See the pattern with n', vis: [['dots', { steps: [{ cap: 'n = 1', pts: rowsA(1) }, { cap: 'n = 2', pts: rowsA(2) }, { cap: 'n = 3', pts: rowsA(3) }], alt: 'Two rows of dots: 4, 6, 8 dots' }], ['cue', [['2 rows', 'm'], ['of', ''], ['n', 'x', 'step number'], ['+ 1', 'n', 'one more', 'd']]], ['flow', ['n = 3', { op: '2 · (3 + 1)' }, { t: '8 ✓', r: 'g' }]], ['flow', ['step 12', { op: '2 · (12 + 1)' }, { t: '26 dots', r: 'g' }]]],
+        trap: ['step 12 = 4 × step 3 = 32', '2 · (12 + 1) = 26'], alt: 'Tie each part of the picture to the step number n: two rows of n + 1 dots is 2(n + 1). Check the rule on a step you can count, then jump straight to a far step.', v: [['2*(3+1)', '8'], ['2*(12+1)', '26']] },
+      { h: 'A rectangle multiplies: out and back', vis: [['dist', { k: '3', terms: ['x', '+ 4'], out: ['3x', '+ 12'] }], ['amodel', { h: '4', parts: [['2y', '8y', 'x'], ['3', '12', 'n']], eq: '8y + 12 = 4(2y + 3)' }]],
+        trap: ['3(x + 4) = 3x + 4', '3(x + 4) = 3x + 12'], alt: 'The factor outside reaches every term inside, like a rectangle split into parts. Read the rectangle backwards and it is factoring: take out the greatest factor every term shares.', v: [['3*(5+4)', '3*5+12'], ['8*5+12', '4*(2*5+3)']] }
+    ]
   });
 
   // Unit 1: Powers and Exponents
-  L('1-1', 'Write out the factors', ['The base is the number being repeated.', 'The exponent says how many times it appears as a factor.', 'Multiply them out.'], '7² = 7 · 7 = 49      2⁵ = 2 · 2 · 2 · 2 · 2 = 32', '2³ is 2 · 2 · 2 = 8. It is not 2 · 3.', { v: [['7^2', '49'], ['2^5', '32']] });
-  L('1-2', 'Powers first, then the rest', ['Work out each power before multiplying, adding or subtracting.', 'A power of ten is a 1 with that many zeros: 10⁵ = 100,000.', 'With a unit in parentheses, the exponent hits the unit too.'], '3 · 10⁵ − 9 · 10³ = 300,000 − 9,000 = 291,000', '(5 m)³ is 125 m³: the 5 and the metre are both cubed.', { v: [['3*10^5-9*10^3', '291000'], ['5^3', '125']] });
-  L('1-3', 'Square for area, cube for volume', ['A square with side s has area s².', 'A cube with edge s has volume s³.', 'Check whether the exponent sits on the whole quantity or on one part.'], 'Side 12 m: area = (12 m)² = 144 m²', '(5m)³ = 125m³, but 5m³ = 5 · m³. Parentheses decide.', { v: [['12^2', '144']] });
+  V('1-1', { th: ['pow'], r: ['power'], t: 'Write out the factors', spot: ['pow', { b: '2', e: 4, val: '16', lab: 1 }],
+    doit: [['flow', ['7 · 7 · 7', { op: 'count' }, { t: '7³', r: 'g' }]], ['flow', ['10⁴', { op: '4 zeros' }, { t: '10,000', r: 'g' }]], ['flow', ['0.2²', { op: '' }, '0.2 · 0.2', { op: '' }, { t: '0.04', r: 'g' }]]],
+    trap: ['2³ = 2 · 3 = 6', '2³ = 2 · 2 · 2 = 8'], alt: 'The exponent says how many times the base appears as a factor. 2 to the fourth power is 2 · 2 · 2 · 2 = 16.', v: [['2^4', '16'], ['10^4', '10000'], ['(2/10)^2', '4/100'], ['2^3', '8']] });
+  V('1-2', { th: ['pow'], from: '1-1', r: ['reach', 'pemdas'], t: 'What does the exponent reach?', spot: ['cue', [['(5 cm)³', 'x', 'number and unit'], ['or', ''], ['5 cm³', 'n', 'unit only', 'd']]],
+    doit: [['pow', { b: '5 cm', e: 3, par: 1, val: '125 cm³' }], ['pow', { pre: '5', b: 'cm', e: 3 }], ['flow', ['125 − 5', { op: '' }, { t: '120 cm³ more', r: 'g' }]], ['flow', ['7 · 10⁶ − 4 · 10²', { op: 'powers first' }, '7,000,000 − 400', { op: '' }, { t: '6,999,600', r: 'g' }]]],
+    trap: ['(4 in)² = 4 in²', '(4 in)² = 16 in²'], alt: 'With parentheses the exponent cubes the number and the unit: (5 cm)³ = 125 cm³. Without them, 5 cm³ cubes only the unit. In a longer expression, work out the powers first.', v: [['5^3', '125'], ['125-5', '120'], ['4^2', '16'], ['7*10^6-4*10^2', '6999600']] });
+  V('1-3', { th: ['pow', 'area'], from: '1-2', r: ['sqcube'], t: 'Square for area, cube for volume', spot: ['sqcube', { s: 's' }],
+    doit: [['cue', [['7 cubes', 'n', 'how many'], ['edge 0.2 m', 'x', 'cube it', 'd']]], ['pow', { b: '0.2 m', e: 3, par: 1, val: '0.008 m³' }], ['flow', ['7 · 0.008', { op: '' }, { t: '0.056 m³', r: 'g' }]], ['flow', ['edge 2s, s = 2.5 cm', { op: 'edge first' }, '(5 cm)³', { op: '' }, { t: '125 cm³', r: 'g' }]]],
+    trap: ['0.2³ = 0.08', '0.2³ = 0.008'], alt: 'A square with side s has area s squared; a cube with edge s has volume s cubed. Seven cubes of edge 0.2 m: 7 · 0.008 = 0.056 cubic metres. Three factors of 0.2 give three decimal places.', v: [['(2/10)^3', '8/1000'], ['7*(8/1000)', '56/1000'], ['(2*2.5)^3', '125']] });
   // Unit 2: Order of Operations
-  L('2-1', 'P → E → MD → AS', ['Parentheses first, then exponents.', 'Then × and ÷, left to right.', 'Then + and −, left to right.'], '3 · 6² = 3 · 36 = 108      2 + 3 · 4 = 2 + 12 = 14', 'Do not work straight across from the left. 2 + 3 · 4 is not 5 · 4.', { v: [['3*6^2', '108'], ['2+3*4', '14']] });
-  L('2-2', 'Inside out, and mind the bar', ['With parentheses inside parentheses, start with the innermost.', 'A fraction bar groups the whole top and the whole bottom: finish each before dividing.', 'Keep fractions as fractions if they do not come out whole.'], '0.4 · (1 − 0.4)² = 0.4 · 0.6² = 0.4 · 0.36 = 0.144      (2 + 10)/(7 − 4) = 12/3 = 4', 'In (2 + 10)/(7 − 4), do not divide 10 by 7. The bar means “all of this over all of that”.', { v: [['(4/10)*(1-4/10)^2', '144/1000'], ['(2+10)/(7-4)', '4']] });
-  L('2-3', '÷ takes only its neighbour', ['The sign ÷ divides only the number right before it by the number right after it.', 'A fraction bar divides everything above by everything below.', 'To turn ÷ into a bar, ask: what exactly is being divided?'], '9 + 2 · 6 ÷ 2 = 9 + (2 · 6)/2 = 9 + 6 = 15', 'Writing the 9 on top of the bar changes the value: (9 + 2 · 6)/2 = 10.5.', { v: [['9+2*6/2', '15'], ['(9+2*6)/2', '21/2']] });
+  V('2-1', { th: ['ops'], from: '1-2', shift: 'powers first, met on 1-2, is one rung of the full order', r: ['pemdas'], t: 'P → E → MD → AS', spot: TIERS,
+    doit: [['fold', [['11 + {x:2³} · {x:2²}', 'E'], ['11 + {x:8 · 4}', 'MD'], ['{x:11 + 32}', 'AS'], ['43']]], ['fold', [['58 − {x:(9 − 7)}²', 'P'], ['58 − {x:2²}', 'E'], ['{x:58 − 4}', 'AS'], ['54']]]],
+    trap: ['2 + 3 · 4 = 5 · 4 = 20', '2 + 3 · 4 = 2 + 12 = 14'], alt: 'Parentheses first, then exponents, then multiply and divide from the left, then add and subtract from the left. 11 + 2³ · 2² = 11 + 32 = 43.', v: [['11+2^3*2^2', '43'], ['58-(9-7)^2', '54'], ['2+3*4', '14']] });
+  V('2-2', { th: ['ops'], from: '2-1', r: ['inside', 'fracbar'], t: 'Inside out, and the bar groups', spot: ['cue', [['( … ( … ) … )', 'x', 'innermost first'], ['{f:top|bottom}', 'n', 'each whole part first', 'd']]],
+    doit: [['fold', [['(6 − {x:(8 − 4)}) · 2', 'P'], ['{x:(6 − 4)} · 2', 'P'], ['{x:2 · 2}', 'MD'], ['4']]], ['fold', [['{f:{x:6²} − 14|8 + 5}', 'E'], ['{f:{x:36 − 14}|{x:8 + 5}}', 'bar'], ['{f:22|13}']]], ['flow', ['{f:27|16} + 3', { op: '3 = {f:48|16}' }, { t: '{f:75|16}', r: 'g' }]]],
+    trap: ['{f:2 + {w:10}|{w:7} − 4}  →  10 ÷ 7', '{f:2 + 10|7 − 4}  →  {f:12|3}'], alt: 'Work from the innermost parentheses outward. A fraction bar groups everything above it and everything below it: finish both, then divide. Leave 22/13 and 75/16 as fractions.', v: [['(6-(8-4))*2', '4'], ['(6^2-14)/(8+5)', '22/13'], ['27/16+3', '75/16'], ['(2+10)/(7-4)', '4']] });
+  V('2-3', { th: ['ops'], from: '2-2', r: ['divbar', 'pemdas'], t: '÷ reaches only its neighbours', spot: ['cue', [['45', 'x', 'top'], ['÷', 'o'], ['(7 + 2)', 'n', 'bottom', 'd'], ['− 4', 'm', 'outside']]],
+    doit: [['flow', ['5 ÷ 2 + 4 = {f:5|2} + 4', '(5 + 4) ÷ 2 = {f:5 + 4|2}', '5 ÷ (2 + 4) = {f:5|2 + 4}']], ['fold', [['{f:45|{x:7 + 2}} − 4', 'bar'], ['{x:{f:45|9}} − 4', 'MD'], ['{x:5 − 4}', 'AS'], ['1']]], ['fold', [['{x:12 ÷ 2} · 3', 'MD'], ['{x:6 · 3}', 'MD'], ['18']]]],
+    trap: ['45 ÷ (7 + 2) − 4  →  {f:45|7 + 2 − 4}', '45 ÷ (7 + 2) − 4  →  {f:45|7 + 2} − 4'], alt: 'The sign ÷ reaches only the number before it and the number or group right after it. Rewrite it as a fraction to see what is divided. Multiply and divide in order from the left: 12 ÷ 2 · 3 = 18.', v: [['45/(7+2)-4', '1'], ['45/(7+2-4)', '9'], ['12/2*3', '18'], ['5/2+4', '13/2'], ['(5+4)/2', '9/2'], ['5/(2+4)', '5/6']] });
   // Unit 3: Evaluating Expressions
-  L('3-1', 'Swap the letter for (the number)', ['Write the value in parentheses where the letter was.', 'Follow the order of operations.', 'If the answer is not whole, leave it as a fraction.'], 'x = 3:   x²/(x + 4) = 3²/(3 + 4) = 9/7', '2x means 2 · x. At x = 3 it is 6, not 23.', { v: [['x^2/(x+4)', '9/7', { x: 3 }]] });
-  L('3-2', 'One letter at a time', ['Substitute every letter before you calculate anything.', 'Do the powers, then the products, then add and subtract.', 'Area multiplies two lengths (l · w); perimeter adds all the sides (2l + 2w).'], 'x = 3, y = 1.5:   x²y − 2y = 9 · 1.5 − 2 · 1.5 = 13.5 − 3 = 10.5', 'x²y squares only the x.', { v: [['x^2*y-2*y', '21/2', { x: 3, y: '3/2' }]] });
-  L('3-3', 'Compare two expressions', ['Make a small table: one row for each value, one column for each expression.', 'Look for where the two columns match, or which grows faster.', 'Or think in copies: 3p is p plus two more p’s.'], '3p and p + 8 match when 2p = 8, so p = 4. Check: 12 and 12.', 'Two expressions can be equal for one value and different for all the others.', { v: [['3*4', '4+8']] });
+  V('3-1', { th: ['ops', 'test'], from: '2-1', r: ['subst'], t: 'Swap the letter for (the number)', spot: ['flow', ['2{x:x}² − {x:x}', { op: 'x = 3' }, '2 · {n:(3)}² − {n:(3)}']],
+    doit: [['fold', [['2 · {x:(3)²} − (3)', 'E'], ['{x:2 · 9} − 3', 'MD'], ['{x:18 − 3}', 'AS'], ['15']]], ['chain', { top: ['x', '3x', '3x + 1'], ops: ['· 3', '+ 1'], bottom: ['0.6', '1.8', '2.8'] }]],
+    trap: ['2x at x = 3  →  23', '2x at x = 3  →  2 · 3 = 6'], alt: 'Write the value in parentheses where the letter was, then follow the order of operations. 2x² − x at x = 3 is 2 · 9 − 3 = 15.', v: [['2*x^2-x', '15', { x: 3 }], ['3*x+1', '28/10', { x: '6/10' }], ['2*3', '6']] });
+  V('3-2', { th: ['ops', 'test'], from: '3-1', r: ['subst', 'reach'], t: 'Every letter, then the order', spot: ['flow', ['{x:x}²{n:y} − 7{n:y}', { op: 'x = 4, y = 3' }, '{x:(4)}² · {n:(3)} − 7 · {n:(3)}']],
+    doit: [['fold', [['{x:4²} · 3 − 7 · 3', 'E'], ['{x:16 · 3} − {x:7 · 3}', 'MD'], ['{x:48 − 21}', 'AS'], ['27']]], ['fold', [['{f:4{x:s}|5} − {f:3{x:t}|5}'], ['{f:{x:4 · 6}|5} − {f:{x:3 · 2}|5}', 'MD'], ['{x:{f:24|5} − {f:6|5}}', 'AS'], ['{f:18|5}']], { at: { s: '6', t: '2' } }]],
+    trap: ['x²y = (4 · 3)²', 'x²y = 4² · 3'], alt: 'Substitute every letter before you calculate. Then powers, products, and last add and subtract. In x²y only the x is squared. Leave 18/5 as a fraction.', v: [['x^2*y-7*y', '27', { x: 4, y: 3 }], ['4*s/5-3*t/5', '18/5', { s: 6, t: 2 }], ['4^2*3', '48']] });
+  V('3-3', { th: ['test', 'bar'], from: '3-2', r: ['agree'], t: 'Compare two expressions', spot: ['cue', [['5p', 'x'], ['=', ''], ['p + 2', 'n'], ['when?', 'o']]],
+    doit: [['cmp', { v: 'p', a: '5p', b: 'p + 2', rel: 1, tries: [['0', '0', '2'], ['0.5', '2.5', '2.5'], ['1', '5', '3']] }], ['bar', { rows: [{ parts: [['p', 1, 'x'], ['p', 1, 'm'], ['p', 1, 'm'], ['p', 1, 'm'], ['p', 1, 'm']] }, { parts: [['p', 1, 'x'], ['2', 4, 'n']] }], alt: 'Five copies of p above; p and 2 below: four copies of p equal 2' }], ['flow', ['4p = 2', { op: '÷ 4' }, { t: 'p = 0.5', r: 'g' }]]],
+    trap: ['x² is always more than 2x', 'at x = 1.5:  2.25 < 3'], alt: 'Put both expressions in a table of values: the signs show which is larger and where they match. Or think in copies: 5p is p plus four more p, so four copies of p equal 2 and p = 0.5.', v: [['5*(1/2)', '1/2+2'], ['2/4', '1/2'], ['1+2', '3'], ['1.5^2', '2.25'], ['2*1.5', '3']] });
   // Unit 4: Words to Expressions
-  L('4-1', 'Find the signal word', ['Spot the operation word: sum, difference, product, quotient, squared.', 'Write the parts in the order the words give them.', '“The quantity” or “the sum of” makes a group: use parentheses.'], '“the difference of t squared and s squared”  →  t² − s²', '“7 less than x” is x − 7. “Less than” flips the order.', { tool: 'trans' });
-  L('4-2', 'Start from the one you know', ['Write the letter for the known person or thing first.', 'Younger, shorter, fewer → subtract. Older, longer, more → add. Times as many → multiply.', 'Test it with a number.'], 'Alice is 11 years younger than Betty (B):  Alice = B − 11.  Test: B = 20 gives 9.', 'It is B − 11, not 11 − B: start from Betty’s age.', { v: [['20-11', '9']], tool: 'trans' });
-  L('4-3', 'Price × how many, then add', ['For each kind of thing: what one costs times how many.', 'Add the kinds together.', 'A one-time amount is added once, with no letter.'], 'n hats at $7 and m scarves at $4:  7n + 4m', '7n + 4m cannot be combined: n and m count different things.', { tool: 'tri:cost' });
+  V('4-1', { th: ['words'], from: '1-2', shift: 'the quantity is what the exponent must reach', r: ['signal', 'flip', 'quantity', 'reach'], t: 'Find the signal word', spot: ['map', [['8', 'n'], ['less than', 'o'], ['x to the fifth', 'x']], [['x⁵', 'x'], ['−', 'o'], ['8', 'n']], [2, 1, 0], { fit: 1 }],
+    doit: [['flow', ['sum {o:+}', 'difference {o:−}']], ['flow', ['product {o:×}', 'quotient {o:÷}']], ['map', [['the quantity', 'o'], ['5x plus 4', 'x'], ['to the fifth power', 'n']], [['(   )', 'o'], ['5x + 4', 'x'], ['(   )⁵', 'n']], [0, 1, 2]], ['flow', [{ t: '(5x + 4)⁵', r: 'g' }]]],
+    trap: ['8 less than x⁵  →  8 − x⁵', '8 less than x⁵  →  x⁵ − 8'], alt: 'Find the operation word and write the parts in the order the words mean. “Less than” flips the order. “The quantity” makes a group: use parentheses.', v: [['2^5-8', '24'], ['(5*1+4)^5', '59049']], tool: 'trans' });
+  V('4-2', { th: ['words', 'bar'], from: '4-1', r: ['known', 'parts', 'try'], t: 'Start from the one you know', spot: ['map', [['9 years', 'n'], ['younger than', 'o'], ['B', 'x']], [['B', 'x'], ['−', 'o'], ['9', 'n']], [2, 1, 0], { fit: 1 }],
+    doit: [['map', [['older · longer · more', 'm'], ['younger · shorter · fewer', 'm'], ['times as many', 'm']], [['+', 'o'], ['−', 'o'], ['×', 'o']], [0, 1, 2]], ['bar', { rows: [{ parts: [['t', 1, 'x'], ['22 − t', 1.4, 'g']], over: [[0, 2, '22', 'n']] }], alt: '22 shared: one part is t, the rest is 22 − t' }], ['flow', ['x', { op: '{f:1|8} off' }, { t: 'x − {f:x|8} = {f:7x|8}', r: 'g' }]], ['flow', ['B = 20', { op: 'test' }, { t: '20 − 9 = 11', r: 'g' }]]],
+    trap: ['9 − B', 'B − 9'], alt: 'Write the letter for the known amount first, then change it: younger, shorter, fewer subtract; older, longer, more add. A total of 22 shared: one part t, the rest 22 − t. Test with a number.', v: [['20-9', '11'], ['22-9', '13'], ['16-16/8', '14'], ['16-16/8', '7*16/8']], tool: 'trans' });
+  V('4-3', { th: ['words', 'tri'], from: '4-2', r: ['value', 'once'], t: 'Worth × how many, then add', spot: ['map', [['x pennies', 'x'], ['and', 'm'], ['y quarters', 'n']], [['1 · x', 'x'], ['+', 'm'], ['25 · y', 'n']], [0, 1, 2], { fit: 1 }],
+    doit: [['vt', { rows: [['1¢', 'x', 'x'], ['25¢', 'y', '25y']], sum: 'x + 25y' }], ['vt', { cols: ['each', 'how many', 'cost'], rows: [['$8', 'y', '8y'], ['$4', 'once', '4']], sum: '8y + 4' }], ['tri', 'cost', 'top']],
+    trap: ['x + y  (coins)', 'x + 25y  (cents)'], alt: 'For each kind, multiply what one is worth by how many there are, then add the kinds: x pennies and y quarters are worth x + 25y cents. An amount paid once is added once, with no letter.', v: [['3+25*2', '53'], ['8*3+4', '28']], tool: 'tri:cost' });
   // Unit 5: Equations and Roots
-  L('5-1', 'Try each value', ['Substitute each number from the set into the equation.', 'A root makes the two sides equal.', 'Keep going to the end of the set: there may be more than one root.'], 'n² − 15n + 56 = 0:   n = 7 gives 49 − 105 + 56 = 0 ✓   n = 8 gives 64 − 120 + 56 = 0 ✓', 'Stopping at the first root you find can miss another one.', { v: [['n^2-15*n+56', '0', { n: 7 }], ['n^2-15*n+56', '0', { n: 8 }]] });
-  L('5-2', 'Sentence → equation → undo', ['Put = where the sentence says is, gives or equals.', 'Translate each side.', 'Undo what was done to the number.'], '“A number increased by 1/8 is 4/3”:  x + 1/8 = 4/3,  so  x = 4/3 − 1/8 = 29/24', 'An equation such as x + x = 2x is true for every number. That is an identity, not a puzzle with one answer.', { v: [['4/3-1/8', '29/24']], tool: 'trans' });
-  L('5-3', 'Does the equation tell the story?', ['Name the unknown with a letter.', 'Build the equation from the story, one phrase at a time.', 'Test a simple number in the story and in the equation: they must agree.'], 'A discount of 1/5 leaves 4/5:  (4/5)p = 104.  One fifth is 104 ÷ 4 = 26, so p = 5 · 26 = 130.', 'After 1/5 off, the price is 4/5 of the original, not 1/5 of it.', { v: [['(4/5)*130', '104']] });
+  V('5-1', { th: ['test'], from: '3-1', r: ['root'], t: 'Try each value', spot: ['cue', [['n² − 15n + 56', 'x', 'put each value in'], ['=', ''], ['0', 'n', 'want', 'd']]],
+    doit: [['test', { v: 'n', expr: 'n² − 15n + 56', want: '0', tries: [['6', '2', false], ['7', '0', true], ['8', '0', true], ['9', '2', false]] }], ['cmp', { v: 'x', a: '10x − 6', b: '2x', tries: [['{f:1|2}', '−1', '1'], ['{f:3|4}', '{f:3|2}', '{f:3|2}']] }]],
+    trap: ['stop at the first root', 'test the whole set'], alt: 'Substitute each value from the set. A root makes the two sides equal. Go to the end of the set: there may be more than one root.', v: [['n^2-15*n+56', '0', { n: 7 }], ['n^2-15*n+56', '0', { n: 8 }], ['10*(3/4)-6', '2*(3/4)']] });
+  V('5-2', { th: ['words', 'undo'], from: '4-1', r: ['iseq', 'inverse', 'parts', 'equiv'], t: 'Sentence → equation → undo', spot: ['map', [['difference', 'o'], ['a number', 'x'], ['3/8', 'n'], ['is', 'g'], ['1/8', 'm']], [['x', 'x'], ['−', 'o'], ['3/8', 'n'], ['=', 'g'], ['1/8', 'm']], [1, 0, 2, 3, 4], { fit: 1 }],
+    doit: [['chain', { top: ['x', 'x − 3/8'], ops: ['− 3/8'], bottom: ['1/2', '1/8'], undo: ['+ 3/8'] }], ['bar', { rows: [{ parts: [['x', 1.3, 'x'], ['35', 1, 'm']], over: [[0, 2, '82', 'n']] }], alt: '82 is made of x and 35' }], ['flow', ['82 − x = 35', { op: '' }, { t: 'x = 82 − 35 = 47', r: 'g' }]], ['cmp', { v: 'x', a: 'x + x', b: '2x', tries: [['1', '2', '2'], ['5', '10', '10'], ['9', '18', '18']], say: 'true for every x' }]],
+    trap: ['x = {f:3|8} − {f:1|8}', 'x = {f:1|8} + {f:3|8}'], alt: 'Put the equals sign where the sentence says “is”. Translate each side, then undo what was done to the number: x − 3/8 = 1/8, so x = 1/8 + 3/8 = 1/2. When the unknown is taken away, 82 − x = 35, picture the parts: x = 82 − 35.', v: [['1/8+3/8', '1/2'], ['1/2-3/8', '1/8'], ['82-35', '47'], ['82-47', '35']], tool: 'trans' });
+  V('5-3', { th: ['bar', 'words'], from: '4-2', r: ['value', 'parts', 'inverse', 'try'], t: 'Does the equation tell the story?', spot: ['vt', { cols: ['each', 'how many', 'cost'], rows: [['$25', '3', '75'], ['p', '5', '5p']], sum: '75 + 5p', eq: '84.25' }],
+    doit: [['flow', ['84.25 − 75', { op: '' }, '5p = 9.25', { op: '÷ 5' }, { t: 'p = $1.85', r: 'g' }]], ['bar', { rows: [{ parts: [['7', 1, 'g'], ['7', 1, 'g'], ['off', 1, 'w']], over: [[0, 3, 'price', 'x']], under: [[0, 2, '14', 'n']] }], alt: 'The price in thirds: one third is taken off, the two thirds left are 14' }], ['flow', ['14 ÷ 2 = 7', { op: '· 3' }, { t: 'price = $21', r: 'g' }]], ['flow', ['w = 40', { op: 'test' }, 'loses 5, keeps 35', { op: '' }, { t: '{f:7w|8} = 35 ✓', r: 'g' }]]],
+    trap: ['w − {f:1|8} = 35', '{f:7w|8} = 35'], alt: 'Name the unknown and build the equation one phrase at a time. A price with one third off leaves two thirds: if two thirds are 14, one third is 7 and the price is 21. Test an equation with a number that is easy to check.', v: [['84.25-75', '9.25'], ['9.25/5', '1.85'], ['14/2*3', '21'], ['21-21/3', '14'], ['7*40/8', '35'], ['40-40/8', '35']] });
   // Unit 6: Properties of Operations
-  L('6-1', 'What changed: the order or the grouping?', ['The order of the numbers changed → commutative.', 'The parentheses moved but the order stayed → associative.', 'Then say which operation: addition or multiplication.'], '9 · 6 = 6 · 9 is commutative.   (2 + 3) + 4 = 2 + (3 + 4) is associative.', 'Only + and × have these properties. − and ÷ do not.', { v: [['9*6', '6*9'], ['(2+3)+4', '2+(3+4)']] });
-  L('6-2', 'Test with numbers', ['Try a few values in both expressions: 0, 1, 2 and one bigger.', 'One value where they differ means they are not equivalent.', 'Equal for every value you try suggests they are equivalent. Then look for the reason.'], '5 + x + x and x · x + 5:  at x = 5 they give 15 and 30. Not equivalent (though both give 5 at x = 0).', 'Matching at one value proves nothing. Try at least three.', { v: [['5+5+5', '15'], ['5*5+5', '30']] });
-  L('6-3', 'One counterexample is enough', ['To show a rule is not always true, find one pair of numbers that breaks it.', 'Pick different numbers for a and b. Equal numbers hide the problem.', 'Subtraction and division care about order; addition and multiplication do not.'], 'a − b and b − a:  with a = 6, b = 4 they are 2 and −2.', 'a = 5, b = 5 gives 0 both ways and shows nothing.', { v: [['6-4', '2'], ['4-6', '-2']] });
+  V('6-1', { th: ['like'], from: '2-2', shift: 'parentheses decide what is done first; for + and × alone the result is the same either way', r: ['comm', 'assoc'], t: 'What changed: order or grouping?', spot: ['map', [['a', 'x'], ['+', 'm'], ['6', 'n']], [['6', 'n'], ['+', 'm'], ['a', 'x']], [2, 1, 0]],
+    doit: [['flow', [{ t: 'order', r: 'x' }, { op: '' }, 'commutative']], ['cue', [['(b + n)', 'o', 'group'], ['+ x', ''], ['=', ''], ['b +', ''], ['(n + x)', 'o', 'group', 'd']]], ['flow', [{ t: 'grouping', r: 'o' }, { op: '' }, 'associative']], ['sort', { op: '·', terms: [['5', 'n'], ['x', 'x'], ['2', 'n']], bins: [{ r: 'n', sum: '10' }, { r: 'x', sum: 'x' }], out: '10x' }]],
+    trap: ['(b + n) + x = b + (n + x)  →  commutative', 'same order, new groups  →  associative'], alt: 'If the order of the numbers changed, the property is commutative. If only the parentheses moved, it is associative. Changing the order brings like things together: 5 · x · 2 = 5 · 2 · x = 10x.', v: [['6+4', '4+6'], ['(2+3)+4', '2+(3+4)'], ['5*3*2', '10*3']] });
+  V('6-2', { th: ['test'], from: '3-3', r: ['equiv', 'counter'], t: 'Test with numbers', spot: ['cue', [['a + 4b', 'x'], ['=', ''], ['b + 4a', 'n'], ['always?', 'o']]],
+    doit: [['cmp', { v: ['a', 'b'], a: 'a + 4b', b: 'b + 4a', tries: [[['1', '2'], '9', '6'], [['2', '2'], '10', '10'], [['0', '3'], '12', '3']], say: 'some values only' }], ['cmp', { v: ['x', 'y'], a: '{f:x + y|7}', b: '{f:x|7} + {f:y|7}', tries: [[['3', '4'], '1', '1'], [['10', '12'], '{f:22|7}', '{f:22|7}'], [['7', '0'], '1', '1']], say: 'every value: each part ÷ 7' }], ['cmp', { v: 'n', a: '(n − 6) − 4', b: 'n − (6 − 4)', tries: [['10', '0', '8'], ['12', '2', '10'], ['20', '10', '18']], say: 'never: grouping changed, 8 apart' }]],
+    trap: ['one match  →  equivalent', 'one miss  →  not equivalent'], alt: 'Try several values in both expressions. One value where they differ shows they are not equivalent. Equal every time suggests they are: then find the reason, here that each part is divided by 7.', v: [['1+4*2', '9'], ['2+4*1', '6'], ['(3+4)/7', '3/7+4/7'], ['(10+12)/7', '10/7+12/7'], ['(10-6)-4', '0'], ['10-(6-4)', '8']] });
+  V('6-3', { th: ['test'], from: '6-2', r: ['counter', 'comm', 'assoc'], t: 'One counterexample is enough', spot: ['cue', [['a − b', 'x'], ['=', ''], ['b − a', 'n'], ['always?', 'o']]],
+    doit: [['cmp', { v: ['a', 'b'], a: 'a − b', b: 'b − a', tries: [[['5', '5'], '0', '0'], [['7', '6'], '1', '−1']] }], ['cmp', { v: ['a', 'b', 'c'], a: '(a ÷ b) ÷ c', b: 'a ÷ (b ÷ c)', tries: [[['6', '3', '1'], '2', '2'], [['6', '3', '2'], '1', '4']] }], ['grid', { head: ['', '+', '×', '−', '÷'], rows: [['order', '✓', '✓', '✗', '✗'], ['grouping', '✓', '✓', '✗', '✗']] }]],
+    trap: ['a = b:  0 = 0  →  always true', 'a = 7, b = 6:  1 ≠ −1  →  not always'], alt: 'To show a rule is not always true, find one set of numbers that breaks it. Equal numbers, or a 1, can hide the difference. Subtraction and division have neither property.', v: [['7-6', '1'], ['6-7', '-1'], ['(6/3)/2', '1'], ['6/(3/2)', '4'], ['(6/3)/1', '6/(3/1)']] });
   // Unit 7: Simplifying Expressions
-  L('7-1', 'Terms are split by + and −', ['A term is numbers and letters multiplied together.', 'The coefficient is the number in front. A term with no letter is a constant.', 'Count the terms by counting the pieces between + and − signs.'], '2xy − 0.9ab + 7 has three terms. The coefficients are 2 and −0.9, and 7 is the constant.', 'x alone has coefficient 1. Dividing by a number still makes one term: x/3 is (1/3)x.');
-  L('7-2', 'Adding: add the coefficients. Multiplying: count the letters.', ['Adding like terms: add the numbers in front, keep the letter part.', 'Multiplying: multiply the numbers, then count how many of each letter.', 'Reorder first so the like things sit together.'], 'y + 3y = 4y        x · 2 · y · x = 2x²y', 'x + x is 2x. x · x is x². They are different.', { v: [['5+3*5', '4*5'], ['3*2*5*3', '2*3^2*5']] });
-  L('7-3', 'Sum or product? Decide first', ['Look at the signs between the parts.', 'A sum: combine like terms only. Unlike terms stay.', 'A product: everything multiplies together.'], '4p + 4 + 5p + p = 10p + 4        4 · p · p = 4p²', '2x + 7y cannot be combined. 10p + 4 is finished: it is not 14p.', { v: [['4*3+4+5*3+3', '10*3+4']] });
+  V('7-1', { th: ['like'], r: ['term'], t: 'Terms are split by + and −', spot: ['cue', [['2', 'n', 'constant term', 'd'], ['+', ''], ['6a³', 'x', 'term'], ['−', ''], ['7y²', 'x', 'term', 'd'], ['+', ''], ['3a', 'x', 'term']]],
+    doit: [['cue', [['6', 'o', 'coefficient'], ['a³', 'x', 'letter part', 'd']]], ['flow', ['2 + 6a³ − 7y² + 3a', { op: 'count' }, { t: '4 terms', r: 'g' }]], ['flow', ['{x:6xy}', '{x:{f:5x|7}}', '{x:37²}', { op: 'no + or −' }, { t: '1 term each', r: 'g' }]]],
+    trap: ['x: coefficient 0', 'x: coefficient 1'], alt: 'Terms are the pieces between plus and minus signs. The coefficient is the number in front of the letters; a term with no letter is a constant. A product or a fraction with no plus or minus is one term. x alone has coefficient 1.', v: [['1*5', '5'], ['5/3', '(1/3)*5']] });
+  V('7-2', { th: ['like', 'pow'], from: '7-1', r: ['like', 'xx'], t: 'Add: coefficients. Multiply: count.', spot: ['cue', [['7x − 2x', 'x', 'same letter part'], ['x · 2 · y · y', 'n', 'all ·', 'd']]],
+    doit: [['sort', { terms: [['7x', 'x'], ['+ 13', 'n'], ['− 2x', 'x'], ['− 7', 'n'], ['+ 5x', 'x']], bins: [{ r: 'x', sum: '10x' }, { r: 'n', sum: '6' }], out: '10x + 6' }], ['sort', { op: '·', terms: [['x', 'x'], ['2', 'n'], ['y', 'o'], ['y', 'o'], ['5', 'n']], bins: [{ r: 'n', sum: '10' }, { r: 'x', sum: 'x' }, { r: 'o', sum: 'y²' }], out: '10xy²' }]],
+    trap: ['x + x = x²', 'x + x = 2x'], alt: 'Like terms have the same letter part. Adding them: add the numbers in front and keep the letter part. Multiplying: multiply the numbers and count each letter, so x · 2 · y · y · 5 = 10xy².', v: [['7*3+13-2*3-7+5*3', '10*3+6'], ['3+3', '2*3'], ['3*2*5*5*5', '10*3*5^2']] });
+  V('7-3', { th: ['like', 'pow'], from: '7-2', r: ['sumprod'], t: 'Sum or product? Decide first', spot: ['cue', [['y + 3y', 'x', 'sum'], ['or', ''], ['y · 3y', 'n', 'product', 'd']]],
+    doit: [['flow', [{ t: 'y + 3y = 4y', r: 'x' }, { t: 'y · 3y = 3y²', r: 'n' }]], ['flow', ['y · 4y · 3 · 2y · y', { op: 'split' }, 'y · 4 · y · 3 · 2 · y · y']], ['sort', { op: '·', terms: [['y', 'x'], ['4', 'n'], ['y', 'x'], ['3', 'n'], ['2', 'n'], ['y', 'x'], ['y', 'x']], bins: [{ r: 'n', sum: '24' }, { r: 'x', sum: 'y⁴' }], out: '24y⁴' }]],
+    trap: ['8x + 2x² = 10x³', '8x + 2x² stays'], alt: 'Look at the signs between the parts. A sum combines like terms only; x and x² are not like terms, so 8x + 2x² stays. A product multiplies everything: numbers together, letters counted.', v: [['y*4*y*3*2*y*y', '24*y^4', { y: 2 }], ['5+3*5', '4*5'], ['5*3*5', '3*5^2']] });
   // Unit 8: Growing Patterns
-  L('8-1', 'What does the step number do?', ['Count the dots in steps 1, 2 and 3.', 'Find how the picture is built from the step number: a row of n, an n-by-n square, n plus one more.', 'Use that to jump to a far step without drawing it.'], 'A rectangle n wide and n + 1 tall has n(n + 1) dots. Step 8: 8 · 9 = 72.', 'Do not just add the last difference again and again. Look for the shape.', { v: [['8*9', '72']] });
-  L('8-2', 'Write the rule with n', ['Describe each part of the picture using n.', 'Add the parts.', 'Check the rule on a step you can count.'], 'An n-by-n square has n² dots. Check step 3: 9 dots ✓', 'A rule that works for step 1 only is not the rule. Check step 3 or 4.', { v: [['3^2', '9']] });
-  L('8-3', 'Two rules, one pattern', ['The same picture can be seen in different ways.', 'Each way gives a formula; simplify both to compare.', 'Or check several steps: equal rules give equal numbers.'], 'Two rows of n + 1 dots: 2(n + 1) = 2n + 2. Steps 1, 2, 3 give 4, 6, 8 either way.', 'Formulas that look different may be the same. Distribute before deciding.', { v: [['2*(3+1)', '2*3+2']] });
+  V('8-1', { th: ['step'], r: ['see-n'], t: 'What does the step number do?', spot: ['dots', { steps: [{ cap: 'n = 1', pts: rowsA(1) }, { cap: 'n = 2', pts: rowsA(2) }, { cap: 'n = 3', pts: rowsA(3) }], alt: 'Two rows of dots: 4, 6, 8 dots' }],
+    doit: [['cue', [['2 rows', 'm'], ['of', ''], ['n', 'x', 'step number'], ['+ 1', 'n', 'one more', 'd']]], ['flow', ['step 12', { op: '2 · (12 + 1)' }, { t: '26 dots', r: 'g' }]], ['dots', { steps: [{ cap: 'n = 1', pts: sq1(1) }, { cap: 'n = 2', pts: sq1(2) }, { cap: 'n = 3', pts: sq1(3) }], alt: 'A square of dots with one extra: 2, 5, 10 dots' }], ['flow', ['step 9', { op: '9 · 9 + 1' }, { t: '82 dots', r: 'g' }]]],
+    trap: ['step 12 = 4 × step 3 = 32', '2 · (12 + 1) = 26'], alt: 'Find how the picture is built from the step number: two rows of n + 1 dots, or an n-by-n square plus one. Then jump straight to a far step. Four times the step is not four times the dots.', v: [['2*(12+1)', '26'], ['9*9+1', '82'], ['2*(3+1)', '8'], ['4*8', '32']] });
+  V('8-2', { th: ['step'], from: '8-1', r: ['see-n', 'check-n'], t: 'Write the rule with n', spot: ['dots', { steps: [{ cap: 'n = 1', pts: plus(1) }, { cap: 'n = 2', pts: plus(2) }, { cap: 'n = 3', pts: plus(3) }], alt: 'A plus shape that grows: 1, 5, 9 dots' }],
+    doit: [['cue', [['1', 'n', 'centre'], ['+ 4', 'm', 'arms'], ['(n − 1)', 'x', 'dots each', 'd']]], ['seq', { n: ['1', '2', '3', '…', 'n'], v: ['1', '5', '9', '…', '1 + 4(n − 1)'], add: '+ 4', role: { 4: 'g' } }], ['flow', ['n = 3', { op: '1 + 4 · 2' }, { t: '9 ✓', r: 'g' }]]],
+    trap: ['4n  (step 1 would be 4)', '1 + 4(n − 1)  (fits steps 1, 2, 3)'], alt: 'Describe each part of the picture with n and add the parts: one centre dot and four arms of n − 1 dots is 1 + 4(n − 1). Check the rule on a step you can count.', v: [['1+4*(1-1)', '1'], ['1+4*(2-1)', '5'], ['1+4*(3-1)', '9'], ['4*1', '4']] });
+  V('8-3', { th: ['step', 'test'], from: '8-2', r: ['equiv', 'solve-n', 'inverse'], t: 'Two rules, one pattern', spot: ['dots', { steps: [{ cap: '2 rows of n + 1', pts: rowsA(3) }, { cap: 'n pairs + 2', pts: rows2(3) }], alt: 'The same eight dots seen as two rows of four, or as three pairs and two more' }],
+    doit: [['cmp', { v: 'n', a: '2(n + 1)', b: '2n + 2', tries: [['1', '4', '4'], ['2', '6', '6'], ['3', '8', '8']], say: 'same rule' }], ['cmp', { v: 'n', a: '1 + 4(n − 1)', b: '4n − 3', tries: [['1', '1', '1'], ['2', '5', '5'], ['3', '9', '9']], say: 'same rule' }], ['flow', ['2n + 2 = 40', { op: '− 2' }, '2n = 38', { op: '÷ 2' }, { t: 'n = 19', r: 'g' }]]],
+    trap: ['2(n + 1) = 2n + 1', '2(n + 1) = 2n + 2'], alt: 'One picture can be seen in two ways, and the two rules are equal: 2(n + 1) = 2n + 2. To find which step has 40 dots, set the rule equal to 40 and solve: n = 19.', v: [['2*(3+1)', '2*3+2'], ['1+4*(3-1)', '4*3-3'], ['(40-2)/2', '19'], ['2*19+2', '40']] });
   // Unit 9: The Distributive Property
-  L('9-1', 'Multiply every term inside', ['The number outside multiplies each term in the parentheses.', 'Keep each term’s sign.', 'For mental math, split an awkward number: 98 = 100 − 2.'], '2(5s − t + 7) = 10s − 2t + 14        7 · 98 = 7(100 − 2) = 700 − 14 = 686', '3(x + 4) is 3x + 12, not 3x + 4.', { v: [['2*(5*3-2+7)', '10*3-2*2+14'], ['7*98', '686']] });
-  L('9-2', 'A rectangle in parts', ['Whole rectangle: height × (total width).', 'The parts: height × each width, added.', 'Backwards is factoring: pull out what every term shares.'], '9(12 + b) = 108 + 9b        5x + 45 = 5(x + 9)', 'Factor out the greatest shared factor: 6x + 12 = 6(x + 2), not 2(3x + 6).', { v: [['9*(12+2)', '108+9*2'], ['5*3+45', '5*(3+9)']] });
-  L('9-3', 'Divide each part', ['To divide a sum, divide every term.', 'To find a side from a perimeter, divide by the number of equal sides.', 'Check by multiplying back.'], '(20s + 35)/5 = 4s + 7.   Check: 5(4s + 7) = 20s + 35.', 'Divide both terms. (20s + 35)/5 is not 4s + 35.', { v: [['(20*2+35)/5', '4*2+7']] });
+  V('9-1', { th: ['area'], from: '8-3', shift: 'the two rules of 8-3 are equal because of this property', r: ['dist'], t: 'Multiply every term inside', spot: ['dist', { k: '3', terms: ['x', '+ 4'], out: ['3x', '+ 12'] }],
+    doit: [['amodel', { h: '3', parts: [['x', '3x', 'x'], ['4', '12', 'n']] }], ['dist', { k: '0.2', terms: ['2v', '+ 6w', '− 1'], out: ['0.4v', '+ 1.2w', '− 0.2'] }], ['flow', ['7 · 98', { op: '' }, '7(100 − 2)', { op: '' }, { t: '700 − 14 = 686', r: 'g' }]]],
+    trap: ['3(x + 4) = 3x + 4', '3(x + 4) = 3x + 12'], alt: 'The number outside multiplies every term in the parentheses, and each term keeps its sign. For mental math, split an awkward number: 7 · 98 = 7(100 − 2) = 686.', v: [['3*(5+4)', '3*5+12'], ['7*98', '686'], ['700-14', '686'], ['(2/10)*(2*3+6*5-1)', '(4/10)*3+(12/10)*5-2/10']] });
+  V('9-2', { th: ['area'], from: '9-1', r: ['factor', 'dist'], t: 'A rectangle in parts', spot: ['amodel', { h: '3', parts: [['2', '6', 'n'], ['b', '3b', 'x']] }],
+    doit: [['flow', ['?(x + 8) = ?x + 64', { op: '64 ÷ 8' }, { t: '? = 8', r: 'g' }]], ['amodel', { h: '4', parts: [['2y', '8y', 'x'], ['3', '12', 'n']], eq: '8y + 12 = 4(2y + 3)' }], ['flow', ['72t − 32', { op: 'greatest: 8' }, { t: '8(9t − 4)', r: 'g' }]]],
+    trap: ['8y + 12 = 4(2y + 12)', '8y + 12 = 4(2y + 3)'], alt: 'The whole rectangle is height times total width; the parts are height times each width. Backwards it is factoring: take out the greatest factor every term shares, and divide every term by it.', v: [['3*(2+7)', '6+3*7'], ['64/8', '8'], ['8*5+12', '4*(2*5+3)'], ['72*5-32', '8*(9*5-4)']] });
+  V('9-3', { th: ['area'], from: '9-2', r: ['divparts'], t: 'Divide each part', spot: ['cue', [['{f:5x − 5|4}', 'x', 'every term ÷ 4']]],
+    doit: [['flow', ['{f:5x − 5|4}', { op: 'split' }, { t: '{f:5x|4} − {f:5|4}', r: 'g' }]], ['amodel', { h: '9', whole: '12', parts: [['2', '18', 'g', 1], ['10', '90', 'w', 2.2]], eq: '9(12 − 10) = 108 − 90 = 18' }], ['flow', ['P = 20s + 35', { op: '÷ 5 sides' }, { t: 'side = 4s + 7', r: 'g' }]]],
+    trap: ['{f:20s + 35|5} = 4s + 35', '{f:20s + 35|5} = 4s + 7'], alt: 'To divide a sum, divide every term. A strip removed from a rectangle subtracts its area: 9(12 − 10) = 108 − 90 = 18. A side from a perimeter: divide by the number of sides.', v: [['(5*3-5)/4', '5*3/4-5/4'], ['9*(12-10)', '18'], ['9*12-9*10', '18'], ['(20*2+35)/5', '4*2+7']] });
   // Unit 10: Modeling with Algebra
-  L('10-1', 'Perimeter adds, area multiplies', ['Regular polygon: number of sides × one side.', 'Rectangle: perimeter 2l + 2w, area l · w.', 'Distribute, then combine like terms.'], 'A regular hexagon with side 9x + 2:  6(9x + 2) = 54x + 12', 'Multiply both terms of the side by the number of sides.', { v: [['6*(9*2+2)', '54*2+12']], tool: 'tri:area' });
-  L('10-2', 'Value = worth × count', ['Each kind: what one is worth times how many.', 'Add the kinds and set the sum equal to the total.', 'With two unknowns, choose one and work out the other.'], 'n dimes and m quarters worth 275¢:  10n + 25m = 275.  If m = 1, then 10n = 250, so n = 25.', 'n and m count coins, not cents. 10n is the cents.', { v: [['10*25+25*1', '275']], tool: 'tri:cost' });
-  L('10-3', 'Per item, plus the one-time fee', ['Multiply the per-item amounts by n.', 'Add a one-time amount once, with no n.', 'Combine like terms, then solve.'], 'Pens $1, notebooks $4, n of each, $6 shipping, total $96:  n + 4n + 6 = 96  →  5n = 90  →  n = 18', 'The shipping is paid once. Do not multiply it by n.', { v: [['18+4*18+6', '96']], tool: 'tri:cost' });
+  V('10-1', { th: ['area', 'like'], from: '7-3', r: ['periarea', 'like', 'xx', 'dist'], t: 'Perimeter adds, area multiplies', spot: ['rect', { w: '5x', h: '6x', a: 'A = 30x²' }],
+    doit: [['flow', [{ t: '6x · 5x', r: 'x' }, { op: 'multiply' }, { t: '30x²', r: 'g' }]], ['flow', [{ t: '6x + 5x + 6x + 5x', r: 'x' }, { op: 'add' }, { t: '22x', r: 'g' }]], ['amodel', { h: '3s', parts: [['s', '3s²', 'x'], ['2', '6s', 'n']] }], ['flow', ['6 sides of 9x + 2', { op: '' }, { t: '54x + 12', r: 'g' }]]],
+    trap: ['6x · 5x = 30x', '6x · 5x = 30x²'], alt: 'On the same rectangle, area multiplies two sides, 6x · 5x = 30x², and perimeter adds all four, 22x. A side that is a sum: split the rectangle, 3s(s + 2) = 3s² + 6s. A regular polygon: number of sides times one side.', v: [['6*3*5*3', '30*3^2'], ['6*3+5*3+6*3+5*3', '22*3'], ['3*5*(5+2)', '3*5^2+6*5'], ['6*(9*2+2)', '54*2+12']], tool: 'tri:area' });
+  V('10-2', { th: ['tri', 'test'], from: '4-3', r: ['value', 'once', 'inverse'], t: 'Worth × how many = the total', spot: ['vt', { cols: ['each', 'how many', 'cents'], rows: [['10¢', 'n', '10n'], ['25¢', 'm', '25m']], sum: '10n + 25m', eq: '405' }],
+    doit: [['test', { v: 'm', expr: '(405 − 25m) ÷ 10', whole: 1, tries: [['2', '35.5', false], ['3', '33', true], ['13', '8', true]] }], ['vt', { cols: ['each', 'how many', 'cost'], rows: [['$2', 'y', '2y'], ['$4', 'once', '4']], sum: '2y + 4', eq: '40' }], ['flow', ['2y + 4 = 40', { op: '− 4, ÷ 2' }, { t: 'y = 18', r: 'g' }]], ['flow', ['11 + w + 11 + w = 46', { op: 'tidy' }, '2w + 22 = 46', { op: '− 22, ÷ 2' }, { t: 'w = 12 m', r: 'g' }]]],
+    trap: ['n + m = 405', '10n + 25m = 405'], alt: 'Each kind is worth one coin’s value times how many. Add the kinds and set the sum equal to the total. With two unknowns, choose one and check that the other comes out whole: 13 quarters leave 80 cents, 8 dimes.', v: [['10*8+25*13', '405'], ['(405-25*2)/10', '35.5'], ['(40-4)/2', '18'], ['2*18+4', '40'], ['(46-22)/2', '12'], ['11+12+11+12', '46']], tool: 'tri:cost' });
+  V('10-3', { th: ['area', 'undo'], from: '10-1', r: ['dist', 'inverse'], t: 'Same group k times: k( … )', spot: ['cue', [['5 orders', 'n', 'k times'], ['of', ''], ['14n + 15', 'x', 'one order', 'd']]],
+    doit: [['flow', ['5(14n + 15) = 425', { op: '÷ 5' }, '14n + 15 = 85', { op: '− 15, ÷ 14' }, 'n = 5', { op: '· 5' }, { t: '25 jars', r: 'g' }]], ['amodel', { h: 'L', parts: [['23', '23L', 'x'], ['18', '18L', 'n']], total: '2,296 ft²', eq: '' }], ['flow', ['L(23 + 18) = 2,296', { op: '÷ 41' }, { t: 'L = 56 ft', r: 'g' }]], ['chain', { top: ['x', 'x − 1', '3(x − 1)'], ops: ['− 1', '· 3'], bottom: ['3.30', '2.30', '6.90'], undo: ['+ 1', '÷ 3'] }]],
+    trap: ['5 · 14n + 15 = 425', '5(14n + 15) = 425'], alt: 'A group repeated k times is k times the whole group, in parentheses. To solve k( … ) = total, undo in reverse: the multiplication was done last, so divide first. 3(x − 1) = 6.90 gives x − 1 = 2.30, then x = 3.30.', v: [['2296/41', '56'], ['56*(23+18)', '2296'], ['425/5', '85'], ['(85-15)/14', '5'], ['5*(14*5+15)', '425'], ['6.90/3', '2.30'], ['3*(3.30-1)', '6.90']] });
 })();
 
 /* --- tactics_ch2.js --- */
@@ -49691,7 +49967,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   V('1-2', { th: ['undo', 'bal'], from: '1-1', r: ['inverse'], t: 'Do the opposite', spot: ['cue', [['6', 'n', 'times 6'], ['x', 'x'], ['=', ''], ['54', '']]],
     doit: [['inv', [['+', '−'], ['·', '÷']]], ['steps', [['{n:6}x', '54'], { op: '÷ 6' }, ['x', '9', 'ans']]]],
     trap: ['x + 1 = 6  →  {w:+ 1}', 'x + 1 = 6  →  {o:− 1}'], alt: 'See what is done to x and do the opposite to both sides. 6x = 54: divide both sides by 6.', v: [['54/6', '9'], ['6-1', '5']] });
-  V('1-3', { th: ['test'], r: ['root'], t: 'A root makes it true: test each value', spot: ['map', [['x cubed', 'x'], ['equals', 'o'], ['27', 'n']], [['x³', 'x'], ['=', 'o'], ['27', 'n']], [0, 1, 2]],
+  V('1-3', { th: ['test'], from: '1:5-1', r: ['root'], t: 'A root makes it true: test each value', spot: ['map', [['x cubed', 'x'], ['equals', 'o'], ['27', 'n']], [['x³', 'x'], ['=', 'o'], ['27', 'n']], [0, 1, 2]],
     doit: [['test', { v: 'x', expr: 'x³', want: '27', tries: [['−3', '−27', false], ['2', '8', false], ['3', '27', true]] }]],
     trap: ['(−3)³ = 27', '(−3)³ = −27'], alt: 'Substitute each value. A value that makes the two sides equal is a root.', v: [['(-3)^3', '-27'], ['2^3', '8'], ['3^3', '27']] });
   // Unit 2: Add and Subtract Equations
@@ -49718,14 +49994,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   V('4-1', { th: ['undo', 'bal'], from: '2-1', r: ['order'], t: 'Undo + − first, then × ÷', spot: ['cue', [['7', 'x', '2nd'], ['n', ''], ['− 14', 'n', '1st'], ['=', ''], ['−28', '']]],
     doit: [['chain', { top: ['n', '7n', '7n − 14'], ops: ['· 7', '− 14'], bottom: ['−2', '−14', '−28'], undo: ['÷ 7', '+ 14'] }], ['steps', [['7n {n:− 14}', '−28'], { op: '+ 14' }, ['{x:7}n', '−14'], { op: '÷ 7' }, ['n', '−2', 'ans']]]],
     trap: ['{w:÷ 7} first', '{o:+ 14} first'], alt: '7n − 14 = −28: add 14 to both sides, then divide both sides by 7. n = −2.', v: [['-28+14', '-14'], ['-14/7', '-2'], ['7*(-2)-14', '-28']] });
-  V('4-2', { th: ['step'], r: ['rule-n'], t: 'Find the rule in the picture', spot: ['dots', { steps: [{ cap: 'n = 1 → 1', pts: cross(1) }, { cap: 'n = 2 → 5', pts: cross(2) }, { cap: 'n = 3 → 9', pts: cross(3) }], alt: 'A cross of dots: 1, 5, 9 dots' }],
+  V('4-2', { th: ['step'], from: '1:8-2', r: ['rule-n'], t: 'Find the rule in the picture', spot: ['dots', { steps: [{ cap: 'n = 1 → 1', pts: cross(1) }, { cap: 'n = 2 → 5', pts: cross(2) }, { cap: 'n = 3 → 9', pts: cross(3) }], alt: 'A cross of dots: 1, 5, 9 dots' }],
     doit: [['seq', { n: ['1', '2', '3', '…', 'n'], v: ['1', '5', '9', '…', '4n − 3'], add: '+ 4', role: { 4: 'g' } }], ['cue', [['4', 'o', 'added each step'], ['n', ''], ['− 3', 'n', 'so step 1 is 1', 'd']]]],
     trap: ['rule: 4n', 'rule: 4n − 3'], alt: 'Count the first three steps. What is added each step multiplies n. Then adjust so that step 1 fits.', v: [['4*1-3', '1'], ['4*2-3', '5'], ['4*3-3', '9']] });
   V('4-3', { th: ['step', 'undo'], from: '4-2', r: ['solve-n'], t: 'Which step has that many? Solve', spot: ['cue', [['2n − 1', 'x', 'the rule'], ['=', ''], ['37', 'n', 'dots wanted', 'd']]],
     doit: [['steps', [['2n {n:− 1}', '37'], { op: '+ 1' }, ['{x:2}n', '38'], { op: '÷ 2' }, ['n', '19', 'ans']]], ['flow', [{ t: 'step n', r: 'x' }, { op: 'plug in' }, 'dots']], ['flow', ['dots', { op: 'solve' }, { t: 'step n', r: 'x' }]]],
     trap: ['2 · 37 − 1', '2n − 1 = 37'], alt: 'To find which step has 37 dots, set the rule equal to 37 and solve. Substituting goes the other way.', v: [['(37+1)/2', '19'], ['2*19-1', '37']] });
   // Unit 5: Writing Equations
-  V('5-1', { th: ['bar'], r: ['parts'], t: 'Parts make the whole', spot: ['bar', { rows: [{ parts: [['40', 40, 'm'], ['x', 37, 'x'], ['22', 22, 'm']], over: [[0, 3, '99', 'n']] }], alt: 'A bar of 99 split into 40, x and 22' }],
+  V('5-1', { th: ['bar'], from: '1:5-3', r: ['parts'], t: 'Parts make the whole', spot: ['bar', { rows: [{ parts: [['40', 40, 'm'], ['x', 37, 'x'], ['22', 22, 'm']], over: [[0, 3, '99', 'n']] }], alt: 'A bar of 99 split into 40, x and 22' }],
     doit: [['steps', [['40 + x + 22', '99'], { op: ['tidy', ''], soft: 1 }, ['x {n:+ 62}', '99'], { op: '− 62' }, ['x', '37', 'ans']]], ['bar', { rows: [{ parts: [['¼', 1, 'm'], ['¼', 1, 'm'], ['¼', 1, 'm'], ['off', 1, 'w']], over: [[0, 4, 'price p', 'x']], under: [[0, 3, '$24', 'n']] }], alt: 'A quarter off leaves three quarters of the price' }], ['flow', ['{f:3|4}p = 24', { op: '' }, { t: 'p = 32', r: 'g' }]]],
     trap: ['{f:1|4}p = 24', '{f:3|4}p = 24'], alt: 'Draw the whole as a bar and its parts inside. The parts add up to the whole. A quarter off leaves three quarters.', v: [['40+37+22', '99'], ['99-62', '37'], ['(3/4)*32', '24']] });
   V('5-2', { th: ['tri', 'undo'], from: '3-1', r: ['formula'], t: 'Use the formula you know', spot: ['rect', { w: '23 m', h: 'w = ?', a: '598 m²', hi: 'h' }],
@@ -51150,7 +51426,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
    Same contract as hub/dojo_gens.js. Needs FML (hub/formulas.js), the registry the Skills & Tactics formula bank and flash cards
    use, so a formula is written once. "Applied formulas" is a focus area of its own; besides the moves here it borrows every
    move elsewhere that uses a formula (DJG.ALSO.form), so one roll can mix d = vt, percent, circles and the rest.
-     form.r3 / r6 / r7 / r8   recall, by chapter: name → formula (look-alikes are proved wrong by the verifier), formula → name,
+     form.r1 / r3 / r6 / r7 / r8   recall, by chapter: name → formula (look-alikes are proved wrong by the verifier), formula → name,
                               and at level 3 the choice is among the chapter's other real formulas
      form.cost   total = price · how many (forwards, backwards, in dollars and cents)
      form.rect   rectangle: area, perimeter, a side from either, and which of the two a story needs
@@ -51162,25 +51438,29 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
   function story(t) { return '<p class="lead dj-story">' + t + '</p>'; }
   function money(v) { return Q.of(v).toNumber().toFixed(2); }
   var WHO = ['Zorp', 'Captain Pickle', 'Grandma Thunder', 'Sir Fluffington', 'Professor Wobble', 'Duchess Banana', 'Agent Waffles', 'Chef Kaboom', 'Mayor Turnip', 'Bigfoot'];
-  DJG.STYLES.push({ id: 'form', name: 'Applied formulas', ch: [3, 5, 6, 7, 8], blurb: 'Name the formula, plug in, work it backwards.' });
+  DJG.STYLES.push({ id: 'form', name: 'Applied formulas', ch: [1, 3, 5, 6, 7, 8], blurb: 'Name the formula, plug in, work it backwards.' });
   DJG.ALSO.form = ['drt.run', 'drt.form', 'drt.plug', 'drt.time', 'eq2.rearr', 'pat.rule', 'rate.unit', 'rate.k', 'rate.scale', 'rate.slope', 'pct.type', 'pct.change', 'pct.interest', 'geo.circ', 'geo.form', 'geo.area', 'geo.vol', 'geo.pyth', 'geo.poly'];
 
   // ---------------------------------------------------------------- RECALL, one move per chapter
   function rightTile(e) { return { t: e.plain, src: e.sol || e.lit[1] }; }
-  function recall(ch, title, skills, card) {
+  // W: the wording for a chapter whose entries are rules rather than formulas for a quantity (Chapter 1)
+  function recall(ch, title, skills, card, W) {
+    W = W || { ask: 'Which one gives this?', what: 'What does this give?', verb: ' gives ' };
     mv('form.r' + ch, title, skills, card, function (lv) {
       var all = FML.list(ch), fs = all.filter(function (e) { return e.grp === 'f'; }), e, others;
       if (lv === 1) {
         e = pick(all);
-        return [C(e.grp === 'u' ? D(e.name) + L('Get x alone. Which one is right?') : L('Which one gives this?') + D(e.name), rightTile(e), e.wrong.map(function (w) { return { t: w[0], src: w[1] }; }),
+        return [C(e.grp === 'u' ? D(e.name) + L('Get x alone. Which one is right?') : L(W.ask) + D(e.name), rightTile(e), e.wrong.map(function (w) { return { t: w[0], src: w[1] }; }),
           { ver: { lit: { eq: e.lit, v: e.v || e.lit[0] } }, sk: e.sk, why: e.name + ': ' + e.plain + '.' })];
       }
-      e = pick(fs); others = shuffle(fs.filter(function (x) { return x.id !== e.id && x.name !== e.name && x.plain !== e.plain; })).slice(0, 3);
-      if (lv === 2) return [C(D(e.plain) + L('What does this give?'), e.name, others.map(function (x) { return x.name; }), { ver: { fix: 1 }, sk: e.sk, why: e.plain + ' gives ' + e.name.charAt(0).toLowerCase() + e.name.slice(1) + '.' })];
-      return [C(L('Which one gives this?') + D(e.name), e.plain, others.map(function (x) { return x.plain; }), { ver: { fix: 1 }, sk: e.sk, why: e.name + ': ' + e.plain + '. The others are real formulas, for something else.' })];
+      e = pick(fs); others = shuffle(fs.filter(function (x) { return x.id !== e.id && x.name !== e.name && x.plain !== e.plain && (x.of || x.id) !== (e.of || e.id); })).slice(0, 3);   // never a rearrangement of the same formula as a wrong tile
+      if (lv === 2) return [C(D(e.plain) + L(W.what), e.name, others.map(function (x) { return x.name; }), { ver: { fix: 1 }, sk: e.sk, why: e.plain + W.verb + e.name.charAt(0).toLowerCase() + e.name.slice(1) + '.' })];
+      return [C(L(W.ask) + D(e.name), e.plain, others.map(function (x) { return x.plain; }), { ver: { fix: 1 }, sk: e.sk, why: e.name + ': ' + e.plain + '. The others are real formulas, for something else.' })];
     });
   }
-  recall(3, 'Name that formula: equations and motion', ['U20', 'U22', 'U21', 'U16', 'U17', 'U28', 'U5', 'U6', 'U9'], ['Say the formula before you touch a number', 'Distance d = v · t. Area A = l · w. Total cost T = p · n. A sequence: dₙ = a · n + b. To undo a move on x, do the opposite to both sides.']);
+  recall(1, 'Name that rule: powers, terms and properties', ['S1', 'S3', 'S18', 'S19', 'S23', 'S25', 'S32', 'S35', 'S36', 'S26'], ['Say the rule before you use it', 'A power counts factors: a³ = a · a · a. Like terms add: ax + bx = (a + b)x. Multiplying counts the letters: ax · bx = abx². Distribute: a(b + c) = ab + ac. Order and grouping may change for + and ×, never for − and ÷.'],
+    { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
+  recall(3, 'Name that formula: equations and motion', ['U20', 'U22', 'U21', 'U16', 'U17', 'U28', 'U5', 'U6', 'U9'], ['Say the formula before you touch a number', 'Distance d = v · t. Area A = ℓ · w. Total cost T = p · n. A sequence: dₙ = a · n + b. To undo a move on x, do the opposite to both sides.']);
   recall(6, 'Name that formula: rates and scale', ['P8', 'P16', 'P28', 'P40', 'P44', 'P48', 'P57', 'P59'], ['Rate, scale and slope are all divisions', 'Unit rate = amount ÷ quantity. Scale factor = new ÷ old. Slope = rise ÷ run. Proportional: y = k · x. A line: y = m · x + b.']);
   recall(7, 'Name that formula: percent', ['C8', 'C10', 'C12', 'C13', 'C21', 'C31', 'C38'], ['part = percent · whole', 'Cover what you want: percent = part ÷ whole, whole = part ÷ percent. Up r: × (1 + r). Down r: × (1 − r). Change: change ÷ original. Interest: I = P · r · t.']);
   recall(8, 'Name that formula: geometry', ['G12', 'G14', 'G23', 'G24', 'G59', 'G69', 'G70'], ['Lengths add, areas multiply two lengths', 'C = π · d. A = π · r². Parallelogram b · h, triangle ½ · b · h, trapezoid ½ · (a + b) · h. Volume = base area · height. Right triangle: c² = a² + b².']);
@@ -51204,7 +51484,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
 
   // ---------------------------------------------------------------- RECTANGLE: AREA AND PERIMETER
   var PLOTS = ['a trampoline for elephants', 'a napping mat for dragons', 'a dance floor for penguins', 'a picnic rug for giants', 'a parking spot for a blimp', 'a pond for rubber ducks'];
-  mv('form.rect', 'Rectangle: area and perimeter', ['S26', 'U16', 'E17'], ['Area fills, perimeter goes round', 'Area = l · w, in square units: it covers the inside. Perimeter = 2l + 2w, in plain units: it is the walk round the edge.'], function (lv) {
+  mv('form.rect', 'Rectangle: area and perimeter', ['S26', 'U16', 'E17'], ['Area fills, perimeter goes round', 'Area = ℓ · w, in square units: it covers the inside. Perimeter = 2ℓ + 2w, in plain units: it is the walk round the edge.'], function (lv) {
     var d = until(function () { return [R(3, 12), R(2, 9)]; }, function (z) { return z[0] > z[1] && z[0] * z[1] !== 2 * z[0] + 2 * z[1]; }), l = d[0], w = d[1], A = l * w, P = 2 * l + 2 * w, what = PLOTS[R(0, PLOTS.length - 1)];
     if (lv === 1) {
       if (pick([0, 1])) return [T(story(what.charAt(0).toUpperCase() + what.slice(1) + ' is ' + l + ' m long and ' + w + ' m wide.') + D('Area = ▢'), A, { unit: 'm²', wrongs: [P, l + w], ver: { ev: l + '*' + w }, why: 'A = l · w = ' + l + ' · ' + w + ' = ' + A + ' m².' })];
@@ -252118,9 +252398,9 @@ var HTC = (function () {
     HX.openDrawer(t === 'trans' ? 'Words → symbols' : 'The triangle', function (b) { b.classList.add('novar', 'tc-drawer'); b.innerHTML = t === 'trans' ? transHTML() : triHTML(Object.keys(TAC.TRI), t.slice(4)); wire(b); });
   }
   // ---------------------------------------------------------------- the formula bank: every formula drawn, all visible
-  function wd(f) { return /[a-z]{4,}/.test(TVZ.plain(f)) ? ' fw' : ''; }   // a formula written in words is set smaller
+  function wd(f) { var p = TVZ.plain(f); return /[a-z]{4,}/.test(p) ? ' fw' : p.length > 21 ? ' fl2' : p.length > 15 ? ' fl' : ''; }   // a formula written in words is set smaller
   function tile(e) {
-    var kids = FML.ALL.filter(function (x) { return x.of === e.id && x.f; }), dj = e.move && typeof DJG !== 'undefined' && DJG.byId[e.move];
+    var kids = FML.ALL.filter(function (x) { return x.of === e.id && x.f && (!tile.ch || FML.inCh(x, tile.ch)); }), dj = e.move && typeof DJG !== 'undefined' && DJG.byId[e.move];
     if (e.st) return '<div class="tv-ft g-u" data-f="' + esc(e.id) + '"><div class="hd">' + TVZ.icon(e.ic) + '<span class="nm">' + esc(e.lab) + '</span></div>' + TVZ.draw(['steps', e.st]) + '</div>';
     return '<div class="tv-ft g-' + e.grp + '" data-f="' + esc(e.id) + '"><div class="hd">' + TVZ.icon(e.ic) + '<span class="nm">' + (e.grp === 'u' ? TVZ.fmt(e.ask) : esc(e.name)) + '</span></div><div class="fx' + wd(e.f) + '">' + TVZ.fmt(e.f) + '</div>' +
       (kids.length ? '<div class="alt">' + kids.map(function (k) { return '<span class="' + wd(k.f).trim() + '" title="' + esc(k.name) + '">' + TVZ.fmt(k.f) + '</span>'; }).join('') + '</div>' : '') +
@@ -252128,6 +252408,7 @@ var HTC = (function () {
       (dj ? '<a class="dr" href="#dojo/move/' + esc(e.move) + '" aria-label="Drill ' + esc(e.name) + ' in the Dojo">Drill</a>' : '') + '</div>';
   }
   function bankHTML(n) {
+    tile.ch = n;
     var fs = FML.list(n, 'f').filter(function (e) { return e.f && !e.of; }), us = FML.list(n, 'u').filter(function (e) { return e.f; });
     return '<div class="tc-bank tv" id="tc-bank"><h3>Formula bank</h3><div class="tv-ftgrid">' + fs.map(tile).join('') + '</div>' +
       (us.length ? '<h4 class="tv-sub">Undo rules: what to do to both sides</h4><div class="tv-ftgrid u">' + us.map(tile).join('') + '</div>' : '') + '</div>' + flashHTML(n);
