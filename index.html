@@ -2164,6 +2164,10 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-inv { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; } .tv-inv .pr { display: inline-flex; align-items: center; gap: 4px; } .tv-inv b { min-width: 36px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 19px; font-weight: 800; background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); padding: 0 8px; } .tv-inv svg { width: 38px; height: 21px; fill: none; stroke: var(--ink-2); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tv-test { display: inline-grid; gap: 1px 10px; align-items: center; justify-items: center; font-size: 16px; font-weight: 650; font-variant-numeric: tabular-nums; } .tv-test .hd { justify-self: end; color: var(--ink-2); font-size: 14px; padding-right: 2px; } .tv-test .xv { background: var(--tv-x-bg); box-shadow: inset 0 0 0 1.4px var(--tv-x); color: var(--tv-x); border-radius: 8px; padding: 1px 10px; font-weight: 800; }
 .tv-test .ar { color: var(--ink-2); line-height: 0; } .tv-test .val.hit { color: var(--tv-g); font-weight: 800; } .tv-test .mk { font-weight: 900; font-size: 17px; } .tv-test .mk.hit { color: var(--tv-g); } .tv-test .mk.miss { color: var(--tv-w); }
+/* thread marks and the "builds on" chip */
+.tc-card.tv > header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; } .tv-th { margin-left: auto; display: inline-flex; gap: 6px; }
+.tv-thm { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: .03em; color: var(--ink-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px 1px 5px; background: var(--surface-2); white-space: nowrap; } .tv-thm em { font-style: normal; } .tv-thm .tv-ic { width: 17px; height: 13.5px; } .tv-thm + .tv-thm em { display: none; } .tv-thm + .tv-thm { padding: 1px 5px; }
+.tv-from { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; font-size: 12px; color: var(--ink-2); text-decoration: none; border: 1px dashed var(--line); border-radius: 999px; padding: 2px 10px 2px 7px; max-width: 100%; } .tv-from b { color: var(--ink); font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .tv-from svg { width: 12px; height: 12px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; } .tv-from:hover { border-color: var(--accent); color: var(--ink); }
 /* the formula bank */
 .tc-bank.tv h3 { font-size: 19px; } .tv-sub { margin: 16px 0 8px; font-size: 14px; color: var(--ink-2); font-weight: 700; }
 .tv-ftgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(218px, 1fr)); gap: 10px; }
@@ -2184,7 +2188,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tc-fc .tap { position: absolute; bottom: 11px; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-2); } .tc-fc .fa { font-size: 27px; font-weight: 800; text-align: center; font-variant-numeric: tabular-nums; } .tc-fc .fa.fw { font-size: 18px; } .tc-fc .tv-ic { width: 56px; height: 44px; }
 .tc-fbtns { display: flex; gap: 10px; justify-content: center; margin-top: 14px; min-height: 46px; } .tc-fdone { text-align: center; padding: 26px 0 8px; } .tc-fdone .big { font-size: 36px; font-weight: 800; color: var(--tv-g); } .tc-fdone p { color: var(--ink-2); margin: 6px 0 14px; }
 @media (prefers-reduced-motion: reduce) { .tc-fc .in { transition: none; } }
-@media print { .tc-flash, .tv-ft .dr { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+@media print { .tc-flash, .tv-ft .dr, .tv-from { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -49070,7 +49074,19 @@ var TAC = (function () {
   //   t     the tactic in a few words          spot  one piece: the pattern as it appears in a problem, with arrows to what matters
   //   doit  one to three pieces: the tactic applied (pieces are TVZ specs, hub/tactics_viz.js)
   //   trap  the usual slip and the right way   alt   one or two sentences for a screen reader      v, tool  as above
-  function viz(n, key, o) { LV['ch' + n + ':' + key] = { vis: true, t: o.t, spot: o.spot || null, doit: o.doit || [], trap: o.trap || null, alt: o.alt || '', v: o.v || [], tool: o.tool || null, m: [], ex: '', w: '' }; }
+  //   th    1–2 THREADS, the course-wide picture this card belongs to (first = main)      r   the RULES it states (ids below)
+  //   from  the card it grows out of: 'u-l' in the same chapter or 'ch:u-l'; it must come earlier and share a thread (or say why: shift)
+  function viz(n, key, o) { var f = o.from ? (String(o.from).indexOf(':') < 0 ? 'ch' + n + ':' + o.from : 'ch' + o.from) : null;
+    LV['ch' + n + ':' + key] = { vis: true, t: o.t, spot: o.spot || null, doit: o.doit || [], trap: o.trap || null, alt: o.alt || '', v: o.v || [], tool: o.tool || null, th: o.th || [], from: f, shift: o.shift || '', r: o.r || [], m: [], ex: '', w: '' }; }
+  // THREADS: one picture per recurring idea, for the whole course (plan §2.1). A card wears its thread so the same idea looks the same wherever it returns.
+  var THREADS = {
+    bal: { name: 'Same move, both sides', ic: 'bal' }, undo: { name: 'Undo it', ic: 'undo' }, tri: { name: 'a = b · c', ic: 'tri' }, bar: { name: 'Part and whole', ic: 'bar' },
+    step: { name: 'Start + add × n', ic: 'stairs' }, line: { name: 'Number line', ic: 'line' }, words: { name: 'Words → symbols', ic: 'map' }, units: { name: 'Units first', ic: 'clock' },
+    scale: { name: 'Scale by k', ic: 'scale' }, area: { name: 'Rectangles multiply', ic: 'rect' }, test: { name: 'Substitute to test', ic: 'test' }
+  };
+  // RULES: every rule a card states, once, in one wording. A rule that sharpens an earlier one names it (refines), so nothing is silently replaced.
+  var RULES = {}, RORDER = [];
+  function rule(id, text, o) { if (RULES[id]) throw new Error('rule defined twice: ' + id); RULES[id] = { id: id, text: text, refines: (o && o.refines) || null }; RORDER.push(id); }
 
   // ---------------------------------------------------------------- the translation decoder (after the owner's Chapter 3 sheet)
   var TRANS = [
@@ -49103,7 +49119,7 @@ var TAC = (function () {
   };
   function forms(id) { var T = TRI[id]; return T ? [T.top + ' = ' + T.l + ' · ' + T.r, T.l + ' = ' + T.top + ' ÷ ' + T.r, T.r + ' = ' + T.top + ' ÷ ' + T.l] : []; }
   function toolsOf(card) { return card && card.tool ? String(card.tool).split(',') : []; }
-  return { ch: ch, lv: lv, viz: viz, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
+  return { ch: ch, lv: lv, viz: viz, rule: rule, THREADS: THREADS, RULES: RULES, RORDER: RORDER, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
     level: function (key) { return LV[key] || null; }, chapter: function (n) { return CH[n] || null; } };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
@@ -49378,7 +49394,13 @@ var TVZ = (function () {
     bal: '<path class="i1" d="M24 6V30M14 32H34M6 12H42"/><path class="i2l" d="M6 12l-4 12h8zM42 12l-4 12h8z"/>',
     undo: '<path class="i1" d="M10 14H30a9 9 0 0 1 0 18H16"/><path class="i2l" d="M16 7l-7 7 7 7"/>',
     avg: '<path class="i1" d="M4 26H20M28 26H44"/><path class="i2l" d="M4 12H44"/><circle class="i2" cx="24" cy="26" r="3"/>',
-    flip: '<path class="i1" d="M12 8V30M36 30V8"/><path class="i2l" d="M6 14l6-7 6 7M30 24l6 7 6-7"/>'
+    flip: '<path class="i1" d="M12 8V30M36 30V8"/><path class="i2l" d="M6 14l6-7 6 7M30 24l6 7 6-7"/>',
+    tri: '<path class="i1" d="M24 5L44 33H4Z"/><path class="i2l" d="M14 20H34M24 20V33"/>',
+    bar: '<rect class="i1" x="4" y="12" width="40" height="14"/><path class="i2l" d="M18 12V26M31 12V26"/>',
+    line: '<path class="i1" d="M3 22H45M8 17V27M24 17V27M40 17V27"/><path class="i2l" d="M9 14C13 5 20 5 23 14"/>',
+    map: '<rect class="i1" x="4" y="5" width="16" height="10" rx="3"/><rect class="i1" x="28" y="23" width="16" height="10" rx="3"/><path class="i2l" d="M14 17C16 26 22 28 27 28M23 24l4 4-4 4"/>',
+    scale: '<rect class="i1" x="4" y="20" width="12" height="12"/><rect class="i1" x="22" y="6" width="22" height="26"/><path class="i2l" d="M10 16L20 9"/>',
+    test: '<path class="i1" d="M6 10H22M6 19H22M6 28H16"/><path class="i2l" d="M28 20l6 7 10-15"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
@@ -49469,6 +49491,36 @@ var FML = (function () {
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 /* ===== FML END ===== */
+
+/* The rules register: every rule a Skills & Tactics card states, once, in one wording, in course order.
+   TAC.rule(id, text, { refines }) — a rule that sharpens an earlier one names it, so a later card never silently replaces an earlier
+   rule. Cards cite rules by id (r: ['both']). hub/test_tactics.js checks that every cited rule exists, every rule is cited, and a
+   refinement comes after what it refines. The chapter and course audits read this file for duplicates and conflicts. */
+(function () {
+  'use strict';
+  var R = TAC.rule;
+  // ---- Chapter 3
+  R('both', 'Do the same thing to both sides of an equation.');
+  R('inverse', 'Undo an operation with its opposite: + with −, × with ÷.');
+  R('root', 'A root makes the two sides equal. Substitute to test or to check.');
+  R('tidy', 'Simplify each side on its own before moving anything across.');
+  R('neg1', '−x = n means x = −n.', { refines: 'inverse' });
+  R('recip', 'Undo a fraction in front of x by multiplying by its reciprocal.', { refines: 'inverse' });
+  R('order', 'Two steps: undo + − first, then × ÷.', { refines: 'inverse' });
+  R('rule-n', 'A pattern rule: what is added each step, times n, adjusted so step 1 fits.');
+  R('solve-n', 'Which step has that many? Set the rule equal to it and solve.');
+  R('parts', 'The parts add up to the whole.');
+  R('formula', 'Write the formula, put in what you know, solve for what is left.');
+  R('recipe', 'Word problem: name the unknown, write the equation, solve, answer with the unit.');
+  R('min60', 'Minutes ÷ 60 = hours. Hours · 60 = minutes.');
+  R('tri', 'For a = b · c, cover what you want: side by side multiply, over and under divide.');
+  R('units', 'Match the units before you compute.');
+  R('flipdiv', 'Dividing by a fraction is multiplying by its reciprocal.');
+  R('legs', 'A trip in legs: find the time of each leg, then add.');
+  R('avg', 'Average speed = total distance ÷ total time, never the average of the speeds.');
+  R('seq', 'dₙ = (amount added) · n + start, where the start is the value at step 0.', { refines: 'rule-n' });
+  R('addper', 'Amount added per step = change in value ÷ change in step.');
+})();
 
 /* --- tactics_ch1.js --- */
 /* Skills & Tactics, Chapter 1: The Language of Algebra. Format: hub/tactics_core.js. Source: the owner's Chapter 1 sheet, regrouped by this system's units and levels. */
@@ -49633,93 +49685,93 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   });
 
   // Unit 1: Balance and Equality
-  V('1-1', { t: 'Same move, both sides', spot: ['cue', [['6 + 2', 'x', '÷ 2'], ['=', ''], ['8', 'x', '÷ 2', 'd']]],
+  V('1-1', { th: ['bal'], r: ['both'], t: 'Same move, both sides', spot: ['cue', [['6 + 2', 'x', '÷ 2'], ['=', ''], ['8', 'x', '÷ 2', 'd']]],
     doit: [['steps', [['6 + 2', '8'], { op: '÷ 2' }, ['4', '4'], { op: '· (−3)' }, ['−12', '−12', 'ans']]], ['bal2', { a: { L: ['x', '3'], R: ['8'] }, op: '− 3', b: { L: ['x'], R: ['5'] } }]],
     trap: ['6 + 2 {o:− 4} = 8', '6 + 2 {o:− 4} = 8 {o:− 4}'], alt: 'Whatever is done to one side is done to the other, and the two sides stay equal.', v: [['(6+2)/2', '8/2'], ['(6+2)/2*(-3)', '-12'], ['8-3', '5']] });
-  V('1-2', { t: 'Do the opposite', spot: ['cue', [['6', 'n', 'times 6'], ['x', 'x'], ['=', ''], ['54', '']]],
+  V('1-2', { th: ['undo', 'bal'], from: '1-1', r: ['inverse'], t: 'Do the opposite', spot: ['cue', [['6', 'n', 'times 6'], ['x', 'x'], ['=', ''], ['54', '']]],
     doit: [['inv', [['+', '−'], ['·', '÷']]], ['steps', [['{n:6}x', '54'], { op: '÷ 6' }, ['x', '9', 'ans']]]],
     trap: ['x + 1 = 6  →  {w:+ 1}', 'x + 1 = 6  →  {o:− 1}'], alt: 'See what is done to x and do the opposite to both sides. 6x = 54: divide both sides by 6.', v: [['54/6', '9'], ['6-1', '5']] });
-  V('1-3', { t: 'A root makes it true: test each value', spot: ['map', [['x cubed', 'x'], ['equals', 'o'], ['27', 'n']], [['x³', 'x'], ['=', 'o'], ['27', 'n']], [0, 1, 2]],
+  V('1-3', { th: ['test'], r: ['root'], t: 'A root makes it true: test each value', spot: ['map', [['x cubed', 'x'], ['equals', 'o'], ['27', 'n']], [['x³', 'x'], ['=', 'o'], ['27', 'n']], [0, 1, 2]],
     doit: [['test', { v: 'x', expr: 'x³', want: '27', tries: [['−3', '−27', false], ['2', '8', false], ['3', '27', true]] }]],
     trap: ['(−3)³ = 27', '(−3)³ = −27'], alt: 'Substitute each value. A value that makes the two sides equal is a root.', v: [['(-3)^3', '-27'], ['2^3', '8'], ['3^3', '27']] });
   // Unit 2: Add and Subtract Equations
-  V('2-1', { t: 'Undo + with −, and − with +', spot: ['cue', [['x', ''], ['+ 7', 'n', 'undo this'], ['=', ''], ['−2', '']]],
+  V('2-1', { th: ['undo'], from: '1-2', r: ['inverse'], t: 'Undo + with −, and − with +', spot: ['cue', [['x', ''], ['+ 7', 'n', 'undo this'], ['=', ''], ['−2', '']]],
     doit: [['steps', [['x {n:+ 7}', '−2'], { op: '− 7' }, ['x', '−9', 'ans'], ['−9 + 7', '−2', 'chk']]], ['inv', [['+ n', '− n']]]],
     trap: ['−2 − 7 = −5', '−2 − 7 = −9'], alt: 'x + 7 = −2: subtract 7 from both sides. x = −9. Check: −9 + 7 = −2.', v: [['-2-7', '-9'], ['-9+7', '-2']] });
-  V('2-2', { t: 'Tidy each side, then solve', spot: ['cue', [['−3 − 19', 'n', 'tidy'], ['=', ''], ['s', 'x'], ['+ (−8) + 4', 'n', 'tidy', 'd']]],
+  V('2-2', { th: ['bal', 'undo'], from: '2-1', r: ['tidy'], t: 'Tidy each side, then solve', spot: ['cue', [['−3 − 19', 'n', 'tidy'], ['=', ''], ['s', 'x'], ['+ (−8) + 4', 'n', 'tidy', 'd']]],
     doit: [['steps', [['{n:−3 − 19}', 's {n:+ (−8) + 4}'], { op: ['tidy', 'tidy'], soft: 1 }, ['−22', 's − 4'], { op: '+ 4' }, ['−18', 's', 'ans']]], ['flow', ['−18 = s', { op: 'flip' }, { t: 's = −18', r: 'g' }]]],
     trap: ['{w:−3 − 19 − 8 + 4} = s', '{n:−22} = s {n:− 4}'], alt: 'Combine the plain numbers on each side separately, then undo what is left with the letter. The letter may sit on the right.', v: [['-3-19', '-22'], ['-8+4', '-4'], ['-22+4', '-18'], ['-18+(-8)+4', '-3-19']] });
-  V('2-3', { t: 'The hidden negative', spot: ['cue', [['10', ''], ['− x', 'x', 'the minus stays'], ['=', ''], ['−4', '']]],
+  V('2-3', { th: ['undo'], from: '2-1', r: ['neg1'], t: 'The hidden negative', spot: ['cue', [['10', ''], ['− x', 'x', 'the minus stays'], ['=', ''], ['−4', '']]],
     doit: [['steps', [['10 {x:− x}', '−4'], { op: '− 10' }, ['{x:−x}', '−14'], { op: '· (−1)' }, ['x', '14', 'ans'], ['10 − 14', '−4', 'chk']]]],
     trap: ['−x = −14  →  x = −14', '−x = −14  →  x = 14'], alt: 'Subtract 10 from both sides: −x = −14. The opposite of x is −14, so x is 14.', v: [['-4-10', '-14'], ['10-14', '-4']] });
   // Unit 3: Multiply and Divide Equations
-  V('3-1', { t: 'x is multiplied: divide both sides', spot: ['cue', [['104', ''], ['=', ''], ['8', 'n', 'times 8'], ['s', 'x']]],
+  V('3-1', { th: ['undo'], from: '1-2', r: ['inverse'], t: 'x is multiplied: divide both sides', spot: ['cue', [['104', ''], ['=', ''], ['8', 'n', 'times 8'], ['s', 'x']]],
     doit: [['steps', [['104', '{n:8}s'], { op: '÷ 8' }, ['13', 's', 'ans'], ['8 · 13', '104', 'chk']]], ['flow', ['{f:−{s:3}x|{s:3}}', { op: 'cancel' }, { t: '−x', r: 'g' }]]],
     trap: ['−3x = 12  →  x = 4', '−3x = 12  →  x = −4'], alt: 'Divide both sides by the number in front of the letter, sign included. A shared factor on top and bottom cancels.', v: [['104/8', '13'], ['8*13', '104'], ['12/(-3)', '-4']], tool: 'tri:eqn' });
-  V('3-2', { t: 'x is divided: multiply both sides', spot: ['cue', [['{f:x|7}', 'x', 'divided by 7'], ['=', ''], ['−10', '']]],
+  V('3-2', { th: ['undo'], from: '3-1', r: ['inverse'], t: 'x is divided: multiply both sides', spot: ['cue', [['{f:x|7}', 'x', 'divided by 7'], ['=', ''], ['−10', '']]],
     doit: [['steps', [['{f:x|{n:7}}', '−10'], { op: '· 7' }, ['x', '−70', 'ans'], ['−70 ÷ 7', '−10', 'chk']]]],
     trap: ['x = −10 ÷ 7', 'x = −10 · 7'], alt: 'x over 7 equals −10: multiply both sides by 7. x = −70.', v: [['-10*7', '-70'], ['-70/7', '-10']] });
-  V('3-3', { t: 'A fraction in front: use the reciprocal', spot: ['cue', [['{f:2|5}', 'n', 'flip it'], ['x', 'x'], ['=', ''], ['6', '']]],
+  V('3-3', { th: ['undo'], from: '3-2', r: ['recip'], t: 'A fraction in front: use the reciprocal', spot: ['cue', [['{f:2|5}', 'n', 'flip it'], ['x', 'x'], ['=', ''], ['6', '']]],
     doit: [['flow', [{ t: '{f:2|5}', r: 'n' }, { op: 'flip' }, { t: '{f:5|2}', r: 'o' }]], ['steps', [['{f:{n:2}|{n:5}}x', '6'], { op: '· {f:5|2}' }, ['x', '15', 'ans'], ['{f:2|5} · 15', '6', 'chk']]]],
     trap: ['x = 6 · {f:2|5}', 'x = 6 · {f:5|2}'], alt: 'Multiply both sides by the reciprocal of the fraction in front of x. Two fifths x = 6 gives x = 6 times five halves = 15.', v: [['6*(5/2)', '15'], ['(2/5)*15', '6']] });
   // Unit 4: Two-Step Equations and Patterns
-  V('4-1', { t: 'Undo + − first, then × ÷', spot: ['cue', [['7', 'x', '2nd'], ['n', ''], ['− 14', 'n', '1st'], ['=', ''], ['−28', '']]],
+  V('4-1', { th: ['undo', 'bal'], from: '2-1', r: ['order'], t: 'Undo + − first, then × ÷', spot: ['cue', [['7', 'x', '2nd'], ['n', ''], ['− 14', 'n', '1st'], ['=', ''], ['−28', '']]],
     doit: [['chain', { top: ['n', '7n', '7n − 14'], ops: ['· 7', '− 14'], bottom: ['−2', '−14', '−28'], undo: ['÷ 7', '+ 14'] }], ['steps', [['7n {n:− 14}', '−28'], { op: '+ 14' }, ['{x:7}n', '−14'], { op: '÷ 7' }, ['n', '−2', 'ans']]]],
     trap: ['{w:÷ 7} first', '{o:+ 14} first'], alt: '7n − 14 = −28: add 14 to both sides, then divide both sides by 7. n = −2.', v: [['-28+14', '-14'], ['-14/7', '-2'], ['7*(-2)-14', '-28']] });
-  V('4-2', { t: 'Find the rule in the picture', spot: ['dots', { steps: [{ cap: 'n = 1 → 1', pts: cross(1) }, { cap: 'n = 2 → 5', pts: cross(2) }, { cap: 'n = 3 → 9', pts: cross(3) }], alt: 'A cross of dots: 1, 5, 9 dots' }],
+  V('4-2', { th: ['step'], r: ['rule-n'], t: 'Find the rule in the picture', spot: ['dots', { steps: [{ cap: 'n = 1 → 1', pts: cross(1) }, { cap: 'n = 2 → 5', pts: cross(2) }, { cap: 'n = 3 → 9', pts: cross(3) }], alt: 'A cross of dots: 1, 5, 9 dots' }],
     doit: [['seq', { n: ['1', '2', '3', '…', 'n'], v: ['1', '5', '9', '…', '4n − 3'], add: '+ 4', role: { 4: 'g' } }], ['cue', [['4', 'o', 'added each step'], ['n', ''], ['− 3', 'n', 'so step 1 is 1', 'd']]]],
     trap: ['rule: 4n', 'rule: 4n − 3'], alt: 'Count the first three steps. What is added each step multiplies n. Then adjust so that step 1 fits.', v: [['4*1-3', '1'], ['4*2-3', '5'], ['4*3-3', '9']] });
-  V('4-3', { t: 'Which step has that many? Solve', spot: ['cue', [['2n − 1', 'x', 'the rule'], ['=', ''], ['37', 'n', 'dots wanted', 'd']]],
+  V('4-3', { th: ['step', 'undo'], from: '4-2', r: ['solve-n'], t: 'Which step has that many? Solve', spot: ['cue', [['2n − 1', 'x', 'the rule'], ['=', ''], ['37', 'n', 'dots wanted', 'd']]],
     doit: [['steps', [['2n {n:− 1}', '37'], { op: '+ 1' }, ['{x:2}n', '38'], { op: '÷ 2' }, ['n', '19', 'ans']]], ['flow', [{ t: 'step n', r: 'x' }, { op: 'plug in' }, 'dots']], ['flow', ['dots', { op: 'solve' }, { t: 'step n', r: 'x' }]]],
     trap: ['2 · 37 − 1', '2n − 1 = 37'], alt: 'To find which step has 37 dots, set the rule equal to 37 and solve. Substituting goes the other way.', v: [['(37+1)/2', '19'], ['2*19-1', '37']] });
   // Unit 5: Writing Equations
-  V('5-1', { t: 'Parts make the whole', spot: ['bar', { rows: [{ parts: [['40', 40, 'm'], ['x', 37, 'x'], ['22', 22, 'm']], over: [[0, 3, '99', 'n']] }], alt: 'A bar of 99 split into 40, x and 22' }],
+  V('5-1', { th: ['bar'], r: ['parts'], t: 'Parts make the whole', spot: ['bar', { rows: [{ parts: [['40', 40, 'm'], ['x', 37, 'x'], ['22', 22, 'm']], over: [[0, 3, '99', 'n']] }], alt: 'A bar of 99 split into 40, x and 22' }],
     doit: [['steps', [['40 + x + 22', '99'], { op: ['tidy', ''], soft: 1 }, ['x {n:+ 62}', '99'], { op: '− 62' }, ['x', '37', 'ans']]], ['bar', { rows: [{ parts: [['¼', 1, 'm'], ['¼', 1, 'm'], ['¼', 1, 'm'], ['off', 1, 'w']], over: [[0, 4, 'price p', 'x']], under: [[0, 3, '$24', 'n']] }], alt: 'A quarter off leaves three quarters of the price' }], ['flow', ['{f:3|4}p = 24', { op: '' }, { t: 'p = 32', r: 'g' }]]],
     trap: ['{f:1|4}p = 24', '{f:3|4}p = 24'], alt: 'Draw the whole as a bar and its parts inside. The parts add up to the whole. A quarter off leaves three quarters.', v: [['40+37+22', '99'], ['99-62', '37'], ['(3/4)*32', '24']] });
-  V('5-2', { t: 'Use the formula you know', spot: ['rect', { w: '23 m', h: 'w = ?', a: '598 m²', hi: 'h' }],
+  V('5-2', { th: ['tri', 'undo'], from: '3-1', r: ['formula'], t: 'Use the formula you know', spot: ['rect', { w: '23 m', h: 'w = ?', a: '598 m²', hi: 'h' }],
     doit: [['tri', 'area', 'r'], ['steps', [['{n:23} · w', '598'], { op: '÷ 23' }, ['w', '26 m', 'ans']]]],
     trap: ['w = 26 m²', 'w = 26 m'], alt: 'Write the formula, put in what you know, solve for what is left. Area 598, one side 23: the other side is 598 ÷ 23 = 26 m.', v: [['598/23', '26'], ['23*26', '598']], tool: 'tri:area' });
-  V('5-3', { t: 'Story → equation → answer', spot: ['map', [['total cost', 'x'], ['split 3 ways', 'o'], ['is', 'm'], ['$7,400 each', 'n']], [['C', 'x'], ['÷ 3', 'o'], ['=', 'm'], ['7400', 'n']], [0, 1, 2, 3]],
+  V('5-3', { th: ['words'], r: ['recipe'], t: 'Story → equation → answer', spot: ['map', [['total cost', 'x'], ['split 3 ways', 'o'], ['is', 'm'], ['$7,400 each', 'n']], [['C', 'x'], ['÷ 3', 'o'], ['=', 'm'], ['7400', 'n']], [0, 1, 2, 3]],
     doit: [['flow', ['name it', { op: '' }, 'equation', { op: '' }, 'solve', { op: '' }, { t: 'answer + unit', r: 'g' }]], ['steps', [['{f:C|{n:3}}', '7400'], { op: '· 3' }, ['C', '$22,200', 'ans']]]],
     trap: ['3C = 7400', '{f:C|3} = 7400'], alt: 'Name the unknown, translate the story into an equation, solve on both sides, answer with the unit.', v: [['7400*3', '22200']], tool: 'trans' });
   // Unit 6: Distance, Rate, and Time
-  V('6-1', { t: 'Minutes ÷ 60 = hours', spot: ['cue', [['2 h', 'm', 'keep'], ['12 min', 'x', '÷ 60']]],
+  V('6-1', { th: ['units'], r: ['min60'], t: 'Minutes ÷ 60 = hours', spot: ['cue', [['2 h', 'm', 'keep'], ['12 min', 'x', '÷ 60']]],
     doit: [['clock', { min: 12, a: '12 min', b: '0.2 h' }], ['flow', ['2 h 12 min', { op: '' }, { t: '2.2 h', r: 'g' }]], ['flow', ['0.75 h', { op: '· 60' }, { t: '45 min', r: 'g' }]]],
     trap: ['2 h 30 min = 2.3 h', '2 h 30 min = 2.5 h'], alt: 'Keep the whole hours and divide the minutes by 60. Back again: multiply the decimal part by 60.', v: [['12/60', '2/10'], ['2+12/60', '22/10'], ['(3/4)*60', '45'], ['30/60', '1/2']] });
-  V('6-2', { t: 'Cover the letter you want', spot: ['cue', [['29 mph', 'x', 'v', 'd'], ['69.6 miles', 'n', 'd', 'd'], ['how long?', 'o', 't = ?', 'd']]],
+  V('6-2', { th: ['tri'], from: '5-2', r: ['tri'], t: 'Cover the letter you want', spot: ['cue', [['29 mph', 'x', 'v', 'd'], ['69.6 miles', 'n', 'd', 'd'], ['how long?', 'o', 't = ?', 'd']]],
     doit: [['tri', 'dvt', 'r'], ['flow', ['69.6 ÷ 29', { op: '' }, { t: '2.4 h', r: 'g' }]]],
     trap: ['t = v ÷ d', 't = d ÷ v'], alt: 'Name what you know and what you want. Cover the wanted letter on the triangle: time is distance divided by speed.', v: [['(696/10)/29', '24/10']], tool: 'tri:dvt' });
-  V('6-3', { t: 'Units first, then the formula', spot: ['cue', [['30 mph', 'x', 'per hour'], ['·', ''], ['45 min', 'w', 'not hours!', 'd']]],
+  V('6-3', { th: ['units', 'tri'], from: '6-1', r: ['units'], t: 'Units first, then the formula', spot: ['cue', [['30 mph', 'x', 'per hour'], ['·', ''], ['45 min', 'w', 'not hours!', 'd']]],
     doit: [['clock', { min: 45, a: '45 min', b: '¾ h' }], ['flow', ['30 · {f:3|4}', { op: '' }, { t: '22.5 miles', r: 'g' }]]],
     trap: ['d = 30 · 45', 'd = 30 · {f:3|4}'], alt: 'A speed per hour needs the time in hours. Convert the minutes first, then use d = v · t.', v: [['45/60', '3/4'], ['30*(3/4)', '225/10']], tool: 'tri:dvt' });
   // Unit 7: Average Speed
-  V('7-1', { t: 'Divide by a fraction: flip and multiply', spot: ['cue', [['{f:63 mi|{f:3|7} h}', 'x', 'a fraction underneath']]],
+  V('7-1', { th: ['tri', 'units'], from: '6-2', r: ['flipdiv'], t: 'Divide by a fraction: flip and multiply', spot: ['cue', [['{f:63 mi|{f:3|7} h}', 'x', 'a fraction underneath']]],
     doit: [['flow', ['63 ÷ {f:3|7}', { op: 'flip' }, '63 · {f:7|3}', { op: '' }, { t: '147 mph', r: 'g' }]]],
     trap: ['63 · {f:3|7}', '63 · {f:7|3}'], alt: 'The long bar means divide. Dividing by three sevenths is multiplying by seven thirds: 147 mph.', v: [['63/(3/7)', '147'], ['63*(7/3)', '147']] });
-  V('7-2', { t: 'Per hour: scale up to 60 minutes', spot: ['cue', [['8 miles', 'n', 'd'], ['in', ''], ['10 min', 'w', 'not hours!', 'd']]],
+  V('7-2', { th: ['units', 'tri'], from: '6-3', r: ['units'], t: 'Per hour: scale up to 60 minutes', spot: ['cue', [['8 miles', 'n', 'd'], ['in', ''], ['10 min', 'w', 'not hours!', 'd']]],
     doit: [['steps', [['8 mi', '10 min', '', 'in'], { op: '· 6' }, ['48 mi', '60 min', 'ans', 'in']]], ['clock', { min: 10, a: '10 min', b: '⅙ h' }], ['flow', ['8 ÷ {f:1|6}', { op: '' }, { t: '48 mph', r: 'g' }]]],
     trap: ['8 ÷ 10 = 0.8 mph', '8 ÷ {f:1|6} = 48 mph'], alt: 'Miles per hour needs the time in hours. Ten minutes is a sixth of an hour, so multiply by 6: 48 mph.', v: [['8/(10/60)', '48'], ['8*6', '48'], ['10*6', '60']], tool: 'tri:dvt' });
-  V('7-3', { t: 'Same unit, then compare', spot: ['cue', [['36 mi in 45 min', 'x', 'car 1'], ['or', ''], ['12 mi in 36 min', 'n', 'car 2', 'd']]],
+  V('7-3', { th: ['units'], from: '7-2', r: ['units'], t: 'Same unit, then compare', spot: ['cue', [['36 mi in 45 min', 'x', 'car 1'], ['or', ''], ['12 mi in 36 min', 'n', 'car 2', 'd']]],
     doit: [['flow', [{ t: '36 ÷ {f:3|4}', r: 'x' }, { op: '' }, '48 mph']], ['flow', [{ t: '12 ÷ {f:3|5}', r: 'n' }, { op: '' }, '20 mph']], ['bar', { rows: [{ parts: [['48 mph', 48, 'x']] }, { parts: [['20 mph', 20, 'n'], ['28 faster', 28, 'g']] }], alt: '48 mph against 20 mph: 28 mph faster' }]],
     trap: ['36 mi > 12 mi', '48 mph > 20 mph'], alt: 'Work out both speeds in the same unit before comparing: 48 mph and 20 mph, a difference of 28 mph.', v: [['36/(45/60)', '48'], ['12/(36/60)', '20'], ['48-20', '28']] });
   // Unit 8: Multi-Leg Trips
-  V('8-1', { t: 'One leg at a time', spot: ['cue', [['18 km at 4 km/h', 'x', 'leg 1'], ['then', ''], ['14 km at 5 km/h', 'n', 'leg 2', 'd']]],
+  V('8-1', { th: ['tri'], from: '6-2', r: ['legs'], t: 'One leg at a time', spot: ['cue', [['18 km at 4 km/h', 'x', 'leg 1'], ['then', ''], ['14 km at 5 km/h', 'n', 'leg 2', 'd']]],
     doit: [['road', { legs: [{ d: '18 km', v: '4 km/h', t: '18 ÷ 4 = 4.5 h' }, { d: '14 km', v: '5 km/h', t: '14 ÷ 5 = 2.8 h' }], sum: '4.5 + 2.8 = 7.3 h = 438 min' }]],
     trap: ['(18 + 14) ÷ (4 + 5)', '18 ÷ 4 + 14 ÷ 5'], alt: 'Find the time of each leg, distance divided by speed, then add the times.', v: [['18/4', '45/10'], ['14/5', '28/10'], ['(18/4+14/5)*60', '438']], tool: 'tri:dvt' });
-  V('8-2', { t: 'Average speed = total ÷ total', spot: ['cue', [['120 km at 15 km/h', 'x', 'leg 1'], ['+', ''], ['120 km at 60 km/h', 'n', 'leg 2', 'd']]],
+  V('8-2', { th: ['tri'], from: '8-1', r: ['avg'], t: 'Average speed = total ÷ total', spot: ['cue', [['120 km at 15 km/h', 'x', 'leg 1'], ['+', ''], ['120 km at 60 km/h', 'n', 'leg 2', 'd']]],
     doit: [['road', { legs: [{ d: '120 km', v: '15 km/h', t: '8 h' }, { d: '120 km', v: '60 km/h', t: '2 h' }], sum: '240 km ÷ 10 h = 24 km/h' }]],
     trap: ['(15 + 60) ÷ 2 = 37.5', '240 ÷ 10 = 24'], alt: 'Average speed is the total distance divided by the total time, not the average of the two speeds.', v: [['120/15', '8'], ['120/60', '2'], ['240/10', '24'], ['(15+60)/2', '375/10']] });
-  V('8-3', { t: 'Compare with the normal trip', spot: ['cue', [['¼ of the way', 'x', '18 of 72 mi'], ['at', ''], ['⅓ of the speed', 'n', '2 of 6 mph', 'd']]],
+  V('8-3', { th: ['tri'], from: '8-2', r: ['legs'], t: 'Compare with the normal trip', spot: ['cue', [['¼ of the way', 'x', '18 of 72 mi'], ['at', ''], ['⅓ of the speed', 'n', '2 of 6 mph', 'd']]],
     doit: [['road', { legs: [{ d: '72 miles', v: '6 mph', t: '12 h' }], alt: 'The normal trip: 72 miles at 6 mph takes 12 hours' }], ['road', { legs: [{ d: '18 mi', v: '2 mph', t: '9 h' }, { d: '54 mi', v: '18 mph', t: '3 h' }], sum: '9 + 3 = 12 h: on time' }]],
     trap: ['¼ of the way = ¼ of the time', '¼ of the way = 9 of 12 h'], alt: 'Work out the normal time. Split the changed trip into legs, each with its own distance and speed, and add the times.', v: [['72/6', '12'], ['72/4', '18'], ['6/3', '2'], ['18/2', '9'], ['54/18', '3'], ['9+3', '12']] });
   // Unit 9: Sequences: Start and Step (added in this system)
-  V('9-1', { t: 'Start + add × step', spot: ['dots', { steps: [{ cap: 'n = 1 → 4', pts: rows2(1) }, { cap: 'n = 2 → 6', pts: rows2(2) }, { cap: 'n = 3 → 8', pts: rows2(3) }], alt: 'Two rows of dots: 4, 6, 8 dots' }],
+  V('9-1', { th: ['step'], from: '4-2', r: ['seq'], t: 'Start + add × step', spot: ['dots', { steps: [{ cap: 'n = 1 → 4', pts: rows2(1) }, { cap: 'n = 2 → 6', pts: rows2(2) }, { cap: 'n = 3 → 8', pts: rows2(3) }], alt: 'Two rows of dots: 4, 6, 8 dots' }],
     doit: [['seq', { n: ['0', '1', '2', '3'], v: ['2', '4', '6', '8'], add: '+ 2', mark: { 0: 'start' }, role: { 0: 'x' } }], ['cue', [['dₙ =', ''], ['2', 'o', 'add'], ['· n', ''], ['+ 2', 'x', 'start', 'd']]]],
     trap: ['start = step 1', 'start = step 0'], alt: 'The start is the value at step 0. Each step adds the same amount. Rule: amount added times n, plus the start.', v: [['2*1+2', '4'], ['2*3+2', '8'], ['4-2', '2']] });
-  V('9-2', { t: 'Change in value ÷ change in step', spot: ['seq', { n: ['4', '…', '9'], v: ['12', '…', '27'], span: [0, 2, '+ 15', '5 steps'], alt: 'Step 4 is 12 and step 9 is 27' }],
+  V('9-2', { th: ['step'], from: '9-1', r: ['addper'], t: 'Change in value ÷ change in step', spot: ['seq', { n: ['4', '…', '9'], v: ['12', '…', '27'], span: [0, 2, '+ 15', '5 steps'], alt: 'Step 4 is 12 and step 9 is 27' }],
     doit: [['flow', ['{f:+ 15|5 steps}', { op: '' }, { t: '+ 3 a step', r: 'o' }]], ['flow', ['12 − 3 · 4', { op: 'back to 0' }, { t: 'start 0', r: 'x' }]], ['cue', [['dₙ =', ''], ['3', 'o', 'add'], ['· n', ''], ['+ 0', 'x', 'start', 'd']]]],
     trap: ['15 ÷ 9', '15 ÷ (9 − 4)'], alt: 'Divide the change in value by the number of steps between the two known steps. Then walk back to step 0 for the start.', v: [['27-12', '15'], ['9-4', '5'], ['15/5', '3'], ['12-3*4', '0'], ['3*9', '27']] });
-  V('9-3', { t: 'Story → two steps → rule', spot: ['map', [['week 3: 19 stands', 'x'], ['week 11: 51 stands', 'n']], [['n = 3,  d = 19', 'x'], ['n = 11,  d = 51', 'n']], [0, 1]],
+  V('9-3', { th: ['step'], from: '9-2', r: ['seq'], t: 'Story → two steps → rule', spot: ['map', [['week 3: 19 stands', 'x'], ['week 11: 51 stands', 'n']], [['n = 3,  d = 19', 'x'], ['n = 11,  d = 51', 'n']], [0, 1]],
     doit: [['seq', { n: ['3', '…', '11'], v: ['19', '…', '51'], span: [0, 2, '+ 32', '8 weeks'], alt: 'Week 3 is 19 and week 11 is 51' }], ['flow', ['32 ÷ 8', { op: '' }, { t: '+ 4 a week', r: 'o' }]], ['flow', ['19 − 4 · 3', { op: '' }, { t: 'start 7', r: 'x' }]], ['flow', [{ t: 'dₙ = 4n + 7', r: 'g' }, { op: 'n = 20' }, '87']]],
     trap: ['dₙ = 4n + 19', 'dₙ = 4n + 7'], alt: 'Take two known steps from the story. Amount added: change in value over change in step. Walk back to step 0, write the rule, use it.', v: [['(51-19)/(11-3)', '4'], ['19-4*3', '7'], ['4*11+7', '51'], ['4*20+7', '87']] });
 })();
@@ -252006,15 +252058,21 @@ var HHI = (function () {
 var HTC = (function () {
   'use strict';
   var HX = null, esc, el, CAT, LVN = ['Foundation', 'Fluency', 'Transfer'];
+  // the thread a card belongs to (the same idea wears the same mark all through the course) and the card it grows out of
+  function threadMarks(c) { return (c.th || []).length ? '<span class="tv-th">' + c.th.map(function (id) { var t = TAC.THREADS[id]; return t ? '<span class="tv-thm" data-th="' + esc(id) + '" title="Thread: ' + esc(t.name) + '">' + TVZ.icon(t.ic) + '<em>' + esc(t.name) + '</em></span>' : ''; }).join('') + '</span>' : ''; }
+  function fromChip(c) {
+    if (!c.from) return ''; var up = TAC.level(c.from), m = c.from.match(/^ch(\d+):(.+)$/); if (!up || !m) return '';
+    return '<a class="tv-from" href="#ch/' + m[1] + '/tactics/' + esc(m[2]) + '" aria-label="Builds on ' + esc(up.t) + '"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M11 11L3.5 3.5M3.5 9V3.5H9"/></svg>builds on <b>' + esc(up.t) + '</b></a>';
+  }
   var TOOLIC = { trans: '<svg viewBox="0 0 22 16" aria-hidden="true"><path d="M2 4h7M2 8h5M2 12h7M13 8h6M16 5l3 3-3 3"/></svg>', tri: '<svg viewBox="0 0 22 16" aria-hidden="true"><path d="M11 2L20 14H2Z"/><path d="M6.5 9h9M11 9v5"/></svg>' };
   function toolBtns(tools, opt) { return tools.length && !opt.bare ? '<div class="tc-tools">' + tools.map(function (t) { return '<button type="button" class="tc-toolbtn" data-tool="' + esc(t) + '">' + (t === 'trans' ? TOOLIC.trans + 'Words → symbols' : TOOLIC.tri + esc(TAC.TRI[t.slice(4)].say)) + '</button>'; }).join('') + '</div>' : ''; }
   function cardHTML(key, opt) {
     opt = opt || {}; var c = TAC.level(key); if (!c) return '';
     var L = CAT.levels[key] || {}, k = key.replace(/^ch\d+:/, ''), tools = TAC.toolsOf(c);
-    if (c.vis) return '<article class="tc-card tv lv' + (L.level || 1) + '" id="tc-' + esc(key.replace(':', '-')) + '" data-level="' + esc(key) + '"><header><span class="tc-lv">' + esc(L.name || LVN[(L.level || 1) - 1]) + '</span>' + (opt.unit ? '<span class="tc-un">' + esc(L.unit || '') + '</span>' : '') + '</header><h4>' + esc(c.t) + '</h4>' +
+    if (c.vis) return '<article class="tc-card tv lv' + (L.level || 1) + '" id="tc-' + esc(key.replace(':', '-')) + '" data-level="' + esc(key) + '"><header><span class="tc-lv">' + esc(L.name || LVN[(L.level || 1) - 1]) + '</span>' + (opt.unit ? '<span class="tc-un">' + esc(L.unit || '') + '</span>' : '') + threadMarks(c) + '</header><h4>' + esc(c.t) + '</h4>' +
       (c.spot ? '<div class="tv-sec spot"><span class="k">Spot it</span>' + TVZ.draw(c.spot) + '</div>' : '') +
       '<div class="tv-sec do"><span class="k">Do it</span>' + c.doit.map(TVZ.draw).join('') + '</div>' +
-      (c.trap ? '<div class="tv-sec tr"><span class="k">Trap</span>' + TVZ.draw(['trap', c.trap[0], c.trap[1]]) + '</div>' : '') + '<p class="tv-sr">' + esc(c.alt) + '</p>' + toolBtns(tools, opt) +
+      (c.trap ? '<div class="tv-sec tr"><span class="k">Trap</span>' + TVZ.draw(['trap', c.trap[0], c.trap[1]]) + '</div>' : '') + '<p class="tv-sr">' + esc(c.alt) + '</p>' + fromChip(c) + toolBtns(tools, opt) +
       (opt.links ? '<footer class="tc-links"><a href="#ch/' + L.ch + '/path/' + esc(k) + '">Open this level</a>' + (typeof HDJ !== 'undefined' ? '<a href="#dojo/warm/' + esc(key) + '">Warm up in the Dojo</a>' : '') + '</footer>' : '') + '</article>';
     return '<article class="tc-card lv' + (L.level || 1) + '" id="tc-' + esc(key.replace(':', '-')) + '" data-level="' + esc(key) + '"><header><span class="tc-lv">' + esc(L.name || LVN[(L.level || 1) - 1]) + '</span>' + (opt.unit ? '<span class="tc-un">' + esc(L.unit || '') + '</span>' : '') + '</header>' +
       '<h4>' + c.t + '</h4><ol class="tc-moves">' + c.m.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>' +
