@@ -2188,6 +2188,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tv-rep { text-decoration: overline; text-decoration-thickness: 1.6px; }
 .tv-col { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; } .tv-col .cap { font-size: 11.5px; font-weight: 800; color: var(--tv-o); } .tv-col .bd { display: inline-flex; flex-direction: column; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; } .tv-col .rw { display: flex; justify-content: flex-end; } .tv-col .d { width: .68em; text-align: center; } .tv-col .d.z { color: var(--ink-2); opacity: .5; } .tv-col .pt { width: .34em; text-align: center; color: var(--tv-o); font-weight: 900; } .tv-col .op { width: 1.1em; text-align: left; color: var(--tv-o); font-weight: 800; } .tv-col .rw.ans { border-top: 1.8px solid var(--ink-2); margin-top: 3px; padding-top: 3px; color: var(--tv-g); font-weight: 800; }
 .tv-rdiv { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; font-weight: 700; } .tv-rdiv .hd { display: flex; align-items: center; gap: 8px; font-size: 18px; } .tv-rdiv .bd { display: inline-grid; grid-template-columns: repeat(5, auto); gap: 3px 7px; align-items: center; justify-items: center; font-size: 16px; font-variant-numeric: tabular-nums; } .tv-rdiv .s { color: var(--ink-2); font-size: 13px; font-weight: 600; } .tv-rdiv .rm { min-width: 30px; text-align: center; border-radius: 8px; padding: 0 5px; } .tv-rdiv .rm i { font-style: normal; color: var(--ink-2); opacity: .55; } .tv-rdiv .rm.hl { color: var(--tv-o); background: var(--tv-o-bg); box-shadow: inset 0 0 0 1.4px var(--tv-o); } .tv-rdiv .rm.end { color: var(--tv-g); } .tv-rdiv .dg { min-width: 24px; text-align: center; border-radius: 8px; color: var(--tv-g); background: var(--tv-g-bg); font-weight: 800; } .tv-rdiv .nt { font-size: 12px; font-weight: 700; color: var(--tv-o); } .tv-rdiv .nt b { font-weight: 900; } .tv-rdiv .res { font-size: 19px; font-weight: 800; }
+.tv-area2 { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; font-weight: 800; } .tv-area2 .bd { display: inline-grid; gap: 3px; align-items: stretch; justify-items: stretch; font-size: 16px; } .tv-area2 .hd { text-align: center; color: var(--ink-2); font-size: 15px; padding: 0 6px 1px; } .tv-area2 .hd.rw { display: flex; align-items: center; justify-content: flex-end; padding: 0 6px 0 0; } .tv-area2 .c { display: flex; align-items: center; justify-content: center; min-width: 52px; min-height: 34px; padding: 3px 10px; background: var(--cb); box-shadow: inset 0 0 0 1.4px var(--c); color: var(--c); } .tv-area2 .c.big { min-width: 76px; min-height: 52px; } .tv-area2 .c.neg { background-image: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--c) 28%, transparent) 5px 6.5px); } .tv-area2 .sm { font-size: 17px; color: var(--tv-g); }
 .tv-grid { column-gap: 10px; } .tv-grid .hd.wd { font-size: 13px; color: var(--ink-2); } .tv-grid .lb.sy { font-size: 18px; font-weight: 800; color: var(--ink); justify-self: center; padding-right: 0; } .tv-grid .c.wd { font-size: 14px; font-weight: 700; white-space: nowrap; padding: 1px 4px; }
 .tv-grid .c.pl { color: var(--tv-x); background: var(--tv-x-bg); } .tv-grid .c.mi { color: var(--tv-n); background: var(--tv-n-bg); }
 /* thread marks and the "builds on" chip */
@@ -35036,7 +35037,7 @@ var GEN = (function () {
   function q$(x) { return Q.of(x); }
   function qfloor(q) { q = Q.of(q); var r = q.n / q.d; if (q.n < 0n && q.n % q.d !== 0n) r -= 1n; return Number(r); }
   function qceil(q) { return -qfloor(Q.of(q).neg()); }
-  function qround(q, dp) { var k = Q.of(10 ** dp); return Q.of(qfloor(Q.of(q).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(q, dp) { var k = Q.of(10 ** dp), x = Q.of(q), ng = x.sign() < 0, r = Q.of(qfloor((ng ? x.neg() : x).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero: −7.425 → −7.43
   function qtol(dp) { return Q.of(1).div(Q.of(10 ** dp)).div(2); }
   function qabs(q) { q = Q.of(q); return q.sign() < 0 ? q.neg() : q; }
   function dq(i, places) { return new Q(BigInt(i), 10n ** BigInt(places)); }   // dq(63, 1) = 6.3
@@ -36975,7 +36976,7 @@ var GEN = (function () {
   function qabs(x) { x = Q.of(x); return x.sign() < 0 ? x.neg() : x; }
   function qfloor(x) { x = Q.of(x); var r = x.n / x.d; if (x.n < 0n && x.n % x.d !== 0n) r -= 1n; return Number(r); }
   function qceil(x) { return -qfloor(Q.of(x).neg()); }
-  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)); return Q.of(qfloor(Q.of(x).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)), y = Q.of(x), ng = y.sign() < 0, r = Q.of(qfloor((ng ? y.neg() : y).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero
   function qtol(dp) { return Q.of(1).div(Q.of(Math.pow(10, dp))).div(2); }
   function dq(i, places) { return new Q(BigInt(i), BigInt(Math.pow(10, places))); }   // dq(63, 1) = 6.3
   function ad(a, b) { return Q.of(a).add(b); }
@@ -39786,7 +39787,7 @@ var GEN = (function () {
   function ff(x) { return Q.of(x).toFrac(); }                // canonical key
   function qabs(x) { x = Q.of(x); return x.sign() < 0 ? x.neg() : x; }
   function qfloor(x) { x = Q.of(x); var r = x.n / x.d; if (x.n < 0n && x.n % x.d !== 0n) r -= 1n; return Number(r); }
-  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)); return Q.of(qfloor(Q.of(x).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)), y = Q.of(x), ng = y.sign() < 0, r = Q.of(qfloor((ng ? y.neg() : y).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero
   function qtol(dp) { return Q.of(1).div(Q.of(Math.pow(10, dp))).div(2); }
   function dq(i, places) { return new Q(BigInt(i), BigInt(Math.pow(10, places))); }   // dq(63, 1) = 6.3
   function D(s) { return Q.of(String(s)); }                  // D('0.045') — an exact decimal
@@ -49553,10 +49554,10 @@ var TVZ = (function () {
     var step = o.step === undefined ? (span <= 24 ? 1 : 0) : o.step;
     if (step) for (v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) h += '<path class="tv-ln thin" d="M' + r1(X(v)) + ' ' + (y - 4) + 'v8"/>';
     (o.marks || []).forEach(function (m) { var val = typeof m === 'number' ? m : m[0], t = typeof m === 'number' ? sgn(m) : m[1]; h += '<path class="tv-ln" d="M' + r1(X(val)) + ' ' + (y - 6) + 'v12"/>' + tx(X(val), y + 23, t, 'tv-t sm ' + (val === 0 ? 'b' : 'r-m')); });
-    if (o.ray) { var R = o.ray, xr = X(R.at), xe = R.dir === 'r' ? 293 : 7, rr = 'r-' + (R.role || 'x');
+    (o.rays || (o.ray ? [o.ray] : [])).forEach(function (R) { var xr = X(R.at), xe = R.dir === 'r' ? 293 : 7, rr = 'r-' + (R.role || 'x');
       h += '<path class="tv-a ' + rr + ' ray" d="M' + r1(xr) + ' ' + y + 'H' + xe + '"/><path class="tv-a ' + rr + ' ray" d="M' + (R.dir === 'r' ? 286 : 14) + ' ' + (y - 6) + 'L' + xe + ' ' + y + 'L' + (R.dir === 'r' ? 286 : 14) + ' ' + (y + 6) + '" fill="none"/>';
       h += '<circle class="tv-dot ' + rr + (R.closed ? '' : ' open') + '" cx="' + r1(xr) + '" cy="' + y + '" r="6.5"/>';
-      alt.push('a ray from ' + sgn(R.at) + ' to the ' + (R.dir === 'r' ? 'right' : 'left') + ', ' + (R.closed ? 'closed circle' : 'open circle')); }
+      alt.push('a ray from ' + sgn(R.at) + ' to the ' + (R.dir === 'r' ? 'right' : 'left') + ', ' + (R.closed ? 'closed circle' : 'open circle')); });
     if (o.seg) { var G = o.seg, gr = 'r-' + (G.role || 'x'), ca = G.closed === true || (G.closed && G.closed[0]), cb = G.closed === true || (G.closed && G.closed[1]);
       h += '<path class="tv-a ' + gr + ' ray" d="M' + r1(X(G.a)) + ' ' + y + 'H' + r1(X(G.b)) + '"/><circle class="tv-dot ' + gr + (ca ? '' : ' open') + '" cx="' + r1(X(G.a)) + '" cy="' + y + '" r="6.5"/><circle class="tv-dot ' + gr + (cb ? '' : ' open') + '" cx="' + r1(X(G.b)) + '" cy="' + y + '" r="6.5"/>';
       alt.push('the part from ' + sgn(G.a) + ' to ' + sgn(G.b) + ', ' + (ca ? 'closed' : 'open') + ' circles'); }
@@ -49645,6 +49646,38 @@ var TVZ = (function () {
     var res = repStr(E);
     return '<div class="tv-rdiv" role="img" aria-label="' + esc(o.n + ' divided by ' + o.d + ' by long division: the digits are ' + E.digs.join(', ') + (E.from >= 0 ? '; the remainder ' + rp + ' comes back, so the digits repeat' : '; the remainder is 0, so the decimal ends')) + '"><div class="hd">' + fmt('{f:' + o.n + '|' + o.d + '}') + '<span class="s">' + (E.q0 ? E.q0 + ' r ' + E.rems[0] : '') + '</span></div><div class="bd">' + h + '</div><div class="nt">' + (E.from >= 0 ? 'remainder <b>' + rp + '</b> again: digits repeat' : 'remainder 0: it ends') + '</div><div class="res">' + fmt('{g:' + res + '}') + '</div></div>';
   }
+  // ---------------------------------------------------------------- pieces added for Chapter 5 (two sides as two lines, the two-way area model)
+  // cross: the left side m·x + b as a slanted line, the right side c as a level line; where they cross, x is the root.
+  // ineq '<' '>' '≤' '≥' also marks on the x-axis where the slanted line is below / above the level line.
+  function cross(o) {
+    var m = o.m, b = o.b, c = o.c, r = (c - b) / m, xa = Math.round(r) - 4, xb = Math.round(r) + 4, ys = [0, c, m * xa + b, m * xb + b], lo = Math.min.apply(null, ys), hi = Math.max.apply(null, ys);
+    lo = Math.max(lo, Math.min(0, c) - 7); hi = Math.min(hi, Math.max(0, c) + 7); if (hi - lo < 6) { hi += 2; lo -= 2; }
+    var x0 = 34, x1 = 266, y0 = 132, y1 = 14, h = '', v;
+    function X(x) { return x0 + (x - xa) / (xb - xa) * (x1 - x0); } function Y(y) { return y0 - (y - lo) / (hi - lo) * (y0 - y1); }
+    for (v = xa; v <= xb; v++) h += '<path class="tv-ln thin gridl" d="M' + r1(X(v)) + ' ' + y1 + 'V' + y0 + '"/>';
+    var yax = Math.max(lo, Math.min(hi, 0)), ty = Y(yax);
+    h += '<path class="tv-ln" d="M' + (x0 - 6) + ' ' + r1(ty) + 'H' + (x1 + 6) + '"/>';
+    if (xa <= 0 && xb >= 0) h += '<path class="tv-ln thin" d="M' + r1(X(0)) + ' ' + y1 + 'V' + y0 + '"/>';
+    // the slanted line, clipped to the frame
+    var pa = [xa, m * xa + b], pb = [xb, m * xb + b]; function clip(p, q) { var y = p[1]; if (y > hi) return [p[0] + (hi - p[1]) / m, hi]; if (y < lo) return [p[0] + (lo - p[1]) / m, lo]; return p; }
+    pa = clip(pa, pb); pb = clip(pb, pa);
+    h += '<path class="tv-a r-x" d="M' + r1(X(pa[0])) + ' ' + r1(Y(pa[1])) + 'L' + r1(X(pb[0])) + ' ' + r1(Y(pb[1])) + '" fill="none"/>';
+    h += '<path class="tv-a r-n" d="M' + x0 + ' ' + r1(Y(c)) + 'H' + x1 + '" fill="none"/>';
+    h += '<path class="tv-ln thin dash" d="M' + r1(X(r)) + ' ' + r1(Y(c)) + 'V' + r1(ty) + '"/><circle class="tv-dot r-g" cx="' + r1(X(r)) + '" cy="' + r1(Y(c)) + '" r="5.5"/>';
+    var top = m > 0 ? pb : pa, lx = Math.min(x1 - 4, Math.max(x0 + 30, X(top[0]) + (m > 0 ? -34 : 34)));
+    h += tx(lx, Y(top[1]) + (Y(top[1]) < 30 ? 14 : -6), o.left, 'tv-t sm r-x b') + tx(m > 0 ? x0 + 4 : x1 - 4, Y(c) - 6, o.right, 'tv-t sm r-n b', m > 0 ? 'start' : 'end');
+    if (o.ineq) { var below = o.ineq === '<' || o.ineq === '≤', leftw = (m > 0) === below, closed = o.ineq === '≤' || o.ineq === '≥';
+      h += '<path class="tv-a r-g ray" d="M' + r1(X(r)) + ' ' + r1(ty) + 'H' + (leftw ? x0 - 6 : x1 + 6) + '"/><circle class="tv-dot r-g' + (closed ? '' : ' open') + '" cx="' + r1(X(r)) + '" cy="' + r1(ty) + '" r="6"/>'; }
+    else h += '<circle class="tv-dot r-g" cx="' + r1(X(r)) + '" cy="' + r1(ty) + '" r="4"/>';
+    h += tx(X(r), ty + 17, (o.ineq ? o.v + ' ' + o.ineq + ' ' : o.v + ' = ') + sgn(r), 'tv-t sm r-g b');
+    return svg(300, Math.max(150, ty + 26), h, 'tv-cross', 'The two sides of ' + o.left + (o.ineq ? ' ' + o.ineq + ' ' : ' = ') + o.right + ' as two lines: they cross at ' + o.v + ' = ' + sgn(r) + (o.ineq ? '; the solutions are ' + o.v + ' ' + o.ineq + ' ' + sgn(r) : '') + '.');
+  }
+  // area2: a rectangle cut both ways; each part is its row times its column. A part with a negative area is hatched.
+  function area2(o) {
+    var n = o.cols.length, h = '<span></span>' + o.cols.map(function (c) { return '<span class="hd">' + fmt(c) + '</span>'; }).join('');
+    o.rows.forEach(function (r, i) { h += '<span class="hd rw">' + fmt(r) + '</span>' + o.cells[i].map(function (c, j) { var p = plain(c), cls = /^[−-]/.test(p) ? 'r-w neg' : /[a-z]²|[a-z]\^2/.test(p) ? 'r-x' : /[a-z]/.test(p) ? 'r-o' : 'r-n'; return '<span class="c ' + cls + (i === 0 && j === 0 ? ' big' : '') + '">' + fmt(c) + '</span>'; }).join(''); });
+    return '<div class="tv-area2" role="img" aria-label="' + esc('An area model: ' + o.rows.map(plain).join(' and ') + ' high, ' + o.cols.map(plain).join(' and ') + ' wide; the parts are ' + o.cells.map(function (r) { return r.map(plain).join(', '); }).join(', ') + (o.sum ? '; together ' + plain(o.sum) : '')) + '"><div class="bd" style="grid-template-columns:auto repeat(' + n + ',auto)">' + h + '</div>' + (o.sum ? '<div class="sm">' + fmt(o.sum) + '</div>' : '') + '</div>';
+  }
   // small line icons for the formula tiles
   var IC = {
     road: '<path class="i1" d="M4 26C14 8 30 34 44 12"/><circle class="i2" cx="4" cy="26" r="3"/><circle class="i2" cx="44" cy="12" r="3"/>',
@@ -49677,7 +49710,7 @@ var TVZ = (function () {
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
@@ -49754,6 +49787,20 @@ var FML = (function () {
   F('q-up', 4, { of: 'q-left', name: 'After a tax or a rise is added', f: '{g:total} = ({n:1} + {x:r}) · {o:W}', plain: 'total = (1 + r) · W', lit: ['T', '(1+r)*W'], wrong: [['total = r · W', 'r*W'], ['total = (1 − r) · W', '(1-r)*W'], ['total = W + r', 'W+r']], sk: ['R33', 'R24'] });
   F('q-FC', 4, { name: 'Celsius to Fahrenheit', f: '{g:F} = {f:9|5}{x:C} + {n:32}', plain: 'F = 9/5 · C + 32', lit: ['F', '9/5*C+32'], wrong: [['F = 5/9 · C + 32', '5/9*C+32'], ['F = 9/5 · (C + 32)', '9/5*(C+32)'], ['F = 9/5 · C − 32', '9/5*C-32']], sk: ['R34'], leg: [['F', '× first, then + 32'], ['C', '( ) first:  F − 32']], ic: 'gauge' });
   F('q-CF', 4, { of: 'q-FC', name: 'Fahrenheit to Celsius', f: '{g:C} = {f:5|9}({x:F} − {n:32})', plain: 'C = 5/9 · (F − 32)', lit: ['C', '5/9*(F-32)'], wrong: [['C = 5/9 · F − 32', '5/9*F-32'], ['C = 9/5 · (F − 32)', '9/5*(F-32)'], ['C = 5/9 · (F + 32)', '5/9*(F+32)']], sk: ['R34'] });
+
+  // ---------------------------------------------------------------- Chapter 5: equations, patterns, the area model
+  F('e-two', 5, { name: 'Solving ax + b = c', f: '{x:x} = {f:{g:c} − {n:b}|{o:a}}', plain: 'x = (c − b) ÷ a', lit: ['x', '(c-b)/a'], wrong: [['x = (c + b) ÷ a', '(c+b)/a'], ['x = c ÷ a − b', 'c/a-b'], ['x = c − b ÷ a', 'c-b/a']], sk: ['E1', 'E4'], leg: [['first', 'undo + b'], ['then', 'undo · a']], ic: 'undo', move: 'eq2.solve' });
+  F('e-par', 5, { name: 'Solving a(x + b) = c', f: '{x:x} = {f:{g:c}|{o:a}} − {n:b}', plain: 'x = c ÷ a − b', lit: ['x', 'c/a-b'], wrong: [['x = c ÷ a + b', 'c/a+b'], ['x = (c − b) ÷ a', '(c-b)/a'], ['x = c − a · b', 'c-a*b']], sk: ['E11', 'E10'], leg: [['first', '÷ a, both sides'], ['or', 'distribute first']], ic: 'arcs', move: 'eq2.dist' });
+  F('e-dist', 5, { of: 'e-par', name: 'A negative number outside', f: '{n:−a}({x:x} − {o:b}) = {n:−a}{x:x} + {n:a}{o:b}', plain: '−a(x − b) = −ax + ab', lit: ['E', '-a*(x-b)'], sol: '-a*x+a*b', wrong: [['−a(x − b) = −ax − ab', '-a*x-a*b'], ['−a(x − b) = −ax − b', '-a*x-b'], ['−a(x − b) = ax − ab', 'a*x-a*b']], sk: ['E10', 'E14'] });
+  F('e-div', 5, { name: 'Solving x ÷ a + b = c', f: '{x:x} = {o:a}({g:c} − {n:b})', plain: 'x = a · (c − b)', lit: ['x', 'a*(c-b)'], wrong: [['x = a · c − b', 'a*c-b'], ['x = (c − b) ÷ a', '(c-b)/a'], ['x = a · (c + b)', 'a*(c+b)']], sk: ['E6'], leg: [['first', 'undo + b'], ['then', '· a, both sides']], ic: 'undo', move: 'eq2.order' });
+  F('e-top', 5, { of: 'e-div', name: 'Solving (x + b) ÷ a = c', f: '{x:x} = {o:a}{g:c} − {n:b}', plain: 'x = a · c − b', lit: ['x', 'a*c-b'], wrong: [['x = a · (c − b)', 'a*(c-b)'], ['x = c ÷ a − b', 'c/a-b'], ['x = a · c + b', 'a*c+b']], sk: ['E13', 'E7'] });
+  F('e-step', 5, { name: 'Step n of a pattern that starts at step 1', f: '{g:step n} = {x:first} + {o:add} · ({n:n} − 1)', plain: 'first + add · (n − 1)', lit: ['S', 'f+d*(n-1)'], wrong: [['first + add · n', 'f+d*n'], ['first · n + add', 'f*n+d'], ['add + first · (n − 1)', 'd+f*(n-1)']], sk: ['E25', 'E26'], leg: [['n − 1', 'steps after the first'], ['same as', 'add · n + (first − add)']], ic: 'stairs', move: 'pat.rule' });
+  F('e-ratio', 5, { name: 'One share in the ratio a : b', f: '{g:share} = {f:{x:a}|{x:a} + {n:b}} · {o:W}', plain: 'share = a ÷ (a + b) · W', lit: ['P', 'a/(a+b)*W'], wrong: [['share = W ÷ a', 'W/a'], ['share = a ÷ b · W', 'a/b*W'], ['share = W ÷ (a · b)', 'W/(a*b)']], sk: ['E19'], leg: [['parts', 'ax and bx'], ['W', 'the whole:  ax + bx']], ic: 'bar' });
+  F('e-geo', 5, { name: 'A multiplying sequence', f: '{g:g}ₙ = {x:start} · {o:r}ⁿ', plain: 'start · rⁿ', lit: ['g', 's*r^n'], wrong: [['start · r · n', 's*r*n'], ['start + rⁿ', 's+r^n'], ['(start · r)ⁿ', '(s*r)^n']], sk: ['E38', 'E40'], leg: [['r', 'the multiplier'], ['start', 'the value at step 0']], ic: 'pow', move: 'pat.next' });
+  F('e-tri', 5, { name: 'Dots in a staircase of n rows', f: '{g:T} = {f:{x:n}({x:n} + 1)|2}', plain: 'n · (n + 1) ÷ 2', lit: ['T', 'n*(n+1)/2'], wrong: [['n · (n + 1)', 'n*(n+1)'], ['n² ÷ 2', 'n^2/2'], ['n · (n − 1) ÷ 2', 'n*(n-1)/2']], sk: ['E39'], leg: [['two of them', 'a rectangle n by n + 1']], ic: 'stairs' });
+  F('e-foil', 5, { name: 'A product of two sums', f: '({x:x} + {n:a})({x:x} + {o:b}) = {x:x²} + ({n:a} + {o:b}){x:x} + {n:a}{o:b}', plain: '(x + a)(x + b) = x² + (a + b)x + ab', lit: ['E', '(x+a)*(x+b)'], sol: 'x^2+(a+b)*x+a*b', wrong: [['(x + a)(x + b) = x² + ab', 'x^2+a*b'], ['(x + a)(x + b) = x² + abx + a + b', 'x^2+a*b*x+a+b'], ['(x + a)(x + b) = 2x + a + b', '2*x+a+b']], sk: ['E46', 'E47'], leg: [['add', 'to the middle'], ['multiply', 'to the end']], ic: 'rect', move: 'pat.area' });
+  F('e-sq', 5, { of: 'e-foil', name: 'The square of a sum', f: '({x:x} + {n:a})² = {x:x²} + 2{n:a}{x:x} + {n:a²}', plain: '(x + a)² = x² + 2ax + a²', lit: ['E', '(x+a)^2'], sol: 'x^2+2*a*x+a^2', wrong: [['(x + a)² = x² + a²', 'x^2+a^2'], ['(x + a)² = x² + ax + a²', 'x^2+a*x+a^2'], ['(x + a)² = x² + 2ax + a', 'x^2+2*a*x+a']], sk: ['E48'] });
+  F('e-dsq', 5, { of: 'e-foil', name: 'A sum times a difference', f: '({x:x} + {n:a})({x:x} − {n:a}) = {x:x²} − {n:a²}', plain: '(x + a)(x − a) = x² − a²', lit: ['E', '(x+a)*(x-a)'], sol: 'x^2-a^2', wrong: [['(x + a)(x − a) = x² + a²', 'x^2+a^2'], ['(x + a)(x − a) = x² − 2ax − a²', 'x^2-2*a*x-a^2'], ['(x + a)(x − a) = x² − a', 'x^2-a']], sk: ['E48'] });
 
   // ---------------------------------------------------------------- Chapter 3: equations, motion, sequences
   F('dvt', 3, { name: 'Distance', f: '{g:d} = {x:v} · {n:t}', plain: 'd = v · t', lit: ['d', 'v*t'], wrong: [['d = v ÷ t', 'v/t'], ['d = v + t', 'v+t'], ['d = t ÷ v', 't/v']], sk: ['U20'], leg: [['d', 'distance'], ['v', 'speed'], ['t', 'time']], ic: 'road', tri: 'dvt', move: 'drt.plug' });
@@ -49950,6 +49997,36 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   R('rest', 'The shares of one whole add up to 1, so the rest is 1 minus the shares taken.', { refines: 'parts' });
   R('onepm', 'Adding 5% multiplies by 1.05 (1 plus the percent as a decimal). Taking off a fraction f multiplies by 1 − f.', { refines: 'rest' });
   R('wholefrom', 'Part = fraction · whole, so whole = part ÷ fraction.', { refines: 'recip' });
+
+  // ---------------------------------------------------------------- Chapter 5: equations and inequalities (the moves are Chapter 3's, the arithmetic Chapters 2 and 4's)
+  R.ch = 5;
+  R('cross', 'Graph both sides: where the two lines cross, the sides are equal. That x is the root.', { refines: 'root' });
+  R('errline', 'To find a mistake, check each line against the line before it: what was done, and was it done to all of it?', { refines: 'both' });
+  R('start1', 'A pattern that starts at step 1: first + add · (n − 1), which is add · n + (first − add).', { refines: 'rule-n' });
+  R('divfirst', 'a(x + b) = c: divide both sides by a first, or distribute first. Both give the same root.', { refines: 'order' });
+  R('negdist', 'A negative number outside the parentheses changes the sign of every term inside.', { refines: 'dist' });
+  R('jumpeq', 'A path of jumps is an equation: start, plus every jump, equals where it ends.', { refines: 'jumpsize' });
+  R('longbar', 'A long fraction bar groups its whole top: (w − 10)/7 is undone by · 7 first, then + 10.', { refines: 'fracbar' });
+  R('everyterm', 'Multiplying both sides by a number multiplies every term on both sides.', { refines: 'both' });
+  R('sideseq', 'Perimeter: write every side with the same letter, add the sides, set the sum equal to the perimeter.', { refines: 'periarea' });
+  R('eachitem', 'A charge on each item goes inside the parentheses: n(p + c). A fee on the whole order is added once.', { refines: 'once' });
+  R('roundup', 'A count must be whole: round down for how many you can afford, up for how many you need.', { refines: 'wholepieces' });
+  R('ratiox', 'A ratio 4 : 5 means parts 4x and 5x: add the parts, set the sum equal to the whole, solve for x.');
+  R('consec', 'Consecutive whole numbers are n, n + 1, n + 2, …');
+  R('ineqwords', 'At least is ≥, at most is ≤, more than is >, fewer than is <.', { refines: 'circle' });
+  R('boundary', 'Solve the equation first: its root is the boundary. Then test a number on each side.', { refines: 'solineq' });
+  R('revsign', 'Multiplying or dividing both sides of an inequality by a negative number reverses the sign.', { refines: 'both' });
+  R('wholeineq', 'For whole numbers, n ≤ 40 says the same as n < 41, and n ≥ 40 the same as n > 39.', { refines: 'ineqwords' });
+  R('grow3', 'A sequence grows by adding the same amount, by adding more each time, or by multiplying.', { refines: 'see-n' });
+  R('geo', 'A multiplying sequence is start · multiplierⁿ, with the start at step 0.', { refines: 'seq' });
+  R('shapes', 'Dots in a square: n². In a rectangle n by n + 1: n(n + 1). In a staircase: half of that.', { refines: 'see-n' });
+  R('between', 'a < x < b means x is between a and b. Do the same thing to all three parts.', { refines: 'both' });
+  R('absdist', '|x − c| is the distance from x to c. |x − c| = k: the two numbers k away from c.', { refines: 'twoside' });
+  R('outside', '|x| > k means x is farther from zero than k: x < −k or x > k, two rays.', { refines: 'within' });
+  R('centre', '|x − c| ≤ k: c is the middle of the range and k is half its width.', { refines: 'absdist' });
+  R('fourparts', 'Area model: cut both sides, find the area of each part, add the parts.', { refines: 'dist' });
+  R('foil', '(x + a)(x + b) = x² + (a + b)x + ab: the two numbers add to the middle and multiply to the end.', { refines: 'fourparts' });
+  R('special', '(x + a)² = x² + 2ax + a².   (x + a)(x − a) = x² − a².', { refines: 'foil' });
 })();
 
 /* --- tactics_ch1.js --- */
@@ -51848,6 +51925,8 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
     { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
   recall(3, 'Name that formula: equations and motion', ['U20', 'U22', 'U21', 'U16', 'U17', 'U28', 'U5', 'U6', 'U9'], ['Say the formula before you touch a number', 'Distance d = v · t. Area A = ℓ · w. Total cost T = p · n. A sequence: dₙ = a · n + b. To undo a move on x, do the opposite to both sides.']);
   recall(4, 'Name that rule: fractions and decimals', ['R8', 'R6', 'R13', 'R18', 'R20', 'R22', 'R25', 'R31', 'R33', 'R34'], ['Say the rule before you compute', 'Add fractions over a common denominator: only the tops add. Multiply tops and bottoms; cancel first. Dividing by a fraction is multiplying by its reciprocal. A fraction of a quantity means multiply; the whole is the part divided by the fraction. What is left is (1 − f) of the whole.'],
+    { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
+  recall(5, 'Name that rule: equations and patterns', ['E1', 'E6', 'E10', 'E11', 'E13', 'E19', 'E25', 'E38', 'E39', 'E46', 'E48'], ['Say the move before you make it', 'ax + b = c: undo + b, then ÷ a. a(x + b) = c: ÷ a first, or distribute. x ÷ a + b = c: undo + b, then · a; with a long bar over x + b, · a first. A pattern from step 1: first + add · (n − 1). A multiplying sequence: start · rⁿ. (x + a)(x + b) = x² + (a + b)x + ab.'],
     { ask: 'Which one is this?', what: 'What is this?', verb: ' is ' });
   recall(6, 'Name that formula: rates and scale', ['P8', 'P16', 'P28', 'P40', 'P44', 'P48', 'P57', 'P59'], ['Rate, scale and slope are all divisions', 'Unit rate = amount ÷ quantity. Scale factor = new ÷ old. Slope = rise ÷ run. Proportional: y = k · x. A line: y = m · x + b.']);
   recall(7, 'Name that formula: percent', ['C8', 'C10', 'C12', 'C13', 'C21', 'C31', 'C38'], ['part = percent · whole', 'Cover what you want: percent = part ÷ whole, whole = part ÷ percent. Up r: × (1 + r). Down r: × (1 − r). Change: change ÷ original. Interest: I = P · r · t.']);
@@ -92158,7 +92237,7 @@ var GEN = (function () {
   function q$(x) { return Q.of(x); }
   function qfloor(q) { q = Q.of(q); var r = q.n / q.d; if (q.n < 0n && q.n % q.d !== 0n) r -= 1n; return Number(r); }
   function qceil(q) { return -qfloor(Q.of(q).neg()); }
-  function qround(q, dp) { var k = Q.of(10 ** dp); return Q.of(qfloor(Q.of(q).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(q, dp) { var k = Q.of(10 ** dp), x = Q.of(q), ng = x.sign() < 0, r = Q.of(qfloor((ng ? x.neg() : x).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero: −7.425 → −7.43
   function qtol(dp) { return Q.of(1).div(Q.of(10 ** dp)).div(2); }
   function qabs(q) { q = Q.of(q); return q.sign() < 0 ? q.neg() : q; }
   function dq(i, places) { return new Q(BigInt(i), 10n ** BigInt(places)); }   // dq(63, 1) = 6.3
@@ -101430,7 +101509,7 @@ var GEN = (function () {
   function qabs(x) { x = Q.of(x); return x.sign() < 0 ? x.neg() : x; }
   function qfloor(x) { x = Q.of(x); var r = x.n / x.d; if (x.n < 0n && x.n % x.d !== 0n) r -= 1n; return Number(r); }
   function qceil(x) { return -qfloor(Q.of(x).neg()); }
-  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)); return Q.of(qfloor(Q.of(x).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)), y = Q.of(x), ng = y.sign() < 0, r = Q.of(qfloor((ng ? y.neg() : y).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero
   function qtol(dp) { return Q.of(1).div(Q.of(Math.pow(10, dp))).div(2); }
   function dq(i, places) { return new Q(BigInt(i), BigInt(Math.pow(10, places))); }   // dq(63, 1) = 6.3
   function ad(a, b) { return Q.of(a).add(b); }
@@ -111574,7 +111653,7 @@ var GEN = (function () {
   function ff(x) { return Q.of(x).toFrac(); }                // canonical key
   function qabs(x) { x = Q.of(x); return x.sign() < 0 ? x.neg() : x; }
   function qfloor(x) { x = Q.of(x); var r = x.n / x.d; if (x.n < 0n && x.n % x.d !== 0n) r -= 1n; return Number(r); }
-  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)); return Q.of(qfloor(Q.of(x).mul(k).add(new Q(1n, 2n)))).div(k); }
+  function qround(x, dp) { var k = Q.of(Math.pow(10, dp)), y = Q.of(x), ng = y.sign() < 0, r = Q.of(qfloor((ng ? y.neg() : y).mul(k).add(new Q(1n, 2n)))).div(k); return ng ? r.neg() : r; }   // a tie rounds away from zero
   function qtol(dp) { return Q.of(1).div(Q.of(Math.pow(10, dp))).div(2); }
   function dq(i, places) { return new Q(BigInt(i), BigInt(Math.pow(10, places))); }   // dq(63, 1) = 6.3
   function D(s) { return Q.of(String(s)); }                  // D('0.045') — an exact decimal
