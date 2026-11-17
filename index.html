@@ -2199,7 +2199,7 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tc-bank.tv h3 { font-size: 19px; } .tv-sub { margin: 16px 0 8px; font-size: 14px; color: var(--ink-2); font-weight: 700; }
 .tv-ftgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(218px, 1fr)); gap: 10px; }
 .tv-ft { position: relative; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-2); padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 7px; break-inside: avoid; }
-.tv-ft .hd { display: flex; align-items: center; gap: 8px; min-height: 28px; padding-right: 46px; } .tv-ft .nm { font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); line-height: 1.2; } .tv-ft.g-u .hd { padding-right: 0; min-height: 0; } .tv-ft.g-u .tv-steps { font-size: 16.5px; width: 100%; } .tv-ft.g-u .tv-ic { width: 26px; height: 21px; }
+.tv-ft .hd { display: flex; align-items: center; gap: 8px; min-height: 28px; padding-right: 46px; } .tv-ft .nm { font-size: 12.5px; font-weight: 800; letter-spacing: .01em; color: var(--ink-2); line-height: 1.2; }   /* no upper-casing: a name may hold letters (a/b = c/d, slope m) whose case is meaning */ .tv-ft.g-u .hd { padding-right: 0; min-height: 0; } .tv-ft.g-u .tv-steps { font-size: 16.5px; width: 100%; } .tv-ft.g-u .tv-ic { width: 26px; height: 21px; }
 .tv-ic { width: 34px; height: 27px; flex: none; } .tv-ic .i1 { fill: none; stroke: var(--tv-x); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; } .tv-ic .i1.f { fill: var(--tv-x-bg); } .tv-ic .i1.dash { stroke-dasharray: 4 3.5; } .tv-ic .i2 { fill: var(--tv-n); } .tv-ic .i2l { fill: none; stroke: var(--tv-n); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .tv-ft .fx { margin: auto 0; display: block; font-size: 23px; font-weight: 800; text-align: center; padding: 4px 0; font-variant-numeric: tabular-nums; white-space: nowrap; } .tv-ft .fx.fw { font-size: 15px; } .tv-ft.g-u .fx { font-size: 17px; }
 .tv-ft .alt { display: flex; gap: 6px 16px; flex-wrap: wrap; justify-content: center; font-size: 15.5px; font-weight: 750; padding-top: 7px; border-top: 1px dashed var(--line); } .tv-ft .alt > span { white-space: nowrap; } .tv-ft .alt .fw { font-size: 12.5px; }
@@ -2217,6 +2217,9 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tc-fbtns { display: flex; gap: 10px; justify-content: center; margin-top: 14px; min-height: 46px; } .tc-fdone { text-align: center; padding: 26px 0 8px; } .tc-fdone .big { font-size: 36px; font-weight: 800; color: var(--tv-g); } .tc-fdone p { color: var(--ink-2); margin: 6px 0 14px; }
 @media (prefers-reduced-motion: reduce) { .tc-fc .in { transition: none; } }
 @media print { .tc-flash, .tv-ft .dr, .tv-from { display: none !important; } .tv-sec, .tv-ft, .tv-row.ans, .tv-trap > span, .tv-box, .tv-cue .t.hl, .tv-opp b, .tv-svg, .tv-inv b, .tv-test .xv, .tv-fold .ex span, .tv-fold .rw.ans b, .tv-sort .ch, .tv-vt .c, .tv-grid .c { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+/* Chapter 6 pieces: the ratio table, the graph, the proportion, similar figures */
+.tv-shade { fill: var(--c); fill-opacity: .15; stroke: none; } .tv-eqbg { fill: var(--surface); stroke: none; } .tv-a.dashl { stroke-dasharray: 6 5; } .tv-graph .gridl, .tv-cross .gridl { stroke-opacity: .28; }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -37013,7 +37016,10 @@ var GEN = (function () {
   function ul(u) { return ULONG[u] || u; }
   function ulsq(u) { return u === 'm' ? 'square metres' : u + '²'; }
   // 'a' or 'an' in front of a number or word, by how it is read aloud
-  function art(x) { var t = String(x); return /^(8|11|18|8[0-9]{2}|[aeiou])/i.test(t) ? 'an' : 'a'; }
+  // one of a unit: “1 minute”, “1 square metre”, “1 tonne” (the plural word is the last one, or the one before “of”)
+  function sing(w) { var ip = String(w).indexOf(' per '); if (ip > 0) return sing(String(w).slice(0, ip)) + String(w).slice(ip); var ps = String(w).split(' of '), ws = ps[0].split(' '), l = ws[ws.length - 1]; if (/^[a-z]{4,}s$/.test(l) && !/(ss|us|is)$/.test(l)) ws[ws.length - 1] = /(ch|sh|x|z)es$/.test(l) ? l.slice(0, -2) : /ies$/.test(l) ? l.slice(0, -3) + 'y' : l.slice(0, -1); ps[0] = ws.join(' '); return ps.join(' of '); }
+  function un(q, w) { return Q.of(q).eq(Q.of(1)) ? sing(w) : w; }
+  function art(x) { var t = String(x); return /^(8|11|18|8[0-9]{2}|[aeio]|u(?!ni|se|su)|hour)/i.test(t) ? 'an' : 'a'; }
   var ROUND_NAME = { 0: 'the nearest whole number', 1: 'the nearest tenth', 2: 'the nearest hundredth', 3: 'three decimal places' };
 
   /* ---------- problem constructors ---------- */
@@ -37027,6 +37033,8 @@ var GEN = (function () {
       if (w > ans.d) core += ' = ' + (ans.sign() < 0 ? '−' : '') + (w / ans.d) + ' ' + (w % ans.d) + '/' + ans.d;
     }
     var tail = opt.per ? ' ' + opt.per : (opt.unit && !opt.money ? ' ' + opt.unit : '');
+    // exactly one of a unit named by one plural word: “1 metre”, not “1 metres” (the label beside the box keeps the plural)
+    if (ans.eq(Q.of(1)) && !opt.money && (opt.per || opt.unit)) tail = ' ' + sing(opt.per || opt.unit);
     var p = {
       prompt: prompt, kind: 'num', answer: ans, show: core + tail, steps: steps,
       unit: opt.money ? undefined : opt.unit, lowest: !!opt.lowest, money: !!opt.money
@@ -37145,7 +37153,7 @@ var GEN = (function () {
     { q: 'metres', t: 'minutes', s: 'A mermaid late for work covers' }, { q: 'pages', t: 'minutes', s: 'A haunted printer prints' },
     { q: 'litres', t: 'minutes', s: 'A tap of chocolate milk delivers' }, { q: 'words', t: 'seconds', s: 'An octopus typist types' },
     { q: 'bricks', t: 'hours', s: 'A bricklaying gorilla lays' }, { q: 'bottles', t: 'minutes', s: 'A burping machine fills' },
-    { q: 'stitches', t: 'minutes', s: 'A spider with a sewing machine sews' }, { q: 'steps', t: 'minutes', s: 'A sleepwalking robot takes' }
+    { q: 'metres of thread', t: 'minutes', s: 'A spider with a sewing machine uses' }, { q: 'kilometres', t: 'hours', s: 'A sleepwalking robot walks' }
   ];
   var PER1 = [
     { q: 'km', t: 'hour', tp: 'hours', s: 'A van driven by raccoons travels', lo: 40, hi: 95 },
@@ -37216,13 +37224,13 @@ var GEN = (function () {
           'So the rate is ' + m + ' ' + c3.q + ' per ' + c3.t + '.'],
         { unit: c3.q + ' per ' + c3.t });
     }
-    var sa3 = R(2, 9), sb3 = R(2, 9), k3 = R(2, 9), c4 = pick(RATE3);
+    var sa3 = R(2, 9), sb3 = R(2, 9), k3 = R(2, 9), c4 = pick(RATE3.filter(function (r) { return /metres|litres/.test(r.q); }));   // decimals: only quantities that are measured, not counted
     if (gcd(sa3, sb3) !== 1 || sa3 === sb3) return t1l1(v, dep);
     var n1 = sa3 * k3, n2 = sb3 * k3;
     if (n1 % 10 === 0 && n2 % 10 === 0) return t1l1(v, dep);
     var d1 = dq(n1, 1), d2 = dq(n2, 1);
     return fields(lead('Simplify this rate to whole numbers in lowest terms. Clear the decimals first.') +
-      E(f(d1) + ' ' + c4.q + ' : ' + f(d2) + ' ' + c4.t),
+      E(f(d1) + ' ' + un(d1, c4.q) + ' : ' + f(d2) + ' ' + un(d2, c4.t)),
       [c4.q, c4.t], eqAll([sa3, sb3]), [sa3, sb3],
       sa3 + ' ' + c4.q + ' per ' + sb3 + ' ' + c4.t,
       ['Multiply both terms by 10 to clear the decimals: ' + n1 + ' : ' + n2 + '.',
@@ -37254,9 +37262,9 @@ var GEN = (function () {
       if (!Yq.isInt()) return t1l2(v, dep);
       var Y = Number(Yq.n);
       if (Y < 2 || Y > 9000) return t1l2(v, dep);
-      return fields(lead('Write the ratio of ' + f(X) + ' ' + u.big + ' to ' + f(Y) + ' ' + u.sm + ' in lowest terms. Convert to one unit first.'),
+      return fields(lead('Write the ratio of ' + f(X) + ' ' + un(X, u.big) + ' to ' + f(Y) + ' ' + u.sm + ' in lowest terms. Convert to one unit first.'),
         ['first term', 'second term'], eqAll([r, s]), [r, s], rt(r, s),
-        ['Convert to the smaller unit: ' + f(X) + ' ' + u.big + ' = ' + f(T) + ' ' + u.sm + '.',
+        ['Convert to the smaller unit: ' + f(X) + ' ' + un(X, u.big) + ' = ' + f(T) + ' ' + u.sm + '.',
           'Write it with a fraction line so the units cancel: ' + fr(f(T) + ' ' + u.sm, f(Y) + ' ' + u.sm) + ' = ' + fr(f(T), f(Y)) + '.',
           'Divide both terms by ' + f(T.div(r)) + ': the ratio is ' + rt(r, s) + '.']);
     }
@@ -37304,9 +37312,9 @@ var GEN = (function () {
         E(mixH(amt) + ' ' + qn + ' per ' + mins + ' min&nbsp; = &nbsp;' + BLANK + ' per 1 h&nbsp; = &nbsp;' + BLANK + ' per ' + small + ' min'),
         [qn + ' per hour', qn + ' per ' + small + ' minutes'],
         eqAll([rateH, amtS]), [f(rateH), f(amtS)],
-        rateH + ' ' + qn + ' per hour and ' + mixT(amtS) + ' ' + qn + ' per ' + small + ' minutes',
-        ['One hour is 60 minutes, and 60 ÷ ' + mins + ' = ' + f(fac) + ', so multiply both terms by ' + f(fac) + ': ' + mixT(amt) + ' · ' + f(fac) + ' = ' + rateH + ' ' + qn + ' per hour.',
-          small + ' minutes is ' + mixT(new Q(BigInt(small), 60n)) + ' of an hour, so ' + rateH + ' · ' + small + ' ÷ 60 = ' + mixT(amtS) + ' ' + qn + '.',
+        rateH + ' ' + un(rateH, qn) + ' per hour and ' + mixT(amtS) + ' ' + un(amtS, qn) + ' per ' + small + ' minutes',
+        ['One hour is 60 minutes, and 60 ÷ ' + mins + ' = ' + f(fac) + ', so multiply both terms by ' + f(fac) + ': ' + mixT(amt) + ' · ' + f(fac) + ' = ' + rateH + ' ' + un(rateH, qn) + ' per hour.',
+          small + ' minutes is ' + mixT(new Q(BigInt(small), 60n)) + ' of an hour, so ' + rateH + ' · ' + small + ' ÷ 60 = ' + mixT(amtS) + ' ' + un(amtS, qn) + '.',
           'So the chain reads ' + mixT(amt) + ' per ' + mins + ' min = ' + rateH + ' per hour = ' + mixT(amtS) + ' per ' + small + ' min.']);
     }
     if (v === 6) {
@@ -37537,7 +37545,7 @@ var GEN = (function () {
         amt = Q.of(r).mul(half), tgt = R(120, 600), exact = Q.of(tgt).div(r),
         ctx = pick([['litres', 'A pump at the gravy factory moves'], ['litres', 'A tap of chocolate milk runs'], ['square metres', 'A glitter sprayer covers']]);
       if (qround(exact, 1).eq(exact)) return t2l3(v, dep);
-      return rnum(lead(ctx[1] + ' ' + mixH(amt) + ' ' + ctx[0] + ' every ' + mixH(half) + ' of a minute. How long will ' + f(tgt) + ' ' + ctx[0] + ' take? Round to the nearest tenth of a minute.'),
+      return rnum(lead(ctx[1] + ' ' + mixH(amt) + ' ' + un(amt, ctx[0]) + ' every ' + mixH(half) + ' of a minute. How long will ' + f(tgt) + ' ' + ctx[0] + ' take? Round to the nearest tenth of a minute.'),
         exact, 1, ['Per minute: ' + mixT(amt) + ' ÷ ' + mixT(half) + ' = ' + f(r) + ' ' + ctx[0] + ' a minute.',
           'Divide the target by that rate: ' + f(tgt) + ' ÷ ' + f(r) + ' = ' + f(qround(exact, 3)) + '…',
           'To the nearest tenth, ' + f(qround(exact, 1)) + ' minutes.'],
@@ -37640,7 +37648,7 @@ var GEN = (function () {
       return num(lead(nm[0] + '’s heart beat ' + b1 + ' times in ' + s1 + ' seconds. ' + nm[1] + '’s beat ' + b2 + ' times in ' + s2 + ' seconds. Put both rates in beats per minute. How many more beats per minute is the faster rate?'),
         diff, [nm[0] + ': a minute holds 60 ÷ ' + s1 + ' = ' + f(dv(60, s1)) + ' lots of ' + s1 + ' seconds, so ' + b1 + ' · ' + f(dv(60, s1)) + ' = ' + f(r1) + ' beats per minute.',
           nm[1] + ': ' + b2 + ' · ' + f(dv(60, s2)) + ' = ' + f(r2) + ' beats per minute.',
-          fast + '’s rate is faster: ' + f(hi) + ' − ' + f(lo) + ' = ' + f(diff) + ' beats per minute.'],
+          fast + '’s rate is faster: ' + f(hi) + ' − ' + f(lo) + ' = ' + f(diff) + ' ' + un(diff, 'beats') + ' per minute.'],
         { unit: 'beats per minute' });
     }
     if (v <= 6) {
@@ -37651,7 +37659,7 @@ var GEN = (function () {
       return num(lead(cn[0] + ' has ' + f(cntA) + ' ' + prof + ' for ' + f(popA) + ' people. ' + cn[1] + ' has ' + per2 + ' ' + prof + ' per 10,000 people. Which has more per 10,000 people, and by how many? Type the difference.'),
         Math.abs(per1 - per2), [cn[0] + ': ' + f(cntA) + ' ÷ ' + f(popA) + ' · 10,000 = ' + per1 + ' ' + prof + ' per 10,000 people.',
           cn[1] + ' already has ' + per2 + ' per 10,000 people.',
-          (per1 > per2 ? cn[0] : cn[1]) + ' has more, by ' + Math.max(per1, per2) + ' − ' + Math.min(per1, per2) + ' = ' + Math.abs(per1 - per2) + ' ' + prof + ' per 10,000 people.'],
+          (per1 > per2 ? cn[0] : cn[1]) + ' has more, by ' + Math.max(per1, per2) + ' − ' + Math.min(per1, per2) + ' = ' + Math.abs(per1 - per2) + ' ' + un(Math.abs(per1 - per2), prof) + ' per 10,000 people.'],
         { unit: prof });
     }
     var food = pick(['dragon hot sauce', 'pickled thunder', 'troll toe jam', 'glow-in-the-dark yoghurt', 'unicorn muesli']),
@@ -37866,7 +37874,7 @@ var GEN = (function () {
       return ex(lead(s2.tot(s2.money ? usd(tot2) : f(tot2), n2) +
         '. Let ' + s2.y + ' stand for the ' + s2.ys + ' and ' + s2.x + ' for the ' + s2.xs + '. Write the equation for ' + s2.y + ', and type just the right-hand side.'),
         src, ['The unit rate is ' + f(tot2) + ' ÷ ' + n2 + ' = ' + f(k2) + ' ' + s2.rate + '.',
-          'In ' + mth(s2.y + ' = m' + s2.x) + ' the coefficient m is the unit rate.',
+          'In ' + mth(s2.y + ' = ' + (s2.x === 'm' ? 'k' : 'm') + s2.x) + ' the coefficient ' + (s2.x === 'm' ? 'k' : 'm') + ' is the unit rate.',
           'So ' + s2.y + ' = ' + shw + '.'], { terms: 1 }, { show: shw });
     }
     if (v <= 7) {
@@ -38021,7 +38029,7 @@ var GEN = (function () {
           points: [{ x: pt, y: pt / d, lab: '(' + pt + ', ' + f(pt / d) + ')' }] }),
         ctx.x + '/' + d, ['Read the marked point: ' + f(pt / d) + ' goes with ' + pt + '.',
           'The unit rate is ' + f(pt / d) + ' ÷ ' + pt + ' = ' + mixT(m2) + ', that is ' + mixT(m2) + ' ' + ctx.u + '.',
-          'So ' + ctx.y + ' = ' + mixT(m2) + ctx.x + ', which can be written ' + ctx.x + ' ÷ ' + d + '.'],
+          'So ' + ctx.y + ' = (' + mixT(m2) + ')' + ctx.x + ', which can be written ' + ctx.x + ' ÷ ' + d + '.'],
         { terms: 1 }, { show: ctx.x + '/' + d });
     }
     if (v <= 7) {
@@ -38138,9 +38146,23 @@ var GEN = (function () {
           mth('y = ' + m4 + 'x²') + ' squares x, so its graph is a curve.',
           'Only the plain y = mx forms are proportional — straight lines through the origin.']);
     }
-    var mm = R(2, 6), bb = R(3, 12), x2 = pick([4, 5, 6, 8]), y1 = bb, y2 = mm * x2 + bb,
-      rightR = 'Not proportional — the line is straight, but it crosses the ' + mth('y') + '-axis at ' + bb + ' instead of passing through (0, 0).',
-      wrongR = ['Proportional — the line is straight, and every straight line is a proportional relationship.',
+    var mm = R(2, 6), bb = R(3, 12), x2 = pick([4, 5, 6, 8]), y1 = bb, y2 = mm * x2 + bb, rightR, wrongR;
+    if (Math.random() < 0.5) {   // a line through the origin: the same question must sometimes be answered yes
+      var y0 = mm * x2;
+      rightR = 'Proportional — the line is straight and passes through (0, 0); every point has ' + mth('y') + ' ÷ ' + mth('x') + ' = ' + mm + '.';
+      wrongR = ['Not proportional — the line does not start at 1, so there is no unit rate.',
+        'Not proportional — a proportional graph must be a curve that bends toward the origin.',
+        'Not proportional — the line is too steep: a proportional rate is less than 1.',
+        'Proportional only after the first point, because the line starts at (0, 0) where there is no rate.'];
+      return mc(lead('Is the relationship shown by this line proportional?') +
+        lineGraph([{ name: '', points: [[0, 0], [x2, y0]] }], { xmin: 0, xmax: x2, xstep: 1, ymin: 0, xlab: 'x', ylab: 'y', label: 'A straight line that starts at 0 comma 0 and rises to ' + x2 + ' comma ' + y0 }),
+        rightR, sOpts(rightR, wrongR, 3),
+        ['Read the two marked points: the line starts at (0, 0) and reaches (' + x2 + ', ' + y0 + ').',
+          'It is straight and it passes through the origin, so 0 of one quantity goes with 0 of the other.',
+          'The rate is the same everywhere: ' + y0 + ' ÷ ' + x2 + ' = ' + mm + '. So it is proportional, y = ' + mm + 'x.']);
+    }
+    rightR = 'Not proportional — the line is straight, but it crosses the ' + mth('y') + '-axis at ' + bb + ' instead of passing through (0, 0).',
+    wrongR = ['Proportional — the line is straight, and every straight line is a proportional relationship.',
         'Proportional — the two quantities both grow, and the rate between them is ' + mm + '.',
         'Not proportional — the graph is a curve, so no single rate links the quantities.',
         'Not proportional — the line never reaches the horizontal axis, so there is no unit rate.'];
@@ -38184,13 +38206,13 @@ var GEN = (function () {
     if (v <= 6) {
       var first = R(70, 110), later = R(45, 65), hrs = [1, 2, 3, 4],
         pays = hrs.map(function (h) { return first + (h - 1) * later; }),
-        job = pick(['ghost plumber', 'dragon dentist', 'unicorn hairdresser', 'piano tuner for whales']),
+        job = pick(['ghost plumber', 'dragon dentist', 'unicorn hairdresser', 'tuner of whale pianos']),
         rightC = 'No — the first hour costs $' + first + ' but each later hour adds only $' + later + ', so the rates ' + pays.map(function (p, j) { return usd(qround(dv(p, hrs[j]), 2)); }).join(', ') + ' an hour are not all equal.',
         wrongC = ['Yes — the pay goes up by the same amount, $' + later + ', for every extra hour, and that is direct variation.',
           'Yes — the pay and the time both increase, and the rate $' + first + ' an hour holds throughout.',
           'No — the pay per hour rises as the job gets longer, so later hours cost more than earlier ones.',
           'No — pay can never be proportional to time, because a call-out always costs something.'];
-      return mc(lead('A ' + job + '’s pay for 1, 2, 3 and 4 hours is $' + pays.map(f).join(', $') + '. Is the pay proportional to the time?') +
+      return mc(lead('The pay of a ' + job + ' for 1, 2, 3 and 4 hours is $' + pays.map(f).join(', $') + '. Is the pay proportional to the time?') +
         rtab('time (hours)', hrs, 'pay ($)', pays),
         rightC, sOpts(rightC, wrongC, 3),
         ['Look at the differences between consecutive rows: ' + pays.slice(1).map(function (p, j) { return '$' + f(p - pays[j]); }).join(', ') + ' — all $' + later + '.',
@@ -38256,7 +38278,7 @@ var GEN = (function () {
       lineGraph([{ name: who[0], points: [[0, 0], [xm2, m1.mul(xm2).toNumber()]] }, { name: who[1], points: [[0, 0], [xm2, m2.mul(xm2).toNumber()]] }],
         { xmin: 0, xmax: xm2, ymin: 0, ymax: ym2, xlab: 'time (seconds)', ylab: 'distance (metres)', markers: false,
           label: 'Two straight lines from the origin on one grid, the ' + (m1.cmp(m2) > 0 ? who[0] : who[1]) + ' line the steeper of the two' }),
-      diff, [cap1(who[0]) + ' at t = ' + f(tv) + ': ' + mixT(m1) + ' · ' + f(tv) + ' = ' + mixT(y1) + ' metres.',
+      diff, [cap1(who[0]) + ' at t = ' + f(tv) + ': ' + mixT(m1) + ' · ' + f(tv) + ' = ' + mixT(y1) + ' m.',
         cap1(who[1]) + ' at t = ' + f(tv) + ': ' + mixT(m2) + ' · ' + f(tv) + ' = ' + mixT(y2) + ' m.',
         'The difference is ' + mixT(y1.cmp(y2) > 0 ? y1 : y2) + ' − ' + mixT(y1.cmp(y2) > 0 ? y2 : y1) + ' = ' + mixT(diff) + ' m.'],
       { unit: 'metres', fraction: true, lowest: true });
@@ -38581,7 +38603,7 @@ var GEN = (function () {
       var Lp = R(8, 30), Wp = R(6, 28), perim = 2 * (Lp + Wp), roll = pick([5, 6, 8, 10]),
         perM = cents(R(2, 24) * 50), perRoll = perM.mul(roll), costP = perM.mul(perim);
       if (!perRoll.mul(100).isInt() || !costP.mul(100).isInt() || Lp === Wp) return t8l3(v, dep);
-      return num(lead('Dragon-proof fencing costs ' + usd(perRoll) + ' per ' + roll + '-metre roll, and part rolls may be bought. What does fencing a ' + Lp + ' m by ' + Wp + ' m plot cost?'),
+      return num(lead('Dragon-proof fencing costs ' + usd(perRoll) + ' per ' + roll + '-metre roll, and part rolls may be bought. What does fencing ' + art(Lp) + ' ' + Lp + ' m by ' + Wp + ' m plot cost?'),
         costP, ['Work out the length of fence needed first: the perimeter is 2 · ' + Lp + ' + 2 · ' + Wp + ' = ' + f(perim) + ' m.',
           'Cost per metre: ' + usd(perRoll) + ' ÷ ' + roll + ' = ' + usd(perM) + ' a metre.',
           f(perim) + ' m · ' + usd(perM) + ' = ' + usd(costP) + '.'],
@@ -38619,7 +38641,7 @@ var GEN = (function () {
     return num(lead(who + ' types ' + wps + ' words in ' + secs + ' seconds. At that rate, how long does a ' + f(words) + '-word report take? Give the answer in seconds, rounded to the nearest second.'),
       qround(exactS, 0), ['Set it up with words on top on both sides: ' + wps + ' words per ' + secs + ' sec = ' + f(words) + ' words per x.',
         'Cross-multiply: ' + wps + 'x = ' + secs + ' · ' + f(words) + ' = ' + f(secs * words) + '.',
-        'Divide both sides by ' + wps + ': x = ' + f(qround(exactS, 2)) + ' seconds, which is ' + f(qround(exactS, 0)) + ' seconds to the nearest second — about ' + (hrs2 ? hrs2 + ' hours ' + rem + ' minutes' : rem + ' minutes') + '.'],
+        'Divide both sides by ' + wps + ': x = ' + f(qround(exactS, 2)) + ' seconds, which is ' + f(qround(exactS, 0)) + ' seconds to the nearest second — about ' + (hrs2 ? hrs2 + ' ' + un(hrs2, 'hours') + ' ' + rem + ' ' + un(rem, 'minutes') : rem + ' ' + un(rem, 'minutes')) + '.'],
       { unit: 'seconds', tol: qtol(0) });
   }
 
@@ -38665,8 +38687,9 @@ var GEN = (function () {
     }
     var p = R(2, 7), q = R(2, 9), unit2 = pick(['cm', 'm']);
     if (gcd(p, q) !== 1 || p >= q) return t9l1(v, dep);
-    var base = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).sort(function (a, b) { return a - b; }),
-      bigS = base.map(function (k) { return Q.of(k).mul(q).div(2); }), smallS = bigS.map(function (s) { return s.mul(p).div(q); });
+    var base = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).sort(function (a, b) { return a - b; });
+    if (base[0] + base[1] <= base[2]) return t9l1(v, dep);   // three sides must make a triangle
+    var bigS = base.map(function (k) { return Q.of(k).mul(q).div(2); }), smallS = bigS.map(function (s) { return s.mul(p).div(q); });
     if (bigS.some(function (s) { return !s.mul(10).isInt(); }) || smallS.some(function (s) { return !s.mul(100).isInt(); })) return t9l1(v, dep);
     return listq(lead('Two similar triangles have sides in the ratio ' + rt(p, q) + ', smaller to bigger. The bigger triangle’s sides are ' + bigS.map(f).join(' ' + unit2 + ', ') + ' ' + unit2 + '. Find the smaller triangle’s three sides, in the same order, separated by commas.'),
       smallS, ['The ratio smaller to bigger is ' + rt(p, q) + ', so each small side is ' + mixT(new Q(BigInt(p), BigInt(q))) + ' of the matching bigger side.',
@@ -38688,7 +38711,7 @@ var GEN = (function () {
           'Similar — both rectangles are longer than they are wide, so one is a scaled copy of the other.',
           'Not similar — the sides of the second rectangle are not whole multiples of the first rectangle’s sides.',
           'Not similar — the two rectangles have different perimeters, and similar figures must have equal perimeters.'];
-      return mc(lead('Are a ' + a1 + ' cm by ' + b1 + ' cm rectangle and a ' + f(a2) + ' cm by ' + f(b2) + ' cm rectangle similar? Name the pair that decides it.') +
+      return mc(lead('Are ' + art(a1) + ' ' + a1 + ' cm by ' + b1 + ' cm rectangle and ' + art(f(a2)) + ' ' + f(a2) + ' cm by ' + f(b2) + ' cm rectangle similar? Name the pair that decides it.') +
         similarFigs({ w: a1, h: b1, bottom: a1 + ' cm', side: b1 + ' cm' }, { w: a2.toNumber(), h: b2.toNumber(), bottom: f(a2) + ' cm', side: f(b2) + ' cm' }),
         right, sOpts(right, wrongs, 3),
         ['Test every pair of corresponding sides, not just one.',
@@ -38760,8 +38783,9 @@ var GEN = (function () {
     }
     var pp = R(2, 5), qq = R(3, 8);
     if (gcd(pp, qq) !== 1 || pp >= qq) return t9l3(v, dep);
-    var sides = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 3).sort(function (a, b) { return a - b; }),
-      base2 = sides.map(function (k) { return Q.of(k).mul(pp); }), outS = base2.map(function (s) { return s.mul(qq).div(pp); });
+    var sides = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 3).sort(function (a, b) { return a - b; });
+    if (sides[0] + sides[1] <= sides[2]) return t9l3(v, dep);   // three sides must make a triangle
+    var base2 = sides.map(function (k) { return Q.of(k).mul(pp); }), outS = base2.map(function (s) { return s.mul(qq).div(pp); });
     if (base2.some(function (s) { return !s.isInt(); }) || outS.some(function (s) { return !s.mul(10).isInt(); })) return t9l3(v, dep);
     return listq(lead('A triangle has sides ' + base2.map(f).join(' cm, ') + ' cm. A similar triangle is drawn at the similarity ratio ' + rt(pp, qq) + ', smaller to bigger, with all three angles unchanged. Give the bigger triangle’s three sides, in the same order, separated by commas.'),
       outS, ['The ratio smaller to bigger is ' + rt(pp, qq) + ', so each new side is ' + mixT(new Q(BigInt(qq), BigInt(pp))) + ' times the matching smaller side.',
@@ -39421,6 +39445,7 @@ var GEN = (function () {
         ['The lines cross where the two rules give the same y: ' + lin2(m1, b1) + ' = ' + lin2(m2, b2) + '.', 'Take ' + m1 + 'x and ' + b2 + ' from both sides: ' + (b1 - b2) + ' = ' + (m2 - m1) + 'x, so x = ' + xm + '.', 'Then y = ' + m1 + ' · ' + xm + ' + ' + b1 + ' = ' + (m1 * xm + b1) + '. Read the crossing on the graph to check.', 'Left of the crossing B is lower; right of it B is higher, because B is steeper.']);
     }
     var a2 = R(1, 4), c2 = a2 + R(2, 5), mm = R(2, 5), b3 = R(20, 40), y1 = b3 - mm * a2, y2 = b3 - mm * c2;
+    if (y2 < 2) return t13l3();   // an icicle is never shorter than nothing
     return fields(lead('A melting icicle is ' + y1 + ' cm long after ' + a2 + ' hour' + (a2 === 1 ? '' : 's') + ' and ' + y2 + ' cm long after ' + c2 + ' hours. It shrinks at a steady rate. Find the slope (cm per hour, negative for shrinking) and the length at the start.'),
       ['slope', 'length at the start (cm)'], eqAll([-mm, b3]), [-mm, b3], 'slope −' + mm + '; start ' + b3 + ' cm',
       ['Rise: ' + y2 + ' − ' + y1 + ' = −' + (y1 - y2) + '. Run: ' + c2 + ' − ' + a2 + ' = ' + (c2 - a2) + '. Slope = −' + (y1 - y2) + ' ÷ ' + (c2 - a2) + ' = −' + mm + '.', 'Start: go back ' + a2 + ' hour' + (a2 === 1 ? '' : 's') + ' from ' + y1 + ' cm, adding ' + mm + ' for each: ' + y1 + ' + ' + (mm * a2) + ' = ' + b3 + ' cm.', 'Rule: ' + ruleY(-mm, b3, 't', 'L') + '.']);
@@ -49119,7 +49144,7 @@ var TAC = (function () {
     step: { name: 'Start + add × n', ic: 'stairs' }, line: { name: 'Number line', ic: 'line' }, words: { name: 'Words → symbols', ic: 'map' }, units: { name: 'Units first', ic: 'clock' },
     scale: { name: 'Scale by k', ic: 'scale' }, area: { name: 'Rectangles multiply', ic: 'rect' }, test: { name: 'Substitute to test', ic: 'test' },
     pow: { name: 'Exponent counts factors', ic: 'pow' }, ops: { name: 'Order of operations', ic: 'tiers' }, like: { name: 'Like things combine', ic: 'sort' }, form: { name: 'Same number, new form', ic: 'swap' }, est: { name: 'Estimate first', ic: 'gauge' },
-    zero: { name: 'Opposites make zero', ic: 'pair' }, sign: { name: 'Signs: count the negatives', ic: 'pm' }
+    zero: { name: 'Opposites make zero', ic: 'pair' }, sign: { name: 'Signs: count the negatives', ic: 'pm' }, graph: { name: 'Lines on a graph', ic: 'graph' }
   };
   // RULES: every rule a card states, once, in one wording. A rule that sharpens an earlier one names it (refines), so nothing is silently replaced.
   var RULES = {}, RORDER = [];
@@ -49678,6 +49703,120 @@ var TVZ = (function () {
     o.rows.forEach(function (r, i) { h += '<span class="hd rw">' + fmt(r) + '</span>' + o.cells[i].map(function (c, j) { var p = plain(c), cls = /^[−-]/.test(p) ? 'r-w neg' : /[a-z]²|[a-z]\^2/.test(p) ? 'r-x' : /[a-z]/.test(p) ? 'r-o' : 'r-n'; return '<span class="c ' + cls + (i === 0 && j === 0 ? ' big' : '') + '">' + fmt(c) + '</span>'; }).join(''); });
     return '<div class="tv-area2" role="img" aria-label="' + esc('An area model: ' + o.rows.map(plain).join(' and ') + ' high, ' + o.cols.map(plain).join(' and ') + ' wide; the parts are ' + o.cells.map(function (r) { return r.map(plain).join(', '); }).join(', ') + (o.sum ? '; together ' + plain(o.sum) : '')) + '"><div class="bd" style="grid-template-columns:auto repeat(' + n + ',auto)">' + h + '</div>' + (o.sum ? '<div class="sm">' + fmt(o.sum) + '</div>' : '') + '</div>';
   }
+  // ---------------------------------------------------------------- pieces added for Chapter 6 (the ratio table, the graph, the proportion, similar figures)
+  function cellOf(c) { return Array.isArray(c) ? { t: String(c[0]), r: c[1] || '' } : { t: String(c), r: '' }; }
+  // rt: a ratio table. rows: [[label, cell, …], …]; a cell is 'text' or ['text', role]. ops: [[i, j, label, role?]] an arc over the first row
+  // AND under the last (the same move on every row); top / bot: arcs for one row only; down: ['· 8'] the move from each row to the next;
+  // q: { lab, v: […], of: [top, bottom] } a row of quotients under the table; say: a verdict.
+  function rt(o) {
+    var rows = o.rows, n = rows[0].length - 1, R = rows.length, labW = 0, h = '', i;
+    rows.forEach(function (rw) { labW = Math.max(labW, est(rw[0], 6.6)); }); if (o.q) labW = Math.max(labW, est(o.q.lab, 6.6));
+    labW = Math.min(104, Math.max(22, labW + 8));
+    var right = o.down ? 250 : 294, x0 = 4 + labW, cw = (right - x0) / n, rh = 27;
+    var top = (o.ops || []).concat(o.top || []), bot = (o.ops || []).concat(o.bot || []);
+    function span(a) { var m = 0; a.forEach(function (p) { m = Math.max(m, Math.abs(p[1] - p[0])); }); return m; }
+    var th = top.length ? (span(top) > 1 ? 54 + 12 * (span(top) - 2) : 30) : 4, y0 = th, alt = [];
+    function cx(c) { return x0 + cw * (c + 0.5); }
+    rows.forEach(function (rw, ri) {
+      var y = y0 + ri * rh; h += tx(x0 - 6, y + rh / 2 + 4.4, rw[0], 'tv-t sm r-m b', 'end');
+      for (i = 0; i < n; i++) { var c = cellOf(rw[i + 1]); h += '<rect class="tv-b ' + (c.r ? 'r-' + c.r : 'r-m') + '" x="' + r1(x0 + cw * i + 2) + '" y="' + r1(y + 2) + '" width="' + r1(cw - 4) + '" height="' + (rh - 4) + '" rx="6"/>' + tx(cx(i), y + rh / 2 + 4.6, c.t, 'tv-t ' + (est(c.t, 8.4) > cw - 8 ? 'sm ' : '') + (c.r ? 'r-' + c.r + ' b' : '')); }
+      alt.push(rw[0] + ': ' + rw.slice(1).map(function (c) { return cellOf(c).t; }).join(', '));
+    });
+    var yb = y0 + R * rh;
+    function arc(p, up) { var a = cx(p[0]), b = cx(p[1]), s = Math.abs(p[1] - p[0]), B = 22, role = 'r-' + (p[3] || 'o'), d = b > a ? 1 : -1, y = up ? y0 - 2 : yb + 2, sg = up ? -1 : 1;
+      if (s === 1) return arw(a + 6 * d, y, b - 6 * d, y, role, sg * d * B) + tx((a + b) / 2, up ? y - B / 2 - 5 : y + B / 2 + 14, p[2], 'tv-t sm b ' + role);
+      var xs = a - 7 * d, yl = y + sg * (36 + 12 * (s - 2));   // a move over several columns: a bracket above the one-column arcs
+      return '<path class="tv-a ' + role + '" d="M' + r1(xs) + ' ' + y + 'V' + r1(yl - sg * 6) + 'Q' + r1(xs) + ' ' + r1(yl) + ' ' + r1(xs + 6 * d) + ' ' + r1(yl) + 'H' + r1(b - 6 * d) + 'Q' + r1(b) + ' ' + r1(yl) + ' ' + r1(b) + ' ' + r1(yl - sg * 6) + '" fill="none"/>' + arw(b, yl - sg * 6, b, y, role, 0) + tx((xs + b) / 2, up ? yl - 5 : yl + 14, p[2], 'tv-t sm b ' + role); }
+    top.forEach(function (p) { h += arc(p, true); }); 
+    var yq = yb;
+    if (o.q) { yq = yb + 24; h += '<path class="tv-ln thin dash" d="M' + r1(x0) + ' ' + (yb + 5) + 'H' + right + '"/>' + tx(x0 - 6, yb + 21, o.q.lab, 'tv-t sm r-o b', 'end');
+      o.q.v.forEach(function (v, j) { var c = cellOf(v); h += tx(cx(j), yb + 21, c.t, 'tv-t sm b r-' + (c.r || 'o')); }); alt.push(o.q.lab + ': ' + o.q.v.map(function (c) { return cellOf(c).t; }).join(', ')); }
+    else bot.forEach(function (p) { h += arc(p, false); });
+    var bh = o.q ? 24 : bot.length ? (span(bot) > 1 ? 54 + 12 * (span(bot) - 2) : 30) : 4;
+    (o.down || []).forEach(function (d, ri) { var xd = right + 8, ya = y0 + ri * rh + rh / 2 + 5, yc = y0 + (ri + 1) * rh + rh / 2 - 5; h += arw(xd, ya, xd, yc, 'r-o', 0) + tx(xd + 6, (ya + yc) / 2 + 4, d, 'tv-t sm b r-o', 'start'); alt.push('each row to the next: ' + d); });
+    top.concat(o.q ? [] : (o.bot || [])).forEach(function (p) { alt.push('from column ' + (p[0] + 1) + ' to column ' + (p[1] + 1) + ': ' + p[2]); });
+    var H = yb + bh;
+    if (o.say) { h += tx(150, H + 14, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 20; alt.push(o.say); }
+    return svg(300, H, h, 'tv-rtab', o.alt || ('A table. ' + alt.join('; ') + '.'));
+  }
+  // graph: axes with a grid; lines { m, b, role, lab, dash, from, to, lp }, a broken path, points [x, y, role, label, pos, on], guides to the
+  // axes (drop), a rise-and-run triangle, a shaded half-plane, a ray on the x-axis.
+  function graph(o) {
+    var xr = o.x, yr = o.y, x0 = 46, x1 = 282, y0 = 142, y1 = 22, h = '', v, alt = [];
+    function X(x) { return x0 + (x - xr[0]) / (xr[1] - xr[0]) * (x1 - x0); } function Y(y) { return y0 - (y - yr[0]) / (yr[1] - yr[0]) * (y0 - y1); }
+    function P(p) { return r1(X(p[0])) + ' ' + r1(Y(p[1])); }
+    var xs = o.xs || 1, ys = o.ys || 1, ax = Math.max(xr[0], Math.min(xr[1], 0)), ay = Math.max(yr[0], Math.min(yr[1], 0));
+    for (v = Math.ceil(xr[0] / xs) * xs; v <= xr[1] + 1e-9; v += xs) h += '<path class="tv-ln thin gridl" d="M' + r1(X(v)) + ' ' + y1 + 'V' + y0 + '"/>';
+    for (v = Math.ceil(yr[0] / ys) * ys; v <= yr[1] + 1e-9; v += ys) h += '<path class="tv-ln thin gridl" d="M' + x0 + ' ' + r1(Y(v)) + 'H' + x1 + '"/>';
+    var lines = o.lines || [];
+    function ends(L) { var lo = Math.max(xr[0], L.from === undefined ? -1e9 : L.from), hi = Math.min(xr[1], L.to === undefined ? 1e9 : L.to);
+      if (L.m !== 0) { var xa = (yr[0] - L.b) / L.m, xb = (yr[1] - L.b) / L.m; lo = Math.max(lo, Math.min(xa, xb)); hi = Math.min(hi, Math.max(xa, xb)); } return [[lo, L.m * lo + L.b], [hi, L.m * hi + L.b]]; }
+    if (o.shade) { var S = lines[o.shade.line], up = o.shade.side === 'above', poly = [[xr[0], yr[0]], [xr[1], yr[0]], [xr[1], yr[1]], [xr[0], yr[1]]], out = [];
+      var ins = function (p) { var d = p[1] - (S.m * p[0] + S.b); return up ? d >= -1e-9 : d <= 1e-9; };
+      poly.forEach(function (p, i) { var q = poly[(i + 1) % 4], a = ins(p), b2 = ins(q); if (a) out.push(p);
+        if (a !== b2) { var dp = p[1] - (S.m * p[0] + S.b), dq = q[1] - (S.m * q[0] + S.b), t = dp / (dp - dq); out.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]); } });
+      h += '<path class="tv-shade r-' + (o.shade.role || 'g') + '" d="M' + out.map(P).join('L') + 'Z"/>'; alt.push('shaded ' + o.shade.side + ' the line'); }
+    h += '<path class="tv-ln" d="M' + x0 + ' ' + r1(Y(ay)) + 'H' + (x1 + 5) + 'M' + r1(X(ax)) + ' ' + y0 + 'V' + (y1 - 5) + '"/>';
+    (o.xt || []).forEach(function (t) { h += '<path class="tv-ln thin" d="M' + r1(X(t)) + ' ' + r1(Y(ay) - 3) + 'v6"/>' + tx(X(t), Y(ay) + 15, sgn(t), 'tv-t xs r-m'); });
+    (o.yt || []).forEach(function (t) { h += '<path class="tv-ln thin" d="M' + r1(X(ax) - 3) + ' ' + r1(Y(t)) + 'h6"/>' + tx(X(ax) - 6, Y(t) + 3.8, sgn(t), 'tv-t xs r-m', 'end'); });
+    if (o.ax) { h += tx(x1 + 5, Y(ay) + 28, o.ax[0], 'tv-t xs r-m b', 'end') + tx(Math.max(4, X(ax) - 8), y1 - 10, o.ax[1], 'tv-t xs r-m b', 'start'); alt.push('across: ' + o.ax[0] + ', up: ' + o.ax[1]); }
+    (o.drop || []).forEach(function (d) { var m = d[2] || 'xy'; if (/x/.test(m)) h += '<path class="tv-ln thin dash" d="M' + P(d) + 'V' + r1(Y(ay)) + '"/>'; if (/y/.test(m)) h += '<path class="tv-ln thin dash" d="M' + P(d) + 'H' + r1(X(ax)) + '"/>';
+      if (d[3]) h += tx(X(d[0]), Y(ay) + (o.xt ? 28 : 15), d[3], 'tv-t sm r-g b'); });
+    if (o.path) { h += '<path class="tv-a r-' + (o.path.role || 'x') + '" d="M' + o.path.pts.map(P).join('L') + '" fill="none"/>'; alt.push('a path through ' + o.path.pts.map(function (p) { return '(' + sgn(p[0]) + ', ' + sgn(p[1]) + ')'; }).join(', ')); }
+    lines.forEach(function (L) { var e = ends(L), role = 'r-' + (L.role || 'x'); if (e[0][0] > e[1][0]) return;
+      h += '<path class="tv-a ' + role + (L.dash ? ' dashl' : '') + '" d="M' + P(e[0]) + 'L' + P(e[1]) + '" fill="none"/>';
+      if (L.lab) { var lp = L.lp, an = lp ? lp[2] || 'start' : L.m < 0 ? 'start' : 'end', px, py, sl = L.m * (y0 - y1) / (yr[1] - yr[0]) / ((x1 - x0) / (xr[1] - xr[0]));   // sl: screen slope (up is positive)
+        if (lp) { px = X(lp[0]); py = Y(lp[1]); }
+        else if (L.m === 0) { px = X(e[1][0]) - 6; py = Y(L.b) - 6; }
+        else { var en = L.m > 0 ? e[1] : e[0], d = L.m > 0 ? -1 : 1; px = X(en[0]) + 6 * d; py = Y(en[1]) + Math.abs(sl) * 6 - 10;   // the line's height at the label's near end, less a gap
+          if (py < y1 + 9) { px += d * (y1 + 9 - py) / Math.abs(sl); py = y1 + 9; } }
+        h += tx(px, py, L.lab, 'tv-t sm b ' + role, an); alt.push('the line ' + L.lab + (L.dash ? ' (dashed)' : '')); } });
+    if (o.rise) { var A = o.rise.a, B = o.rise.b; h += '<path class="tv-a r-o dashl" d="M' + P(A) + 'H' + r1(X(B[0])) + 'V' + r1(Y(B[1])) + '" fill="none"/>' + tx((X(A[0]) + X(B[0])) / 2 + (X(B[0]) - X(A[0])) * 0.18, Y(A[1]) + (B[1] >= A[1] ? -6 : 14), o.rise.labs[0], 'tv-t sm b r-o') + tx(X(B[0]) + 5, (Y(A[1]) + Y(B[1])) / 2 + 4, o.rise.labs[1], 'tv-t sm b r-o', 'start'); alt.push(o.rise.labs.join(', ')); }
+    if (o.ray) { var Rr = o.ray, xe = Rr.dir === 'r' ? x1 + 5 : x0 - 5, rr = 'r-' + (Rr.role || 'g'), ty = Y(ay); h += '<path class="tv-a ' + rr + ' ray" d="M' + r1(X(Rr.at)) + ' ' + r1(ty) + 'H' + xe + '"/><circle class="tv-dot ' + rr + (Rr.closed ? '' : ' open') + '" cx="' + r1(X(Rr.at)) + '" cy="' + r1(ty) + '" r="6"/>';
+      alt.push('on the x-axis: a ray from ' + sgn(Rr.at) + ' to the ' + (Rr.dir === 'r' ? 'right' : 'left') + ', ' + (Rr.closed ? 'closed' : 'open') + ' circle'); }
+    var OFF = { r: [8, 4, 'start'], l: [-8, 4, 'end'], t: [0, -9, 'middle'], b: [0, 17, 'middle'], tl: [-6, -8, 'end'], tr: [6, -8, 'start'], br: [7, 14, 'start'], bl: [-7, 14, 'end'] };
+    (o.pts || []).forEach(function (p) { var f = OFF[p[4] || 'tr']; h += '<circle class="tv-dot r-' + (p[2] || 'x') + (p[6] ? ' open' : '') + '" cx="' + r1(X(p[0])) + '" cy="' + r1(Y(p[1])) + '" r="4.6"/>' + (p[3] ? tx(X(p[0]) + f[0], Y(p[1]) + f[1], p[3], 'tv-t sm b r-' + (p[2] || 'x'), f[2]) : ''); if (p[3]) alt.push('the point ' + p[3]); });
+    return svg(300, y0 + (o.ax || o.xt || o.drop ? 32 : 10), h, 'tv-graph', o.alt || ('A graph. ' + alt.join('; ') + '.'));
+  }
+  // prop: a proportion l[0]/l[1] = r[0]/r[1], optional units for the two rows, the unknown in blue, the cross products underneath
+  // (the product that holds the unknown is orange, the other purple, wherever the unknown sits)
+  function prop(o) {
+    var L = o.l, R = o.r, u = o.units, cL = u ? 132 : 104, cR = cL + 92, yT = 24, yB = 62, h = '', xv = o.x, mid = (cL + cR) / 2, wL = Math.max(est(L[0], 10.5), est(L[1], 10.5), 24) + 8;
+    function term(t, x, y) { var isx = xv && plain(String(t)) === xv; return tx(x, y, t, 'tv-t big' + (isx ? ' r-x b' : '')); }
+    if (u) h += tx(6, yT, u[0], 'tv-t sm r-m b', 'start') + tx(6, yB, u[1], 'tv-t sm r-m b', 'start') + '<path class="tv-ln thin dash" d="M' + (12 + est(u[0], 8.6)) + ' ' + (yT - 4) + 'H' + r1(cL - wL / 2 - 8) + 'M' + (12 + est(u[1], 8.6)) + ' ' + (yB - 8) + 'H' + r1(cL - wL / 2 - 8) + '"/>';
+    var wR = Math.max(est(R[0], 10.5), est(R[1], 10.5), 24) + 8;
+    function diag(xa, ya, xb, yb2, role) { var dx = xb - xa, dy = yb2 - ya, len = Math.sqrt(dx * dx + dy * dy), ux = dx / len, uy = dy / len, mx = (xa + xb) / 2, my = (ya + yb2) / 2, g = 12;   // a gap in the middle, for the equals sign
+      return '<path class="tv-a ' + role + '" d="M' + r1(xa) + ' ' + r1(ya) + 'L' + r1(mx - ux * g) + ' ' + r1(my - uy * g) + '"/>' + arw(mx + ux * g, my + uy * g, xb, yb2, role, 0); }
+    var sw = xv && (plain(String(L[0])) === xv || plain(String(R[1])) === xv), cA = sw ? 'r-n' : 'r-o', cB = sw ? 'r-o' : 'r-n';   // the product with the unknown is orange
+    if (o.cross !== false) h += diag(cL + wL / 2 + 1, yT - 2, cR - wR / 2 - 1, yB - 10, cA) + diag(cL + wL / 2 + 1, yB - 10, cR - wR / 2 - 1, yT - 2, cB);
+    [[L, cL], [R, cR]].forEach(function (p) { var w = Math.max(est(p[0][0], 10.5), est(p[0][1], 10.5), 24) + 8; h += term(p[0][0], p[1], yT) + '<path class="tv-ln thick" d="M' + r1(p[1] - w / 2) + ' 36H' + r1(p[1] + w / 2) + '"/>' + term(p[0][1], p[1], yB - 4); });
+    h += tx(mid, 42, o.test && !o.eq ? '?' : '=', 'tv-t big');
+    var H = 68;
+    if (o.cross !== false) { h += tx(mid - 9, 88, plain(L[0]) + ' · ' + plain(R[1]), 'tv-t b ' + cA, 'end') + tx(mid, 88, o.test ? (o.eq ? '=' : '≠') : '=', 'tv-t b') + tx(mid + 9, 88, plain(L[1]) + ' · ' + plain(R[0]), 'tv-t b ' + cB, 'start'); H = 96;
+      if (o.prods) { h += tx(mid - 9, 108, o.prods[0], 'tv-t b ' + cA, 'end') + tx(mid, 108, o.eq ? '=' : '≠', 'tv-t b') + tx(mid + 9, 108, o.prods[1], 'tv-t b ' + cB, 'start'); H = 116; } }
+    if (o.say) { h += tx(150, H + 12, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; }
+    return svg(300, H, h, 'tv-prop', o.alt || ('A proportion: ' + (u ? u[0] + ' over ' + u[1] + ': ' : '') + plain(L[0]) + ' over ' + plain(L[1]) + (o.test && !o.eq ? ' compared with ' : ' equals ') + plain(R[0]) + ' over ' + plain(R[1]) + (o.cross !== false ? '. Cross products: ' + plain(L[0]) + ' times ' + plain(R[1]) + (o.test && !o.eq ? ' and ' : ' equals ') + plain(L[1]) + ' times ' + plain(R[0]) : '') + (o.prods ? ', that is ' + o.prods[0] + ' and ' + o.prods[1] : '') + (o.say ? '. ' + o.say : '') + '.'));
+  }
+  // sim: a figure and its scaled copy, drawn to scale: a { w, h, labs, area }, k, klab, b { labs, area }; tile cuts the copy into k · k originals
+  function numOf(s) { var p = ascii(String(s)).replace(/[()\s]/g, '').split('/'); return p.length === 2 ? p[0] / p[1] : parseFloat(p[0]); }
+  function sim(o) {
+    var k = numOf(o.k), A = o.a, B = o.b || { labs: [] }, tri = o.shape === 'tri', gl = tri ? 34 : 40, gr = tri ? 28 : 6, gap = 46, aw = A.w, ah = A.h, bw = aw * k, bh = ah * k;
+    var u = Math.min((300 - 12 - 2 * (gl + gr) - gap) / (aw + bw), 86 / Math.max(ah, bh)), top = 20, base = top + Math.max(ah, bh) * u, h = '';
+    var tot = (aw + bw) * u + 2 * (gl + gr) + gap, xa = (300 - tot) / 2 + gl, xb = xa + aw * u + gr + gap + gl;
+    function fig(x, w, hh, labs, area, role, tile) { var s = '', W = w * u, Hh = hh * u, i;
+      if (tri) { var ap = [x + 0.3 * W, base - Hh]; s += '<path class="tv-b sq r-' + role + '" d="M' + r1(x) + ' ' + r1(base) + 'H' + r1(x + W) + 'L' + r1(ap[0]) + ' ' + r1(ap[1]) + 'Z"/>';
+        if (labs[1]) s += tx(x + 0.15 * W - 5, base - Hh / 2, labs[1], 'tv-t sm b r-' + role, 'end'); if (labs[2]) s += tx(x + 0.65 * W + 5, base - Hh / 2, labs[2], 'tv-t sm b r-' + role, 'start'); }
+      else { s += '<rect class="tv-b sq r-' + role + '" x="' + r1(x) + '" y="' + r1(base - Hh) + '" width="' + r1(W) + '" height="' + r1(Hh) + '"/>';
+        if (tile) { for (i = 1; i < tile; i++) s += '<path class="tv-ln thin dash" d="M' + r1(x + W * i / tile) + ' ' + r1(base - Hh) + 'V' + r1(base) + 'M' + r1(x) + ' ' + r1(base - Hh * i / tile) + 'H' + r1(x + W) + '"/>'; s += '<rect class="tv-b sq r-x" x="' + r1(x) + '" y="' + r1(base - Hh / tile) + '" width="' + r1(W / tile) + '" height="' + r1(Hh / tile) + '"/>'; }
+        if (labs[1]) s += tx(x - 5, base - Hh / 2 + 4, labs[1], 'tv-t sm b r-' + role, 'end'); }
+      if (labs[0]) s += tx(x + W / 2, base + 15, labs[0], 'tv-t sm b r-' + role);
+      if (area) s += tx(x + W / 2, tile || Hh < 20 || est(area, 7) > W - 4 ? base + 31 : base - Hh / 2 + 4.5, area, 'tv-t sm b r-' + (tile || Hh < 20 || est(area, 7) > W - 4 ? role : 'm'));
+      return s; }
+    h += fig(xa, aw, ah, A.labs || [], A.area, 'x', 0) + fig(xb, bw, bh, B.labs || [], B.area, 'g', o.tile && !tri && k === Math.round(k) && k >= 2 && k <= 5 ? k : 0);
+    var ym = base - Math.min(ah, bh) * u / 2, x1 = xa + aw * u + gr + 5, x2 = xb - gl - 3; if (tri) { x1 += 4; }
+    h += arw(x1, ym, x2, ym, 'r-o', 0) + tx((x1 + x2) / 2, ym - 8, o.klab || '· ' + o.k, 'tv-t sm b r-o');
+    return svg(300, base + (A.area || B.area ? 38 : 22), h, 'tv-sim', o.alt || ('A ' + (tri ? 'triangle' : 'rectangle') + (A.labs && A.labs.join('') ? ' with sides ' + A.labs.filter(Boolean).join(' and ') : '') + (A.area ? ', area ' + A.area : '') + ', and its copy scaled by ' + plain(String(o.k)) + (B.labs && B.labs.join('') ? ' with sides ' + B.labs.filter(Boolean).join(' and ') : '') + (B.area ? ', area ' + B.area : '') + '.'));
+  }
   // small line icons for the formula tiles
   var IC = {
     road: '<path class="i1" d="M4 26C14 8 30 34 44 12"/><circle class="i2" cx="4" cy="26" r="3"/><circle class="i2" cx="44" cy="12" r="3"/>',
@@ -49706,11 +49845,12 @@ var TVZ = (function () {
     pm: '<path class="i1" d="M12 13H36M24 3V23"/><path class="i2l" d="M12 33H36"/>',
     bars: '<path class="i1" d="M4 20H44"/><path class="i2l" d="M11 20V8M21 20V30M31 20V12M40 20V26"/>',
     cube: '<path class="i1" d="M8 14l10-8h22v18l-10 8H8Z"/><path class="i2l" d="M8 14H30V32M30 14l10-8"/>',
+    graph: '<path class="i1" d="M8 5V31H44"/><path class="i2l" d="M8 31L40 9"/><circle class="i2" cx="24" cy="20" r="3"/>',
     group: '<path class="i1" d="M10 7C4 14 4 24 10 31M27 7C33 14 33 24 27 31"/><circle class="i2" cx="14" cy="19" r="3"/><circle class="i2" cx="23" cy="19" r="3"/><circle class="i2" cx="41" cy="19" r="3"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
@@ -49824,14 +49964,19 @@ var FML = (function () {
   F('u6', 3, { grp: 'u', lab: 'Undo −x', st: [['{n:−}x', 'n'], { op: '· (−1)' }, ['x', '−n', 'ans']], name: '−x = n', ask: '−x = n', f: '{o:· (−1)}  →  {g:x} = −n', plain: 'x = −n', lit: ['-x', 'n'], v: 'x', sol: '-n', wrong: [['x = n', 'n'], ['x = 1 ÷ n', '1/n'], ['x = n − 1', 'n-1']], sk: ['U9'], ic: 'flip' });
 
   // ---------------------------------------------------------------- Chapter 6 (Dojo only for now)
-  F('urate', 6, { name: 'Unit rate', plain: 'amount ÷ quantity', lit: ['k', 'y/x'], wrong: [['quantity ÷ amount', 'x/y'], ['amount · quantity', 'y*x'], ['amount − quantity', 'y-x']], sk: ['P8'] });
-  F('ykx', 6, { name: 'A proportional relationship', plain: 'y = k · x', lit: ['y', 'k*x'], wrong: [['y = k + x', 'k+x'], ['y = x ÷ k', 'x/k'], ['y = k · x + 5', 'k*x+5']], sk: ['P16'] });
-  F('prop', 6, { name: 'a/b = c/d, solved for a', plain: 'a = b · c ÷ d', lit: ['a/b', 'c/d'], v: 'a', sol: 'b*c/d', wrong: [['a = c · d ÷ b', 'c*d/b'], ['a = b · d ÷ c', 'b*d/c'], ['a = b + c − d', 'b+c-d']], sk: ['P28', 'P29'] });
-  F('sf', 6, { name: 'Scale factor', plain: 'new length ÷ old length', lit: ['k', 'N/O'], wrong: [['old length ÷ new length', 'O/N'], ['new length − old length', 'N-O'], ['new length · old length', 'N*O']], sk: ['P40'] });
-  F('sarea', 6, { name: 'Area after scaling every length by k', plain: 'k² · area', lit: ['B', 'k^2*A'], wrong: [['k · area', 'k*A'], ['k³ · area', 'k^3*A'], ['area ÷ k', 'A/k']], sk: ['P44'] });
-  F('mapr', 6, { name: 'Real length from a 1 : n map', plain: 'n · map length', lit: ['R', 'n*m'], wrong: [['map length ÷ n', 'm/n'], ['n ÷ map length', 'n/m'], ['n + map length', 'n+m']], sk: ['P48'] });
-  F('slope', 6, { name: 'Slope', plain: 'rise ÷ run', lit: ['m', 'r/u'], wrong: [['run ÷ rise', 'u/r'], ['rise · run', 'r*u'], ['rise − run', 'r-u']], sk: ['P57'] });
-  F('line', 6, { name: 'A line with slope m and start b', plain: 'y = m · x + b', lit: ['y', 'm*x+b'], wrong: [['y = b · x + m', 'b*x+m'], ['y = m · (x + b)', 'm*(x+b)'], ['y = m + x + b', 'm+x+b']], sk: ['P59'] });
+  F('urate', 6, { name: 'Unit rate', f: '{g:unit rate} = {f:{x:amount}|{n:quantity}}', plain: 'amount ÷ quantity', lit: ['k', 'y/x'], wrong: [['quantity ÷ amount', 'x/y'], ['amount · quantity', 'y*x'], ['amount − quantity', 'y-x']], sk: ['P8'], leg: [['per', 'means ÷'], ['quantity', 'the unit after “per”']], ic: 'gauge', move: 'rate.unit' });
+  F('ykx', 6, { name: 'A proportional relationship', f: '{g:y} = {o:k} · {x:x}', plain: 'y = k · x', lit: ['y', 'k*x'], wrong: [['y = k + x', 'k+x'], ['y = x ÷ k', 'x/k'], ['y = k · x + 5', 'k*x+5']], sk: ['P16'], leg: [['k', 'the constant: the unit rate'], ['x, y', 'the two quantities']], ic: 'tri', move: 'rate.k' });
+  F('xyk', 6, { of: 'ykx', name: 'The quantity, from the amount', f: '{x:x} = {f:{g:y}|{o:k}}', plain: 'x = y ÷ k', lit: ['x', 'y/k'], wrong: [['x = y · k', 'y*k'], ['x = k ÷ y', 'k/y'], ['x = y − k', 'y-k']], sk: ['P16'] });
+  F('prop', 6, { name: 'a/b = c/d, solved for a', f: '{f:{x:a}|{n:b}} = {f:c|d}   →   {x:a} = {f:{n:b} · c|d}', plain: 'a = b · c ÷ d', lit: ['a/b', 'c/d'], v: 'a', sol: 'b*c/d', wrong: [['a = c · d ÷ b', 'c*d/b'], ['a = b · d ÷ c', 'b*d/c'], ['a = b + c − d', 'b+c-d']], sk: ['P28', 'P29'], leg: [['· b', 'on both sides clears the bottom'], ['units', 'the same ones in the same places']], ic: 'bal', move: 'rate.prop' });
+  F('crossp', 6, { of: 'prop', name: 'Cross products of a/b = c/d', f: '{x:a} · d = {n:b} · c', plain: 'a · d = b · c', lit: ['a/b', 'c/d'], v: 'a', sol: 'b*c/d', wrong: [['a · c = b · d', 'b*d/c'], ['a · b = c · d', 'c*d/b'], ['a + d = b + c', 'b+c-d']], sk: ['P29'] });
+  F('sf', 6, { name: 'Scale factor', f: '{g:k} = {f:{x:new length}|{n:old length}}', plain: 'new length ÷ old length', lit: ['k', 'N/O'], wrong: [['old length ÷ new length', 'O/N'], ['new length − old length', 'N-O'], ['new length · old length', 'N*O']], sk: ['P40'], leg: [['k > 1', 'enlarges'], ['k < 1', 'shrinks']], ic: 'scale', move: 'rate.scale' });
+  F('newlen', 6, { of: 'sf', name: 'A scaled length', f: '{x:new} = {g:k} · {n:old}', plain: 'new = k · old', lit: ['N', 'k*O'], wrong: [['new = old ÷ k', 'O/k'], ['new = k + old', 'k+O'], ['new = k² · old', 'k^2*O']], sk: ['P40'] });
+  F('sarea', 6, { name: 'Area after scaling every length by k', f: '{g:new area} = {o:k²} · {x:area}', plain: 'k² · area', lit: ['B', 'k^2*A'], wrong: [['k · area', 'k*A'], ['k³ · area', 'k^3*A'], ['area ÷ k', 'A/k']], sk: ['P44'], leg: [['k', 'the factor for every length'], ['perimeter', '· k only']], ic: 'rect', move: 'rate.power' });
+  F('mapr', 6, { name: 'Real length from a 1 : n map', f: '{g:real} = {o:n} · {x:map}', plain: 'n · map length', lit: ['R', 'n*m'], wrong: [['map length ÷ n', 'm/n'], ['n ÷ map length', 'n/m'], ['n + map length', 'n+m']], sk: ['P48'], leg: [['1 : n', '1 cm stands for n cm'], ['100,000 cm', '= 1 km']], ic: 'road' });
+  F('mapm', 6, { of: 'mapr', name: 'Map length from a real length', f: '{x:map} = {f:{g:real}|{o:n}}', plain: 'real length ÷ n', lit: ['m', 'R/n'], wrong: [['n · real length', 'n*R'], ['n ÷ real length', 'n/R'], ['real length − n', 'R-n']], sk: ['P48'] });
+  F('slope', 6, { name: 'Slope', f: '{g:m} = {f:{x:rise}|{n:run}}', plain: 'rise ÷ run', lit: ['m', 'r/u'], wrong: [['run ÷ rise', 'u/r'], ['rise · run', 'r*u'], ['rise − run', 'r-u']], sk: ['P57'], leg: [['rise', 'the change in y'], ['run', 'the change in x']], ic: 'stairs', move: 'rate.slope' });
+  F('line', 6, { name: 'A line with slope m and start b', f: '{g:y} = {o:m} · {x:x} + {n:b}', plain: 'y = m · x + b', lit: ['y', 'm*x+b'], wrong: [['y = b · x + m', 'b*x+m'], ['y = m · (x + b)', 'm*(x+b)'], ['y = m + x + b', 'm+x+b']], sk: ['P59'], leg: [['m', 'gained for each 1 in x'], ['b', 'the start: y at x = 0']], ic: 'graph' });
+  F('startb', 6, { of: 'line', name: 'The start, from a point and the slope', f: '{n:b} = {g:y} − {o:m} · {x:x}', plain: 'b = y − m · x', lit: ['b', 'y-m*x'], wrong: [['b = y + m · x', 'y+m*x'], ['b = m · x − y', 'm*x-y'], ['b = y − m', 'y-m']], sk: ['P59'] });
   // ---------------------------------------------------------------- Chapter 7 (Dojo only for now)
   F('part', 7, { name: 'The part', plain: 'percent · whole', lit: ['P', 'r*W'], wrong: [['whole ÷ percent', 'W/r'], ['percent ÷ whole', 'r/W'], ['percent + whole', 'r+W']], sk: ['C8'] });
   F('pct', 7, { name: 'The percent', plain: 'part ÷ whole', lit: ['r', 'P/W'], wrong: [['whole ÷ part', 'W/P'], ['part · whole', 'P*W'], ['whole − part', 'W-P']], sk: ['C10'] });
@@ -50028,6 +50173,48 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   R('fourparts', 'Area model: cut both sides, find the area of each part, add the parts.', { refines: 'dist' });
   R('foil', '(x + a)(x + b) = x² + (a + b)x + ab: the two numbers add to the middle and multiply to the end.', { refines: 'fourparts' });
   R('special', '(x + a)² = x² + 2ax + a².   (x + a)(x − a) = x² − a².', { refines: 'foil' });
+  // ---------------------------------------------------------------- Chapter 6: ratios and proportions (a proportion is an equation: Chapter 3's and 5's moves; the arithmetic is Chapter 4's)
+  R.ch = 6;
+  R('ratioorder', 'A ratio keeps the order of the words: stars to moons is stars : moons.');
+  R('sameboth', 'Multiply or divide both terms of a ratio or a rate by the same number: an equal ratio.', { refines: 'scale10' });
+  R('lowest', 'Lowest terms: clear decimals or fractions first, then divide both terms by their greatest common factor.', { refines: 'sameboth' });
+  R('through1', 'To reach an awkward amount, go through the rate for 1: divide to get one, then multiply.', { refines: 'sameboth' });
+  R('unitless', 'Two quantities of the same kind: write both in one unit, and the unit cancels.', { refines: 'units' });
+  R('partwhole', 'A ratio compares part to part or part to whole. The whole minus one part is the other part.', { refines: 'parts' });
+  R('per', '“Per” means ÷: km per litre = km ÷ litres. The unit after “per” goes underneath.');
+  R('tworates', 'Two quantities have two unit rates, reciprocals of each other. Use the one the question asks for.', { refines: 'per' });
+  R('perbase', 'To change what a rate is per, multiply by how many of the old unit make the new one: per lb · 2.2 = per kg.', { refines: 'per' });
+  R('sameper', 'Compare rates only when they are per the same unit.', { refines: 'sameform' });
+  R('constk', 'Proportional: y ÷ x is the same for every pair. That number is the constant k: the unit rate without its unit.');
+  R('ykx', 'A proportional relationship is y = k · x: nothing added, no power of x, no x underneath.', { refines: 'constk' });
+  R('xy', 'A point (x, y) pairs two values: across first, then up. The independent quantity is x.');
+  R('unitpoint', 'On the graph of y = kx, the point (1, k) shows the unit rate.', { refines: 'ykx' });
+  R('origin', 'A proportional graph is a straight line through (0, 0). Straight is not enough.', { refines: 'ykx' });
+  R('doubling', 'Proportional: doubling x doubles y. An amount added once breaks that.', { refines: 'constk' });
+  R('steeper', 'Lines through (0, 0): the steeper line has the greater rate. Points on one such line have equal rates.', { refines: 'unitpoint' });
+  R('propeq', 'A proportion says two ratios are equal. It is an equation: multiply both sides by a bottom to clear it.', { refines: 'both' });
+  R('under', 'A letter under the bar: multiply both sides by it first.', { refines: 'longbar' });
+  R('crossmul', 'Cross-multiplying, a/b = c/d → a · d = b · c, is two moves in one: both sides · b, then · d.', { refines: 'propeq' });
+  R('crosstest', 'Two ratios are equal exactly when their cross products are equal.', { refines: 'crossmul' });
+  R('turnover', 'If two ratios are equal, so are the ratios turned over: x/y = 5/13 means y/x = 13/5.', { refines: 'recip1' });
+  R('sameplace', 'In a proportion the same units sit in the same places: miles over gallons on both sides.', { refines: 'units' });
+  R('sizecheck', 'Check the size: more of one quantity gives more of the other, by the same factor.', { refines: 'estimate' });
+  R('needed', 'Read what the rate is per. If that quantity is not given (an area, a time in that unit), find it first.', { refines: 'units' });
+  R('sfactor', 'Scale factor = new length ÷ old length. Above 1 enlarges, below 1 shrinks. Angles do not change.', { refines: 'scalek' });
+  R('matching', 'Similar figures: every pair of matching sides has the same ratio.');
+  R('perk', 'Every length · k: the perimeter is · k, the area is · k².', { refines: 'sfactor' });
+  R('lenfirst', 'To scale an area, scale the lengths first, then use the area formula.', { refines: 'perk' });
+  R('scalepair', 'A scale is a rate between drawing and real lengths. For 1 : n, real = drawing · n and drawing = real ÷ n.', { refines: 'tri' });
+  R('onetoN', '1 : n with no units: both lengths in the same unit. 1 cm stands for n cm.', { refines: 'unitless' });
+  R('rescale', 'Redrawing at another scale: every drawing length · (old n ÷ new n). A smaller n means a bigger drawing.', { refines: 'onetoN' });
+  R('cmkm', '100 cm = 1 m and 1000 m = 1 km, so 100,000 cm = 1 km.');
+  R('slope', 'Slope = rise ÷ run: how much y gains for each 1 in x. A line that falls has a negative slope.', { refines: 'addper' });
+  R('startb', 'The start b is y at x = 0. From a known point, step back to x = 0, taking away one slope for each 1.', { refines: 'seq' });
+  R('line', 'A line is y = m · x + b: slope m, start b. With b = 0 it is proportional.', { refines: 'ykx' });
+  R('higher', 'On a graph of both sides, the higher line is the greater side: read an inequality beside the crossing.', { refines: 'cross' });
+  R('xboth', 'A letter on both sides: add or subtract an x-term on both sides, so the letter is on one side only.', { refines: 'both' });
+  R('plans', 'Two plans cost the same where their rules are equal. Before it the lower start wins, after it the lower rate.', { refines: 'cross' });
+  R('halfplane', 'y > mx + b: every point above the line; y <: below. ≤ ≥ include the line (solid); < > leave it out (dashed).', { refines: 'circle' });
 })();
 
 /* --- tactics_ch1.js --- */
@@ -50765,83 +50952,181 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 })();
 
 /* --- tactics_ch6.js --- */
-/* Skills & Tactics, Chapter 6: Ratios and Proportions. Format: hub/tactics_core.js. Units 13–14 (lines, solving by graph) were added in this system. */
+/* Skills & Tactics, Chapter 6: Ratios and Proportions. DRAWN cards (TAC.viz; pieces: hub/tactics_viz.js; formulas: hub/formulas.js).
+   Thread plan: hub/staging/threads_ch6.md. Every level's problem types: hub/staging/briefs/ch6_types.md (grouped by form).
+   A proportion is an equation: the moves are Chapter 3's and 5's, the arithmetic Chapter 4's; their rules are cited, not restated.
+   Units 13–14 (lines, solving by graph) were added in this system. Every calculation a card shows is listed in v or re-computed from its picture. */
 (function () {
   'use strict';
-  var L = function (k, t, m, ex, w, o) { TAC.lv(6, k, t, m, ex, w, o); };
+  var V = function (k, o) { TAC.viz(6, k, o); };
+
   TAC.ch(6, {
     lede: 'Ratios, unit rates, proportional relationships, proportions, similar figures, scale drawings and maps, and lines. Nearly all of it is one idea: y = k · x.',
     tools: ['tri:rate', 'tri:scale', 'tri:dvt', 'trans'],
     top: [
-      { h: 'Simplify a ratio or a rate', rule: '5.6 : 6.4  →  56 : 64  →  7 : 8', body: 'Clear decimals first by multiplying both terms by 10 or 100. Put both quantities in the same unit if they are the same kind. Then divide both terms by their greatest common factor.', watch: 'Do the same thing to both terms, and keep the order the question uses.', v: [['56/64', '7/8']] },
-      { h: 'Unit rate: divide', rule: '“per” means ÷      dollars per kilogram = dollars ÷ kilograms', body: 'The unit that comes after “per” goes underneath. Every situation has two unit rates, one for each way up, and they are reciprocals. Pick the one the question asks for.', watch: '$10.50 for 5 kg is $2.10 per kg, not 5 ÷ 10.50.', v: [['1050/100/5', '210/100'], ['(2/3)/(1/2)', '4/3'], ['(1/2)/(2/3)', '3/4']] },
-      { h: 'y = k · x: cover what you want', rule: 'amount = unit rate · quantity', body: 'Once you have the unit rate k, everything else is one step. Want the amount: multiply. Want the quantity: divide the amount by k. Want the rate: divide the amount by the quantity. k is the constant of proportionality.', watch: 'Match the units before you multiply: 80 minutes at 96 km per hour is 96 · 80 ÷ 60.', v: [['96*80/60', '128']] },
-      { h: 'Proportional or not? Three tests', rule: 'table: y ÷ x is constant     graph: straight, through (0, 0)     equation: y = kx', body: 'A relationship is proportional when doubling one quantity doubles the other. In a table every pair gives the same quotient. On a graph the line passes through the origin. In an equation nothing is added.', watch: 'C = 10 + 2n is a straight line but not proportional: it starts at 10.', v: [['10+2*6', '22'], ['2*(10+2*3)', '32']] },
-      { h: 'Set up a proportion', rule: 'a/b = c/d   →   a · d = b · c', body: 'Write the known rate as a fraction with its units. Write the second fraction with the same units in the same places. Cross-multiply, then divide. Check that the answer is a sensible size.', watch: 'Miles over gallons on one side means miles over gallons on the other.', v: [['180/5', '612/17']] },
-      { h: 'Similar figures and the scale factor', rule: 'scale factor = new ÷ old', body: 'Matching sides of similar figures have the same ratio. Multiply a side by the scale factor to get its partner. Above 1 the figure grows; below 1 it shrinks. Angles do not change.', watch: 'Match corresponding sides: the shortest goes with the shortest.', v: [['23*12/6', '46']] },
-      { h: 'Lengths × k, areas × k²', rule: 'scale factor 4  →  perimeter × 4,  area × 16', body: 'When every length is multiplied by k, the perimeter is multiplied by k and the area by k · k. To find a scaled area, scale the lengths first and then multiply them, or multiply the area by k².', watch: 'A plan at 1 in : 3 ft turns 1 square inch into 9 square feet, not 3.', v: [['8*36', '16*(2*9)'], ['(3*3)*(4*3)', '108']] },
-      { h: 'Scales and maps', rule: '1 : n   →   real = n · drawing     drawing = real ÷ n', body: 'A unitless scale 1 : 50,000 means 1 cm stands for 50,000 cm, which is 500 m or 0.5 km. Rewrite the scale in the units you need once, then every length is one multiplication or division.', watch: 'Convert units before dividing by the scale: 128 m is 12,800 cm.', v: [['56/10*(1/2)', '28/10'], ['12800/500', '256/10']] },
-      { h: 'Lines: slope and start', rule: 'y = m · x + b      m = rise ÷ run      b = y when x is 0', body: 'The slope m is how much y changes for each 1 in x. The start b is the value at x = 0. From a table: divide the change in y by the change in x, then step back to x = 0. Two lines cross where their rules are equal.', watch: 'If the table does not begin at x = 0, the first y is not the start.', v: [['2*2+6', '10'], ['2*8+6', '22']] }
-    ],
-    bank: [['UNIT RATE', 'amount ÷ quantity'], ['PROPORTIONAL', 'y = k · x'], ['CONSTANT k', 'y ÷ x'], ['PROPORTION', 'a/b = c/d  →  ad = bc'], ['SPEED', 'd = v · t'], ['SCALE FACTOR', 'new ÷ old'], ['SCALED LENGTH', 'k · length'], ['SCALED AREA', 'k² · area'], ['MAP 1 : n', 'real = n · map'], ['1 : 100,000', '1 cm = 1 km'], ['SLOPE', 'rise ÷ run'], ['LINE', 'y = m · x + b'], ['CROSSING', 'set the two rules equal']]
+      { h: 'Both terms: the same × or ÷', vis: [['rt', { rows: [['$', '159', ['13.25', 'x'], ['53', 'g']], ['h', '12', ['1', 'x'], '4']], ops: [[0, 1, '÷ 12'], [1, 2, '· 4']] }], ['flow', ['5.6 : 2.1', { op: '· 10' }, '56 : 21', { op: '÷ 7' }, { t: '8 : 3', r: 'g' }]]],
+        trap: ['45 in 54 min  →  60 in 69 min   (+ 15)', '÷ 9, then · 12:   60 in 72 min'], alt: 'Multiplying or dividing both terms of a ratio or a rate by the same number gives an equal one; adding the same number does not. Go through the rate for 1 to reach any amount. For lowest terms, clear decimals first.', v: [['159/12', '13.25'], ['13.25*4', '53'], ['5.6*10', '56'], ['2.1*10', '21'], ['56/7', '8'], ['21/7', '3'], ['45/9', '5'], ['54/9', '6'], ['5*12', '60'], ['6*12', '72']] },
+      { h: 'Per means ÷: the rate for one', vis: [['cue', [['km', 'x', '288'], ['per', 'o', 'means ÷'], ['L', 'n', '18', 'd']]], ['flow', ['288 ÷ 18', { op: '' }, { t: '16 km per L', r: 'g' }]], ['flow', ['13 bricks in {f:1|8} h', { op: '13 ÷ {f:1|8}' }, '13 · 8', { op: '' }, { t: '104 per h', r: 'g' }]]],
+        trap: ['18 ÷ 288 = 0.0625   (L per km)', 'km per L:   288 ÷ 18 = 16'], alt: 'A unit rate is the amount for one. Per means divided by, and the unit named after per goes underneath. When the quantity is a fraction, divide by it: multiply by its reciprocal.', v: [['288/18', '16'], ['13*8', '104'], ['18/288', '0.0625']] },
+      { h: 'y = k · x: cover what you want', vis: [['tri', 'rate', 'top'], ['flow', ['72 km per h for 70 min', { op: '70 min = {f:70|60} h' }, { t: '72 · {f:70|60} = 84 km', r: 'g' }]], ['flow', ['$70 at $4.05 a gallon', { op: '÷ 4.05' }, '17.28…', { op: '· 28 miles each' }, { t: '≈ 484 miles', r: 'g' }]]],
+        trap: ['72 · 70 = 5040 km', 'one time unit:   72 · 70 ÷ 60 = 84'], alt: 'Amount equals unit rate times quantity. Cover the one you want: multiply for the amount, divide for the rate or the quantity. Match the units first, use one rate at a time, and round only at the end.', v: [['72*70/60', '84'], ['72*70', '5040']] },
+      { h: 'Proportional or not? Three tests', vis: [['rt', { rows: [['x', '2', '4', '6'], ['y', '76', '152', '228']], q: { lab: 'y ÷ x', v: ['38', '38', '38'] }, say: 'a table: y ÷ x never changes' }], ['graph', { x: [0, 7], y: [0, 28], xs: 1, ys: 7, xt: [2, 4, 6], yt: [7, 14, 21], lines: [{ m: 4, b: 0, role: 'g', lab: 'through (0, 0) ✓', lp: [5.2, 24.5, 'end'] }, { m: 2, b: 7, role: 'w', lab: 'starts at 7 ✗', lp: [6.9, 12, 'end'] }], pts: [[0, 0, 'g', '', 'br', 0], [0, 7, 'w', '', 'r', 1]] }], ['flow', ['C = {n:19} + 4n', { op: '19 is paid once' }, { t: 'not y = kx', r: 'w' }]]],
+        trap: ['a straight line  →  proportional', 'it must also pass through (0, 0)'], alt: 'Three tests for a proportional relationship. In a table, y divided by x is the same for every pair. On a graph, a straight line through the origin. As an equation, y equals k times x with nothing added.', v: [['76/2', '38'], ['152/4', '38'], ['228/6', '38'], ['4*0', '0'], ['2*0+7', '7']] },
+      { h: 'A proportion: units line up', vis: [['prop', { l: ['120.60', '18'], r: ['x', '46'], units: ['$', 'm'], x: 'x', val: '308.2' }], ['steps', [['{n:18}x', '5547.6'], { op: '÷ 18' }, ['x', '308.2', 'ans']]]],
+        trap: ['{f:120.60|18} = {f:46|x}', 'metres under metres:   {f:120.60|18} = {f:x|46}'], alt: 'Write the known rate as a fraction with its units, and the second fraction with the same units in the same places. Cross-multiply, then divide both sides. Check that the answer is a sensible size.', v: [['120.60*46', '5547.6'], ['5547.6/18', '308.2']] },
+      { h: 'Similar figures: one scale factor', vis: [['sim', { shape: 'tri', a: { w: 5, h: 3, labs: ['20 m', '16 m', ''] }, k: '1.5', klab: '· 1.5', b: { labs: ['30 m', '24 m', ''] } }], ['flow', ['k = 30 ÷ 20', { op: 'new ÷ old' }, '1.5', { op: '16 · 1.5' }, { t: '24 m', r: 'g' }]]],
+        trap: ['20 → 30 is + 10,  so 16 → 26', 'a factor multiplies:   16 · 1.5 = 24'], alt: 'In similar figures every pair of matching sides has the same ratio. The scale factor is a new length divided by the old one: above 1 the figure grows, below 1 it shrinks. Multiply each side by it.', v: [['30/20', '1.5'], ['16*1.5', '24'], ['16+10', '26']] },
+      { h: 'Lengths · k, areas · k²', vis: [['sim', { a: { w: 4, h: 2, labs: ['4 cm', '2 cm'], area: '8 cm²' }, k: '3', b: { labs: ['12 cm', '6 cm'], area: '72 cm²' }, tile: true }], ['flow', ['3 in by 4 in,  1 in : 3 ft', { op: '· 3 each' }, '9 ft by 12 ft', { op: '' }, { t: '108 ft²', r: 'g' }]]],
+        trap: ['12 in² · 3 = 36 ft²', 'area · 3 · 3:   12 · 9 = 108'], alt: 'When every length is multiplied by k, the perimeter is multiplied by k and the area by k times k. To find a scaled or a real area, change the lengths first, then multiply them.', v: [['4*2', '8'], ['12*6', '72'], ['8*9', '72'], ['3*3', '9'], ['4*3', '12'], ['9*12', '108'], ['3*4', '12'], ['12*3', '36']] },
+      { h: 'Scales and maps: 1 : n', vis: [['flow', ['1 : 50,000', { op: '1 cm = 50,000 cm' }, '500 m', { op: '÷ 1000' }, { t: '1 cm = 0.5 km', r: 'g' }]], ['rt', { rows: [['map (cm)', '1', '5.6'], ['real (km)', '0.5', ['2.8', 'g']]], down: ['· 0.5'] }], ['flow', ['128 m = 12,800 cm', { op: '÷ 500' }, { t: '25.6 cm at 1 : 500', r: 'g' }]]],
+        trap: ['50,000 cm = 50 km', '100,000 cm in 1 km:   0.5 km'], alt: 'A scale 1 to n with no units means 1 centimetre stands for n centimetres. Rewrite it once in the units you need. From the map to reality multiply; from reality to the map convert first, then divide.', v: [['50000/100', '500'], ['500/1000', '0.5'], ['5.6*0.5', '2.8'], ['128*100', '12800'], ['12800/500', '25.6']] },
+      { h: 'A line: slope and start', vis: [['graph', { x: [0, 5], y: [0, 20], xs: 1, ys: 4, xt: [2, 3, 4], yt: [4, 8, 12, 16, 20], lines: [{ m: 4, b: 1, role: 'x', lab: 'y = 4x + 1' }], pts: [[0, 1, 'n', 'start 1', 'br', 0], [1, 5, 'x', '', 'r', 0], [4, 17, 'x', '', 'l', 0]], rise: { a: [1, 5], b: [4, 17], labs: ['run 3', 'rise 12'] } }], ['flow', ['x: 2, 4, 6   y: 10, 14, 18', { op: 'm = 4 ÷ 2' }, 'm = 2', { op: 'b = 10 − 2 · 2' }, { t: 'y = 2x + 6', r: 'g' }]]],
+        trap: ['the first y in the table is the start', 'the start is y at x = 0:   10 − 4 = 6'], alt: 'A line is y equals m times x plus b. The slope m is the rise divided by the run: what y gains for each 1 in x. The start b is y at x = 0: from a known point, step back to zero.', v: [['12/3', '4'], ['4*1+1', '5'], ['4*4+1', '17'], ['4/2', '2'], ['10-2*2', '6'], ['2*6+6', '18']] },
+      { h: 'Solve by graph: the crossing', vis: [['graph', { x: [-3, 5], y: [-2, 10], xs: 1, ys: 2, xt: [-2, 2, 4], yt: [4, 8], lines: [{ m: -2, b: 6, role: 'x', lab: '−2x + 6', lp: [-2.9, 6.3, 'start'] }, { m: 2, b: 2, role: 'n', lab: '2x + 2' }], pts: [[1, 4, 'g', '(1, 4)', 'r', [0, 1]]], drop: [[1, 4, 'x', 'x = 1']] }], ['steps', [['−2x + 6', '2x + 2'], { op: '+ 2x', soft: true }, ['6', '4x + 2'], { op: '− 2' }, ['4', '{n:4}x'], { op: '÷ 4' }, ['1', 'x', 'ans']]]],
+        trap: ['the solution is the height, 4', 'the solution is where:   x = 1'], alt: 'Each side of an equation is a line, and the lines cross where the sides are equal: the x of the crossing is the solution. With the letter on both sides, add or subtract an x-term on both sides first.', v: [['-2*1+6', '4'], ['2*1+2', '4']] }
+    ]
   });
 
   // Unit 1: Ratios, Rates, Equivalents
-  L('1-1', 'Simplify a ratio or a rate', ['Write the two quantities in the order given.', 'Clear decimals: multiply both terms by 10 or 100.', 'Divide both terms by the same number until nothing more divides both.'], '5.6 stitches : 6.4 minutes  →  56 : 64  →  ÷ 8  →  7 stitches per 8 minutes', 'Both terms get the same treatment, always.', { v: [['56/64', '7/8']] });
-  L('1-2', 'Same kind of unit? Same unit first', ['If both quantities measure the same kind of thing, convert to one unit.', 'Clear the decimals or fractions.', 'Simplify. A ratio of like units has no unit left.'], '0.84 : 1.32  →  84 : 132  →  ÷ 12  →  7 : 11', '40 cm : 2 m is 40 : 200 = 1 : 5, not 20 : 1.', { v: [['84/132', '7/11'], ['40/200', '1/5']] });
-  L('1-3', 'Step through an easier rate', ['Simplify the rate to small numbers.', 'Find what to multiply by to reach the new amount.', 'Multiply both terms by it.'], '8 badges in 12 min = 2 badges in 3 min.  36 ÷ 2 = 18, so 3 · 18 = 54 minutes', 'Multiply or divide both terms. Adding the same number to both breaks the rate.', { v: [['12*36/8', '54']] });
+  V('1-1', { th: ['scale', 'form'], from: '4:2-1', r: ['ratioorder', 'sameboth', 'lowest'], t: 'Both terms: the same × or ÷', spot: ['cue', [['51', 'x'], [':', ''], ['85', 'x'], ['=', ''], ['3', 'n', '51 ÷ 17'], [':', ''], ['▢', 'g', '85 ÷ 17', 'd']]],
+    doit: [['rt', { rows: [['stars', '14', ['7', 'g']], ['moons', '4', ['2', 'g']]], ops: [[0, 1, '÷ 2']] }], ['flow', ['5.6 : 2.1', { op: '· 10' }, '56 : 21', { op: '÷ 7' }, { t: '8 : 3', r: 'g' }]]],
+    trap: ['51 : 85 = 3 : 37   (both − 48)', '÷ 17 on both terms:   3 : 5'], alt: 'A ratio keeps the order of the words. Multiplying or dividing both terms by the same number gives an equal ratio; adding or subtracting does not. For lowest terms, clear decimals first, then divide by the greatest common factor.', v: [['51/17', '3'], ['85/17', '5'], ['14/2', '7'], ['4/2', '2'], ['5.6*10', '56'], ['2.1*10', '21'], ['56/7', '8'], ['21/7', '3'], ['51-48', '3'], ['85-48', '37']] });
+  V('1-2', { th: ['scale', 'units'], from: '1-1', r: ['through1', 'sameboth', 'lowest', 'unitless'], t: 'Equal rates: go through 1', spot: ['rt', { rows: [['$', '159', ['13.25', 'x'], ['53', 'g'], ['238.50', 'g']], ['h', '12', ['1', 'x'], '4', '18']], ops: [[0, 1, '÷ 12'], [1, 2, '· 4'], [1, 3, '· 18']] }],
+    doit: [['rt', { rows: [['km', '4', ['12', 'g'], ['3', 'g']], ['min', '20', '60', '15']], ops: [[0, 1, '· 3'], [1, 2, '÷ 4']] }], ['flow', ['{f:2|3} : 1{f:5|6}', { op: 'both · 6' }, { t: '4 : 11', r: 'g' }]], ['flow', ['1.2 m : 192 cm', { op: '1.2 m = 120 cm' }, '120 : 192', { op: '÷ 24' }, { t: '5 : 8', r: 'g' }]]],
+    trap: ['{f:2|3} : {f:11|6}  →  2 : 11', 'sixths first:   {f:4|6} : {f:11|6}  →  4 : 11'], alt: 'To fill a chain of equal rates, find the rate for 1 first: divide both terms, then multiply both. For a ratio of fractions, multiply both terms by the common denominator; for two units, convert to one first.', v: [['159/12', '13.25'], ['13.25*4', '53'], ['13.25*18', '238.5'], ['4*3', '12'], ['20*3', '60'], ['12/4', '3'], ['60/4', '15'], ['2/3*6', '4'], ['(1+5/6)*6', '11'], ['2/3', '4/6'], ['1.2*100', '120'], ['120/24', '5'], ['192/24', '8']] });
+  V('1-3', { th: ['scale', 'bar'], from: '1-2', r: ['sameboth', 'unitless', 'partwhole'], t: 'Simplify, then scale up', spot: ['rt', { rows: [['labels', '45', ['5', 'x'], '60'], ['min', '54', ['6', 'x'], ['72', 'g']]], ops: [[0, 1, '÷ 9'], [1, 2, '· 12']] }],
+    doit: [['flow', ['8 min : 22 min', { op: 'units cancel, ÷ 2' }, '4 : 11', { op: '· 5' }, { t: '20 : 55', r: 'g' }]], ['bar', { rows: [{ parts: [['4 grumpy', 4, 'x'], ['9 sleepy', 9, 'n']], over: [[0, 2, 'all 13', 'm']] }] }], ['flow', ['grumpy : all = 4 : 13', { op: '13 − 4' }, { t: 'grumpy : sleepy = 4 : 9', r: 'g' }]], ['rt', { rows: [['yes', '250', ['2', 'x'], ['28', 'g']], ['asked', '875', ['7', 'x'], '98']], ops: [[0, 1, '÷ 125'], [1, 2, '· 14']] }]],
+    trap: ['45 in 54 min  →  60 in 69 min   (+ 15)', '÷ 9, then · 12:   60 in 72 min'], alt: 'Simplify the rate to small numbers, then multiply both terms to reach the amount asked for. Two amounts in the same unit make a ratio with no unit. A part to the whole gives the other part by subtracting. A survey scales the same way.', v: [['45/9', '5'], ['54/9', '6'], ['5*12', '60'], ['6*12', '72'], ['8/2', '4'], ['22/2', '11'], ['4*5', '20'], ['11*5', '55'], ['13-4', '9'], ['45+15', '60'], ['54+15', '69'], ['250/125', '2'], ['875/125', '7'], ['98/7', '14'], ['2*14', '28']] });
   // Unit 2: Unit Rates
-  L('2-1', 'Unit rate: divide by what comes after “per”', ['Decide the unit rate asked for: what per one of what?', 'Divide the first amount by the second.', 'Write both units in the answer.'], '$10.50 for 5 kg:  10.50 ÷ 5 = $2.10 per kilogram', 'Dollars per kilogram is dollars ÷ kilograms, not the other way round.', { v: [['1050/100/5', '210/100']], tool: 'tri:rate' });
-  L('2-2', 'A unit rate from fractions', ['Write the rate as a fraction over a fraction.', 'Divide: multiply by the reciprocal.', 'The other unit rate is the reciprocal of the first.'], '1/2 panel in 2/3 hour:  2/3 ÷ 1/2 = 1 1/3 hours per panel,  and 1/2 ÷ 2/3 = 3/4 panel per hour', 'Check which unit rate the question wants.', { v: [['(2/3)/(1/2)', '4/3'], ['(1/2)/(2/3)', '3/4']] });
-  L('2-3', 'Use the unit rate, then round with sense', ['Find the rate for one.', 'Multiply or divide to answer the question.', 'How many fit: round down. How many are needed: round up.'], '15 slabs weigh 58.05 kg, so one weighs 3.87 kg.  135 ÷ 3.87 = 34.88  →  34 slabs fit', '35 slabs would be over the limit: 35 · 3.87 = 135.45.', { v: [['5805/100/15', '387/100'], ['35*387/100', '13545/100']] });
+  V('2-1', { th: ['tri', 'units'], from: '3:6-2', r: ['per', 'tri'], t: 'Per means ÷: that unit goes under', spot: ['cue', [['km', 'x', '288'], ['per', 'o', 'means ÷'], ['L', 'n', '18', 'd']]],
+    doit: [['tri', 'rate', 'l'], ['flow', ['288 km on 18 L', { op: 'km ÷ L' }, '288 ÷ 18', { op: '' }, { t: '16 km per L', r: 'g' }]], ['flow', ['$46.80 for 36', { op: '$ ÷ how many' }, { t: '$1.30 each', r: 'g' }]]],
+    trap: ['18 ÷ 288 = 0.0625   (L per km)', 'km per L:   288 ÷ 18 = 16'], alt: 'A unit rate is the amount for one. Per means divided by: kilometres per litre is kilometres divided by litres, so the unit named after per goes underneath.', v: [['288/18', '16'], ['46.80/36', '1.30'], ['18/288', '0.0625']], tool: 'tri:rate' });
+  V('2-2', { th: ['form', 'units'], from: '3:7-1', r: ['per', 'flipdiv', 'improper', 'tworates', 'round'], t: 'A fraction of a unit: · reciprocal', spot: ['flow', ['13 bricks in {f:1|8} h', { op: 'bricks ÷ h' }, '13 ÷ {f:1|8}', { op: '· 8' }, { t: '104 per h', r: 'g' }]],
+    doit: [['steps', [['3{f:3|4} ÷ {f:2|5}', '{f:15|4} · {f:5|2}'], ['{f:15|4} · {f:5|2}', '{f:75|8}'], ['{f:75|8}', '9{f:3|8}', 'ans']]], ['flow', ['74 ml for 1{f:3|4} bottles', { op: '1{f:3|4} = {f:7|4}' }, '74 · {f:4|7}', { op: '' }, { t: '≈ 42.3 ml each', r: 'g' }]], ['flow', ['{f:1|2} panel in {f:2|3} h', { op: 'panels ÷ h' }, '{f:3|4} per h', { op: 'h ÷ panels' }, { t: '1{f:1|3} h each', r: 'g' }]]],
+    trap: ['13 ÷ {f:1|8} = 1{f:5|8}   (÷ 8)', '÷ {f:1|8} is · 8:   104'], alt: 'When the quantity is a fraction, the unit rate is still amount divided by quantity: multiply by the reciprocal. Write a mixed number as an improper fraction first. The two unit rates are reciprocals.', v: [['13*8', '104'], ['3+3/4', '15/4'], ['15/4*5/2', '75/8'], ['75/8', '9+3/8'], ['74*4/7', '296/7'], ['1+3/4', '7/4'], ['(1/2)/(2/3)', '3/4'], ['(2/3)/(1/2)', '4/3'], ['13/8', '1+5/8']] });
+  V('2-3', { th: ['tri'], from: '5:12-2', shift: 'The rounding of 5:12-2 (a limit: round down, a target: round up), now on a count found from a unit rate.', r: ['tri', 'roundup', 'flipdiv', 'round'], t: 'The rate for one, then use it', spot: ['flow', ['6{f:3|4} m² every {f:3|4} min', { op: '6{f:3|4} ÷ {f:3|4}' }, { t: '9 m² per min', r: 'x' }]],
+    doit: [['tri', 'rate', 'r'], ['flow', ['377 m²', { op: '÷ 9' }, '41.88…', { op: '' }, { t: '≈ 41.9 min', r: 'g' }]], ['flow', ['15 slabs: 43.35 kg', { op: '÷ 15' }, '2.89 kg each', { op: '118 ÷ 2.89' }, '40.8… fit', { op: 'a limit: round down' }, { t: '40', r: 'g' }]], ['flow', ['4.5 m · 2.4 m ÷ {f:1|8} m²', { op: '10.8 · 8' }, '86.4 tiles', { op: 'a target: round up' }, { t: '87', r: 'g' }]]],
+    trap: ['40.8…  →  41 slabs:   118.49 kg', 'over the 118 kg limit:   40'], alt: 'Find the amount for one, then multiply or divide to answer the question. A count must be whole: how many fit under a limit is rounded down, how many are needed to reach a target is rounded up.', v: [['(6+3/4)/(3/4)', '9'], ['43.35/15', '2.89'], ['41*2.89', '118.49'], ['40*2.89', '115.6'], ['4.5*2.4', '10.8'], ['10.8*8', '86.4']], tool: 'tri:rate' });
   // Unit 3: Comparing Rates
-  L('3-1', 'Change the unit of a rate', ['Find the unit rate in the units given.', 'Use the conversion fact to change the unit underneath.', 'Round only at the end, the way the question says.'], '$2.80 for 2/3 lb = $4.20 per lb.  A kilogram is 2.2 lb: 2.2 · 4.20 = $9.24, to the nearest 5 cents $9.25', 'A kilogram is more than a pound, so its price must be higher.', { v: [['(280/100)/(2/3)', '420/100'], ['(22/10)*(420/100)', '924/100']] });
-  L('3-2', 'Compare with the same unit underneath', ['Turn each offer into a rate per the same unit.', 'Compare the unit rates.', 'Subtract if the question asks for the difference.'], '250 g for $5.00 is $20 per kg.   450 g for $3.60 is $8 per kg, the better buy.', 'The bigger pack is not always cheaper per kilogram. Work it out.', { v: [['5/(250/1000)', '20'], ['(360/100)/(450/1000)', '8']] });
-  L('3-3', 'Speeds: match the time units', ['Put the time in the unit the speed uses.', 'Distance = speed · time.', 'To compare two speeds, put both in the same units.'], '96 km per hour for 80 minutes:  80 min = 1 1/3 h, so 96 · 80 ÷ 60 = 128 km', '96 · 80 would be the distance for 80 hours.', { v: [['96*80/60', '128']], tool: 'tri:dvt' });
+  V('3-1', { th: ['units'], from: '3:7-2', r: ['perbase', 'flipdiv', 'through1', 'round'], t: 'Change what the rate is per', spot: ['flow', ['$6.80 for {f:2|3} lb', { op: '÷ {f:2|3}' }, '$10.20 per lb', { op: '· 2.2 lb in 1 kg' }, { t: '$22.44 per kg', r: 'g' }]],
+    doit: [['flow', ['$22.44', { op: 'nearest 5¢: 22.40 or 22.45' }, { t: '≈ $22.45', r: 'g' }]], ['flow', ['213 for 56,000', { op: '÷ 56,000' }, 'for 1', { op: '· 10,000' }, { t: '≈ 38 per 10,000', r: 'g' }]]],
+    trap: ['$10.20 per lb ÷ 2.2  ≈  $4.64 per kg', '1 kg is more than 1 lb:   · 2.2'], alt: 'To change what a rate is per, find the rate for one, then multiply by how many of those make the new unit. A kilogram is about 2.2 pounds, so the price per kilogram is about 2.2 times the price per pound.', v: [['6.80/(2/3)', '10.2'], ['10.2*2.2', '22.44'], ['213*10000/56000', '2130/56']] });
+  V('3-2', { th: ['units'], from: '3:7-3', r: ['sameper', 'per', 'sameboth'], t: 'Compare with the same unit under', spot: ['grid', { head: ['pack', '$ per kg'], rows: [['350 g · $2.80', '{g:8}'], ['200 g · $4.00', '20'], ['450 g · $5.40', '12']] }],
+    doit: [['flow', ['350 g · $2.80', { op: '350 g = 0.35 kg' }, '2.80 ÷ 0.35', { op: '' }, { t: '$8 per kg', r: 'g' }]], ['flow', ['34 beats in 15 s', { op: '· 4' }, '136 per min', { op: '− 120 per min' }, { t: '16 more', r: 'g' }]], ['flow', ['16,000 for 5,000,000', { op: 'both ÷ 500' }, { t: '32 per 10,000', r: 'g' }]]],
+    trap: ['the biggest pack is the cheapest', 'divide each:   $ ÷ kg, then compare'], alt: 'Rates can be compared only when they are per the same unit. Change each offer to a price per kilogram, each heartbeat count to beats per minute, each count of people to a number per 10,000, then compare.', v: [['2.80/0.35', '8'], ['4/0.2', '20'], ['5.40/0.45', '12'], ['34*4', '136'], ['30*4', '120'], ['136-120', '16'], ['16000/500', '32'], ['5000000/500', '10000']] });
+  V('3-3', { th: ['tri', 'units'], from: '3:6-3', r: ['min60', 'tri', 'units'], t: 'Speed · time: one time unit', spot: ['flow', ['72 km per h for 70 min', { op: '70 min = {f:70|60} h' }, '72 · {f:70|60}', { op: '' }, { t: '84 km', r: 'g' }]],
+    doit: [['tri', 'dvt', 'r'], ['flow', ['2400 m at 320 and 360 m per min', { op: '÷ each' }, '7{f:1|2} and 6{f:2|3} min', { op: 'difference · 60' }, { t: '50 s sooner', r: 'g' }]], ['flow', ['8 mg per kg, 56 mg', { op: '56 ÷ 8' }, { t: '7 kg', r: 'g' }]], ['flow', ['60 for $14.70: $0.265 each?', { op: 'redo: 14.70 ÷ 60' }, { t: '$0.245 each', r: 'g' }]]],
+    trap: ['72 · 70 = 5040 km', '70 min is {f:70|60} h:   72 · 70 ÷ 60 = 84'], alt: 'Distance is speed times time, with the time in the unit the speed uses: 70 minutes is 70 sixtieths of an hour. For two racers, find each time and subtract. A dose per kilogram divides the same way. Redo a claimed unit price.', v: [['72*70/60', '84'], ['2400/320', '7.5'], ['2400/360', '20/3'], ['7.5-20/3', '5/6'], ['5/6*60', '50'], ['56/8', '7'], ['72*70', '5040'], ['14.70/60', '0.245']], tool: 'tri:dvt' });
   // Unit 4: Tables and Equations
-  L('4-1', 'Proportional table: y ÷ x is always the same', ['Divide y by x for every pair.', 'The same quotient every time → proportional.', 'That quotient is the unit rate, and without its units the constant of proportionality.'], '$319 for an 11-hour shift:  319 ÷ 11 = 29 dollars per hour, so the constant is 29', 'One pair that does not fit is enough to say “not proportional”.', { v: [['319/11', '29']] });
-  L('4-2', 'Write y = m · x and use it', ['Find the unit rate m from any pair.', 'Write the equation with the letters of the problem.', 'Use it to fill or correct the table.'], 'Pairs (1, 31), (2, 62), (3, 93), (5, 153):  the rate is 31, so t = 5 should give 155, not 153', 'The equation multiplies: y = 31x. Nothing is added.', { v: [['31*5', '155'], ['93/3', '62/2']] });
-  L('4-3', 'Two rates, two steps', ['Use the first rate to find the middle quantity.', 'Use the second rate on that.', 'Keep the full number until the end, then round.'], '$3.85 a gallon and 34 miles per gallon on $200:  200 ÷ 3.85 = 51.948… gallons, · 34 = 1766 miles', 'Rounding the gallons to 52 first gives 1768, which is wrong.', { v: [['52*34', '1768']] });
+  V('4-1', { th: ['tri', 'test'], from: '2-1', r: ['constk'], t: 'Proportional: y ÷ x stays the same', spot: ['rt', { rows: [['machines', '2', '4', '6', '8'], ['parts', '76', '152', '228', '304']], q: { lab: 'parts ÷ machines', v: ['38', '38', '38', '38'] }, say: 'the same: proportional, k = 38' }],
+    doit: [['tri', 'rate', 'l'], ['rt', { rows: [['h', '1', '2', '4', '8'], ['pay $', '24', '54', '114', '234']], q: { lab: 'pay ÷ h', v: ['24', ['27', 'w'], ['28.5', 'w'], ['29.25', 'w']] }, say: 'not the same: not proportional', sayr: 'w' }], ['flow', ['402 km in 6 h', { op: '÷ 6' }, '67 km per h', { op: 'no unit' }, { t: 'k = 67', r: 'g' }]], ['flow', ['$27 an hour,  h = 4', { op: '27 · 4' }, { t: '$108', r: 'g' }]]],
+    trap: ['+ $30 every hour  →  proportional', 'divide each pair:   y ÷ x must match'], alt: 'A table is proportional when y divided by x is the same for every pair. That quotient is the unit rate; without its unit it is the constant of proportionality. Equal steps up are not enough.', v: [['76/2', '38'], ['152/4', '38'], ['228/6', '38'], ['304/8', '38'], ['54/2', '27'], ['114/4', '28.5'], ['234/8', '29.25'], ['402/6', '67'], ['54-24', '30'], ['27*4', '108']], tool: 'tri:rate' });
+  V('4-2', { th: ['tri', 'test'], from: '4-1', r: ['ykx', 'constk', 'both'], t: 'Write y = k · x and use it', spot: ['rt', { rows: [['h', '1', '2', '3', '4', '5'], ['pay $', '31', '62', ['90', 'w'], '124', '155']], q: { lab: 'pay ÷ h', v: ['31', '31', ['30', 'w'], '31', '31'] } }],
+    doit: [['tri', 'rate', 'top'], ['flow', ['k = 31', { op: 'h = 3' }, '31 · 3', { op: '' }, { t: '93, not 90', r: 'g' }]], ['flow', ['612 km in 9 h', { op: '÷ 9' }, 'k = 68', { op: 'd = k · t' }, { t: 'd = 68t', r: 'g' }]], ['steps', [['{n:28}t', '434'], { op: '÷ 28' }, ['t', '15.5', 'ans']]]],
+    trap: ['d = 68 + t', 'k multiplies:   d = 68t'], alt: 'Find the unit rate k from any pair, then write the equation y = k times x. Use it to fill or correct a table, or solve it for x by dividing both sides by k.', v: [['90/3', '30'], ['31*3', '93'], ['612/9', '68'], ['434/28', '15.5'], ['62/2', '31'], ['124/4', '31'], ['155/5', '31']] });
+  V('4-3', { th: ['tri', 'units'], from: '4-2', r: ['round', 'tri', 'ykx'], t: 'Two rates: one step for each', spot: ['flow', ['$70 at $4.05 a gallon', { op: '÷ 4.05' }, '17.28… gallons', { op: '· 28 miles each' }, { t: '≈ 484 miles', r: 'g' }]],
+    doit: [['tri', 'rate', 'r'], ['flow', ['g = m ÷ 40', { op: 'm = 4000' }, { t: 'g = 100', r: 'g' }]], ['flow', ['540 ml in 7 months', { op: '÷ 7' }, '77.14…', { op: 'as asked: tenths' }, { t: 'S = 77.1t', r: 'g' }]], ['flow', ['t = 8', { op: '77.1 · 8' }, { t: '≈ 616.8 ml', r: 'g' }]]],
+    trap: ['17.28…  →  17:   17 · 28 = 476', 'keep the digits, round last:   484'], alt: 'With two rates, use one at a time: dollars divided by dollars per gallon gives gallons, then gallons times miles per gallon gives miles. Round at the end, unless the question tells you to round the rate first.', v: [['4000/40', '100'], ['77.1*8', '616.8'], ['17*28', '476']], tool: 'tri:rate' });
   // Unit 5: Graphs of Relationships
-  L('5-1', 'The unit-rate point is (1, k)', ['Plot the pairs from the table and join them from (0, 0).', 'Find the point where x is 1.', 'Its second coordinate is the unit rate.'], 'P = 17t:  at t = 1, P = 17.  The unit-rate point is (1, 17): one hour, 17 dollars', 'The point is (1, 17), not (17, 1).');
-  L('5-2', 'From a graph to a rate and an equation', ['Read a point the line clearly passes through.', 'Divide its y by its x: that is the unit rate.', 'Write y = (rate) · x and check with another point.'], 'The line passes through (2, 46):  46 ÷ 2 = 23 dollars per hour.  Check (8, 184): 23 · 8 = 184 ✓', 'Use grid crossings, not points you have to guess.', { v: [['46/2', '23'], ['23*8', '184']] });
-  L('5-3', 'Say what a point means', ['The first coordinate goes with the horizontal axis.', 'The second goes with the vertical axis.', 'Read the pair back as a sentence with units.'], 'On C = 4w the point (6, 24) means: 6 kilograms cost 24 dollars', 'The point (0, 0) has a meaning too: nothing costs nothing.', { v: [['4*6', '24']] });
+  V('5-1', { th: ['graph'], from: '4-2', shift: 'y = k · x of 4-2, now drawn as a line: the thread Lines on a graph starts here.', r: ['xy', 'unitpoint'], t: 'The unit rate is the point (1, k)', spot: ['graph', { x: [0, 6], y: [0, 300], xs: 1, ys: 50, ax: ['t (h)', 'd (km)'], xt: [1, 2, 3, 4, 5], yt: [100, 200, 300], lines: [{ m: 54, b: 0, role: 'x', lab: 'd = 54t' }], pts: [[1, 54, 'g', '(1, 54)', 'r', 0]], drop: [[1, 54, 'xy']] }],
+    doit: [['flow', ['d = 54t', { op: 't = 1' }, { t: '(1, 54)', r: 'g' }]], ['flow', ['w = 2, C = 8', { op: 'w across, C up' }, { t: 'the point (2, 8)', r: 'g' }]]],
+    trap: ['(54, 1)', 'across first:   (1, 54)'], alt: 'On the graph of a proportional relationship, the point above 1 on the horizontal axis shows the unit rate: one hour, 54 kilometres. A point is written across first, then up.', v: [['54*1', '54']] });
+  V('5-2', { th: ['graph'], from: '5-1', r: ['constk', 'unitpoint', 'ykx', 'roundup'], t: 'A point on the line gives k: y ÷ x', spot: ['graph', { x: [0, 6], y: [0, 600], xs: 1, ys: 100, ax: ['t (h)', 'd (km)'], xt: [2, 4, 5], yt: [200, 400, 600], lines: [{ m: 95, b: 0, role: 'x' }], pts: [[2, 190, 'x', '(2, 190)', 'r', 0], [5, 475, 'x', '(5, 475)', 'l', 0]] }],
+    doit: [['flow', ['(2, 190)', { op: '190 ÷ 2' }, 'k = 95', { op: 'check: 475 ÷ 5' }, { t: '95 ✓', r: 'g' }]], ['flow', ['(5, 1)', { op: '1 ÷ 5' }, 'k = {f:1|5}', { op: 'y = kx' }, { t: 'd = {f:1|5}t = t ÷ 5', r: 'g' }]], ['flow', ['47 · 14 = 658', { op: 'axis in 100s' }, { t: 'reach 700', r: 'g' }]]],
+    trap: ['(5, 1):   k = 5 ÷ 1', 'up ÷ across:   k = 1 ÷ 5'], alt: 'Pick a point the line passes through and divide its y by its x: that is the unit rate, and the equation is y = k times x. Check with a second point. An axis must reach past the largest value.', v: [['190/2', '95'], ['475/5', '95'], ['47*14', '658']] });
+  V('5-3', { th: ['graph'], from: '5-1', r: ['xy', 'ykx', 'both'], t: 'Read a point: x goes with y', spot: ['graph', { x: [0, 12], y: [0, 6], xs: 2, ys: 1, ax: ['t (min)', 'V (L)'], xt: [2, 6, 10], yt: [1, 3, 5], lines: [{ m: 0.5, b: 0, role: 'x', lab: 'V = ½t' }], pts: [[10, 5, 'g', '', 'tl', 0]], drop: [[10, 5, 'xy']] }],
+    doit: [['flow', ['5 L', { op: 'across to the line, down' }, { t: '10 min', r: 'g' }]], ['flow', ['(6, 24) on C = 4w', { op: 'w = 6, C = 24' }, { t: '6 kg cost $24', r: 'g' }]], ['flow', ['d = 45t, d = 337.5', { op: '÷ 45' }, { t: '(7.5, 337.5)', r: 'g' }]], ['flow', ['(0, 0) on d = 86t', { op: 't = 0, d = 0' }, { t: '0 h, 0 km: the start', r: 'g' }]]],
+    trap: ['(8, 152):   152 machines, 8 parts', 'x first:   8 machines, 152 parts'], alt: 'A point pairs a value of x with a value of y. To read a graph, go from the known value across or up to the line, then to the other axis. To find a point from the equation, substitute and solve. The point (0, 0) is the start: zero of each.', v: [['0.5*10', '5'], ['4*6', '24'], ['337.5/45', '7.5']] });
   // Unit 6: Proportional or Not?
-  L('6-1', 'Proportional graphs pass through the origin', ['Is it a straight line?', 'Does it pass through (0, 0)?', 'Both yes → proportional. Either no → not.'], 'A line from (0, 9) to (6, 27) is straight but starts at 9: not proportional', 'Straight is not enough.');
-  L('6-2', 'The doubling test', ['Pick two rows where one x is double the other.', 'In a proportional relationship y doubles too.', 'An added number in the equation breaks it.'], 'C = 10 + 2n:  n = 3 gives 16, n = 6 gives 22.  Double 16 is 32, not 22', 'The 10 is paid once and does not double.', { v: [['10+2*3', '16'], ['10+2*6', '22']] });
-  L('6-3', 'Compare rates on one graph', ['For a point: unit rate = y ÷ x.', 'The steeper the line from the origin, the greater the rate.', 'Equal rates lie on the same line through the origin.'], 'Car 1: 126 miles on 6 gallons = 21 mpg.   Car 2: 63 miles on 3 gallons = 21 mpg, the same line', 'The highest point is not always the greatest rate. Divide.', { v: [['126/6', '63/3']] });
+  V('6-1', { th: ['graph', 'test'], from: '5-1', r: ['origin', 'ykx'], t: 'Straight and through (0, 0)', spot: ['graph', { x: [0, 7], y: [0, 28], xs: 1, ys: 7, xt: [2, 4, 6], yt: [7, 14, 21], lines: [{ m: 4, b: 0, role: 'g', lab: 'through (0, 0) ✓', lp: [5.2, 24.5, 'end'] }, { m: 2, b: 7, role: 'w', lab: 'starts at 7 ✗', lp: [6.9, 12, 'end'] }], pts: [[0, 0, 'g', '', 'br', 0], [0, 7, 'w', '', 'r', 1]] }],
+    doit: [['grid', { head: ['rule', 'y = kx ?'], rows: [['y = 2.5x', '✓'], ['y = 1.4x + 3', '✗'], ['y = 7x²', '✗'], ['y = 3 ÷ x', '✗']] }]],
+    trap: ['a straight line  →  proportional', 'it must also pass through (0, 0)'], alt: 'The graph of a proportional relationship is a straight line through the origin: zero of one quantity goes with zero of the other. As an equation it is y = k times x with nothing added, no power and no division by x.', v: [['4*0', '0'], ['2*0+7', '7']] });
+  V('6-2', { th: ['test', 'graph'], from: '5:8-1', shift: 'The fee that is paid once is what stops y from doubling.', r: ['doubling', 'once', 'constk', 'origin'], t: 'Double x: does y double?', spot: ['rt', { rows: [['n', '0', '1', '3', '6'], ['C = 19 + 4n', '19', '23', '31', '43']], top: [[2, 3, '· 2']], bot: [[2, 3, 'not · 2', 'w']] }],
+    doit: [['flow', ['C = {n:19} + 4n', { op: '19 is paid once' }, { t: 'not proportional', r: 'g' }]], ['rt', { rows: [['h', '1', '2', '3', '4'], ['pay $', '82', '134', '186', '238']], q: { lab: 'pay ÷ h', v: ['82', ['67', 'w'], ['62', 'w'], ['59.5', 'w']] } }], ['graph', { x: [0, 12], y: [0, 70], xs: 2, ys: 10, ax: ['GB', '$'], xt: [5, 10], yt: [35, 70], path: { pts: [[0, 35], [5, 35], [11, 65]], role: 'x' }, pts: [[0, 35, 'w', 'at 0 GB: $35', 'tr']] }]],
+    trap: ['pay + $52 each hour  →  proportional', '82 ÷ 1 is not 134 ÷ 2'], alt: 'In a proportional relationship, doubling x doubles y. An amount that is added once, such as a starting fee, does not double, so the relationship is not proportional: the table fails the test and the graph misses the origin.', v: [['19+4*3', '31'], ['19+4*6', '43'], ['31*2', '62'], ['134/2', '67'], ['186/3', '62'], ['238/4', '59.5'], ['134-82', '52'], ['19+4*1', '23']] });
+  V('6-3', { th: ['graph'], from: '5-2', r: ['steeper', 'constk'], t: 'Steeper line, greater rate', spot: ['graph', { x: [0, 8], y: [0, 180], xs: 1, ys: 30, ax: ['gallons', 'miles'], xt: [2, 4, 6], yt: [60, 120, 180], lines: [{ m: 30, b: 0, role: 'g' }, { m: 21, b: 0, role: 'x' }], pts: [[4, 120, 'g', 'car 3', 'tl', 0], [6, 126, 'x', 'car 1', 'br', 1], [3, 63, 'x', 'car 2', 'br', 1]] }],
+    doit: [['flow', ['car 1 (6, 126),  car 2 (3, 63)', { op: 'y ÷ x' }, { t: '21 and 21: one line', r: 'x' }]], ['flow', ['car 3 (4, 120)', { op: '120 ÷ 4' }, { t: '30: the best', r: 'g' }]], ['flow', ['d = {f:1|4}t,  d = {f:1|2}t  at t = 4', { op: '' }, '1 m, 2 m', { op: '2 − 1' }, { t: '1 m farther', r: 'g' }]]],
+    trap: ['the highest point has the best rate', 'divide y ÷ x:   the steepest line'], alt: 'Each point gives a rate: y divided by x. Points with the same rate lie on one line through the origin, and a steeper line means a greater rate. The highest point is not always the greatest rate.', v: [['126/6', '21'], ['63/3', '21'], ['120/4', '30'], ['1/4*4', '1'], ['1/2*4', '2']] });
   // Unit 7: Solving Proportions
-  L('7-1', 'Multiply both sides by the denominator', ['Unknown on top: multiply both sides by the number under it.', 'Unknown underneath: multiply by it first, then divide.', 'Work out the number.'], '15/20 = M/37   | · 37   →   M = 37 · 15 ÷ 20 = 27.75', 'It is still an equation: both sides, every time.', { v: [['37*15/20', '2775/100']] });
-  L('7-2', 'Cross-multiply, then divide', ['Multiply each numerator by the opposite denominator.', 'Set the two products equal.', 'Divide by the number with the unknown, and round as asked.'], '96/537 = 297/y  →  96y = 537 · 297 = 159,489  →  y = 1661.34', 'Round at the very end.', { v: [['537*297', '159489']] });
-  L('7-3', 'Why cross-multiplying works', ['It is two moves in one: multiply both sides by each denominator.', 'Two ratios are equal exactly when their cross products are equal.', 'Set a proportion up with like quantities in like places.'], '8/19 = 132/K   | · 19, then · K   →   8K = 19 · 132 = 2508  →  K = 313.5', 'Cross-multiply only across an equals sign, never across a times sign.', { v: [['19*132/8', '3135/10']] });
+  V('7-1', { th: ['bal', 'undo'], from: '5:5-2', r: ['propeq', 'under', 'both'], t: 'Multiply both sides by the bottom', spot: ['cue', [['{f:9|5}', ''], ['=', ''], ['{f:{x:m}|{n:111}}', 'n', 'under m:  · 111 both sides', 'd']]],
+    doit: [['steps', [['{f:9|5}', '{f:m|{n:111}}'], { op: '· 111' }, ['{f:999|5}', 'm'], ['199.8', 'm', 'ans']]], ['steps', [['{f:32|{n:w}}', '{f:2|4}'], { op: '· w', soft: true }, ['32', '{f:2w|{n:4}}'], { op: '· 4' }, ['128', '{n:2}w'], { op: '÷ 2' }, ['64', 'w', 'ans']]]],
+    trap: ['{f:32|w} = {f:2|4}  →  w = 32 · 2 ÷ 4 = 16', '· w first, then · 4:   128 = 2w'], alt: 'A proportion is an equation. Multiply both sides by the number under the letter and the letter stands alone. When the letter is underneath, multiply both sides by the letter first, then solve as usual.', v: [['9*111/5', '199.8'], ['9*111', '999'], ['32*4', '128'], ['128/2', '64'], ['32*2/4', '16']] });
+  V('7-2', { th: ['bal'], from: '7-1', r: ['crossmul', 'round', 'both'], t: 'Cross-multiply, divide, round last', spot: ['prop', { l: ['3', '3.3'], r: ['6.3', 'n'], x: 'n', val: '6.93' }],
+    doit: [['steps', [['{n:3}n', '3.3 · 6.3'], ['{n:3}n', '20.79'], { op: '÷ 3' }, ['n', '6.93', 'ans']]], ['flow', ['n = 6.93', { op: 'nearest tenth' }, { t: 'n ≈ 6.9', r: 'g' }]], ['flow', ['{f:242|64} = {f:x|67}', { op: '64x = 242 · 67' }, 'x = 253.34…', { op: '' }, { t: 'x ≈ 253.34', r: 'g' }]]],
+    trap: ['3.3 · 6.3 ≈ 21,   n ≈ 7.0', 'round at the very end:   6.93 → 6.9'], alt: 'Cross-multiply: the product of one diagonal equals the product of the other. Then divide both sides by the number in front of the letter. Keep every digit until the last step, then round as asked.', v: [['3.3*6.3', '20.79'], ['20.79/3', '6.93'], ['242*67', '16214'], ['16214/64', '253.34375']] });
+  V('7-3', { th: ['bal', 'test'], from: '5:6-3', r: ['crossmul', 'crosstest', 'turnover', 'sameplace'], t: 'Cross products: two moves in one', spot: ['steps', [['{f:8|{n:19}}', '{f:132|{n:K}}'], { op: '· 19' }, ['8', '{f:2508|K}'], { op: '· K', soft: true }, ['8K', '2508'], { op: '÷ 8' }, ['K', '313.5', 'ans']]],
+    doit: [['prop', { l: ['32', '4.7'], r: ['55', '9.4'], units: ['km', 'L'], test: true, eq: false, prods: ['300.8', '258.5'], say: 'not equal rates', sayr: 'w' }], ['flow', ['{f:x|y} = {f:5|13}', { op: 'turn both over' }, '{f:y|x} = {f:13|5}', { op: '· x' }, { t: 'y = {f:13|5}x', r: 'g' }]], ['prop', { l: ['34', '2'], r: ['K', '10'], units: ['pages', 's'], x: 'K', val: '170', cross: false }]],
+    trap: ['{f:34 pages|2 s} = {f:10 s|K pages}', 'same units, same places:   {f:34|2} = {f:K|10}'], alt: 'Cross-multiplying is two moves in one: multiply both sides by each bottom. Two rates are equal exactly when their cross products are equal. In a set-up, the same units sit in the same places on both sides.', v: [['8*313.5', '2508'], ['19*132', '2508'], ['32*9.4', '300.8'], ['55*4.7', '258.5'], ['34*10/2', '170'], ['13/5', '2.6']] });
   // Unit 8: Proportion Word Problems
-  L('8-1', 'Carry the units into the proportion', ['Write the known rate as a fraction with units.', 'Write the unknown rate with the same units in the same places.', 'Cross-multiply, divide, and ask: is the size sensible?'], '180 miles / 5 gallons = x miles / 17 gallons  →  5x = 3060  →  x = 612 miles', 'More gallons should give more miles. 612 is more than 180 ✓', { v: [['180*17/5', '612']] });
-  L('8-2', 'Find the missing quantity first', ['Does the problem hand you the quantity the rate needs?', 'If not, work it out: an area, a perimeter, a total.', 'Then write and solve the proportion.'], '9 lb per 1000 ft², lawn 56 ft by 40 ft:  area 2240 ft²,  9/1000 = x/2240  →  x = 20.16 lb', 'The rate is per square foot, so you need the area, not a side.', { v: [['56*40', '2240'], ['9*2240/1000', '2016/100']] });
-  L('8-3', 'Check the set-up before you solve', ['Read the units of each of the four places.', 'The same unit must sit on top on both sides.', 'Fix the set-up, then solve.'], '32 words / 50 sec = 8000 words / x sec  →  32x = 400,000  →  x = 12,500 seconds', 'Words over seconds on the left and seconds over words on the right gives nonsense.', { v: [['50*8000/32', '12500']] });
+  V('8-1', { th: ['units', 'est'], from: '5:9-1', r: ['sameplace', 'sizecheck', 'crossmul'], t: 'Units in the same places; size check', spot: ['prop', { l: ['120.60', '18'], r: ['x', '46'], units: ['$', 'm'], x: 'x', val: '308.2' }],
+    doit: [['steps', [['{n:18}x', '120.60 · 46'], ['{n:18}x', '5547.6'], { op: '÷ 18' }, ['x', '308.2', 'ans']]], ['rt', { rows: [['m²', '79', '136'], ['L', '6', '10.3']], top: [[0, 1, '≈ · 1.7']], bot: [[0, 1, '≈ · 1.7']], say: 'the same factor: a sensible size ✓' }]],
+    trap: ['{f:120.60|18} = {f:46|x}', 'metres under metres:   {f:120.60|18} = {f:x|46}'], alt: 'Write the known rate as a fraction with its units, and the second fraction with the same units in the same places. Solve. Then check the size: both quantities should grow by about the same factor.', v: [['120.60*46', '5547.6'], ['5547.6/18', '308.2']] });
+  V('8-2', { th: ['units'], from: '5:7-3', r: ['needed', 'units', 'sameplace', 'periarea', 'turnover'], t: 'Find the missing quantity first', spot: ['flow', ['6 lb per 1000 ft²', { op: 'lawn: 28 ft · 60 ft' }, { t: '1680 ft²', r: 'x' }]],
+    doit: [['prop', { l: ['6', '1000'], r: ['x', '1680'], units: ['lb', 'ft²'], x: 'x', val: '10.08' }], ['flow', ['$42 an hour,  20 min', { op: '1 h = 60 min' }, '{f:42|60} = {f:x|20}', { op: '' }, { t: '$14', r: 'g' }]], ['flow', ['$12.30 ÷ 26 m,  · 13 m', { op: 'unit-rate check' }, { t: '$6.15 ✓', r: 'g' }]], ['flow', ['{f:7.2|39} = {f:M|13}', { op: 'turn both over' }, { t: '{f:39|7.2} = {f:13|M}', r: 'g' }]]],
+    trap: ['{f:42|1} = {f:x|20}:   $840', 'one time unit:   60 min, not 1 h'], alt: 'Read what the rate is per. If the problem gives sides and the rate is per square foot, find the area first; if it gives minutes and the rate is per hour, change to one unit first. Then set up the proportion.', v: [['28*60', '1680'], ['6*1680/1000', '10.08'], ['42*20/60', '14'], ['12.30/26*13', '6.15'], ['42*20', '840'], ['7.2*13/39', '2.4'], ['13*7.2/39', '2.4']] });
+  V('8-3', { th: ['units'], from: '8-2', r: ['roundup', 'pctof', 'periarea', 'sameplace'], t: 'Several steps: one at a time', spot: ['flow', ['110 ft · 600 ft', { op: '' }, '66,000 ft²', { op: '÷ 1200' }, { t: '55 lb nitrogen', r: 'x' }]],
+    doit: [['flow', ['40% of 8 lb', { op: '' }, '3.2 lb a bag', { op: '55 ÷ 3.2 ≈ 17.19' }, { t: '18 bags', r: 'g' }]], ['flow', ['2 · 29 + 2 · 23', { op: '' }, '104 m', { op: '· $12 a metre' }, { t: '$1248', r: 'g' }]], ['flow', [{ t: '{f:6 m|$9.60} = {f:x|14 m}', r: 'w' }, { op: 'm over $ on both sides' }, '{f:6|9.60} = {f:14|x}', { op: '' }, { t: 'x = $22.40', r: 'g' }]]],
+    trap: ['17.19 bags  →  17 bags', 'a target:   round up to 18'], alt: 'Break a long problem into steps and name what each step finds: the area, the amount needed, the amount in one bag, the number of bags. A number of bags needed is rounded up. A set-up keeps like units in like places.', v: [['110*600', '66000'], ['66000/1200', '55'], ['0.4*8', '3.2'], ['2*29+2*23', '104'], ['60/5', '12'], ['104*12', '1248'], ['9.60*14/6', '22.4'], ['17*3.2', '54.4'], ['18*3.2', '57.6']] });
   // Unit 9: Similar Figures
-  L('9-1', 'Scale factor: multiply', ['Scale factor = a new side ÷ the matching old side.', 'Every side is multiplied by the same factor.', 'A factor above 1 enlarges; below 1 it shrinks.'], 'Scale factor 1 7/10:  an 8.8 mm side becomes 8.8 · 1.7 = 14.96 mm', 'Check: the factor is above 1 and the answer is bigger ✓', { v: [['(88/10)*(17/10)', '1496/100']], tool: 'tri:scale' });
-  L('9-2', 'A proportion from matching sides', ['Pair up the corresponding sides.', 'Write unknown ÷ its partner = known side ÷ its partner.', 'Cross-multiply and solve.'], 'The 6 cm side matches 12 cm.  ?/23 = 12/6  →  ? = 23 · 12 ÷ 6 = 46 cm', 'Similar means every pair of matching sides has the same ratio. Test that to decide whether figures are similar.', { v: [['23*12/6', '46']] });
-  L('9-3', 'Similarity ratio and shrinking', ['Write the ratio in the order asked and simplify.', 'For a shrink the scale factor is a fraction below 1.', 'To draw a similar figure, multiply every side and keep every angle.'], 'Diameters 9 mm and 15 mm:  9 : 15 = 3 : 5.   From large to small the scale factor is 3/5', '3 : 5 and 5 : 3 are different answers. Order matters.', { v: [['9/15', '3/5']] });
+  V('9-1', { th: ['scale'], from: '2:10-3', r: ['sfactor', 'ratioorder'], t: 'Scale factor: multiply every side', spot: ['sim', { a: { w: 4, h: 2.5, labs: ['', '2.5 cm'] }, k: '2.2', klab: '· 2⅕', b: { labs: ['', '?'] } }],
+    doit: [['flow', ['2.5 · 2{f:1|5}', { op: '2{f:1|5} = 2.2' }, { t: '5.5 cm', r: 'g' }]], ['flow', ['3.1 in · {f:1|2}', { op: 'below 1: smaller' }, { t: '1.55 in', r: 'g' }]], ['flow', ['3 : 7, small to big', { op: 'small = {f:3|7} of big' }, '17.5 · {f:3|7}', { op: '' }, { t: '7.5 m', r: 'g' }]], ['flow', ['side 36 → 20', { op: 'new ÷ old' }, 'k = {f:20|36} = {f:5|9}', { op: 'bigger : smaller' }, { t: '9 : 5', r: 'g' }]]],
+    trap: ['2.5 + 2{f:1|5} = 4.7 cm', 'a factor multiplies:   2.5 · 2.2 = 5.5'], alt: 'A scale factor multiplies every side: above 1 the figure grows, below 1 it shrinks, and the angles stay the same. A ratio of 3 to 7, small to big, means each small side is three sevenths of its partner.', v: [['2.5*2.2', '5.5'], ['3.1/2', '1.55'], ['17.5*3/7', '7.5'], ['2+1/5', '2.2'], ['2.5+2.2', '4.7'], ['20/36', '5/9'], ['36/4', '9'], ['20/4', '5']] });
+  V('9-2', { th: ['scale', 'bal'], from: '9-1', r: ['matching', 'sfactor', 'crossmul'], t: 'Matching sides, one ratio', spot: ['sim', { shape: 'tri', a: { w: 5, h: 3, labs: ['20 m', '16 m', ''] }, k: '1.5', klab: 'same ratio', b: { labs: ['30 m', 'x', ''] } }],
+    doit: [['prop', { l: ['x', '16'], r: ['30', '20'], x: 'x', val: '24' }], ['flow', ['20x = 480', { op: '÷ 20' }, { t: 'x = 24 m', r: 'g' }]], ['flow', ['{f:15|6} = 2{f:1|2},   {f:37|14} = 2{f:9|14}', { op: 'two ratios' }, { t: 'not similar', r: 'w' }]], ['flow', ['copy 102 mm, original 68 mm', { op: 'new ÷ old' }, { t: 'k = 1{f:1|2}', r: 'g' }]]],
+    trap: ['{f:x|16} = {f:20|30}', 'big over small, twice:   {f:x|16} = {f:30|20}'], alt: 'In similar figures every pair of matching sides has the same ratio, so a missing side comes from a proportion with matching sides in matching places. If two pairs give different ratios, the figures are not similar.', v: [['16*30', '480'], ['480/20', '24'], ['15/6', '2.5'], ['37/14', '2+9/14'], ['102/68', '1.5']] });
+  V('9-3', { th: ['scale', 'form'], from: '1-1', r: ['ratioorder', 'sfactor', 'recip1', 'lowest'], t: 'Ratio order; a shrink is below 1', spot: ['flow', ['diameters 14 mm and 21 mm', { op: 'smaller : bigger' }, '14 : 21', { op: '÷ 7' }, { t: '2 : 3', r: 'g' }]],
+    doit: [['sim', { a: { w: 8, h: 4, labs: ['54 m', '27 m'] }, k: '4/9', klab: '· ⁴⁄₉', b: { labs: ['24 m', '12 m'] } }], ['flow', ['27 m → 12 m', { op: 'new ÷ old' }, { t: 'k = {f:12|27} = {f:4|9}', r: 'g' }]], ['flow', ['5 : 7, small to big', { op: 'big = {f:7|5} of small' }, '30 · {f:7|5}', { op: '' }, { t: '42 cm', r: 'g' }]]],
+    trap: ['bigger : smaller = 2 : 3', 'bigger first:   21 : 14 = 3 : 2'], alt: 'A similarity ratio is written in the order asked: smaller to bigger, or bigger to smaller. The scale factor is new divided by old, so a shrink has a factor below 1. Going the other way uses the reciprocal.', v: [['14/7', '2'], ['21/7', '3'], ['12/27', '4/9'], ['54*4/9', '24'], ['27*4/9', '12'], ['30*7/5', '42']] });
   // Unit 10: Perimeter and Area Scaling
-  L('10-1', 'Area grows by the factor squared', ['Scale each dimension.', 'Work out the new area from the new dimensions.', 'Compare: the area ratio is the scale factor squared.'], '2 m by 9 m, scale factor 4:  8 m by 36 m.  Area 18 → 288 m², and 288 ÷ 18 = 16 = 4²', 'Area is not multiplied by 4.', { v: [['8*36', '288'], ['288/18', '4^2']] });
-  L('10-2', 'Scale the lengths, not the area', ['Going back to the original: divide each length by the scale factor.', 'Then use the area formula.', 'Short cut: divide the area by the factor squared.'], 'Shrunk by 0.6 to base 4.5 m and height 4.92 m:  7.5 m and 8.2 m, area 7.5 · 8.2 ÷ 2 = 30.75 m²', 'Dividing the small area by 0.6 only once gives the wrong answer.', { v: [['(45/10)/(6/10)', '75/10'], ['(492/100)/(6/10)', '82/10'], ['(75/10)*(82/10)/2', '3075/100'], ['((45/10)*(492/100)/2)/(6/10)^2', '3075/100']] });
-  L('10-3', 'Scaling with letters', ['Scale each side: multiply the expression by the factor.', 'Multiply the new sides.', 'Numbers times numbers, letters times letters.'], 'Sides 2x and 12x, scale factor 6:  12x · 72x = 864x²', 'x · x is x², not 2x.', { v: [['(6*2*x)*(6*12*x)', '864*x^2', { x: 3 }]] });
+  V('10-1', { th: ['scale', 'area'], from: '9-1', r: ['perk', 'sfactor'], t: 'Lengths · k, areas · k²', spot: ['sim', { a: { w: 4, h: 2, labs: ['4 cm', '2 cm'], area: '8 cm²' }, k: '3', b: { labs: ['12 cm', '6 cm'], area: '72 cm²' }, tile: true }],
+    doit: [['flow', ['8 cm²', { op: '· 3 · 3' }, { t: '72 cm²', r: 'g' }]], ['flow', ['10 by 8  →  30 by 24', { op: 'areas 80 and 720' }, { t: '1 : 9', r: 'g' }]], ['flow', ['k = {f:3|10}', { op: 'k² = {f:9|100}' }, { t: 'old : new = 100 : 9', r: 'g' }]]],
+    trap: ['sides · 3,   area · 3 = 24', 'two lengths, each · 3:   area · 9'], alt: 'When every length is multiplied by k, the perimeter is multiplied by k, but the area by k times k, because an area needs two lengths. Nine copies of the small rectangle fill the one three times as long and wide.', v: [['4*2', '8'], ['12*6', '72'], ['8*9', '72'], ['10*8', '80'], ['30*24', '720'], ['720/80', '9'], ['(3/10)^2', '9/100'], ['8*3', '24']] });
+  V('10-2', { th: ['scale', 'area'], from: '10-1', r: ['lenfirst', 'perk', 'round'], t: 'Scale the lengths, then the area', spot: ['flow', ['now 5.04 m by 4.44 m,  k = 0.6', { op: '÷ 0.6 each' }, { t: '8.4 m by 7.4 m', r: 'x' }]],
+    doit: [['rect', { w: '8.4 m', h: '7.4 m', a: '62.16 m²' }], ['flow', ['triangle 0.54 m by 0.44 m, k = 2.5', { op: '· 2.5 each' }, '1.35 m by 1.1 m', { op: 'b · h ÷ 2' }, { t: '0.7425 ≈ 0.74 m²', r: 'g' }]], ['flow', ['k = 4', { op: 'perimeter · 4' }, 'old perimeter = {f:1|4} of new', { op: 'area · 16' }, { t: 'old area = {f:1|16} of new', r: 'g' }]]],
+    trap: ['22.3776 m² ÷ 0.6 = 37.296', 'area changed by 0.6 · 0.6:   62.16'], alt: 'To find an area before or after scaling, scale each length first, then use the area formula. Undo a shrink by dividing each length by the factor. Dividing the area by the factor only once is wrong.', v: [['5.04/0.6', '8.4'], ['4.44/0.6', '7.4'], ['8.4*7.4', '62.16'], ['0.54*2.5', '1.35'], ['0.44*2.5', '1.1'], ['1.35*1.1/2', '0.7425'], ['4*4', '16'], ['5.04*4.44', '22.3776'], ['22.3776/0.6', '37.296'], ['22.3776/0.36', '62.16']] });
+  V('10-3', { th: ['scale', 'area'], from: '1:10-1', r: ['xx', 'perk', 'ratiox', 'lenfirst'], t: 'Scaling with letters', spot: ['flow', ['9x by 6x,  k = 3', { op: '· 3 each' }, '27x by 18x', { op: 'multiply' }, { t: '486x²', r: 'g' }]],
+    doit: [['rect', { w: '27x', h: '18x', a: 'A = 486x²' }], ['flow', ['k = 7', { op: 'area · 7²' }, { t: 'old = {f:1|49} of new', r: 'g' }]], ['flow', ['3 : 4, perimeter 56 cm', { op: 'half:  3x + 4x = 28' }, 'x = 4', { op: '3x, 4x' }, { t: '12 cm by 16 cm', r: 'x' }]], ['flow', ['· {f:4|5} each', { op: '' }, '9.6 by 12.8', { op: '' }, { t: '122.88 cm²', r: 'g' }]]],
+    trap: ['27x · 18x = 486x', 'x · x = x²:   486x²'], alt: 'Scale each side, then multiply: numbers with numbers, and x times x is x squared. A scale factor of 7 makes the area 49 times as large. A ratio of sides 3 to 4 means sides 3x and 4x: half the perimeter is their sum.', v: [['27*18', '486'], ['3*9', '27'], ['3*6', '18'], ['28/7', '4'], ['12*4/5', '9.6'], ['16*4/5', '12.8'], ['9.6*12.8', '122.88'], ['56/2', '28']] });
   // Unit 11: Scale Drawings and Plans
-  L('11-1', 'Read a scale both ways', ['Plan to real: multiply by what one plan unit stands for.', 'Real to plan: divide.', 'For a unitless ratio, write both sides in one unit first.'], 'Scale 10 cm : 1 m:  a 2.8 m wall is 2.8 · 10 = 28 cm on the plan.  Unitless: 10 cm : 100 cm = 1 : 10', 'A plan is smaller than the real thing. If your plan length is bigger, you went the wrong way.', { v: [['(28/10)*10', '28'], ['10/100', '1/10']], tool: 'tri:scale' });
-  L('11-2', 'Change the scale of a drawing', ['Each scale tells how many real units one drawing unit stands for.', 'Factor for the new drawing = old number ÷ new number.', 'Multiply the old drawing’s lengths by that factor.'], 'From 1 : 1000 to 1 : 80:  1000 ÷ 80 = 12 1/2, so the new drawing is 12 1/2 times as large', 'A smaller second number means a bigger drawing.', { v: [['1000/80', '25/2']] });
-  L('11-3', 'Real area: convert the lengths first', ['Change each plan length to its real length.', 'Then multiply the real lengths.', 'Perimeter the same way: real lengths, then add.'], '1 in : 3 ft, room 3 in by 4 in:  9 ft by 12 ft  →  108 sq ft', '3 · 4 = 12 sq in, times 3, gives 36: wrong. The area factor is 3 · 3 = 9.', { v: [['(3*3)*(4*3)', '108'], ['12*9', '108']] });
+  V('11-1', { th: ['scale', 'units'], from: '9-1', r: ['scalepair', 'onetoN', 'unitless'], t: 'Read a scale both ways', spot: ['rt', { rows: [['plan (in)', '1', '1½', '4'], ['real (ft)', '8', ['12', 'g'], ['32', 'g']]], down: ['· 8'] }],
+    doit: [['flow', ['2 cm : 1 m,  real 4.3 m', { op: '· 2' }, { t: '8.6 cm on the plan', r: 'g' }]], ['flow', ['5 mm = 100 m', { op: '100 m = 100,000 mm' }, '5 : 100,000', { op: '÷ 5' }, { t: '1 : 20,000', r: 'g' }]], ['flow', ['5.8 cm at 1 : 40', { op: '· 40' }, '232 cm', { op: '÷ 100' }, { t: '2.32 m', r: 'g' }]]],
+    trap: ['5 mm = 100 m   →   1 : 20', 'same unit first:   5 mm : 100,000 mm'], alt: 'A scale pairs a length on the drawing with the real length. From the drawing to reality multiply; from reality to the drawing go the other way. To write a scale as 1 to n, put both lengths in one unit first.', v: [['1.5*8', '12'], ['4*8', '32'], ['4.3*2', '8.6'], ['100*1000', '100000'], ['100000/5', '20000'], ['5.8*40', '232'], ['232/100', '2.32']], tool: 'tri:scale' });
+  V('11-2', { th: ['scale', 'form'], from: '11-1', r: ['rescale', 'onetoN', 'scalepair'], t: 'Change the scale of a drawing', spot: ['flow', ['1 : 300 redrawn at 1 : 80', { op: '300 ÷ 80' }, { t: '3{f:3|4} times as large', r: 'g' }]],
+    doit: [['rt', { rows: [['at 1 in : 4 ft', '2½', '2'], ['real (ft)', '10', '8'], ['at 1 in : 8 ft', ['1¼', 'g'], ['1', 'g']]], down: ['· 4', '÷ 8'] }], ['flow', ['6.8 cm for 1.7 m', { op: '1.7 m = 170 cm' }, '6.8 : 170', { op: '÷ 6.8' }, { t: '1 : 25', r: 'g' }]], ['flow', ['10 cm : 1 m,  plan 24.5 cm', { op: '÷ 10' }, { t: '2.45 m', r: 'g' }]]],
+    trap: ['1 : 80 is smaller than 1 : 300', 'a smaller n:   a bigger drawing'], alt: 'To redraw at another scale, go through the real size, or divide the old scale number by the new one. A smaller number after the colon means a bigger drawing. A scale 1 to n comes from two lengths in the same unit.', v: [['300/80', '3.75'], ['2.5*4', '10'], ['2*4', '8'], ['10/8', '1.25'], ['8/8', '1'], ['170/6.8', '25'], ['24.5/10', '2.45'], ['1.7*100', '170']] });
+  V('11-3', { th: ['scale', 'area'], from: '10-2', r: ['lenfirst', 'scalepair', 'periarea'], t: 'Real area: scale the lengths first', spot: ['flow', ['2.8 cm by 2.6 cm,  1 cm : 25 m', { op: '· 25 each' }, { t: '70 m by 65 m', r: 'x' }]],
+    doit: [['rect', { w: '70 m', h: '65 m', a: '4550 m²' }], ['flow', ['2 · 70 + 2 · 65', { op: '' }, { t: 'perimeter 270 m', r: 'g' }]], ['flow', ['6.9 m · 9 m · {f:1|5} m', { op: '' }, '12.42 m³', { op: '· $46' }, { t: '$571.32', r: 'g' }]]],
+    trap: ['7.28 cm² · 25 = 182 m²', 'area · 25 · 25:   7.28 · 625 = 4550'], alt: 'For a real area or perimeter, change each plan length to its real length first, then compute. Multiplying the plan area by the scale number once is wrong: an area needs the factor twice.', v: [['2.8*25', '70'], ['2.6*25', '65'], ['70*65', '4550'], ['2*70+2*65', '270'], ['6.9*9/5', '12.42'], ['12.42*46', '571.32'], ['2.8*2.6', '7.28'], ['7.28*625', '4550'], ['7.28*25', '182']] });
   // Unit 12: Maps and Chapter Review
-  L('12-1', 'What 1 cm stands for', ['1 : n means 1 cm is n cm in reality.', 'Change n cm to metres (÷ 100) and kilometres (÷ 100,000).', 'Multiply the map distance by it.'], '1 : 50,000:  1 cm = 50,000 cm = 500 m = 0.5 km.   5.6 cm on the map is 5.6 · 0.5 = 2.8 km', 'There are 100,000 cm in a kilometre, not 1000.', { v: [['50000/100000', '1/2'], ['(56/10)*(1/2)', '28/10']] });
-  L('12-2', 'From reality to the map: divide', ['Change the real distance to centimetres.', 'Divide by the scale’s number.', 'Round as asked.'], 'At 1 : 500, 128 m = 12,800 cm, and 12,800 ÷ 500 = 25.6 cm on the map', 'Convert first. 128 ÷ 500 would be metres on the map.', { v: [['128*100/500', '256/10']] });
-  L('12-3', 'Review: choose the tool', ['Rate question: find the unit rate or write a proportion.', 'Similar figures: scale factor, and its square for areas.', 'Map: real = n · map, then convert the units.'], '1 : 250,000, 4.7 cm on the map:  4.7 · 250,000 = 1,175,000 cm = 11.75 km', 'A winding road is longer than the straight-line distance between its ends.', { v: [['(47/10)*250000/100000', '1175/100']] });
+  V('12-1', { th: ['units', 'scale'], from: '11-1', r: ['cmkm', 'onetoN', 'scalepair'], t: 'What 1 cm stands for', spot: ['flow', ['1 : 200,000', { op: '1 cm = 200,000 cm' }, '2000 m', { op: '÷ 1000' }, { t: '1 cm = 2 km', r: 'g' }]],
+    doit: [['rt', { rows: [['map (cm)', '1', '3.4'], ['real (km)', '2.5', ['8.5', 'g']]], down: ['· 2.5'] }], ['flow', ['7.2 cm · 20,000', { op: '' }, '144,000 cm', { op: '÷ 100,  ÷ 1000' }, { t: '1.44 km', r: 'g' }]]],
+    trap: ['200,000 cm = 200 km', '100,000 cm in 1 km:   2 km'], alt: 'A map scale 1 to 200,000 means 1 centimetre stands for 200,000 centimetres. Divide by 100 for metres and by 1000 for kilometres: 2 kilometres. Rewrite the scale once, then each length is one multiplication.', v: [['200000/100', '2000'], ['2000/1000', '2'], ['3.4*2.5', '8.5'], ['7.2*20000', '144000'], ['144000/100/1000', '1.44'], ['250000/100000', '2.5']], tool: 'tri:scale' });
+  V('12-2', { th: ['units', 'scale'], from: '12-1', r: ['scalepair', 'units', 'rescale', 'round'], t: 'From real to the map: divide', spot: ['flow', ['303 m at 1 : 1000', { op: '303 m = 30,300 cm' }, '30,300 ÷ 1000', { op: '' }, { t: '30.3 cm', r: 'g' }]],
+    doit: [['flow', ['4.3 in · 200,000', { op: '' }, '860,000 in', { op: '÷ 12,  ÷ 5280' }, { t: '≈ 14 miles', r: 'g' }]], ['prop', { l: ['2.7', '150'], r: ['3', 'x'], units: ['cm', 'km'], x: 'x', val: '500/3', cross: false }], ['flow', ['x = 166.6…', { op: 'nearest 10' }, { t: '≈ 170 km', r: 'g' }]], ['flow', ['4.8 cm at 1 : 300,000', { op: '· 300,000 ÷ 200,000' }, { t: '7.2 cm at 1 : 200,000', r: 'g' }]]],
+    trap: ['303 ÷ 1000 = 0.303 cm', 'convert first:   30,300 cm ÷ 1000'], alt: 'From a real length to the map, change the real length to the map unit first, then divide by the scale number. A bar scale gives a proportion. The same distance on a map with a smaller scale number is longer.', v: [['303*100', '30300'], ['30300/1000', '30.3'], ['4.3*200000', '860000'], ['150*3/2.7', '500/3'], ['4.8*300000/200000', '7.2']] });
+  V('12-3', { th: ['scale', 'area'], from: '11-3', r: ['lenfirst', 'cmkm', 'round', 'scalepair'], t: 'Maps: lengths first, then the rest', spot: ['flow', ['5.7 cm straight,  6.9 cm by road', { op: '· 250,000, to km' }, { t: '14.25 km and 17.25 km', r: 'g' }]],
+    doit: [['flow', ['34 mm,  5 mm = 1.5 m', { op: '34 · 1.5 ÷ 5' }, { t: '10.2 m', r: 'x' }]], ['flow', ['10.2 m · 8.1 m', { op: '' }, '82.62', { op: '' }, { t: '≈ 82.6 m²', r: 'g' }]], ['flow', ['{f:2|5} in · 9000', { op: '' }, '3600 in', { op: '÷ 12' }, { t: '300 ft', r: 'x' }]], ['flow', ['300 ft · 375 ft', { op: '' }, '112,500 ft²', { op: '÷ 43,560' }, { t: '≈ 2.6 acres', r: 'g' }]]],
+    trap: ['a road is as long as the straight line', 'measure the road along its bends'], alt: 'Change every map length to a real length first, then find the area or compare. Keep the digits and round at the end. A winding road is measured along its bends, so it is longer than the straight-line distance.', v: [['5.7*250000/100000', '14.25'], ['6.9*250000/100000', '17.25'], ['34*1.5/5', '10.2'], ['27*1.5/5', '8.1'], ['10.2*8.1', '82.62'], ['2/5*9000', '3600'], ['3600/12', '300'], ['300*375', '112500']] });
   // Unit 13: Lines: Slope and Start (added in this system)
-  L('13-1', 'Slope and start', ['Slope = rise ÷ run: the change in y for each 1 in x.', 'The start is the value of y when x is 0.', 'From a point, step back to x = 0 one slope at a time.'], 'Slope 1 through (1, 5):  back 1 step to x = 0 takes away 1, so the start is 4', 'The start is at x = 0, not at the first point you are given.', { v: [['5-1*1', '4']] });
-  L('13-2', 'The rule of a line: y = m · x + b', ['m: change in y ÷ change in x between two rows.', 'b: go back from a row to x = 0.', 'Write the rule and check it on another row.'], 'x: 2, 4, 6, 8 and y: 10, 14, 18, 22:  m = 4 ÷ 2 = 2,  b = 10 − 2 · 2 = 6,  so y = 2x + 6', 'x goes up in twos here, so the slope is 4 ÷ 2, not 4.', { v: [['2*2+6', '10'], ['2*8+6', '22']] });
-  L('13-3', 'Slope and start in a story', ['The start is what there is at time 0.', 'The slope is what each one more adds.', 'Proportional only when the start is 0.'], 'A tank holds 11 litres and a tap adds 2 litres a minute:  V = 2t + 11.  After 12 minutes: 35 litres', 'The amount named first is not always the start. Ask what happens at 0.', { v: [['2*12+11', '35']] });
+  V('13-1', { th: ['step', 'graph'], from: '3:9-2', r: ['slope', 'startb'], t: 'Slope: rise ÷ run. Start: y at x = 0', spot: ['graph', { x: [0, 5], y: [0, 20], xs: 1, ys: 4, xt: [2, 3, 4], yt: [4, 8, 12, 16, 20], lines: [{ m: 4, b: 1, role: 'x' }], pts: [[0, 1, 'n', 'start 1', 'br', 0], [1, 5, 'x', '', 'r', 0], [4, 17, 'x', '(4, 17)', 'l', 0]], rise: { a: [1, 5], b: [4, 17], labs: ['run 3', 'rise 12'] } }],
+    doit: [['flow', ['(1, 5) to (4, 17)', { op: 'rise 12, run 3' }, { t: 'slope 12 ÷ 3 = 4', r: 'g' }]], ['seq', { n: ['0', '1', '2'], v: ['5', '8', '11'], add: '+ 3', mark: { 0: 'start' }, role: { 0: 'g' } }], ['flow', ['slope 3 through (1, 8)', { op: 'back 1 step: 8 − 3' }, { t: 'start 5', r: 'g' }]]],
+    trap: ['slope 3 through (1, 8):   start 8', 'the start is at x = 0:   8 − 3 = 5'], alt: 'The slope is the rise divided by the run: how much y gains for each 1 in x. The start is the value of y when x is 0. From a known point, step back to x = 0 and take away one slope for each step.', v: [['17-5', '12'], ['4-1', '3'], ['12/3', '4'], ['8-3', '5'], ['4*4+1', '17'], ['4*1+1', '5']] });
+  V('13-2', { th: ['step'], from: '5:2-3', r: ['line', 'slope', 'startb'], t: 'The rule of a line: y = m · x + b', spot: ['rt', { rows: [['x', '2', '4', '6', '8'], ['y', '10', '14', '18', '22']], top: [[0, 1, '+ 2']], bot: [[0, 1, '+ 4']] }],
+    doit: [['flow', ['+ 4 for each + 2', { op: '4 ÷ 2' }, 'm = 2', { op: 'back to 0:  10 − 2 · 2' }, { t: 'b = 6', r: 'g' }]], ['flow', ['y = 2x + 6', { op: 'check x = 8' }, { t: '2 · 8 + 6 = 22 ✓', r: 'g' }]], ['flow', ['(4, 11) and (8, 7)', { op: 'rise −4, run 4' }, 'm = −1', { op: '11 = −1 · 4 + b' }, { t: 'b = 15', r: 'g' }]], ['flow', ['(0, 1) to (3, 6)', { op: 'rise 5, run 3' }, { t: 'm = {f:5|3}', r: 'g' }]]],
+    trap: ['x goes up in twos:   m = 4', 'for each 1 in x:   m = 4 ÷ 2 = 2'], alt: 'From a table, the slope is the change in y divided by the change in x. Step back to x = 0 for the start, then write y = m times x plus b and check it with a pair from the table. A falling line has a negative slope.', v: [['4/2', '2'], ['10-2*2', '6'], ['2*8+6', '22'], ['7-11', '-4'], ['8-4', '4'], ['-4/4', '-1'], ['11+4', '15'], ['-1*8+15', '7'], ['(6-1)/(3-0)', '5/3']] });
+  V('13-3', { th: ['step', 'graph'], from: '3:9-3', r: ['line', 'slope', 'origin', 'startb'], t: 'Slope and start in a story', spot: ['cue', [['C', ''], ['=', ''], ['6', 'o', '$6 each GB'], ['g', 'x'], ['+', ''], ['10', 'n', '$10 at 0 GB', 'd']]],
+    doit: [['flow', ['g = 14', { op: '6 · 14 + 10' }, { t: '$94', r: 'g' }]], ['graph', { x: [0, 12], y: [0, 24], xs: 2, ys: 4, ax: ['t (h)', 'cm'], xt: [2, 6, 10], yt: [8, 16, 20], lines: [{ m: -2, b: 20, role: 'x', lab: 'candle: h = −2t + 20' }], pts: [[0, 20, 'n', '', 'r', 0], [10, 0, 'x', '', 't', 0]] }], ['flow', ['icicle: 33 cm at 1 h,  13 cm at 5 h', { op: 'rise −20, run 4' }, 'slope −5', { op: 'back 1 h:  33 + 5' }, { t: 'start 38 cm', r: 'g' }]]],
+    trap: ['y = 5x + 8 is proportional', 'at x = 0, y = 8:   it misses (0, 0)'], alt: 'In a story the start is what there is at zero, and the slope is what each one adds, or takes away when something shrinks. Write the rule, then substitute. A rule with a start that is not zero is not proportional.', v: [['6*14+10', '94'], ['13-33', '-20'], ['5-1', '4'], ['-20/4', '-5'], ['33+5', '38'], ['-5*5+38', '13'], ['-2*10+20', '0']] });
   // Unit 14: Solving by Graph (added in this system)
-  L('14-1', 'Each side of an equation is a line', ['Graph the left side and the right side as two lines.', 'At any x, the higher line is the greater side.', 'Where they cross, the sides are equal: that x is the solution.'], '−x − 1 and −2x − 1 at x = 2:  −3 and −5, so the left side is greater there', 'The solution is the x of the crossing, not its height.', { v: [['-2-1', '-3'], ['-2*2-1', '-5']] });
-  L('14-2', 'Solve, then find the height of the crossing', ['Collect the x-terms on one side and solve.', 'Put the solution into either side to get the height.', 'Both sides must give the same value.'], '−3x + 14 = x − 10  →  −4x = −24  →  x = 6.   Height: 6 − 10 = −4', 'If the two sides give different heights, the solution is wrong.', { v: [['-3*6+14', '6-10']] });
-  L('14-3', 'Two plans: when are they equal?', ['Write a rule for each plan.', 'Set the rules equal and solve.', 'Before the crossing the lower start is cheaper; after it, the lower rate.'], '$14 plus $2 an hour, or $4 an hour:  2x + 14 = 4x  →  x = 7 hours, $28 each', 'Test an x on each side of the crossing to see which plan wins where.', { v: [['2*7+14', '4*7']] });
+  V('14-1', { th: ['graph', 'bal'], from: '5:1-2', r: ['cross', 'higher', 'root'], t: 'Each side is a line; they cross at x', spot: ['graph', { x: [-3, 5], y: [-2, 10], xs: 1, ys: 2, xt: [-2, 2, 4], yt: [4, 8], lines: [{ m: -2, b: 6, role: 'x', lab: '−2x + 6', lp: [-2.9, 6.3, 'start'] }, { m: 2, b: 2, role: 'n', lab: '2x + 2' }], pts: [[1, 4, 'g', '(1, 4)', 'r', [0, 1]]], drop: [[1, 4, 'x', 'x = 1']] }],
+    doit: [['flow', ['x = 1', { op: '−2 · 1 + 6   and   2 · 1 + 2' }, { t: 'both sides are 4', r: 'g' }]], ['flow', ['3x + 2 and x + 4 at x = 2', { op: '8 and 6' }, { t: 'the left line is higher', r: 'g' }]], ['cross', { m: 1, b: 2, c: 1, v: 'x', left: 'x + 2', right: '1', ineq: '≤' }]],
+    trap: ['the solution is the height, 4', 'the solution is where:   x = 1'], alt: 'Graph each side of an equation as a line. The lines cross where the two sides are equal: the x of the crossing is the solution, and its height is the value of both sides. Elsewhere the higher line is the greater side.', v: [['-2*1+6', '4'], ['2*1+2', '4'], ['3*2+2', '8'], ['2+4', '6'], ['-1+2', '1']] });
+  V('14-2', { th: ['bal', 'graph'], from: '14-1', r: ['xboth', 'higher', 'both', 'solineq'], t: 'x on both sides; then the height', spot: ['steps', [['x + 6', '−3x − 6'], { op: '+ 3x', soft: true }, ['4x + 6', '−6'], { op: '− 6' }, ['{n:4}x', '−12'], { op: '÷ 4' }, ['x', '−3', 'ans']]],
+    doit: [['flow', ['x = −3', { op: 'into each side' }, '(−3) + 6 = 3,   −3 · (−3) − 6 = 3', { op: '' }, { t: 'crossing (−3, 3)', r: 'g' }]], ['graph', { x: [-2, 6], y: [-6, 10], xs: 1, ys: 2, xt: [4], yt: [-4, 4, 8], lines: [{ m: 3, b: -4, role: 'x', lab: '3x − 4', lp: [3.9, 8.6, 'end'] }, { m: 2, b: -2, role: 'n', lab: '2x − 2', lp: [5.9, 5.2, 'end'] }], pts: [[2, 2, 'g', '', 't', [0, 1]]], ray: { at: 2, dir: 'r', closed: false }, drop: [[2, 2, 'x']] }], ['flow', ['3x − 4 > 2x − 2', { op: 'left line higher' }, { t: 'x > 2', r: 'g' }]], ['flow', ['y ≥ x − 4,  point (−1, −3)', { op: '−1 − 4 = −5' }, { t: '−3 ≥ −5 ✓', r: 'g' }]]],
+    trap: ['x + 6 = −3x − 6  →  −2x + 6 = −6', '+ 3x on both sides:   4x + 6 = −6'], alt: 'With the letter on both sides, add or subtract an x-term on both sides so the letter is on one side, then solve as before. Put the solution into either side for the height of the crossing. An inequality is where one line is higher.', v: [['-3+6', '3'], ['-3*(-3)-6', '3'], ['-12/4', '-3'], ['3*2-4', '2'], ['2*2-2', '2'], ['-1-4', '-5']] });
+  V('14-3', { th: ['graph', 'test'], from: '5:11-2', r: ['plans', 'halfplane', 'xboth', 'boundary'], t: 'Plans cross; shade above or below', spot: ['graph', { x: [0, 5], y: [0, 24], xs: 1, ys: 4, ax: ['h', '$'], xt: [1, 2, 3, 4], yt: [8, 16], lines: [{ m: 2, b: 7, role: 'x', lab: 'tuba: 2x + 7', lp: [4.9, 11, 'end'] }, { m: 4, b: 3, role: 'n', lab: 'unicycle: 4x + 3' }], pts: [[2, 11, 'g', '(2, 11)', 'br', [0, 1]]] }],
+    doit: [['steps', [['2x + 7', '4x + 3'], { op: '− 2x', soft: true }, ['7', '2x + 3'], { op: '− 3' }, ['4', '{n:2}x'], { op: '÷ 2' }, ['2', 'x', 'ans']]], ['flow', ['after 2 h: test x = 3', { op: '13 and 15' }, { t: 'the tuba costs less', r: 'g' }]], ['graph', { x: [-3, 3], y: [-5, 7], xs: 1, ys: 2, xt: [-2], yt: [-4, 4], lines: [{ m: 2, b: 1, role: 'x', lab: 'y ≤ 2x + 1' }], shade: { line: 0, side: 'below', role: 'x' }, pts: [[1, -2, 'g', '(1, −2) ✓', 'r']] }], ['grid', { head: ['', '≤  ≥', '<  >'], rows: [['the line', 'solid', 'dashed']] }]],
+    trap: ['y < 2x + 1:   a solid line', '< leaves the line out:   dashed'], alt: 'Two plans cost the same where their rules are equal; test a value on each side to see which is cheaper there. An inequality in x and y is a region: above or below the line, with the line solid when it is included and dashed when it is not.', v: [['2*2+7', '11'], ['4*2+3', '11'], ['2*3+7', '13'], ['4*3+3', '15'], ['2*1+1', '3']] });
 })();
 
 /* --- tactics_ch7.js --- */
@@ -101649,7 +101934,10 @@ var GEN = (function () {
   function ul(u) { return ULONG[u] || u; }
   function ulsq(u) { return u === 'm' ? 'square metres' : u + '²'; }
   // 'a' or 'an' in front of a number or word, by how it is read aloud
-  function art(x) { var t = String(x); return /^(8|11|18|8[0-9]{2}|[aeiou])/i.test(t) ? 'an' : 'a'; }
+  // one of a unit: “1 minute”, “1 square metre”, “1 tonne” (the plural word is the last one, or the one before “of”)
+  function sing(w) { var ip = String(w).indexOf(' per '); if (ip > 0) return sing(String(w).slice(0, ip)) + String(w).slice(ip); var ps = String(w).split(' of '), ws = ps[0].split(' '), l = ws[ws.length - 1]; if (/^[a-z]{4,}s$/.test(l) && !/(ss|us|is)$/.test(l)) ws[ws.length - 1] = /(ch|sh|x|z)es$/.test(l) ? l.slice(0, -2) : /ies$/.test(l) ? l.slice(0, -3) + 'y' : l.slice(0, -1); ps[0] = ws.join(' '); return ps.join(' of '); }
+  function un(q, w) { return Q.of(q).eq(Q.of(1)) ? sing(w) : w; }
+  function art(x) { var t = String(x); return /^(8|11|18|8[0-9]{2}|[aeio]|u(?!ni|se|su)|hour)/i.test(t) ? 'an' : 'a'; }
   var ROUND_NAME = { 0: 'the nearest whole number', 1: 'the nearest tenth', 2: 'the nearest hundredth', 3: 'three decimal places' };
 
   /* ---------- problem constructors ---------- */
@@ -101663,6 +101951,8 @@ var GEN = (function () {
       if (w > ans.d) core += ' = ' + (ans.sign() < 0 ? '−' : '') + (w / ans.d) + ' ' + (w % ans.d) + '/' + ans.d;
     }
     var tail = opt.per ? ' ' + opt.per : (opt.unit && !opt.money ? ' ' + opt.unit : '');
+    // exactly one of a unit named by one plural word: “1 metre”, not “1 metres” (the label beside the box keeps the plural)
+    if (ans.eq(Q.of(1)) && !opt.money && (opt.per || opt.unit)) tail = ' ' + sing(opt.per || opt.unit);
     var p = {
       prompt: prompt, kind: 'num', answer: ans, show: core + tail, steps: steps,
       unit: opt.money ? undefined : opt.unit, lowest: !!opt.lowest, money: !!opt.money
@@ -101781,7 +102071,7 @@ var GEN = (function () {
     { q: 'metres', t: 'minutes', s: 'A mermaid late for work covers' }, { q: 'pages', t: 'minutes', s: 'A haunted printer prints' },
     { q: 'litres', t: 'minutes', s: 'A tap of chocolate milk delivers' }, { q: 'words', t: 'seconds', s: 'An octopus typist types' },
     { q: 'bricks', t: 'hours', s: 'A bricklaying gorilla lays' }, { q: 'bottles', t: 'minutes', s: 'A burping machine fills' },
-    { q: 'stitches', t: 'minutes', s: 'A spider with a sewing machine sews' }, { q: 'steps', t: 'minutes', s: 'A sleepwalking robot takes' }
+    { q: 'metres of thread', t: 'minutes', s: 'A spider with a sewing machine uses' }, { q: 'kilometres', t: 'hours', s: 'A sleepwalking robot walks' }
   ];
   var PER1 = [
     { q: 'km', t: 'hour', tp: 'hours', s: 'A van driven by raccoons travels', lo: 40, hi: 95 },
@@ -101852,13 +102142,13 @@ var GEN = (function () {
           'So the rate is ' + m + ' ' + c3.q + ' per ' + c3.t + '.'],
         { unit: c3.q + ' per ' + c3.t });
     }
-    var sa3 = R(2, 9), sb3 = R(2, 9), k3 = R(2, 9), c4 = pick(RATE3);
+    var sa3 = R(2, 9), sb3 = R(2, 9), k3 = R(2, 9), c4 = pick(RATE3.filter(function (r) { return /metres|litres/.test(r.q); }));   // decimals: only quantities that are measured, not counted
     if (gcd(sa3, sb3) !== 1 || sa3 === sb3) return t1l1(v, dep);
     var n1 = sa3 * k3, n2 = sb3 * k3;
     if (n1 % 10 === 0 && n2 % 10 === 0) return t1l1(v, dep);
     var d1 = dq(n1, 1), d2 = dq(n2, 1);
     return fields(lead('Simplify this rate to whole numbers in lowest terms. Clear the decimals first.') +
-      E(f(d1) + ' ' + c4.q + ' : ' + f(d2) + ' ' + c4.t),
+      E(f(d1) + ' ' + un(d1, c4.q) + ' : ' + f(d2) + ' ' + un(d2, c4.t)),
       [c4.q, c4.t], eqAll([sa3, sb3]), [sa3, sb3],
       sa3 + ' ' + c4.q + ' per ' + sb3 + ' ' + c4.t,
       ['Multiply both terms by 10 to clear the decimals: ' + n1 + ' : ' + n2 + '.',
@@ -101890,9 +102180,9 @@ var GEN = (function () {
       if (!Yq.isInt()) return t1l2(v, dep);
       var Y = Number(Yq.n);
       if (Y < 2 || Y > 9000) return t1l2(v, dep);
-      return fields(lead('Write the ratio of ' + f(X) + ' ' + u.big + ' to ' + f(Y) + ' ' + u.sm + ' in lowest terms. Convert to one unit first.'),
+      return fields(lead('Write the ratio of ' + f(X) + ' ' + un(X, u.big) + ' to ' + f(Y) + ' ' + u.sm + ' in lowest terms. Convert to one unit first.'),
         ['first term', 'second term'], eqAll([r, s]), [r, s], rt(r, s),
-        ['Convert to the smaller unit: ' + f(X) + ' ' + u.big + ' = ' + f(T) + ' ' + u.sm + '.',
+        ['Convert to the smaller unit: ' + f(X) + ' ' + un(X, u.big) + ' = ' + f(T) + ' ' + u.sm + '.',
           'Write it with a fraction line so the units cancel: ' + fr(f(T) + ' ' + u.sm, f(Y) + ' ' + u.sm) + ' = ' + fr(f(T), f(Y)) + '.',
           'Divide both terms by ' + f(T.div(r)) + ': the ratio is ' + rt(r, s) + '.']);
     }
@@ -101940,9 +102230,9 @@ var GEN = (function () {
         E(mixH(amt) + ' ' + qn + ' per ' + mins + ' min&nbsp; = &nbsp;' + BLANK + ' per 1 h&nbsp; = &nbsp;' + BLANK + ' per ' + small + ' min'),
         [qn + ' per hour', qn + ' per ' + small + ' minutes'],
         eqAll([rateH, amtS]), [f(rateH), f(amtS)],
-        rateH + ' ' + qn + ' per hour and ' + mixT(amtS) + ' ' + qn + ' per ' + small + ' minutes',
-        ['One hour is 60 minutes, and 60 ÷ ' + mins + ' = ' + f(fac) + ', so multiply both terms by ' + f(fac) + ': ' + mixT(amt) + ' · ' + f(fac) + ' = ' + rateH + ' ' + qn + ' per hour.',
-          small + ' minutes is ' + mixT(new Q(BigInt(small), 60n)) + ' of an hour, so ' + rateH + ' · ' + small + ' ÷ 60 = ' + mixT(amtS) + ' ' + qn + '.',
+        rateH + ' ' + un(rateH, qn) + ' per hour and ' + mixT(amtS) + ' ' + un(amtS, qn) + ' per ' + small + ' minutes',
+        ['One hour is 60 minutes, and 60 ÷ ' + mins + ' = ' + f(fac) + ', so multiply both terms by ' + f(fac) + ': ' + mixT(amt) + ' · ' + f(fac) + ' = ' + rateH + ' ' + un(rateH, qn) + ' per hour.',
+          small + ' minutes is ' + mixT(new Q(BigInt(small), 60n)) + ' of an hour, so ' + rateH + ' · ' + small + ' ÷ 60 = ' + mixT(amtS) + ' ' + un(amtS, qn) + '.',
           'So the chain reads ' + mixT(amt) + ' per ' + mins + ' min = ' + rateH + ' per hour = ' + mixT(amtS) + ' per ' + small + ' min.']);
     }
     if (v === 6) {
@@ -102173,7 +102463,7 @@ var GEN = (function () {
         amt = Q.of(r).mul(half), tgt = R(120, 600), exact = Q.of(tgt).div(r),
         ctx = pick([['litres', 'A pump at the gravy factory moves'], ['litres', 'A tap of chocolate milk runs'], ['square metres', 'A glitter sprayer covers']]);
       if (qround(exact, 1).eq(exact)) return t2l3(v, dep);
-      return rnum(lead(ctx[1] + ' ' + mixH(amt) + ' ' + ctx[0] + ' every ' + mixH(half) + ' of a minute. How long will ' + f(tgt) + ' ' + ctx[0] + ' take? Round to the nearest tenth of a minute.'),
+      return rnum(lead(ctx[1] + ' ' + mixH(amt) + ' ' + un(amt, ctx[0]) + ' every ' + mixH(half) + ' of a minute. How long will ' + f(tgt) + ' ' + ctx[0] + ' take? Round to the nearest tenth of a minute.'),
         exact, 1, ['Per minute: ' + mixT(amt) + ' ÷ ' + mixT(half) + ' = ' + f(r) + ' ' + ctx[0] + ' a minute.',
           'Divide the target by that rate: ' + f(tgt) + ' ÷ ' + f(r) + ' = ' + f(qround(exact, 3)) + '…',
           'To the nearest tenth, ' + f(qround(exact, 1)) + ' minutes.'],
@@ -102276,7 +102566,7 @@ var GEN = (function () {
       return num(lead(nm[0] + '’s heart beat ' + b1 + ' times in ' + s1 + ' seconds. ' + nm[1] + '’s beat ' + b2 + ' times in ' + s2 + ' seconds. Put both rates in beats per minute. How many more beats per minute is the faster rate?'),
         diff, [nm[0] + ': a minute holds 60 ÷ ' + s1 + ' = ' + f(dv(60, s1)) + ' lots of ' + s1 + ' seconds, so ' + b1 + ' · ' + f(dv(60, s1)) + ' = ' + f(r1) + ' beats per minute.',
           nm[1] + ': ' + b2 + ' · ' + f(dv(60, s2)) + ' = ' + f(r2) + ' beats per minute.',
-          fast + '’s rate is faster: ' + f(hi) + ' − ' + f(lo) + ' = ' + f(diff) + ' beats per minute.'],
+          fast + '’s rate is faster: ' + f(hi) + ' − ' + f(lo) + ' = ' + f(diff) + ' ' + un(diff, 'beats') + ' per minute.'],
         { unit: 'beats per minute' });
     }
     if (v <= 6) {
@@ -102287,7 +102577,7 @@ var GEN = (function () {
       return num(lead(cn[0] + ' has ' + f(cntA) + ' ' + prof + ' for ' + f(popA) + ' people. ' + cn[1] + ' has ' + per2 + ' ' + prof + ' per 10,000 people. Which has more per 10,000 people, and by how many? Type the difference.'),
         Math.abs(per1 - per2), [cn[0] + ': ' + f(cntA) + ' ÷ ' + f(popA) + ' · 10,000 = ' + per1 + ' ' + prof + ' per 10,000 people.',
           cn[1] + ' already has ' + per2 + ' per 10,000 people.',
-          (per1 > per2 ? cn[0] : cn[1]) + ' has more, by ' + Math.max(per1, per2) + ' − ' + Math.min(per1, per2) + ' = ' + Math.abs(per1 - per2) + ' ' + prof + ' per 10,000 people.'],
+          (per1 > per2 ? cn[0] : cn[1]) + ' has more, by ' + Math.max(per1, per2) + ' − ' + Math.min(per1, per2) + ' = ' + Math.abs(per1 - per2) + ' ' + un(Math.abs(per1 - per2), prof) + ' per 10,000 people.'],
         { unit: prof });
     }
     var food = pick(['dragon hot sauce', 'pickled thunder', 'troll toe jam', 'glow-in-the-dark yoghurt', 'unicorn muesli']),
@@ -102502,7 +102792,7 @@ var GEN = (function () {
       return ex(lead(s2.tot(s2.money ? usd(tot2) : f(tot2), n2) +
         '. Let ' + s2.y + ' stand for the ' + s2.ys + ' and ' + s2.x + ' for the ' + s2.xs + '. Write the equation for ' + s2.y + ', and type just the right-hand side.'),
         src, ['The unit rate is ' + f(tot2) + ' ÷ ' + n2 + ' = ' + f(k2) + ' ' + s2.rate + '.',
-          'In ' + mth(s2.y + ' = m' + s2.x) + ' the coefficient m is the unit rate.',
+          'In ' + mth(s2.y + ' = ' + (s2.x === 'm' ? 'k' : 'm') + s2.x) + ' the coefficient ' + (s2.x === 'm' ? 'k' : 'm') + ' is the unit rate.',
           'So ' + s2.y + ' = ' + shw + '.'], { terms: 1 }, { show: shw });
     }
     if (v <= 7) {
@@ -102657,7 +102947,7 @@ var GEN = (function () {
           points: [{ x: pt, y: pt / d, lab: '(' + pt + ', ' + f(pt / d) + ')' }] }),
         ctx.x + '/' + d, ['Read the marked point: ' + f(pt / d) + ' goes with ' + pt + '.',
           'The unit rate is ' + f(pt / d) + ' ÷ ' + pt + ' = ' + mixT(m2) + ', that is ' + mixT(m2) + ' ' + ctx.u + '.',
-          'So ' + ctx.y + ' = ' + mixT(m2) + ctx.x + ', which can be written ' + ctx.x + ' ÷ ' + d + '.'],
+          'So ' + ctx.y + ' = (' + mixT(m2) + ')' + ctx.x + ', which can be written ' + ctx.x + ' ÷ ' + d + '.'],
         { terms: 1 }, { show: ctx.x + '/' + d });
     }
     if (v <= 7) {
@@ -102774,9 +103064,23 @@ var GEN = (function () {
           mth('y = ' + m4 + 'x²') + ' squares x, so its graph is a curve.',
           'Only the plain y = mx forms are proportional — straight lines through the origin.']);
     }
-    var mm = R(2, 6), bb = R(3, 12), x2 = pick([4, 5, 6, 8]), y1 = bb, y2 = mm * x2 + bb,
-      rightR = 'Not proportional — the line is straight, but it crosses the ' + mth('y') + '-axis at ' + bb + ' instead of passing through (0, 0).',
-      wrongR = ['Proportional — the line is straight, and every straight line is a proportional relationship.',
+    var mm = R(2, 6), bb = R(3, 12), x2 = pick([4, 5, 6, 8]), y1 = bb, y2 = mm * x2 + bb, rightR, wrongR;
+    if (Math.random() < 0.5) {   // a line through the origin: the same question must sometimes be answered yes
+      var y0 = mm * x2;
+      rightR = 'Proportional — the line is straight and passes through (0, 0); every point has ' + mth('y') + ' ÷ ' + mth('x') + ' = ' + mm + '.';
+      wrongR = ['Not proportional — the line does not start at 1, so there is no unit rate.',
+        'Not proportional — a proportional graph must be a curve that bends toward the origin.',
+        'Not proportional — the line is too steep: a proportional rate is less than 1.',
+        'Proportional only after the first point, because the line starts at (0, 0) where there is no rate.'];
+      return mc(lead('Is the relationship shown by this line proportional?') +
+        lineGraph([{ name: '', points: [[0, 0], [x2, y0]] }], { xmin: 0, xmax: x2, xstep: 1, ymin: 0, xlab: 'x', ylab: 'y', label: 'A straight line that starts at 0 comma 0 and rises to ' + x2 + ' comma ' + y0 }),
+        rightR, sOpts(rightR, wrongR, 3),
+        ['Read the two marked points: the line starts at (0, 0) and reaches (' + x2 + ', ' + y0 + ').',
+          'It is straight and it passes through the origin, so 0 of one quantity goes with 0 of the other.',
+          'The rate is the same everywhere: ' + y0 + ' ÷ ' + x2 + ' = ' + mm + '. So it is proportional, y = ' + mm + 'x.']);
+    }
+    rightR = 'Not proportional — the line is straight, but it crosses the ' + mth('y') + '-axis at ' + bb + ' instead of passing through (0, 0).',
+    wrongR = ['Proportional — the line is straight, and every straight line is a proportional relationship.',
         'Proportional — the two quantities both grow, and the rate between them is ' + mm + '.',
         'Not proportional — the graph is a curve, so no single rate links the quantities.',
         'Not proportional — the line never reaches the horizontal axis, so there is no unit rate.'];
@@ -102820,13 +103124,13 @@ var GEN = (function () {
     if (v <= 6) {
       var first = R(70, 110), later = R(45, 65), hrs = [1, 2, 3, 4],
         pays = hrs.map(function (h) { return first + (h - 1) * later; }),
-        job = pick(['ghost plumber', 'dragon dentist', 'unicorn hairdresser', 'piano tuner for whales']),
+        job = pick(['ghost plumber', 'dragon dentist', 'unicorn hairdresser', 'tuner of whale pianos']),
         rightC = 'No — the first hour costs $' + first + ' but each later hour adds only $' + later + ', so the rates ' + pays.map(function (p, j) { return usd(qround(dv(p, hrs[j]), 2)); }).join(', ') + ' an hour are not all equal.',
         wrongC = ['Yes — the pay goes up by the same amount, $' + later + ', for every extra hour, and that is direct variation.',
           'Yes — the pay and the time both increase, and the rate $' + first + ' an hour holds throughout.',
           'No — the pay per hour rises as the job gets longer, so later hours cost more than earlier ones.',
           'No — pay can never be proportional to time, because a call-out always costs something.'];
-      return mc(lead('A ' + job + '’s pay for 1, 2, 3 and 4 hours is $' + pays.map(f).join(', $') + '. Is the pay proportional to the time?') +
+      return mc(lead('The pay of a ' + job + ' for 1, 2, 3 and 4 hours is $' + pays.map(f).join(', $') + '. Is the pay proportional to the time?') +
         rtab('time (hours)', hrs, 'pay ($)', pays),
         rightC, sOpts(rightC, wrongC, 3),
         ['Look at the differences between consecutive rows: ' + pays.slice(1).map(function (p, j) { return '$' + f(p - pays[j]); }).join(', ') + ' — all $' + later + '.',
@@ -102892,7 +103196,7 @@ var GEN = (function () {
       lineGraph([{ name: who[0], points: [[0, 0], [xm2, m1.mul(xm2).toNumber()]] }, { name: who[1], points: [[0, 0], [xm2, m2.mul(xm2).toNumber()]] }],
         { xmin: 0, xmax: xm2, ymin: 0, ymax: ym2, xlab: 'time (seconds)', ylab: 'distance (metres)', markers: false,
           label: 'Two straight lines from the origin on one grid, the ' + (m1.cmp(m2) > 0 ? who[0] : who[1]) + ' line the steeper of the two' }),
-      diff, [cap1(who[0]) + ' at t = ' + f(tv) + ': ' + mixT(m1) + ' · ' + f(tv) + ' = ' + mixT(y1) + ' metres.',
+      diff, [cap1(who[0]) + ' at t = ' + f(tv) + ': ' + mixT(m1) + ' · ' + f(tv) + ' = ' + mixT(y1) + ' m.',
         cap1(who[1]) + ' at t = ' + f(tv) + ': ' + mixT(m2) + ' · ' + f(tv) + ' = ' + mixT(y2) + ' m.',
         'The difference is ' + mixT(y1.cmp(y2) > 0 ? y1 : y2) + ' − ' + mixT(y1.cmp(y2) > 0 ? y2 : y1) + ' = ' + mixT(diff) + ' m.'],
       { unit: 'metres', fraction: true, lowest: true });
@@ -103217,7 +103521,7 @@ var GEN = (function () {
       var Lp = R(8, 30), Wp = R(6, 28), perim = 2 * (Lp + Wp), roll = pick([5, 6, 8, 10]),
         perM = cents(R(2, 24) * 50), perRoll = perM.mul(roll), costP = perM.mul(perim);
       if (!perRoll.mul(100).isInt() || !costP.mul(100).isInt() || Lp === Wp) return t8l3(v, dep);
-      return num(lead('Dragon-proof fencing costs ' + usd(perRoll) + ' per ' + roll + '-metre roll, and part rolls may be bought. What does fencing a ' + Lp + ' m by ' + Wp + ' m plot cost?'),
+      return num(lead('Dragon-proof fencing costs ' + usd(perRoll) + ' per ' + roll + '-metre roll, and part rolls may be bought. What does fencing ' + art(Lp) + ' ' + Lp + ' m by ' + Wp + ' m plot cost?'),
         costP, ['Work out the length of fence needed first: the perimeter is 2 · ' + Lp + ' + 2 · ' + Wp + ' = ' + f(perim) + ' m.',
           'Cost per metre: ' + usd(perRoll) + ' ÷ ' + roll + ' = ' + usd(perM) + ' a metre.',
           f(perim) + ' m · ' + usd(perM) + ' = ' + usd(costP) + '.'],
@@ -103255,7 +103559,7 @@ var GEN = (function () {
     return num(lead(who + ' types ' + wps + ' words in ' + secs + ' seconds. At that rate, how long does a ' + f(words) + '-word report take? Give the answer in seconds, rounded to the nearest second.'),
       qround(exactS, 0), ['Set it up with words on top on both sides: ' + wps + ' words per ' + secs + ' sec = ' + f(words) + ' words per x.',
         'Cross-multiply: ' + wps + 'x = ' + secs + ' · ' + f(words) + ' = ' + f(secs * words) + '.',
-        'Divide both sides by ' + wps + ': x = ' + f(qround(exactS, 2)) + ' seconds, which is ' + f(qround(exactS, 0)) + ' seconds to the nearest second — about ' + (hrs2 ? hrs2 + ' hours ' + rem + ' minutes' : rem + ' minutes') + '.'],
+        'Divide both sides by ' + wps + ': x = ' + f(qround(exactS, 2)) + ' seconds, which is ' + f(qround(exactS, 0)) + ' seconds to the nearest second — about ' + (hrs2 ? hrs2 + ' ' + un(hrs2, 'hours') + ' ' + rem + ' ' + un(rem, 'minutes') : rem + ' ' + un(rem, 'minutes')) + '.'],
       { unit: 'seconds', tol: qtol(0) });
   }
 
@@ -103301,8 +103605,9 @@ var GEN = (function () {
     }
     var p = R(2, 7), q = R(2, 9), unit2 = pick(['cm', 'm']);
     if (gcd(p, q) !== 1 || p >= q) return t9l1(v, dep);
-    var base = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).sort(function (a, b) { return a - b; }),
-      bigS = base.map(function (k) { return Q.of(k).mul(q).div(2); }), smallS = bigS.map(function (s) { return s.mul(p).div(q); });
+    var base = shuffle([2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3).sort(function (a, b) { return a - b; });
+    if (base[0] + base[1] <= base[2]) return t9l1(v, dep);   // three sides must make a triangle
+    var bigS = base.map(function (k) { return Q.of(k).mul(q).div(2); }), smallS = bigS.map(function (s) { return s.mul(p).div(q); });
     if (bigS.some(function (s) { return !s.mul(10).isInt(); }) || smallS.some(function (s) { return !s.mul(100).isInt(); })) return t9l1(v, dep);
     return listq(lead('Two similar triangles have sides in the ratio ' + rt(p, q) + ', smaller to bigger. The bigger triangle’s sides are ' + bigS.map(f).join(' ' + unit2 + ', ') + ' ' + unit2 + '. Find the smaller triangle’s three sides, in the same order, separated by commas.'),
       smallS, ['The ratio smaller to bigger is ' + rt(p, q) + ', so each small side is ' + mixT(new Q(BigInt(p), BigInt(q))) + ' of the matching bigger side.',
@@ -103324,7 +103629,7 @@ var GEN = (function () {
           'Similar — both rectangles are longer than they are wide, so one is a scaled copy of the other.',
           'Not similar — the sides of the second rectangle are not whole multiples of the first rectangle’s sides.',
           'Not similar — the two rectangles have different perimeters, and similar figures must have equal perimeters.'];
-      return mc(lead('Are a ' + a1 + ' cm by ' + b1 + ' cm rectangle and a ' + f(a2) + ' cm by ' + f(b2) + ' cm rectangle similar? Name the pair that decides it.') +
+      return mc(lead('Are ' + art(a1) + ' ' + a1 + ' cm by ' + b1 + ' cm rectangle and ' + art(f(a2)) + ' ' + f(a2) + ' cm by ' + f(b2) + ' cm rectangle similar? Name the pair that decides it.') +
         similarFigs({ w: a1, h: b1, bottom: a1 + ' cm', side: b1 + ' cm' }, { w: a2.toNumber(), h: b2.toNumber(), bottom: f(a2) + ' cm', side: f(b2) + ' cm' }),
         right, sOpts(right, wrongs, 3),
         ['Test every pair of corresponding sides, not just one.',
@@ -103396,8 +103701,9 @@ var GEN = (function () {
     }
     var pp = R(2, 5), qq = R(3, 8);
     if (gcd(pp, qq) !== 1 || pp >= qq) return t9l3(v, dep);
-    var sides = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 3).sort(function (a, b) { return a - b; }),
-      base2 = sides.map(function (k) { return Q.of(k).mul(pp); }), outS = base2.map(function (s) { return s.mul(qq).div(pp); });
+    var sides = shuffle([2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, 3).sort(function (a, b) { return a - b; });
+    if (sides[0] + sides[1] <= sides[2]) return t9l3(v, dep);   // three sides must make a triangle
+    var base2 = sides.map(function (k) { return Q.of(k).mul(pp); }), outS = base2.map(function (s) { return s.mul(qq).div(pp); });
     if (base2.some(function (s) { return !s.isInt(); }) || outS.some(function (s) { return !s.mul(10).isInt(); })) return t9l3(v, dep);
     return listq(lead('A triangle has sides ' + base2.map(f).join(' cm, ') + ' cm. A similar triangle is drawn at the similarity ratio ' + rt(pp, qq) + ', smaller to bigger, with all three angles unchanged. Give the bigger triangle’s three sides, in the same order, separated by commas.'),
       outS, ['The ratio smaller to bigger is ' + rt(pp, qq) + ', so each new side is ' + mixT(new Q(BigInt(qq), BigInt(pp))) + ' times the matching smaller side.',
@@ -104057,6 +104363,7 @@ var GEN = (function () {
         ['The lines cross where the two rules give the same y: ' + lin2(m1, b1) + ' = ' + lin2(m2, b2) + '.', 'Take ' + m1 + 'x and ' + b2 + ' from both sides: ' + (b1 - b2) + ' = ' + (m2 - m1) + 'x, so x = ' + xm + '.', 'Then y = ' + m1 + ' · ' + xm + ' + ' + b1 + ' = ' + (m1 * xm + b1) + '. Read the crossing on the graph to check.', 'Left of the crossing B is lower; right of it B is higher, because B is steeper.']);
     }
     var a2 = R(1, 4), c2 = a2 + R(2, 5), mm = R(2, 5), b3 = R(20, 40), y1 = b3 - mm * a2, y2 = b3 - mm * c2;
+    if (y2 < 2) return t13l3();   // an icicle is never shorter than nothing
     return fields(lead('A melting icicle is ' + y1 + ' cm long after ' + a2 + ' hour' + (a2 === 1 ? '' : 's') + ' and ' + y2 + ' cm long after ' + c2 + ' hours. It shrinks at a steady rate. Find the slope (cm per hour, negative for shrinking) and the length at the start.'),
       ['slope', 'length at the start (cm)'], eqAll([-mm, b3]), [-mm, b3], 'slope −' + mm + '; start ' + b3 + ' cm',
       ['Rise: ' + y2 + ' − ' + y1 + ' = −' + (y1 - y2) + '. Run: ' + c2 + ' − ' + a2 + ' = ' + (c2 - a2) + '. Slope = −' + (y1 - y2) + ' ÷ ' + (c2 - a2) + ' = −' + mm + '.', 'Start: go back ' + a2 + ' hour' + (a2 === 1 ? '' : 's') + ' from ' + y1 + ' cm, adding ' + mm + ' for each: ' + y1 + ' + ' + (mm * a2) + ' = ' + b3 + ' cm.', 'Rule: ' + ruleY(-mm, b3, 't', 'L') + '.']);
