@@ -3,7 +3,7 @@
 This folder is the Learning Hub as an app. Once it has been opened one time with a connection, it works with **no internet at all**,
 and everything a student does is saved **on that device**. Nothing is sent anywhere: there are no accounts and no tracking.
 
-Build: `b089107964`
+Build: `d58e6de38c`
 
 ## Install from GitHub Pages (the easy way to get https)
 
@@ -100,7 +100,7 @@ and two tools, followed by one card for every level of the Path. The tools are a
 that works for any "a = b · c" relationship: tap the letter you want and the formula for it appears. A level's card also
 shows in its level drawer and at the start of its Dojo warm-up. The tab has a Print button.
 
-Chapters 1 to 6 are drawn rather than written: each card shows the pattern with arrows to what matters, the tactic applied as a
+Chapters 1 to 7 are drawn rather than written: each card shows the pattern with arrows to what matters, the tactic applied as a
 small infographic, and the usual slip beside the right way. Its formula bank shows every formula at once, and the flash
 cards quiz them (flip, then "Again" or "Got it"). The other chapters are redrawn the same way, one at a time. In the Dojo, the
 "Applied formulas" focus drills the same formulas with answers that count.

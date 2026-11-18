@@ -41243,7 +41243,7 @@ var GEN = (function () {
         usd(sale) + ', a real discount of ' + P(realOff),
         ['After the markup: ' + f(Q.of(100 + m).div(100)) + ' · ' + usd(p2) + ' = ' + usd(marked) + '.',
           'After the sale: ' + f(Q.of(100 - m).div(100)) + ' · ' + usd(marked) + ' = ' + usd(sale) + '.',
-          'The saving against ' + usd(p2) + ' is ' + usd(Q.of(p2).sub(sale)) + ', and ' + f(Q.of(p2).sub(sale)) + ' ÷ ' + f(p2) + ' = ' + f(realOff.div(100)) + ' = ' + P(realOff) + ' — not nothing at all.']);
+          'The saving against ' + usd(p2) + ' is ' + usd(Q.of(p2).sub(sale)) + ', and ' + f(Q.of(p2).sub(sale)) + ' ÷ ' + f(p2) + ' = ' + f(realOff.div(100)) + ' = ' + P(realOff) + ': the price is not back where it started.']);
     }
     var T = 50 * R(6, 60), n2 = pick([3, 4, 5, 6]), n1 = 12 - n2, r = pick([10, 20, 25, 50]),
       coefq = Q.of(n1).add(Q.of(n2).mul(Q.of(100 + r).div(100))), mq = Q.of(T).div(coefq), cmq = monCase(mq);
@@ -41281,7 +41281,7 @@ var GEN = (function () {
         (down ? 'decrease' : 'increase') + cc.note + '?'), cc,
         ['The difference is ' + usd(Math.max(a, b)) + ' − ' + usd(Math.min(a, b)) + ' = ' + usd(diff) + '.',
           'Divide by the ORIGINAL value, ' + usd(a) + ': ' + f(diff) + ' ÷ ' + f(a) + ' = ' + approx(Q.of(diff).div(a), 5) + '.',
-          'As a percent that is ' + cc.show + ' — a ' + (down ? 'decrease' : 'increase') + '.']);
+          'As a percent that is ' + cc.show + ' — ' + (down ? 'a decrease' : 'an increase') + '.']);
     }
     var thing = pick(GOODS), old = R(15, 400), nw = R(Math.ceil(old * 0.4), old - 1);
     if (old === nw) return t9l1(v, dep);
@@ -41966,7 +41966,7 @@ var GEN = (function () {
         plural(yr, 'year') + ' and ' + plural(mo, 'month'),
         ['I = Prt: ' + usd(I3) + ' = ' + usd(P3) + ' · ' + f(Q.of(r3).div(100)) + ' · t = ' + usd(perYear) + 't.',
           't = ' + f(I3) + ' ÷ ' + f(perYear) + ' = ' + approx(tq, 4) + ' years.',
-          'That is ' + f(yr) + ' whole years, and the leftover ' + approx(tq.sub(yr), 4) + ' of a year is ' + approx(tq.sub(yr).mul(12), 2) + ' months — ' + plural(mo, 'month') + ' to the nearest month.']);
+          'That is ' + plural(yr, 'whole year') + ', and the leftover ' + approx(tq.sub(yr), 4) + ' of a year is ' + approx(tq.sub(yr).mul(12), 2) + ' months — ' + plural(mo, 'month') + ' to the nearest month.']);
     }
     if (v === 5) {
       var P4 = 1000 * R(2, 12), mrate = Q.of(String(pick(['0.5', '1', '1.25', '1.5', '2']))), nmon = R(2, 5),
@@ -42005,9 +42005,10 @@ var GEN = (function () {
   function wBarPart() {
     var k = pbPick(), c = pick([['$', '', 'A jar holds $' + k.w + ' in all.', 'is worth $' + k.part], ['', ' km', 'A trail is ' + k.w + ' km long.', 'is ' + k.part + ' km long'], ['', ' kg', 'A sack holds ' + k.w + ' kg of rice.', 'weighs ' + k.part + ' kg'], ['', ' pages', 'A book has ' + k.w + ' pages.', 'has ' + k.part + ' pages']]);
     var whole = c[0] + k.w + c[1], part = c[0] + k.part + c[1], ten = k.w / 10;
+    function amt(x) { return c[0] === '$' ? usd(Q.of(x)) : c[0] + f(x) + c[1]; }   // money always has its cents: $7.50
     return wtool(lead(c[2] + ' The whole bar stands for it. Shade the part of the bar that <b>' + c[3] + '</b>.'), 'pbar', { whole: whole, side: 'left' },
       function (st) { return !!st && st.p === k.p; }, { p: k.p }, k.p + '% shaded',
-      ['10% of ' + whole + ' is ' + c[0] + f(ten) + c[1] + ', and 5% is half of that, ' + c[0] + f(ten / 2) + c[1] + '.', part + ' is ' + f(k.part / (ten / 2)) + ' lots of 5%, which is ' + k.p + '%.', 'Check: ' + k.p + '% of ' + whole + ' = ' + f(k.p / 100) + ' · ' + k.w + ' = ' + part + '.']);
+      ['10% of ' + whole + ' is ' + amt(ten) + ', and 5% is half of that, ' + amt(ten / 2) + '.', part + ' is ' + f(k.part / (ten / 2)) + ' lots of 5%, which is ' + k.p + '%.', 'Check: ' + k.p + '% of ' + whole + ' = ' + f(k.p / 100) + ' · ' + k.w + ' = ' + part + '.']);
   }
   // 9-1: what percent was taken off?
   function wBarOff() {
@@ -49178,7 +49179,7 @@ var TAC = (function () {
     rate: { top: 'y', l: 'k', r: 'x', names: ['amount', 'unit rate', 'quantity'], say: 'y = k · x', eg: '$4 per kg, 6 kg → y = 4 · 6 = $24' },
     scale: { top: 'R', l: 's', r: 'D', names: ['real length', 'scale', 'drawing length'], say: 'real = scale · drawing', eg: '1 cm : 5 m, 4 cm on the map → 5 · 4 = 20 m' },
     pct: { top: 'P', l: 'r', r: 'W', names: ['part', 'percent (as a decimal)', 'whole'], say: 'part = percent · whole', eg: '12 is what percent of 48? r = 12 ÷ 48 = 0.25 = 25%' },
-    intr: { top: 'I', l: 'Pr', r: 't', names: ['interest', 'principal × yearly rate', 'time in years'], say: 'I = P · r · t', eg: '$200 at 5% for 3 years → I = 200 · 0.05 · 3 = $30' },
+    intr: { top: 'I', l: 'Pr', r: 't', names: ['interest', 'principal × rate', 'time, in the unit of the rate'], say: 'I = P · r · t', eg: '$200 at 5% for 3 years → I = 200 · 0.05 · 3 = $30' },
     circ: { top: 'C', l: 'π', r: 'd', names: ['circumference', 'π', 'diameter'], say: 'C = π · d', eg: 'C = 12π → d = 12, so r = 6' },
     par: { top: 'A', l: 'b', r: 'h', names: ['area', 'base', 'height'], say: 'A = b · h', eg: 'A = 54, b = 9 → h = 54 ÷ 9 = 6' },
     vol: { top: 'V', l: 'B', r: 'h', names: ['volume', 'base area', 'height'], say: 'V = B · h', eg: 'V = 120, B = 30 → h = 120 ÷ 30 = 4' }
@@ -49565,7 +49566,7 @@ var TVZ = (function () {
   function grid(o) {
     var n = o.head.length, h = o.head.map(function (c) { return '<span class="hd' + (plain(c).length > 6 ? ' wd' : '') + '">' + fmt(c) + '</span>'; }).join('');
     var wordy = o.rows.some(function (r) { return r.some(function (c, i) { return i > 0 && plain(c).length > 3; }); });
-    o.rows.forEach(function (r) { r.forEach(function (c, i) { h += i === 0 ? '<span class="lb' + (plain(c).length <= 2 ? ' sy' : '') + '">' + fmt(c) + '</span>' : '<span class="c' + (wordy && /[A-Za-z]{2}/.test(plain(c)) ? ' wd' : '') + (c === '✓' ? ' hit' : c === '✗' ? ' miss' : c === '+' ? ' pl' : c === '−' ? ' mi' : '') + '">' + fmt(c) + '</span>'; }); });
+    o.rows.forEach(function (r) { r.forEach(function (c, i) { h += i === 0 ? '<span class="lb' + (plain(c).length <= 2 && !/^\d%$/.test(plain(c)) ? ' sy' : '') + '">' + fmt(c) + '</span>' : '<span class="c' + (wordy && /[A-Za-z]{2}/.test(plain(c)) ? ' wd' : '') + (c === '✓' ? ' hit' : c === '✗' ? ' miss' : c === '+' ? ' pl' : c === '−' ? ' mi' : '') + '">' + fmt(c) + '</span>'; }); });
     return '<div class="tv-grid" style="grid-template-columns:auto repeat(' + (n - 1) + ',minmax(34px,auto))">' + h + '</div>';
   }
 
@@ -49817,6 +49818,38 @@ var TVZ = (function () {
     h += arw(x1, ym, x2, ym, 'r-o', 0) + tx((x1 + x2) / 2, ym - 8, o.klab || '· ' + o.k, 'tv-t sm b r-o');
     return svg(300, base + (A.area || B.area ? 38 : 22), h, 'tv-sim', o.alt || ('A ' + (tri ? 'triangle' : 'rectangle') + (A.labs && A.labs.join('') ? ' with sides ' + A.labs.filter(Boolean).join(' and ') : '') + (A.area ? ', area ' + A.area : '') + ', and its copy scaled by ' + plain(String(o.k)) + (B.labs && B.labs.join('') ? ' with sides ' + B.labs.filter(Boolean).join(' and ') : '') + (B.area ? ', area ' + B.area : '') + '.'));
   }
+  // ---------------------------------------------------------------- pieces added for Chapter 7 (the percent bar, the circle graph)
+  // pbar: a percent bar, a double number line. pts: [[percent, amount, role?]] (percent a number; amount text, '?' allowed); max: the
+  // right end in percent (100 by default; above 100 the part past 100% is dashed); shade: [from, to, role] in percent; over: a label
+  // braced over the whole 0–100%; arcs: [[i, j, label]] moves between two marks, drawn under the amounts.
+  function pbar(o) {
+    var pts = o.pts || [], mx = o.max || 100, x0 = 22, x1 = 284, y = 30, hb = 22, h = '', alt = [], i;
+    function X(p) { return x0 + p / mx * (x1 - x0); }
+    var close = pts.map(function (p, k) { return k > 0 && X(p[0]) - X(pts[k - 1][0]) < 34; }), lift = [], up = false;
+    close.forEach(function (c, k) { up = c ? !up : false; lift[k] = up; });   // marks too close: every other label moves out a row
+    var top = (o.over ? 22 : 0) + (lift.some(Boolean) ? 12 : 0); y += top;
+    if (o.over) { var yo = y - 22 - (lift.some(Boolean) ? 12 : 0); h += '<path class="tv-ln thin" d="M' + r1(X(0)) + ' ' + (yo + 6) + 'v-5H' + r1(X(100)) + 'v5"/>' + tx((X(0) + X(100)) / 2, yo - 3, o.over, 'tv-t sm b r-m'); alt.push('100% is ' + o.over); }
+    if (o.shade) { var sr = 'r-' + (o.shade[2] || 'x'); h += '<rect class="tv-b ' + sr + ' fill" x="' + r1(X(o.shade[0])) + '" y="' + y + '" width="' + r1(X(o.shade[1]) - X(o.shade[0])) + '" height="' + hb + '"/>'; alt.push('shaded from ' + o.shade[0] + '% to ' + o.shade[1] + '%'); }
+    h += '<rect class="tv-ln" x="' + X(0) + '" y="' + y + '" width="' + r1(X(Math.min(100, mx)) - X(0)) + '" height="' + hb + '" rx="3" fill="none"/>';
+    if (mx > 100) h += '<path class="tv-ln dash" d="M' + r1(X(100)) + ' ' + y + 'H' + X(mx) + 'V' + (y + hb) + 'H' + r1(X(100)) + '" fill="none"/>';
+    pts.forEach(function (p, k) { var xx = X(p[0]), role = p[2] ? 'r-' + p[2] : 'r-m', d = lift[k] ? 12 : 0; h += '<path class="tv-ln thin" d="M' + r1(xx) + ' ' + (y - 4 - d) + 'V' + (y + hb + 4 + d) + '"/>' + tx(xx, y - 8 - d, p[0] + '%', 'tv-t sm b ' + (p[2] === 'o' ? 'r-o' : 'r-m')) + tx(xx, y + hb + 17 + d, p[1], 'tv-t b ' + role); alt.push(p[0] + '% is ' + plain(String(p[1]))); });
+    var H = y + hb + 24 + (lift.some(Boolean) ? 12 : 0);
+    (o.arcs || []).forEach(function (a) { var xa = X(pts[a[0]][0]), xb = X(pts[a[1]][0]); h += arw(xa, H - 2, xb, H - 2, 'r-o', (xb > xa ? 1 : -1) * 14) + tx((xa + xb) / 2, H + 18, a[2], 'tv-t sm b r-o'); alt.push(pts[a[0]][0] + '% to ' + pts[a[1]][0] + '%: ' + a[2]); });
+    if ((o.arcs || []).length) H += 24;
+    if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
+    return svg(300, H, h, 'tv-pbar', o.alt || ('A percent bar: ' + alt.join('; ') + '.'));
+  }
+  // pie: a circle graph. parts: [[label, percent, role, angle-label?]]; the percents add to 100. A sector's label sits outside it.
+  function pie(o) {
+    var parts = o.parts, cx = 66, cy = 64, R = 54, a = -90, h = '', alt = [], ly0 = cy - (parts.length - 1) * 11;
+    parts.forEach(function (p) { var sw = p[1] * 3.6, a2 = a + sw, rad = Math.PI / 180, x1 = cx + R * Math.cos(a * rad), y1 = cy + R * Math.sin(a * rad), x2 = cx + R * Math.cos(a2 * rad), y2 = cy + R * Math.sin(a2 * rad), role = 'r-' + (p[2] || 'm');
+      h += '<path class="tv-b ' + role + ' fill" d="M' + cx + ' ' + cy + 'L' + r1(x1) + ' ' + r1(y1) + 'A' + R + ' ' + R + ' 0 ' + (sw > 180 ? 1 : 0) + ' 1 ' + r1(x2) + ' ' + r1(y2) + 'Z"/>';
+      var k = parts.indexOf(p), ly = ly0 + k * 22;   // a key beside the circle: a swatch, the name, the percent and the angle
+      h += '<rect class="tv-b ' + role + ' fill" x="140" y="' + r1(ly - 10) + '" width="12" height="12" rx="3"/>' + tx(158, ly, p[0] + '  ' + p[1] + '%' + (p[3] ? '  ' + p[3] : ''), 'tv-t sm b ' + role, 'start'); alt.push(p[0] + ' ' + p[1] + '%' + (p[3] ? ', ' + p[3] : '')); a = a2; });
+    var H = cy + R + 8;
+    if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
+    return svg(300, H, h, 'tv-pie', o.alt || ('A circle graph: ' + alt.join('; ') + '.'));
+  }
   // small line icons for the formula tiles
   var IC = {
     road: '<path class="i1" d="M4 26C14 8 30 34 44 12"/><circle class="i2" cx="4" cy="26" r="3"/><circle class="i2" cx="44" cy="12" r="3"/>',
@@ -49845,12 +49878,14 @@ var TVZ = (function () {
     pm: '<path class="i1" d="M12 13H36M24 3V23"/><path class="i2l" d="M12 33H36"/>',
     bars: '<path class="i1" d="M4 20H44"/><path class="i2l" d="M11 20V8M21 20V30M31 20V12M40 20V26"/>',
     cube: '<path class="i1" d="M8 14l10-8h22v18l-10 8H8Z"/><path class="i2l" d="M8 14H30V32M30 14l10-8"/>',
+    pie: '<circle class="i1" cx="24" cy="18" r="13"/><path class="i2l" d="M24 18V5M24 18L35 25"/>',
+    pctbar: '<rect class="i1" x="6" y="12" width="36" height="12" rx="2"/><path class="i2l" d="M20 8V28"/>',
     graph: '<path class="i1" d="M8 5V31H44"/><path class="i2l" d="M8 31L40 9"/><circle class="i2" cx="24" cy="20" r="3"/>',
     group: '<path class="i1" d="M10 7C4 14 4 24 10 31M27 7C33 14 33 24 27 31"/><circle class="i2" cx="14" cy="19" r="3"/><circle class="i2" cx="23" cy="19" r="3"/><circle class="i2" cx="41" cy="19" r="3"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pbar: pbar, pie: pie, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
@@ -49977,15 +50012,20 @@ var FML = (function () {
   F('slope', 6, { name: 'Slope', f: '{g:m} = {f:{x:rise}|{n:run}}', plain: 'rise ÷ run', lit: ['m', 'r/u'], wrong: [['run ÷ rise', 'u/r'], ['rise · run', 'r*u'], ['rise − run', 'r-u']], sk: ['P57'], leg: [['rise', 'the change in y'], ['run', 'the change in x']], ic: 'stairs', move: 'rate.slope' });
   F('line', 6, { name: 'A line with slope m and start b', f: '{g:y} = {o:m} · {x:x} + {n:b}', plain: 'y = m · x + b', lit: ['y', 'm*x+b'], wrong: [['y = b · x + m', 'b*x+m'], ['y = m · (x + b)', 'm*(x+b)'], ['y = m + x + b', 'm+x+b']], sk: ['P59'], leg: [['m', 'gained for each 1 in x'], ['b', 'the start: y at x = 0']], ic: 'graph' });
   F('startb', 6, { of: 'line', name: 'The start, from a point and the slope', f: '{n:b} = {g:y} − {o:m} · {x:x}', plain: 'b = y − m · x', lit: ['b', 'y-m*x'], wrong: [['b = y + m · x', 'y+m*x'], ['b = m · x − y', 'm*x-y'], ['b = y − m', 'y-m']], sk: ['P59'] });
-  // ---------------------------------------------------------------- Chapter 7 (Dojo only for now)
-  F('part', 7, { name: 'The part', plain: 'percent · whole', lit: ['P', 'r*W'], wrong: [['whole ÷ percent', 'W/r'], ['percent ÷ whole', 'r/W'], ['percent + whole', 'r+W']], sk: ['C8'] });
-  F('pct', 7, { name: 'The percent', plain: 'part ÷ whole', lit: ['r', 'P/W'], wrong: [['whole ÷ part', 'W/P'], ['part · whole', 'P*W'], ['whole − part', 'W-P']], sk: ['C10'] });
-  F('whole', 7, { name: 'The whole', plain: 'part ÷ percent', lit: ['W', 'P/r'], wrong: [['part · percent', 'P*r'], ['percent ÷ part', 'r/P'], ['part − percent', 'P-r']], sk: ['C12'] });
-  F('up', 7, { name: 'After an increase of r', plain: '(1 + r) · original', lit: ['N', '(1+r)*O'], wrong: [['(1 − r) · original', '(1-r)*O'], ['r · original', 'r*O'], ['original + r', 'O+r']], sk: ['C21'] });
-  F('down', 7, { name: 'After a discount of r', plain: '(1 − r) · original', lit: ['N', '(1-r)*O'], wrong: [['(1 + r) · original', '(1+r)*O'], ['r · original', 'r*O'], ['original − r', 'O-r']], sk: ['C21', 'C23'] });
-  F('orig', 7, { name: 'The original, before a discount of r', plain: 'new ÷ (1 − r)', lit: ['O', 'N/(1-r)'], wrong: [['new · (1 − r)', 'N*(1-r)'], ['new · (1 + r)', 'N*(1+r)'], ['new ÷ r', 'N/r']], sk: ['C13'] });
-  F('chg', 7, { name: 'Percent change', plain: 'change ÷ original', lit: ['c', '(N-O)/O'], wrong: [['change ÷ new', '(N-O)/N'], ['new ÷ original', 'N/O'], ['original ÷ change', 'O/(N-O)']], sk: ['C31'] });
-  F('intr', 7, { name: 'Simple interest', plain: 'I = P · r · t', lit: ['I', 'P*r*t'], wrong: [['I = P + r + t', 'P+r+t'], ['I = P · r ÷ t', 'P*r/t'], ['I = P · (r + t)', 'P*(r+t)']], sk: ['C38'] });
+  // ---------------------------------------------------------------- Chapter 7: percent (drawn: tiles, legends and flash cards)
+  F('part', 7, { name: 'The part', f: '{g:part} = {o:percent} · {x:whole}', plain: 'percent · whole', lit: ['P', 'r*W'], wrong: [['whole ÷ percent', 'W/r'], ['percent ÷ whole', 'r/W'], ['percent + whole', 'r+W']], sk: ['C8'], leg: [['percent', 'as a decimal: 29% = 0.29'], ['whole', 'the base: 100%']], ic: 'tri', move: 'pct.base' });
+  F('pct', 7, { of: 'part', name: 'The percent', f: '{o:percent} = {f:{g:part}|{x:whole}}', plain: 'part ÷ whole', lit: ['r', 'P/W'], wrong: [['whole ÷ part', 'W/P'], ['part · whole', 'P*W'], ['whole − part', 'W-P']], sk: ['C10'] });
+  F('whole', 7, { of: 'part', name: 'The whole', f: '{x:whole} = {f:{g:part}|{o:percent}}', plain: 'part ÷ percent', lit: ['W', 'P/r'], wrong: [['part · percent', 'P*r'], ['percent ÷ part', 'r/P'], ['part − percent', 'P-r']], sk: ['C12'] });
+  F('up', 7, { name: 'After an increase of r', f: '{g:new} = ({o:1 + r}) · {x:original}', plain: '(1 + r) · original', lit: ['N', '(1+r)*O'], wrong: [['(1 − r) · original', '(1-r)*O'], ['r · original', 'r*O'], ['original + r', 'O+r']], sk: ['C21'], leg: [['r', 'the percent as a decimal'], ['1 + r', 'the multiplier: 8% up is 1.08']], ic: 'pm', move: 'pct.mult' });
+  F('down', 7, { name: 'After a discount of r', f: '{g:new} = ({o:1 − r}) · {x:original}', plain: '(1 − r) · original', lit: ['N', '(1-r)*O'], wrong: [['(1 + r) · original', '(1+r)*O'], ['r · original', 'r*O'], ['original − r', 'O-r']], sk: ['C21', 'C23'], leg: [['1 − r', 'what is left: 22% off leaves 0.78']], ic: 'pm' });
+  F('orig', 7, { name: 'The original, before a discount of r', f: '{x:original} = {f:{g:new}|{o:1 − r}}', plain: 'new ÷ (1 − r)', lit: ['O', 'N/(1-r)'], wrong: [['new · (1 − r)', 'N*(1-r)'], ['new · (1 + r)', 'N*(1+r)'], ['new ÷ r', 'N/r']], sk: ['C25', 'C13'], leg: [['÷', 'undoes the multiplier'], ['1 + r', 'after an increase: new ÷ (1 + r)']], ic: 'undo' });
+  F('origup', 7, { of: 'orig', name: 'The original, before an increase of r', f: '{x:original} = {f:{g:new}|{o:1 + r}}', plain: 'new ÷ (1 + r)', lit: ['O', 'N/(1+r)'], wrong: [['new · (1 + r)', 'N*(1+r)'], ['new ÷ (1 − r)', 'N/(1-r)'], ['new − r', 'N-r']], sk: ['C25'] });
+  F('sect', 7, { name: 'A sector angle', f: '{g:angle} = {o:percent} · {x:360°}', plain: 'percent · 360°', lit: ['a', 'r*360'], wrong: [['percent ÷ 360°', 'r/360'], ['percent + 360°', 'r+360'], ['360° ÷ percent', '360/r']], sk: ['C17'], leg: [['percent', 'as a decimal'], ['all sectors', '100% and 360°']], ic: 'pie' });
+  F('areac', 7, { name: 'Area after every length changes by r', f: '{g:new area} = ({o:1 + r})² · {x:area}', plain: '(1 + r)² · area', lit: ['B', '(1+r)^2*A'], wrong: [['(1 + r) · area', '(1+r)*A'], ['(1 + 2r) · area', '(1+2*r)*A'], ['(1 + r²) · area', '(1+r^2)*A']], sk: ['C35'], leg: [['1 + r', 'the multiplier for every length']], ic: 'rect' });
+  F('chg', 7, { name: 'Percent change', f: '{g:% change} = {f:{o:new − original}|{x:original}}', plain: 'change ÷ original', lit: ['c', '(N-O)/O'], wrong: [['change ÷ new', '(N-O)/N'], ['new ÷ original', 'N/O'], ['original ÷ change', 'O/(N-O)']], sk: ['C31'], leg: [['original', 'the value before'], ['−', 'a negative change is a decrease']], ic: 'stairs', move: 'pct.change' });
+  F('intr', 7, { name: 'Simple interest', f: '{g:I} = {x:P} · {o:r} · {n:t}', plain: 'I = P · r · t', lit: ['I', 'P*r*t'], wrong: [['I = P + r + t', 'P+r+t'], ['I = P · r ÷ t', 'P*r/t'], ['I = P · (r + t)', 'P*(r+t)']], sk: ['C38'], leg: [['P', 'the principal'], ['r, t', 'rate and time, one unit']], ic: 'clock', move: 'pct.interest' });
+  F('amt', 7, { of: 'intr', name: 'Amount after simple interest', f: '{g:A} = {x:P} + {x:P} · {o:r} · {n:t}', plain: 'A = P + P · r · t', lit: ['A', 'P+P*r*t'], wrong: [['A = P · r · t', 'P*r*t'], ['A = P · (1 + r) · t', 'P*(1+r)*t'], ['A = P + r · t', 'P+r*t']], sk: ['C38'] });
+  F('cmpd', 7, { name: 'Compound growth', f: '{g:A} = {x:P} · ({o:1 + r}){n:ⁿ}', plain: 'A = P · (1 + r)ⁿ', lit: ['A', 'P*(1+r)^n'], wrong: [['A = P · (1 + r · n)', 'P*(1+r*n)'], ['A = P · (1 + r) · n', 'P*(1+r)*n'], ['A = P · rⁿ', 'P*r^n']], sk: ['C38'], leg: [['r', 'the rate for one period'], ['n', 'the number of periods']], ic: 'pow' });
   // ---------------------------------------------------------------- Chapter 8 (Dojo only for now); p stands for π
   F('circ', 8, { name: 'Circumference', plain: 'C = π · d', lit: ['C', 'p*d'], wrong: [['C = π · d²', 'p*d^2'], ['C = 2 · π · d', '2*p*d'], ['C = π + d', 'p+d']], sk: ['G12'] });
   F('carea', 8, { name: 'Area of a circle', plain: 'A = π · r²', lit: ['A', 'p*r^2'], wrong: [['A = 2 · π · r', '2*p*r'], ['A = (π · r)²', '(p*r)^2'], ['A = π · r', 'p*r']], sk: ['G14'] });
@@ -50215,6 +50255,30 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   R('xboth', 'A letter on both sides: add or subtract an x-term on both sides, so the letter is on one side only.', { refines: 'both' });
   R('plans', 'Two plans cost the same where their rules are equal. Before it the lower start wins, after it the lower rate.', { refines: 'cross' });
   R('halfplane', 'y > mx + b: every point above the line; y <: below. ≤ ≥ include the line (solid); < > leave it out (dashed).', { refines: 'circle' });
+  // ---------------------------------------------------------------- Chapter 7: percent (a percent is a rate per 100: Chapter 6's tools with 100 as the base)
+  R.ch = 7;
+  R('per100', 'Percent means per 100: 48% = 48/100 = 0.48. Percent to decimal: ÷ 100. Decimal to percent: · 100.', { refines: 'pctof' });
+  R('build100', 'A fraction as a percent: build a denominator of 100, 1000 or 10,000, or divide the top by the bottom.', { refines: 'scale10' });
+  R('bench', '10% is ÷ 10, 1% is ÷ 100, 50% is ÷ 2, 25% is ÷ 4. Other percents are lots of these.');
+  R('onepct', 'A percentage table: divide down to 1% (or 10%) first, then multiply up to the percent asked.', { refines: 'through1' });
+  R('partpct', 'Part = percent · whole. Percent = part ÷ whole. Whole = part ÷ percent.', { refines: 'tri' });
+  R('over100', 'Above 100% means more than the whole: 150% of 250 is 1.5 · 250.', { refines: 'partpct' });
+  R('sector', 'A sector of p% takes p% of 360°. The sectors add to 100% and to 360°.', { refines: 'rest' });
+  R('mult', 'p + rp = (1 + r)p and p − rp = (1 − r)p: a change of r is one term with one multiplier.', { refines: 'onepm' });
+  R('notadd', 'p + 0.42 is not 42% more: a percent of p multiplies p, so it is p + 0.42p.', { refines: 'mult' });
+  R('origdiv', 'The original before a change: new value ÷ the multiplier.', { refines: 'wholefrom' });
+  R('pctprop', 'Percent proportion: part over whole = percent over 100. Cross-multiply.', { refines: 'crossmul' });
+  R('paidpct', 'After r off, the price paid is the percent left: 25% off pays 75%.', { refines: 'rest' });
+  R('chain', 'Two changes in a row multiply their multipliers. The percents do not add.', { refines: 'mult' });
+  R('samebase', 'Two percents of the same base add: a 5% tax and a 0.75% fee on p give 1.0575p.', { refines: 'chain' });
+  R('pctchg', 'Percent change = change ÷ original. The original is the value before.', { refines: 'partpct' });
+  R('owncap', 'Each change is a percent of the value it starts from: down 20% then up 20% is not back.', { refines: 'pctchg' });
+  R('area1r', 'Every length · (1 + r): the area · (1 + r)², whatever the shape.', { refines: 'perk' });
+  R('samediff', 'The same rise is a bigger percent of a smaller start; the same percent is more of a bigger start.', { refines: 'pctchg' });
+  R('regroup', 'Changes in groups: change each group, add the new totals, then compare with the old total.');
+  R('axis0', 'Read a graph axis first: an axis that does not start at 0 makes a change look bigger.');
+  R('simple', 'Simple interest I = P · r · t, with the rate and the time in the same unit. Amount = P + I.', { refines: 'tri' });
+  R('compound', 'Compounding: each period · (1 + r) on the new amount, P(1 + r)ⁿ.', { refines: 'geo' });
 })();
 
 /* --- tactics_ch1.js --- */
@@ -51130,74 +51194,161 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 })();
 
 /* --- tactics_ch7.js --- */
-/* Skills & Tactics, Chapter 7: Percent. Format: hub/tactics_core.js. */
+/* Skills & Tactics, Chapter 7: Percent. DRAWN cards (TAC.viz; pieces: hub/tactics_viz.js; formulas: hub/formulas.js).
+   Thread plan: hub/staging/threads_ch7.md. Every level's problem types: hub/staging/briefs/ch7_types.md (grouped by form).
+   A percent is a rate per 100: the moves are Chapter 6's (ratio table, triangle, proportion, scale factor), the arithmetic Chapter 4's.
+   Every calculation a card shows is listed in v or re-computed from its picture. */
 (function () {
   'use strict';
-  var L = function (k, t, m, ex, w, o) { TAC.lv(7, k, t, m, ex, w, o); };
+  var V = function (k, o) { TAC.viz(7, k, o); };
+
   TAC.ch(7, {
-    lede: 'Percent of a quantity, discounts and increases, finding the original, percentage of change, and simple interest. One relationship does most of the work: part = percent · whole.',
+    lede: 'Percent as a rate per 100: forms, benchmarks, the part, the percent and the whole, multipliers, the original before a change, percent change, area change and interest.',
     tools: ['tri:pct', 'tri:intr', 'trans'],
     top: [
-      { h: 'Percent, decimal, fraction', rule: '21% = 21/100 = 0.21', body: 'Percent means “per hundred”. Percent to decimal: move the point two places left. Decimal to percent: two places right. Fraction to percent: divide, then read the decimal as a percent.', watch: '0.5% is 0.005, not 0.5. And 262.5% is 2.625, more than the whole.', v: [['21/8', '2625/1000']] },
-      { h: 'Benchmark percents in your head', rule: '10% → ÷ 10     1% → ÷ 100     50% → half     25% → quarter', body: 'Build any percent from the easy ones: 20% is two lots of 10%, 5% is half of 10%, 15% is 10% plus 5%, 80% is eight lots of 10%. When a part is known, find 1% first and build up.', watch: '125% of something is 1075, so 1% is 1075 ÷ 125 = 8.6 and the whole is 860.', v: [['2*94', '188'], ['1075/125*100', '860']] },
-      { h: 'part = percent · whole', rule: 'P = r · W      r = P ÷ W      W = P ÷ r', body: 'Write the percent as a decimal. Find the part: multiply. Find the percent: part ÷ whole. Find the whole: part ÷ percent. The whole is what comes after the word “of”.', watch: 'The percent proportion says the same thing: part/whole = percent/100.', v: [['(905/1000)*840', '7602/10'], ['4288/10/(32/100)', '1340']] },
-      { h: 'One multiplier for a change', rule: 'up r → × (1 + r)      down r → × (1 − r)', body: '8% off leaves 92%: multiply by 0.92. A 2% rise makes 102%: multiply by 1.02. Sales tax of 5.5%: multiply by 1.055. One multiplication gives the new amount directly.', watch: '0.08C is the discount. 0.92C is the price.', v: [['1-8/100', '92/100'], ['(102/100)*5489/100', '559878/10000']] },
-      { h: 'Find the original: write the equation, divide', rule: '0.35p = 148.75   →   p = 148.75 ÷ 0.35', body: 'Call the original p. Write what happened to it with a multiplier, set that equal to the amount you know, and divide by the multiplier.', watch: 'Do not take 65% of the sale price and add it back. The percent was of the original.', v: [['(35/100)*425', '14875/100']] },
-      { h: 'Two changes: multiply the multipliers', rule: '20% off, then 35% off  →  0.8 · 0.65 = 0.52', body: 'Each change applies to the amount left by the one before. Multiply the multipliers to get one multiplier for the whole chain. Then read it: 0.52 means 48% off in all.', watch: 'Percents of different amounts never add: 20% + 35% is not 55% here. And +40% then −40% does not return to the start.', v: [['(8/10)*(65/100)', '52/100'], ['(14/10)*(6/10)', '84/100']] },
-      { h: 'Percentage of change', rule: 'change ÷ ORIGINAL', body: 'Subtract to find the change. Divide by the value it started from. Read the decimal as a percent. For a change in area, compare the areas, not the sides.', watch: 'Always the original underneath, never the new value. The same $12 rise is 40% of $30 but 13.3% of $90.', v: [['(281-182)/281', '99/281'], ['12/30', '40/100']] },
-      { h: 'Simple interest', rule: 'I = P · r · t      total = P + I', body: 'P is the principal, r the yearly rate as a decimal, t the time in years. Months go over 12. To find the principal from a final balance: P(1 + rt) = balance.', watch: '18 months is 1.5 years. And the question may want the total, not just the interest.', v: [['14200*(75/1000)*5', '5325'], ['14200+5325', '19525'], ['7000*(1+(2/100)*4)', '7560']] }
-    ],
-    bank: [['PART', 'percent · whole'], ['PERCENT', 'part ÷ whole'], ['WHOLE', 'part ÷ percent'], ['PROPORTION', 'part/whole = percent/100'], ['UP r', '× (1 + r)'], ['DOWN r', '× (1 − r)'], ['TAX r', '× (1 + r)'], ['ORIGINAL', 'new ÷ multiplier'], ['TWO CHANGES', 'multiply the multipliers'], ['% CHANGE', 'change ÷ original'], ['CIRCLE GRAPH', 'percent · 360°'], ['SIDES × k', 'area × k²'], ['INTEREST', 'I = P · r · t'], ['MONTHS', 't = months ÷ 12']]
+      { h: 'Percent = per 100', vis: [['flow', ['48%', { op: '÷ 100' }, { t: '0.48', r: 'g' }]], ['flow', ['{f:11|80}', { op: 'both · 125' }, '{f:1375|10,000}', { op: '' }, { t: '13.75%', r: 'g' }]], ['flow', ['{f:1|12}', { op: '1 ÷ 12, · 100' }, { t: '≈ 8.3%', r: 'g' }]]],
+        trap: ['48% = 4.8', '÷ 100 is two places left:   0.48'], alt: 'Percent means per 100: divide by 100 for the decimal, multiply by 100 for the percent. For a fraction, build a denominator of 100, 1000 or 10,000, or divide and round at the end.', v: [['48/100', '0.48'], ['80*125', '10000'], ['11*125', '1375']] },
+      { h: 'Benchmarks and 1%', vis: [['pbar', { pts: [[0, '0'], [10, '82', 'x'], [60, '492', 'g'], [100, '820']], arcs: [[1, 2, '· 6']] }], ['rt', { rows: [['%', '25', ['1', 'x'], '30'], ['amount', '175', ['7', 'x'], ['210', 'g']]], ops: [[0, 1, '÷ 25'], [1, 2, '· 30']] }]],
+        trap: ['10% of 820 = 8.2', '10% is ÷ 10:   82'], alt: 'Ten percent is a tenth and one percent a hundredth; other percents are lots of them. With one entry known, find 1 percent first.', v: [['820/10', '82'], ['82*6', '492'], ['175/25', '7'], ['7*30', '210']] },
+      { h: 'Part = percent · whole', vis: [['tri', 'pct', 'top'], ['flow', ['40.4% of 4150 cm', { op: '0.404 · 4150' }, { t: '1676.6 cm', r: 'g' }]], ['flow', ['20.4 m of 170 m', { op: '20.4 ÷ 170' }, { t: '12%', r: 'g' }]]],
+        trap: ['170 ÷ 20.4 ≈ 833%', 'part over whole:   20.4 ÷ 170'], alt: 'The part is the percent times the whole. Cover what you want on the triangle: the percent is part divided by whole, and the whole is part divided by percent.', v: [['0.404*4150', '1676.6'], ['20.4/170', '0.12']] },
+      { h: 'A change is one multiplier', vis: [['pbar', { pts: [[0, '$0'], [78, '$102.96', 'g'], [100, '$132']], shade: [78, 100, 'w'], say: '22% off leaves 78%' }], ['flow', ['C + 0.42C', { op: '' }, { t: '1.42C', r: 'g' }]]],
+        trap: ['C + 0.42', 'the percent multiplies C:   C + 0.42C'], alt: 'An increase of r multiplies by 1 plus r and a decrease by 1 minus r, as one multiplier: 22 percent off leaves 78 percent, so multiply by 0.78.', v: [['132*0.78', '102.96'], ['1+0.42', '1.42']] },
+      { h: 'The original: ÷ the multiplier', vis: [['flow', ['40% off, now $189', { op: '' }, { t: '0.6p = 189', r: 'x' }]], ['steps', [['{n:0.6}p', '189'], { op: '÷ 0.6' }, ['p', '315', 'ans']]]],
+        trap: ['189 + 40% = $264.60', '40% is of p:   ÷ 0.6'], alt: 'The value after a change is the multiplier times the original, so divide the new value by the multiplier. Adding the percent back to the new value is wrong.', v: [['189/0.6', '315'], ['189*1.4', '264.6']] },
+      { h: 'Part over whole = % over 100', vis: [['prop', { l: ['97.65', 'p'], r: ['35', '100'], x: 'p', val: '279' }]],
+        trap: ['{f:97.65|p} = {f:65|100}', 'the price paid is 35%:   {f:35|100}'], alt: 'The percent proportion puts the part over the whole and the percent over 100. After 65 percent off, the price paid is 35 percent. Cross-multiply and divide.', v: [['97.65*100', '9765'], ['9765/35', '279']] },
+      { h: 'Two changes multiply', vis: [['flow', ['35% off, then 5% off', { op: '0.65 · 0.95' }, '0.6175p', { op: '' }, { t: '38.25% off', r: 'g' }]], ['flow', ['$600, −10%, +10%', { op: '0.9 · 1.1' }, { t: '$594', r: 'g' }]], ['flow', ['5% tax + 0.75% fee, both of p', { op: 'same base: add' }, { t: '1.0575p', r: 'g' }]]],
+        trap: ['35% + 5% = 40% off', '0.65 · 0.95:   38.25% off'], alt: 'Changes in a row multiply their multipliers, and each is a percent of its own starting value: the percents do not add, and a fall and an equal rise do not cancel. Two percents of the same base do add.', v: [['0.65*0.95', '0.6175'], ['600*0.9*1.1', '594'], ['1+0.05+0.0075', '1.0575']] },
+      { h: 'Change ÷ the value before', vis: [['pbar', { pts: [[0, '$0'], [70, '$56', 'x'], [100, '$80']], shade: [70, 100, 'w'], say: '$24 off is 30% of $80' }], ['flow', ['$57 → $54', { op: '3 ÷ 57' }, { t: '≈ 5.3% down', r: 'g' }]]],
+        trap: ['3 ÷ 54 ≈ 5.6%', 'the value before:   3 ÷ 57'], alt: 'Percent change is the change divided by the original value, the one before the change. The same change is a bigger percent of a smaller start.', v: [['80-56', '24'], ['24/80', '0.3'], ['57-54', '3']] },
+      { h: 'Area: · (1 + r)²', vis: [['sim', { a: { w: 4, h: 4, labs: ['s', 's'], area: 's²' }, k: '1.25', klab: '· 1.25', b: { labs: ['1.25s', '1.25s'], area: '1.5625s²' } }], ['flow', ['1.25 · 1.25', { op: '− 1' }, { t: '56.25% more', r: 'g' }]]],
+        trap: ['sides up 25%:   area up 25%', '· 1.25 twice:   up 56.25%'], alt: 'When every length grows by the same percent, the area is multiplied by the multiplier squared, for any shape. Compare areas, not sides.', v: [['1.25*1.25', '1.5625']] },
+      { h: 'Simple interest: I = P · r · t', vis: [['tri', 'intr', 'top'], ['flow', ['$4000 · 0.035 · 3', { op: '' }, '$420', { op: '+ $4000' }, { t: '$4420', r: 'g' }]]],
+        trap: ['pay back $420', 'principal plus interest:   $4420'], alt: 'Simple interest is principal times rate times time, with the rate and the time in the same unit. The total is the principal plus the interest.', v: [['4000*0.035*3', '420'], ['4000+420', '4420']] }
+    ]
   });
 
   // Unit 1: Percent, Decimal, Fraction
-  L('1-1', 'Percent means “per hundred”', ['Percent to decimal: move the point two places left.', 'Decimal to percent: two places right.', 'A hundredths fraction reads straight off: 21/100 = 21%.'], '21/100 = 0.21 = 21%', '7% is 0.07, not 0.7.', { v: [['21/100', '21/100']] });
-  L('1-2', 'Make the denominator a power of ten', ['Multiply top and bottom to reach 10, 100 or 1000.', 'Read it as a decimal.', 'Move the point two places to get the percent.'], '21/8 = 2625/1000 = 2.625 = 262.5%   (8 · 125 = 1000)', 'A fraction above 1 is more than 100%.', { v: [['21*125', '2625'], ['21/8', '2625/1000']] });
-  L('1-3', 'Divide, then round the percent', ['Divide the numerator by the denominator.', 'Keep one more decimal place than you need.', 'Move the point two places, then round.'], '1/18 = 0.05556… = 5.556…%  →  5.6% to the nearest tenth of a percent', 'A tenth of a percent is the third decimal place of the decimal.');
+  V('1-1', { th: ['form', 'scale'], from: '6:1-1', r: ['per100', 'places'], t: 'Percent = per 100: ÷ 100 or · 100', spot: ['cue', [['48', 'x'], ['%', 'o', 'per 100', 'd']]],
+    doit: [['flow', ['48%', { op: '÷ 100' }, '{f:48|100}', { op: '' }, { t: '0.48', r: 'g' }]], ['flow', ['0.19', { op: '· 100' }, { t: '19%', r: 'g' }]], ['flow', ['0.69', { op: '69 hundredths' }, { t: '{f:69|100}', r: 'g' }]]],
+    trap: ['48% = 4.8', '÷ 100 is two places left:   0.48'], alt: 'Percent means per 100. A percent becomes a decimal by dividing by 100, two places to the left; a decimal becomes a percent by multiplying by 100. Hundredths can be written over 100.', v: [['48/100', '0.48'], ['0.19*100', '19'], ['0.69*100', '69']] });
+  V('1-2', { th: ['form', 'scale'], from: '1-1', r: ['build100', 'scale10', 'per100'], t: 'Build 100, 1000 or 10,000 below', spot: ['flow', ['{f:11|80}', { op: 'both · 125' }, '{f:1375|10,000}', { op: '' }, { t: '13.75%', r: 'g' }]],
+    doit: [['flow', ['20.2%', { op: '{f:20.2|100}, both · 10' }, '{f:202|1000}', { op: '' }, { t: '0.202', r: 'g' }]], ['flow', ['0.69139', { op: '· 100' }, { t: '69.139%', r: 'g' }]]],
+    trap: ['20.2% = 2.02', '÷ 100:   0.202'], alt: 'Multiply top and bottom by the same number to make the denominator 100, 1000 or 10,000; then read the decimal and the percent. A decimal percent is cleared the same way: 20.2 over 100 is 202 over 1000.', v: [['80*125', '10000'], ['11*125', '1375'], ['1375/10000', '0.1375'], ['20.2*10', '202'], ['202/1000', '0.202'], ['0.69139*100', '69.139']] });
+  V('1-3', { th: ['form'], from: '1-2', r: ['build100', 'round', 'per100'], t: 'Divide top by bottom; round last', spot: ['flow', ['{f:1|12}', { op: '1 ÷ 12' }, '0.0833…', { op: '· 100' }, { t: '≈ 8.3%', r: 'g' }]],
+    doit: [['flow', ['{f:7|8}', { op: '7 ÷ 8' }, '0.875', { op: '· 100' }, { t: '87.5%', r: 'g' }]], ['flow', ['{f:10|27} = 0.37037…', { op: 'four digits' }, '≈ 0.3704', { op: '· 100' }, { t: '≈ 37.04%', r: 'g' }]]],
+    trap: ['{f:1|12} ≈ 0.08 = 8%', 'keep the digits, round last:   ≈ 8.3%'], alt: 'When no power of ten fits the denominator, divide the top by the bottom, multiply by 100, and round only at the end, to the place asked. A division that ends gives an exact percent.', v: [['7/8', '0.875'], ['0.875*100', '87.5']] });
   // Unit 2: Benchmark Percents
-  L('2-1', 'Build percents from 10% and 1%', ['10%: divide by 10. 1%: divide by 100.', '50% is half, 25% is a quarter.', 'Build the rest: 20% = 2 · 10%, 5% = half of 10%.'], 'Of 940:  50% is 470,  10% is 94,  20% is 188,  80% is 8 · 94 = 752', '80% is also 100% − 20%: 940 − 188 = 752.', { v: [['2*94', '188'], ['8*94', '752'], ['940-188', '752']] });
-  L('2-2', 'From a part, find 1% first', ['Divide the known amount by its percent to get 1%.', 'Multiply 1% by any percent you need.', '100 lots of 1% is the whole.'], '125% is 1075:  1% is 1075 ÷ 125 = 8.6,  so 100% is 860 and 40% is 344', 'The amount given is not always 100%.', { v: [['1075/125', '86/10'], ['40*86/10', '344']] });
-  L('2-3', 'New price in your head', ['Find the change with benchmark percents.', 'Discount: subtract it. Increase or tax: add it.', 'Check the direction: did the price go the right way?'], '$205 raised by 40%:  10% is 20.50, so 40% is 82.  205 + 82 = $287', 'The answer to “the new price” is not the 82.', { v: [['205*(14/10)', '287']] });
+  V('2-1', { th: ['bar', 'scale'], from: '1-1', r: ['bench', 'pctof'], t: 'Benchmarks: 10%, 1%, 50%, 25%', spot: ['pbar', { pts: [[0, '0'], [10, '82', 'x'], [60, '492', 'g'], [100, '820']], arcs: [[1, 2, '· 6']] }],
+    doit: [['grid', { head: ['percent', 'of a number'], rows: [['10%', '÷ 10'], ['1%', '÷ 100'], ['50%', '÷ 2'], ['25%', '÷ 4']] }], ['flow', ['120% of 820', { op: '10% is 82, · 12' }, { t: '984', r: 'g' }]], ['flow', ['$70 of $200', { op: '5% is $10, 7 lots' }, { t: '35%', r: 'g' }]]],
+    trap: ['10% of 820 = 8.2', '10% is ÷ 10:   82'], alt: 'Find an easy percent first: 10% is a tenth, 1% a hundredth, 50% a half, 25% a quarter. Other percents, even above 100%, are lots of these. To find the percent of an amount, count lots of 5% or 10%.', v: [['820/10', '82'], ['82*6', '492'], ['82*12', '984'], ['1.2*820', '984'], ['200/20', '10'], ['70/10', '7'], ['7*5', '35'], ['70/200', '0.35'], ['820/100', '8.2']] });
+  V('2-2', { th: ['bar', 'scale'], from: '6:1-2', r: ['onepct', 'through1'], t: 'One entry known: go through 1%', spot: ['pbar', { pts: [[0, '0'], [25, '175', 'x'], [100, '700', 'g'], [150, '1050', 'g']], max: 150 }],
+    doit: [['rt', { rows: [['%', '25', ['1', 'x'], '30', '150'], ['amount', '175', ['7', 'x'], ['210', 'g'], ['1050', 'g']]], ops: [[0, 1, '÷ 25'], [1, 2, '· 30'], [1, 3, '· 150']] }], ['flow', ['60 is 250% of ?', { op: '1% is 60 ÷ 250' }, '0.24', { op: '· 100' }, { t: '24', r: 'g' }]]],
+    trap: ['250% of ? is 60:   bigger than 60', 'above 100%:   the number is smaller, 24'], alt: 'With one amount known, find 1% by dividing, then any percent is that many lots of 1%. A percent above 100 is more than the whole, so the whole is smaller than the amount.', v: [['175/25', '7'], ['7*100', '700'], ['60/250', '0.24'], ['2.5*24', '60']] });
+  V('2-3', { th: ['bar', 'scale'], from: '2-1', r: ['bench', 'paidpct'], t: 'Mental: the change, then the price', spot: ['flow', ['$410, 40% off', { op: '10% is 41, · 4' }, '$164 off', { op: '410 − 164' }, { t: '$246', r: 'g' }]],
+    doit: [['pbar', { pts: [[0, '$0'], [60, '$246', 'g'], [100, '$410']], shade: [60, 100, 'w'], say: '40% off leaves 60%' }], ['flow', ['$450 + 15% tax', { op: '10% is 45, 5% is 22.50' }, '$67.50', { op: '450 + 67.50' }, { t: '$517.50', r: 'g' }]]],
+    trap: ['40% off $410:   $410 − $40', '40% of $410 is $164'], alt: 'Work out the change from a benchmark, then take it off or add it on. A discount of 40% leaves 60% of the price; a tax of 15% is 10% plus 5% of the price, added on.', v: [['410/10*4', '164'], ['410-164', '246'], ['0.6*410', '246'], ['450/10', '45'], ['45/2', '22.5'], ['45+22.5', '67.5'], ['0.15*450', '67.5'], ['450+67.5', '517.5']] });
   // Unit 3: Part, Total, Percentage
-  L('3-1', 'Part = percent · total', ['Write the percent as a decimal.', 'Multiply by the total.', 'Round to what makes sense: whole seats, cents.'], '90.5% of 840 seats:  0.905 · 840 = 760.2  →  760 seats', 'Check the size: a bit over 90% of 840 should be a bit over 756.', { v: [['(905/1000)*840', '7602/10']], tool: 'tri:pct' });
-  L('3-2', 'What percent is it? Part ÷ whole', ['Divide the part by the whole.', 'Read the decimal as a percent.', 'What is left is the whole minus the part.'], '7.4% of 1560 members missed:  0.074 · 1560 = 115.44 → 115,  so 1560 − 115 = 1445 came', 'The whole is the number after “of”.', { v: [['(74/1000)*1560', '11544/100'], ['1560-115', '1445']] });
-  L('3-3', 'A percent above 100', ['Turn the fraction into a decimal, then a percent.', 'More than the whole means more than 100%.', 'Use it as a multiplier.'], '13/8 = 1.625 = 162.5%,  and 1.625 · 8 m = 13 m', '“162.5% of” and “162.5% more than” are different amounts.', { v: [['13/8', '1625/1000'], ['(13/8)*8', '13']] });
+  V('3-1', { th: ['tri'], from: '6:4-2', r: ['partpct', 'per100', 'round'], t: 'Part = percent · whole', spot: ['cue', [['40.4%', 'o', 'as 0.404'], ['of', ''], ['4150 cm', 'x', 'the whole', 'd']]],
+    doit: [['tri', 'pct', 'top'], ['flow', ['0.404 · 4150', { op: '' }, { t: '1676.6 cm', r: 'g' }]], ['flow', ['88.1% of 480 seats', { op: '0.881 · 480' }, '422.88', { op: 'whole seats' }, { t: '≈ 423', r: 'g' }]]],
+    trap: ['40.4% = 0.0404', '÷ 100:   0.404'], alt: 'The part is the percent, as a decimal, times the whole. Cover the part on the triangle: percent times whole. The part keeps the unit of the whole; a count is rounded to a whole number.', v: [['0.404*4150', '1676.6'], ['0.881*480', '422.88']], tool: 'tri:pct' });
+  V('3-2', { th: ['tri'], from: '3-1', r: ['partpct', 'unitless', 'round'], t: 'Percent = part ÷ whole', spot: ['flow', ['20.4 m of 170 m', { op: 'part ÷ whole' }, '0.12', { op: '· 100' }, { t: '12%', r: 'g' }]],
+    doit: [['tri', 'pct', 'l'], ['flow', ['$34 off a $61 price', { op: '34 ÷ 61' }, { t: '≈ 55.7% off', r: 'g' }]], ['flow', ['5.6% of 630 away', { op: '0.056 · 630' }, '35.28 ≈ 35', { op: '630 − 35' }, { t: '595 at work', r: 'g' }]]],
+    trap: ['170 ÷ 20.4 ≈ 833%', 'part over whole:   20.4 ÷ 170'], alt: 'The percent is the part divided by the whole: the units cancel, then multiply by 100. A discount is the part of the old price. To find the rest, take the rounded part from the whole.', v: [['20.4/170', '0.12'], ['0.056*630', '35.28'], ['630-35', '595']], tool: 'tri:pct' });
+  V('3-3', { th: ['scale'], from: '6:10-1', r: ['over100', 'perk', 'periarea', 'round'], t: 'Above 100%; compare the areas', spot: ['flow', ['{f:3|2} of 250 g', { op: '{f:3|2} = 150%' }, '1.5 · 250', { op: '' }, { t: '375 g', r: 'g' }]],
+    doit: [['sim', { a: { w: 2, h: 1.2, labs: ['14', ''] }, k: '3.5', klab: '· 3½', b: { labs: ['49', ''] } }], ['flow', ['14 : 49 = 2 : 7', { op: 'square both' }, '4 : 49', { op: '4 ÷ 49' }, { t: '≈ 8.2%', r: 'g' }]], ['flow', ['28 · 22 = 616,  36 · 28 = 1008', { op: 'not similar: 616 ÷ 1008' }, { t: '≈ 61.11%', r: 'g' }]]],
+    trap: ['area: 2 ÷ 7 ≈ 28.6%', 'areas:   2² : 7², so 4 ÷ 49'], alt: 'Three halves is 150%, more than the whole. Similar figures: the areas compare as the squares of the sides, 4 to 49, not 2 to 7. Figures that are not similar: work out each area, then divide.', v: [['3/2', '1.5'], ['1.5*250', '375'], ['14/7', '2'], ['49/7', '7'], ['2^2', '4'], ['7^2', '49'], ['28*22', '616'], ['36*28', '1008']] });
   // Unit 4: Circle Graphs
-  L('4-1', 'Sectors as fractions', ['Think of the sector as a fraction of the circle.', 'Half is 50%, a quarter 25%, a tenth 10%.', 'Parts ÷ total parts gives the percent of a figure.'], '1 of 4 equal parts is coloured:  1/4 = 0.25 = 25%', 'The sectors together must make 100%.');
-  L('4-2', 'Count → percent → angle', ['Percent = count ÷ total.', 'Angle = that percent of 360°.', 'Check: the percents make 100 and the angles make 360°.'], '200 of 1000 books:  200 ÷ 1000 = 20%,  and 0.2 · 360° = 72°', '20% is not 20°. A full circle is 360°.', { v: [['(200/1000)*360', '72']] });
-  L('4-3', 'Find the total first', ['Add the counts to get the total.', 'Each percent is its count ÷ that total.', 'A bar graph shows the counts; a circle graph shows shares of the whole.'], 'Counts 70, 80, 90, 40:  total 280,  so 70 is 70 ÷ 280 = 25%', 'A circle graph cannot show the counts unless the total is given.', { v: [['70+80+90+40', '280'], ['70/280', '25/100']] });
+  V('4-1', { th: ['bar'], from: '4:9-3', r: ['sector', 'rest'], t: 'The sectors make 100%', spot: ['pie', { parts: [['yak', 31.25, 'x'], ['llama', 62.5, 'n'], ['camel', 6.25, 'g']] }],
+    doit: [['flow', ['31.25% + 62.5%', { op: '' }, '93.75%', { op: '100% − 93.75%' }, { t: 'camel 6.25%', r: 'g' }]], ['flow', ['3 of 8 equal parts', { op: '3 ÷ 8' }, { t: '37.5%', r: 'g' }]]],
+    trap: ['camel is 93.75%', 'the rest of 100%:   6.25%'], alt: 'The sectors of a circle graph make the whole, 100%. A missing sector is 100% minus the others. A figure cut into equal parts is the coloured parts over all the parts.', v: [['31.25+62.5', '93.75'], ['100-93.75', '6.25'], ['3/8', '0.375']] });
+  V('4-2', { th: ['bar'], from: '4-1', r: ['sector', 'partpct', 'round'], t: 'A sector: percent of 360°', spot: ['pie', { parts: [['mustard', 14, 'x', '≈ 50°'], ['garlic', 19.4, 'o', '≈ 70°'], ['other', 66.6, 'm', '≈ 240°']] }],
+    doit: [['flow', ['14% of 360°', { op: '0.14 · 360' }, '50.4°', { op: '' }, { t: '≈ 50°', r: 'g' }]], ['flow', ['255 of 1000', { op: '÷ 1000' }, '25.5%', { op: '· 360°' }, { t: '91.8° ≈ 92°', r: 'g' }]], ['flow', ['50 + 70 + 240', { op: 'check' }, { t: '360° ✓', r: 'g' }]]],
+    trap: ['14% is 14°', 'p% of 360°:   0.14 · 360 ≈ 50°'], alt: 'A sector of p percent takes p percent of 360 degrees. A count becomes a percent of the total first. The angles add up to 360 degrees.', v: [['0.14*360', '50.4'], ['255/1000', '0.255'], ['0.255*360', '91.8'], ['50+70+240', '360']] });
+  V('4-3', { th: ['bar'], from: '4-2', r: ['partpct', 'sector', 'parts', 'round'], t: 'The total first, then the part', spot: ['bar', { rows: [{ parts: [['mystery 29', 29, 'x'], ['22', 22, 'm'], ['44', 44, 'm']], over: [[0, 3, 'the total first:  29 + 22 + 44 = 95', 'm']] }] }],
+    doit: [['flow', ['mystery: 29 of 95', { op: '29 ÷ 95' }, '0.3052…', { op: '' }, { t: '≈ 31%', r: 'g' }]], ['flow', ['0.3052… · 360°', { op: '' }, '109.89…°', { op: '' }, { t: '≈ 110°', r: 'g' }]], ['flow', ['150 of 1020', { op: '÷ 1020' }, { t: '≈ 14.7%', r: 'g' }]], ['grid', { head: ['shows', 'bar', 'circle'], rows: [['the counts', '✓', '✗'], ['share of the whole', '✗', '✓']] }]],
+    trap: ['29 ÷ 44 ≈ 66%', 'divide by the total:   29 ÷ 95'], alt: 'When only the parts are given, add them for the total. A part divided by the total gives its percent, and that percent of 360 degrees its angle. A bar graph shows the counts, a circle graph the shares.', v: [['29+22+44', '95']] });
   // Unit 5: Expressions and Multipliers
-  L('5-1', 'A discount as one term', ['p% of C is the decimal times C.', 'After the discount: C minus that.', 'C is 1 · C, so combine the two terms.'], '8% off C:  C − 0.08C = 0.92C', '0.08C is what comes off. 0.92C is what you pay.', { v: [['c-(8/100)*c', '(92/100)*c', { c: 50 }]] });
-  L('5-2', 'An increase: multiply by 1 + r', ['A rise of r makes the new amount 100% + r.', 'Write that as one decimal.', 'Multiply, then round to the cent.'], '$54.89 up 2%:  1.02 · 54.89 = 55.9878  →  $55.99', '1.02, not 1.2: 2% is two hundredths.', { v: [['(102/100)*(5489/100)', '559878/10000']] });
-  L('5-3', 'Discount and tax multipliers', ['Discount of r: multiply by 1 − r.', 'Tax of r: multiply by 1 + r.', 'Round money to the nearest cent at the end.'], '$286.08 with 5.5% tax:  1.055 · 286.08 = 301.8144  →  $301.81', '5.5% is 0.055, so the multiplier is 1.055.', { v: [['(1055/1000)*(28608/100)', '3018144/10000']] });
+  V('5-1', { th: ['words', 'scale'], from: '4:8-1', r: ['pctof', 'mult', 'like'], t: 'p − 0.479p is one term: 0.521p', spot: ['cue', [['p', 'x'], ['−', ''], ['0.479p', 'o', '47.9% of p', 'd']]],
+    doit: [['map', [['47.1% of w', 'm'], ['112.5% of p', 'm'], ['p discounted by 47.9%', 'm']], [['0.471w', 'g'], ['1.125p', 'g'], ['p − 0.479p', 'x']], [0, 1, 2]], ['flow', ['p − 0.479p', { op: 'p is 1p' }, '1p − 0.479p', { op: '1 − 0.479' }, { t: '0.521p', r: 'g' }]]],
+    trap: ['p − 0.479p = 0.479', 'p is 1p:   0.521p'], alt: 'A percent of a quantity is the decimal times the letter: 47.1% of w is 0.471w. Taking it off leaves one term: p is 1p, so p minus 0.479p is 0.521p. A percent above 100 gives a multiplier above 1.', v: [['1-0.479', '0.521'], ['47.1/100', '0.471'], ['112.5/100', '1.125']], tool: 'trans' });
+  V('5-2', { th: ['scale'], from: '5-1', r: ['mult', 'notadd'], t: '42% more is · 1.42', spot: ['grid', { head: ['after + 42%', '?'], rows: [['C + 0.42C', '✓'], ['1.42C', '✓'], ['C + 0.42', '✗'], ['42C', '✗'], ['0.58C', '✗']] }],
+    doit: [['flow', ['C + 0.42C', { op: '1C + 0.42C' }, { t: '1.42C', r: 'g' }]], ['flow', ['$240.53, up 5%', { op: '· 1.05' }, '252.5565', { op: 'nearest cent' }, { t: '≈ $252.56', r: 'g' }]]],
+    trap: ['C + 0.42', 'the percent multiplies C:   C + 0.42C'], alt: 'An increase of 42 percent adds 0.42C, which together with C is 1.42C. Adding 0.42 on its own is not 42 percent, and 0.58C is a decrease. A price up 5 percent: multiply by 1.05, round to the cent.', v: [['1+0.42', '1.42'], ['1-0.42', '0.58'], ['240.53*1.05', '252.5565']] });
+  V('5-3', { th: ['scale', 'bar'], from: '5-2', r: ['paidpct', 'mult'], t: 'The percent left, then multiply', spot: ['pbar', { pts: [[0, '$0'], [78, '$102.96', 'g'], [100, '$132']], shade: [78, 100, 'w'], say: '22% off leaves 78%' }],
+    doit: [['flow', ['$132, 22% off', { op: '· 0.78' }, { t: '$102.96', r: 'g' }]], ['flow', ['$65 + 8% tax', { op: '· 1.08' }, { t: '$70.20', r: 'g' }]]],
+    trap: ['22% off:   132 · 0.22 = $29.04', 'that is the discount:   · 0.78 is the price'], alt: 'A discount of 22 percent leaves 78 percent, so one multiplication by 0.78 gives the new price. A tax of 8 percent multiplies by 1.08. Multiplying by 0.22 gives only the discount.', v: [['132*0.78', '102.96'], ['65*1.08', '70.2'], ['132*0.22', '29.04']] });
   // Unit 6: Equations for the Original
-  L('6-1', 'The price before a discount', ['Call the original price p.', 'Write the sale price with one multiplier.', 'Divide the sale price by the multiplier.'], '65% off, now $148.75:  0.35p = 148.75  →  p = 148.75 ÷ 0.35 = $425', 'Adding 65% of $148.75 back does not work: the 65% was of the original.', { v: [['(35/100)*425', '14875/100']] });
-  L('6-2', 'Before an increase, and the bar model', ['After an increase of r the price is (1 + r)p.', 'Bar model: the price you know is so many percent of the bar.', 'Find 1%, then 100%.'], '10% off, now $197.10:  that is 90%, so 1% is 197.10 ÷ 90 = $2.19 and the original was $219', 'Divide by the percent that is left, not the percent taken off.', { v: [['(19710/100)/90', '219/100'], ['(9/10)*219', '19710/100']] });
-  L('6-3', 'Several items at one discount', ['One item costs (1 − r)p.', 'Multiply by how many.', 'Combine into one coefficient and divide.'], 'Six plates, each 12% off, $390.72 in all:  6 · 0.88p = 5.28p = 390.72  →  p = $74', 'The answer is one plate’s original price, not the total.', { v: [['6*(88/100)*74', '39072/100']] });
+  V('6-1', { th: ['bal', 'scale'], from: '4:10-3', r: ['origdiv', 'mult', 'both'], t: 'The original: ÷ the multiplier', spot: ['flow', ['40% off, now $189', { op: 'p − 0.4p' }, { t: '0.6p = 189', r: 'x' }]],
+    doit: [['steps', [['{n:0.6}p', '189'], { op: '÷ 0.6' }, ['p', '315', 'ans']]], ['flow', ['check: 0.6 · 315', { op: '' }, { t: '189 ✓', r: 'g' }]]],
+    trap: ['189 + 40% = $264.60', '40% is of p, not of 189:   ÷ 0.6'], alt: 'The new price is the multiplier times the original: 0.6p = 189. Divide both sides by 0.6 and check. Adding 40 percent to the new price is wrong, because the discount was 40 percent of the original.', v: [['189/0.6', '315'], ['0.6*315', '189'], ['189*1.4', '264.6']] });
+  V('6-2', { th: ['bal', 'scale'], from: '6-1', r: ['origdiv', 'mult', 'paidpct', 'onepct'], t: 'Up r: ÷ (1 + r). A bar: go via 1%', spot: ['flow', ['up 25%, now $1596.25', { op: '1 + 0.25' }, { t: '1.25c = 1596.25', r: 'x' }]],
+    doit: [['steps', [['{n:1.25}c', '1596.25'], { op: '÷ 1.25' }, ['c', '1277', 'ans']]], ['flow', ['60% off, now $193.60', { op: '100% − 60%' }, { t: '$193.60 is 40%', r: 'x' }]], ['rt', { rows: [['% paid', '40', ['1', 'x'], ['100', 'g']], ['$', '193.60', ['4.84', 'x'], ['484', 'g']]], ops: [[0, 1, '÷ 40'], [1, 2, '· 100']] }]],
+    trap: ['1596.25 − 25% ≈ $1197.19', '25% of the old price:   ÷ 1.25'], alt: 'After an increase divide the new value by 1 plus the rate; taking 25 percent off it does not get back. With a bar after a discount: the price paid is the percent left; divide for 1%, then times 100.', v: [['1596.25/1.25', '1277'], ['1.25*1277', '1596.25'], ['1596.25*0.75', '1197.1875'], ['100-60', '40'], ['193.6/40', '4.84'], ['4.84*100', '484'], ['0.4*484', '193.6']] });
+  V('6-3', { th: ['bal', 'scale'], from: '6-1', r: ['origdiv', 'mult', 'notadd'], t: 'Several at a discount: n · 0.6p', spot: ['cue', [['5', 'n', 'how many'], ['·', ''], ['0.6', 'o', '40% off', 'd'], ['·', ''], ['p', 'x', 'one, before'], ['=', ''], ['168', 'g', 'paid', 'd']]],
+    doit: [['steps', [['5 · 0.6p', '168'], ['{n:3}p', '168'], { op: '÷ 3' }, ['p', '56', 'ans']]], ['grid', { head: ['equation', '?'], rows: [['5(0.6p) = 168', '✓'], ['3p = 168', '✓'], ['0.6p = 33.6', '✓'], ['5(p − 0.4) = 168', '✗']] }]],
+    trap: ['6(p − 0.15) = 142.8', '15% off each p:   6(0.85p) = 142.8'], alt: 'Each item costs the multiplier times its original price, and n items cost n times that. Multiply to one coefficient, or divide the total by n first, then divide. Subtracting 0.15 from p takes off 15 cents, not 15 percent.', v: [['5*0.6', '3'], ['168/3', '56'], ['168/5', '33.6'], ['33.6/0.6', '56'], ['6*0.85', '5.1'], ['142.8/5.1', '28']] });
   // Unit 7: The Percent Proportion
-  L('7-1', 'part/whole = percent/100', ['The part and the percent go on top.', 'The whole and 100 go underneath.', 'Cross-multiply and divide.'], '428.8 is 32% of n:  428.8/n = 32/100  →  32n = 42,880  →  n = 1340', 'The whole is the number that follows “of”.', { v: [['(32/100)*1340', '4288/10']], tool: 'tri:pct' });
-  L('7-2', 'A proportion for a discount', ['Find the percent that is left after the discount.', 'The sale price is that percent of the original.', 'Sale price / p = percent left / 100.'], '12% off, now $234.08:  234.08/p = 88/100  →  p = 23,408 ÷ 88 = $266', 'The 88 goes in the proportion, not the 12.', { v: [['(88/100)*266', '23408/100']] });
-  L('7-3', 'A tiny percent of a big total', ['Write the percent as a decimal carefully.', 'Decimal · total = part.', 'Divide the part by the decimal.'], '0.8% of the contract is $84:  0.008v = 84  →  v = 84 ÷ 0.008 = $10,500', '0.8% is 0.008. Using 0.8 gives $105, far too small.', { v: [['(8/1000)*10500', '84']] });
+  V('7-1', { th: ['bal'], from: '6:7-2', r: ['pctprop', 'crossmul', 'sameplace'], t: 'Part over whole = percent over 100', spot: ['prop', { l: ['1108.8', 'n'], r: ['44', '100'], x: 'n', val: '2520' }],
+    doit: [['steps', [['{n:44}n', '110880'], { op: '÷ 44' }, ['n', '2520', 'ans']]], ['flow', ['{f:d|4820} = {f:85|100}', { op: '100d = 85 · 4820' }, { t: 'd = 4097 km', r: 'g' }]]],
+    trap: ['{f:1108.8|n} = {f:100|44}', 'percent over 100:   {f:44|100}'], alt: 'The percent proportion puts the part over the whole on one side and the percent over 100 on the other. Cross-multiply, then divide. The unknown can be the part or the whole.', v: [['1108.8*100', '110880'], ['110880/44', '2520'], ['85*4820/100', '4097']] });
+  V('7-2', { th: ['bal', 'bar'], from: '7-1', r: ['pctprop', 'paidpct'], t: 'After a discount: the percent paid', spot: ['pbar', { pts: [[0, '$0'], [35, '$97.65', 'x'], [100, '?', 'g']], shade: [35, 100, 'w'], over: 'the original p', say: '65% off: $97.65 is 35%' }],
+    doit: [['prop', { l: ['97.65', 'p'], r: ['35', '100'], x: 'p', val: '279' }], ['steps', [['{n:35}p', '9765'], { op: '÷ 35' }, ['p', '279', 'ans']]]],
+    trap: ['{f:97.65|p} = {f:65|100}', 'the price paid is 100 − 65:   {f:35|100}'], alt: 'After 65 percent off, the price paid is 35 percent of the original. So the proportion is the price paid over the original equals 35 over 100. Using 65 over 100 compares with the discount.', v: [['100-65', '35'], ['97.65*100', '9765'], ['9765/35', '279']] });
+  V('7-3', { th: ['bal', 'tri'], from: '7-1', r: ['per100', 'pctprop', 'origdiv'], t: 'Decimal or proportion: one job', spot: ['flow', ['1.7% of v is $476', { op: '1.7% = 0.017' }, { t: '0.017v = 476', r: 'x' }]],
+    doit: [['tri', 'pct', 'r'], ['flow', ['476 ÷ 0.017', { op: '' }, { t: 'v = 28000', r: 'g' }]], ['prop', { l: ['476', 'v'], r: ['1.7', '100'], x: 'v', val: '28000' }], ['flow', ['down 8%, now 55.2¢', { op: '÷ 0.92' }, { t: '60¢', r: 'g' }]]],
+    trap: ['1.7% = 0.17', 'two places:   0.017'], alt: 'A percent as a decimal moves two places: 1.7 percent is 0.017. Cover the whole on the triangle and divide by it, or set up the proportion; both give the same answer. A rate lowered by 8 percent is divided by 0.92.', v: [['476/0.017', '28000'], ['55.2/0.92', '60']], tool: 'tri:pct' });
   // Unit 8: Chains of Two Changes
-  L('8-1', 'Two discounts in a row', ['Write what the first discount leaves.', 'Multiply by what the second leaves.', 'Read the one coefficient as a percent of the original.'], '20% off, then 35% off:  0.65 · 0.8p = 0.52p, so 48% off in all', 'Not 55% off: the second discount is of a smaller price.', { v: [['(65/100)*(8/10)', '52/100']] });
-  L('8-2', 'The original after two changes', ['Multiply the two multipliers into one.', 'Set it times p equal to the final price.', 'Divide the final price by it.'], '5% off, then raised 40%, ending at $655.69:  1.4 · 0.95p = 1.33p  →  p = 655.69 ÷ 1.33 = $493', 'One division by the combined multiplier undoes both changes.', { v: [['(14/10)*(95/100)', '133/100'], ['(133/100)*493', '65569/100']] });
-  L('8-3', 'Up 40%, down 40% is not back to the start', ['Follow the dollars: each percent is of the amount at that moment.', 'Or multiply the multipliers.', 'A discount and a tax can be taken in either order: the product is the same.'], '$184 up 40% is $257.60.  40% off that is $154.56, because 1.4 · 0.6 = 0.84', 'The discount is 40% of a bigger number, so it takes more dollars than the markup added.', { v: [['184*(14/10)', '25760/100'], ['(25760/100)*(6/10)', '15456/100'], ['184*(84/100)', '15456/100']] });
+  V('8-1', { th: ['scale'], from: '5-2', r: ['chain', 'mult'], t: 'Two changes: multiply multipliers', spot: ['flow', ['35% off, then 5% off', { op: '0.65 · 0.95' }, { t: '0.6175p', r: 'x' }]],
+    doit: [['flow', ['0.6175p', { op: '100% − 61.75%' }, { t: '38.25% off in all', r: 'g' }]], ['flow', ['up 40%, then down 25%', { op: '1.4 · 0.75' }, { t: '1.05p', r: 'g' }]], ['flow', ['5% off, then 35% off', { op: '0.95 · 0.65' }, { t: 'the same 0.6175p', r: 'g' }]]],
+    trap: ['35% + 5% = 40% off', '0.65 · 0.95 = 0.6175:   38.25% off'], alt: 'Each change is a multiplier, and two changes in a row multiply, in either order. The second change is a percent of the new price, so the percents do not add: 35 percent then 5 percent off is 38.25 percent off.', v: [['0.65*0.95', '0.6175'], ['0.95*0.65', '0.6175'], ['100-61.75', '38.25'], ['1.4*0.75', '1.05']] });
+  V('8-2', { th: ['scale', 'bal'], from: '8-1', r: ['chain', 'origdiv', 'samebase'], t: 'Back through a chain: ÷ the product', spot: ['flow', ['40% off, 25% off, ends $10.35', { op: '0.6 · 0.75' }, { t: '0.45p = 10.35', r: 'x' }]],
+    doit: [['steps', [['{n:0.45}p', '10.35'], { op: '÷ 0.45' }, ['p', '23', 'ans']]], ['flow', ['check: 23 · 0.6 · 0.75', { op: '' }, { t: '10.35 ✓', r: 'g' }]], ['flow', ['5% tax + 0.75% fee, both of p', { op: 'same base: add' }, '1.0575p = 473', { op: '÷ 1.0575' }, { t: '≈ $447.28', r: 'g' }]]],
+    trap: ['65% off:   10.35 ÷ 0.35', 'the product:   ÷ 0.45'], alt: 'Multiply the two multipliers into one and divide by it; treating the two discounts as one of 65 percent is wrong. Two percents of the same base, a tax and a fee on p, add: 1.0575p.', v: [['0.6*0.75', '0.45'], ['10.35/0.45', '23'], ['23*0.6*0.75', '10.35'], ['1+0.05+0.0075', '1.0575']] });
+  V('8-3', { th: ['scale', 'bal'], from: '8-2', r: ['chain', 'origdiv', 'mult'], t: 'Discount, then tax: one product', spot: ['flow', ['35% off, then 4% tax, pays $74.36', { op: '0.65 · 1.04' }, { t: '0.676p = 74.36', r: 'x' }]],
+    doit: [['steps', [['{n:0.676}p', '74.36'], { op: '÷ 0.676' }, ['p', '110', 'ans']]], ['flow', ['up 30%, then 30% off', { op: '1.3 · 0.7' }, { t: '0.91: 9% below the start', r: 'g' }]], ['flow', ['9 months at m, 3 at 1.1m', { op: '9m + 3.3m' }, '12.3m = 3000', { op: '÷ 12.3' }, { t: '≈ $243.90', r: 'g' }]]],
+    trap: ['up 30%, then 30% off:   back to the start', '1.3 · 0.7 = 0.91:   9% less'], alt: 'A discount and then a tax are one product of multipliers, 0.65 times 1.04 is 0.676; divide by it. A markup and an equal sale do not cancel. Bills at m for some months and 1.1m for the rest add to one term.', v: [['0.65*1.04', '0.676'], ['74.36/0.676', '110'], ['0.676*110', '74.36'], ['1.3*0.7', '0.91'], ['1-0.91', '0.09'], ['3*1.1', '3.3'], ['9+3.3', '12.3']] });
   // Unit 9: Percentage of Change
-  L('9-1', 'Change ÷ original', ['Subtract to find the change.', 'Divide by the OLD value.', 'Read the decimal as a percent and round.'], '$281 down to $182:  change 99,  99 ÷ 281 = 0.3523…  →  35.2% off', 'Dividing by the new price, 182, gives 54.4%: wrong.', { v: [['281-182', '99']] });
-  L('9-2', 'Apply a percentage of change', ['Find the percent of the original value.', 'Add it for an increase, subtract it for a decrease.', 'Or use one multiplier.'], '$92 up 2%:  0.02 · 92 = 1.84,  so 92 + 1.84 = $93.84', 'To rank changes, compare the percents, not the dollar amounts.', { v: [['(102/100)*92', '9384/100']] });
-  L('9-3', 'Each change starts from its own value', ['For the first change, divide by the first value.', 'For the second, divide by the value it started from.', 'A fall and the rise that undoes it are different percents.'], '$75 → $84 → $90:  9 ÷ 75 = 12%,  then 6 ÷ 84 = 7.1%', 'From 100 down to 80 is 20%. From 80 back up to 100 is 25%.', { v: [['9/75', '12/100'], ['20/100', '1/5'], ['20/80', '25/100']] });
+  V('9-1', { th: ['scale', 'bar'], from: '6:9-1', r: ['pctchg', 'round'], t: 'Change ÷ the value before', spot: ['flow', ['$57 → $54', { op: 'change 3' }, '3 ÷ 57', { op: '' }, { t: '≈ 5.3% down', r: 'g' }]],
+    doit: [['pbar', { pts: [[0, '$0'], [70, '$56', 'x'], [100, '$80']], shade: [70, 100, 'w'], say: '$24 off is 30% of $80' }], ['flow', ['$38 → $44', { op: '6 ÷ 38' }, { t: '≈ 15.8% up', r: 'g' }]]],
+    trap: ['3 ÷ 54 ≈ 5.6%', 'divide by the value before:   3 ÷ 57'], alt: 'The percent change is the change divided by the original, the value before the change. A fall from 80 to 56 is 24 off, which is 30 percent of 80.', v: [['57-54', '3'], ['80-56', '24'], ['24/80', '0.3'], ['44-38', '6']] });
+  V('9-2', { th: ['scale'], from: '9-1', r: ['pctchg', 'samediff'], t: 'Compare changes as percents', spot: ['grid', { head: ['price', 'change ÷ before'], rows: [['$200 → $240', '20%'], ['$50 → $70', '{g:40%}'], ['$210 → $231', '10%'], ['$140 → $147', '5%']] }],
+    doit: [['flow', ['14 m → 23 m', { op: '9 ÷ 14' }, { t: '≈ 64.3%', r: 'g' }]], ['flow', ['3000 L + 15%', { op: '· 1.15' }, { t: '3450 L', r: 'g' }]]],
+    trap: ['the biggest jump in dollars wins', 'the biggest percent:   $20 of $50'], alt: 'To compare changes, turn each into a percent of its own starting value. The largest dollar change, $40 on $200, is only 20 percent; $20 on $50 is 40 percent. A growth by a percent multiplies by 1 plus the rate.', v: [['40/200', '0.2'], ['20/50', '0.4'], ['21/210', '0.1'], ['7/140', '0.05'], ['3000*1.15', '3450']] });
+  V('9-3', { th: ['scale'], from: '9-2', r: ['owncap', 'chain'], t: 'Each change from its own start', spot: ['flow', ['$600, −10%, then +10%', { op: '· 0.9 · 1.1' }, { t: '$594: 1% down', r: 'g' }]],
+    doit: [['flow', ['$40 → $24 → $40', { op: '16 ÷ 40,  16 ÷ 24' }, { t: '40% down, ≈ 66.7% up', r: 'g' }]], ['flow', ['+20%, then +50%', { op: '1.2 · 1.5' }, { t: '· 1.8: 80% up', r: 'g' }]]],
+    trap: ['−10% then +10%:   back to $600', '0.9 · 1.1 = 0.99:   $594'], alt: 'Each percent change is a percent of the value it starts from. A fall and a rise of the same percent do not cancel, and the rise needed to get back is a bigger percent than the fall.', v: [['600*0.9*1.1', '594'], ['16/40', '0.4'], ['1.2*1.5', '1.8'], ['0.9*1.1', '0.99']] });
   // Unit 10: Change in Area
-  L('10-1', 'Compare the areas, not the sides', ['Work out the old area and the new area.', 'Subtract to find the change in area.', 'Divide by the old area.'], '17 ft by 36 ft becomes 27 ft by 55 ft:  612 → 1485,  change 873,  873 ÷ 612 = 142.6%', 'The percent change in area is not the sum of the changes in the sides.', { v: [['17*36', '612'], ['27*55', '1485'], ['1485-612', '873']] });
-  L('10-2', 'Sides × k, area × k²', ['The new side is k · s.', 'The new area is k · s · k · s = k² · s².', 'Read k² as a percent to see the increase.'], 'Sides scaled by 1.32:  1.32 · 1.32 = 1.7424,  so the area is 1.7424s², up 74.24%', 'A 32% increase in the sides is not a 32% or a 64% increase in area.', { v: [['(132/100)^2', '17424/10000']] });
-  L('10-3', 'The shape does not matter', ['Scale every length by the same factor k.', 'Any area is multiplied by k².', 'If no dimensions are given, make some up that fit and test.'], 'Every length up 10%:  1.1 · 1.1 = 1.21, so any area goes up 21%: square, triangle or circle', 'Invented dimensions must fit the facts given, such as the area.', { v: [['(11/10)^2', '121/100']] });
+  V('10-1', { th: ['scale', 'area'], from: '6:10-1', r: ['pctchg', 'periarea', 'round'], t: 'Compare areas, not sides', spot: ['flow', ['36 by 38 → 34 by 32', { op: 'areas' }, { t: '1368 → 1088', r: 'x' }]],
+    doit: [['rect', { w: '38 m', h: '36 m', a: '1368 m²' }], ['flow', ['1368 − 1088 = 280', { op: '÷ 1368' }, '0.2046…', { op: '' }, { t: '≈ 20.5% less', r: 'g' }]]],
+    trap: ['280 ÷ 1088 ≈ 25.7%', 'divide by the old area:   280 ÷ 1368'], alt: 'Find the old and the new areas first, then divide the change in area by the old area, the one before. The changes in the sides do not give the change in area.', v: [['36*38', '1368'], ['34*32', '1088'], ['1368-1088', '280']] });
+  V('10-2', { th: ['scale', 'area'], from: '10-1', r: ['area1r', 'perk'], t: 'Sides · 1.25: area · 1.25²', spot: ['sim', { a: { w: 4, h: 4, labs: ['s', 's'], area: 's²' }, k: '1.25', klab: '· 1.25', b: { labs: ['1.25s', '1.25s'], area: '1.5625s²' } }],
+    doit: [['flow', ['1.25 · 1.25', { op: '' }, '1.5625', { op: '− 1' }, { t: '56.25% more area', r: 'g' }]], ['flow', ['sides · 1.35', { op: '1.35²' }, { t: '1.8225s²', r: 'g' }]], ['flow', ['sides · 0.94', { op: '0.94² = 0.8836' }, { t: '11.64% less area', r: 'g' }]]],
+    trap: ['sides up 25%:   area up 25%', '· 1.25 twice:   up 56.25%'], alt: 'When every side is multiplied by 1.25, the area is multiplied by 1.25 times 1.25, which is 1.5625: 56.25 percent more, whatever the size of the square. A shrink by 0.94 leaves 0.8836 of the area.', v: [['1.25*1.25', '1.5625'], ['1.35^2', '1.8225'], ['0.94^2', '0.8836'], ['1-0.8836', '0.1164']] });
+  V('10-3', { th: ['scale', 'area'], from: '10-2', r: ['area1r', 'lenfirst'], t: 'Any shape: area · (1 + r)²', spot: ['flow', ['base and altitude + 10%', { op: '1.1 · 1.1' }, { t: '· 1.21: 21% more', r: 'g' }]],
+    doit: [['flow', ['½ · 16 · 6', { op: '' }, '48 m²', { op: '½ · 17.6 · 6.6' }, { t: '58.08 m² ✓', r: 'g' }]], ['grid', { head: ['shape', 'area · 1.1²'], rows: [['rectangle', '✓'], ['triangle', '✓'], ['parallelogram', '✓']] }]],
+    trap: ['a triangle has ½:   half of 21%', 'the ½ stays:   still · 1.21'], alt: 'Any area multiplies two lengths, so when both grow by the same percent the area is multiplied by the multiplier squared. A triangle\'s one half is in both areas, so it does not change the percent.', v: [['1.1*1.1', '1.21'], ['0.5*16*6', '48'], ['0.5*17.6*6.6', '58.08'], ['48*1.21', '58.08']] });
   // Unit 11: Change in Data and Graphs
-  L('11-1', 'The same dollars, different percents', ['Percent change = change ÷ original.', 'The same rise is a bigger percent of a smaller price.', 'The same percent is more dollars on a bigger price.'], 'A $12 rise:  on $30 it is 12 ÷ 30 = 40%;  on $90 it is 12 ÷ 90 = 13.3%', 'Equal dollar changes are not equal percent changes.', { v: [['12/30', '40/100']] });
-  L('11-2', 'Change each group, then compare the totals', ['Apply each percent to its own group.', 'Add up the new total and the old total.', 'Overall change = change in total ÷ old total.'], '110 down 10% is 99;  80 up 50% is 120.   190 → 219:  29 ÷ 190 = 15.3%', 'Never add or average the percents: −10% and +50% do not make +40% or +20%.', { v: [['(9/10)*110', '99'], ['(15/10)*80', '120'], ['99+120-190', '29']] });
-  L('11-3', 'Percent change from a graph', ['Read the two values off the graph.', 'Subtract to get the change.', 'Divide by the earlier value.'], 'May fell from 360 to 306:  54 ÷ 360 = 0.15 = 15% decrease', 'Read the scale of the axis before reading the bars.', { v: [['(360-306)/360', '15/100']] });
+  V('11-1', { th: ['scale'], from: '9-2', r: ['samediff', 'pctchg'], t: 'Same rise: a bigger % of less', spot: ['grid', { head: ['price', '+ $4'], rows: [['$15', '{g:≈ 26.7%}'], ['$70', '≈ 5.7%'], ['$110', '≈ 3.6%']] }],
+    doit: [['flow', ['25% off $25, $30, $40', { op: 'the biggest price' }, { t: '$40 falls most: $10', r: 'g' }]]],
+    trap: ['the same $4 rise:   the same %', 'divide by each price:   $15 wins'], alt: 'The same rise in dollars is a bigger percent of a smaller price. The same percent off takes more dollars from a bigger price.', v: [['0.25*40', '10']] });
+  V('11-2', { th: ['scale'], from: '11-1', r: ['regroup', 'origdiv', 'owncap'], t: 'Change each group, then re-add', spot: ['flow', ['60 up 50%,  20 down 20%', { op: '· 1.5,  · 0.8' }, { t: '90 and 16', r: 'x' }]],
+    doit: [['flow', ['in all: 80 → 106', { op: '26 ÷ 80' }, { t: '32.5% up', r: 'g' }]], ['flow', ['$42 → $54.60 with 5% tax', { op: '÷ 1.05 each' }, '$40 → $52', { op: '12 ÷ 40' }, { t: '30% up', r: 'g' }]], ['flow', ['$6.25 → $6.50 → $6.75', { op: '0.25 ÷ each start' }, { t: '4%, then ≈ 3.8%', r: 'g' }]]],
+    trap: ['(50% − 20%) ÷ 2 = 15%', 're-add first:   26 ÷ 80 = 32.5%'], alt: 'With groups, change each group, add the new numbers, then compare the new total with the old. Averaging the percents is wrong when the groups differ in size. Divide by 1.05 to take off a 5% tax. Equal rises are shrinking percents.', v: [['60*1.5', '90'], ['20*0.8', '16'], ['60+20', '80'], ['90+16', '106'], ['106-80', '26'], ['26/80', '0.325'], ['42/1.05', '40'], ['54.6/1.05', '52'], ['52-40', '12'], ['12/40', '0.3'], ['0.25/6.25', '0.04']] });
+  V('11-3', { th: ['graph', 'scale'], from: '6:6-3', r: ['axis0', 'owncap', 'pctchg', 'round'], t: 'Graphs: read the axis, then compute', spot: ['graph', { x: [1970, 1990], y: [0, 70], xs: 10, ys: 10, ax: ['year', 'sales ($1000s)'], xt: [1970, 1980, 1990], yt: [20, 40, 60], path: { pts: [[1970, 50], [1980, 60], [1990, 66]], role: 'x' }, pts: [[1970, 50, 'x', '50', 'tr'], [1980, 60, 'x', '60', 'tl'], [1990, 66, 'x', '66', 'tl']] }],
+    doit: [['flow', ['50,000 → 60,000 → 66,000', { op: '÷ each start' }, { t: '20%, then 10%', r: 'g' }]], ['flow', ['April 260 → 208', { op: '52 ÷ 260' }, { t: '20% down', r: 'g' }]], ['flow', ['axis starts at 700', { op: 'bars cut off' }, { t: 'the change looks bigger', r: 'w' }]], ['flow', ['94,185, 15% more', { op: '· 1.15' }, '108,312.75', { op: 'nearest 100' }, { t: '≈ 108,300', r: 'g' }]]],
+    trap: ['2nd period:   6000 ÷ 50,000 = 12%', 'its own start:   6000 ÷ 60,000 = 10%'], alt: 'Read the values off the graph and divide each change by its own start: 20 percent, then 10 percent. Check the axis first: one that does not start at zero makes changes look bigger. A rate that continues multiplies again.', v: [['60000-50000', '10000'], ['10000/50000', '0.2'], ['66000-60000', '6000'], ['6000/60000', '0.1'], ['6000/50000', '0.12'], ['260-208', '52'], ['52/260', '0.2'], ['94185*1.15', '108312.75']] });
   // Unit 12: Interest and Chapter Review
-  L('12-1', 'I = P · r · t, then add', ['Write the rate as a decimal.', 'Interest = principal · rate · years.', 'Total = principal + interest.'], '$14,200 at 7.5% for 5 years:  I = 14,200 · 0.075 · 5 = $5325,  total $19,525', 'The interest is not the amount you withdraw.', { v: [['14200*(75/1000)*5', '5325'], ['14200+5325', '19525']], tool: 'tri:intr' });
-  L('12-2', 'Match the rate and the time', ['A yearly rate needs the time in years: months ÷ 12.', 'A monthly rate needs the time in months.', 'Principal from a balance: P(1 + r · t) = balance.'], '2% a year for 4 years, balance $7560:  p + 0.08p = 1.08p = 7560  →  p = $7000', 'The balance contains the principal as well as the interest.', { v: [['(108/100)*7000', '7560']] });
-  L('12-3', 'Review: compare two deals', ['Work out each option completely.', 'Put times in years and rates as decimals.', 'Compare, and answer the question asked: which one, or how much less.'], '$1700 for 18 months at 12%:  1700 · 0.12 · 1.5 = $306.   For 9 months at 8%:  1700 · 0.08 · 0.75 = $102.   $204 less', 'A lower rate over a longer time can still cost more.', { v: [['1700*(12/100)*(3/2)', '306'], ['1700*(8/100)*(3/4)', '102'], ['306-102', '204']] });
+  V('12-1', { th: ['tri'], from: '3-1', r: ['simple', 'partpct'], t: 'I = P · r · t; the total is P + I', spot: ['tri', 'intr', 'top'],
+    doit: [['flow', ['$4000 · 0.035 · 3', { op: '' }, '$420', { op: '+ $4000' }, { t: '$4420 to pay', r: 'g' }]], ['flow', ['$12,000 · 0.07 · 4', { op: '' }, { t: '$3360', r: 'g' }]]],
+    trap: ['pay back $420', 'principal plus interest:   $4420'], alt: 'Simple interest is the principal times the yearly rate times the years. The total to pay back or to withdraw is the principal plus the interest.', v: [['4000*0.035*3', '420'], ['4000+420', '4420'], ['12000*0.07*4', '3360']], tool: 'tri:intr' });
+  V('12-2', { th: ['units', 'bal'], from: '12-1', shift: 'I = P · r · t of 12-1, with the rate matched to the time, then solved for r on the ladder.', r: ['simple', 'origdiv'], t: 'Match rate and time; work Prt back', spot: ['flow', ['15% a year, for 1 month', { op: '15% ÷ 12' }, { t: '1.25% a month', r: 'x' }]],
+    doit: [['flow', ['$5800 · 0.0125 · 1', { op: '' }, { t: '$72.50', r: 'g' }]], ['steps', [['6000 · r · 4', '6960 − 6000'], ['{n:24000}r', '960'], { op: '÷ 24000' }, ['r', '0.04', 'ans']]], ['flow', ['p + 0.1p = 13,200', { op: '÷ 1.1' }, { t: 'p = $12,000', r: 'g' }]]],
+    trap: ['$5800 · 0.15 · 1 = $870 a month', 'a monthly rate:   · 0.0125'], alt: 'The rate and the time must be in the same unit: a yearly rate is divided by 12 for months. The interest is what is paid back minus the principal. Put the known values into I = Prt and solve.', v: [['15/12', '1.25'], ['5800*0.0125', '72.5'], ['6960-6000', '960'], ['960/24000', '0.04'], ['13200/1.1', '12000'], ['5800*0.15', '870']], tool: 'tri:intr' });
+  V('12-3', { th: ['tri'], from: '12-1', r: ['simple', 'compound', 'round'], t: 'Time, compounding, comparing', spot: ['flow', ['$1200 = $6000 · 0.07 · t', { op: '÷ 420' }, { t: 't ≈ 2.857 years', r: 'x' }]],
+    doit: [['tri', 'intr', 'r'], ['flow', ['0.857… · 12 months', { op: '' }, { t: '≈ 2 years 10 months', r: 'g' }]], ['flow', ['$8000, 1.5% a month, 5 months', { op: '· 1.015⁵' }, { t: '≈ $8618.27', r: 'g' }]], ['flow', ['simple: $8000 · 0.015 · 5', { op: '' }, { t: '$600 < $618.27…', r: 'g' }]]],
+    trap: ['compound = simple:   $8600', 'each month on the new amount:   ≈ $8618.27'], alt: 'Cover t on the triangle: t = I ÷ Pr. Turn the part of a year into months. Compounding multiplies by 1 plus the rate each period, on the new amount, so it earns more than simple interest.', v: [['1200/420', '20/7'], ['8000*0.015*5', '600'], ['8618.27-8000', '618.27']], tool: 'tri:intr' });
 })();
 
 /* --- tactics_ch8.js --- */
@@ -113494,7 +113645,7 @@ var GEN = (function () {
         usd(sale) + ', a real discount of ' + P(realOff),
         ['After the markup: ' + f(Q.of(100 + m).div(100)) + ' · ' + usd(p2) + ' = ' + usd(marked) + '.',
           'After the sale: ' + f(Q.of(100 - m).div(100)) + ' · ' + usd(marked) + ' = ' + usd(sale) + '.',
-          'The saving against ' + usd(p2) + ' is ' + usd(Q.of(p2).sub(sale)) + ', and ' + f(Q.of(p2).sub(sale)) + ' ÷ ' + f(p2) + ' = ' + f(realOff.div(100)) + ' = ' + P(realOff) + ' — not nothing at all.']);
+          'The saving against ' + usd(p2) + ' is ' + usd(Q.of(p2).sub(sale)) + ', and ' + f(Q.of(p2).sub(sale)) + ' ÷ ' + f(p2) + ' = ' + f(realOff.div(100)) + ' = ' + P(realOff) + ': the price is not back where it started.']);
     }
     var T = 50 * R(6, 60), n2 = pick([3, 4, 5, 6]), n1 = 12 - n2, r = pick([10, 20, 25, 50]),
       coefq = Q.of(n1).add(Q.of(n2).mul(Q.of(100 + r).div(100))), mq = Q.of(T).div(coefq), cmq = monCase(mq);
@@ -113532,7 +113683,7 @@ var GEN = (function () {
         (down ? 'decrease' : 'increase') + cc.note + '?'), cc,
         ['The difference is ' + usd(Math.max(a, b)) + ' − ' + usd(Math.min(a, b)) + ' = ' + usd(diff) + '.',
           'Divide by the ORIGINAL value, ' + usd(a) + ': ' + f(diff) + ' ÷ ' + f(a) + ' = ' + approx(Q.of(diff).div(a), 5) + '.',
-          'As a percent that is ' + cc.show + ' — a ' + (down ? 'decrease' : 'increase') + '.']);
+          'As a percent that is ' + cc.show + ' — ' + (down ? 'a decrease' : 'an increase') + '.']);
     }
     var thing = pick(GOODS), old = R(15, 400), nw = R(Math.ceil(old * 0.4), old - 1);
     if (old === nw) return t9l1(v, dep);
@@ -114217,7 +114368,7 @@ var GEN = (function () {
         plural(yr, 'year') + ' and ' + plural(mo, 'month'),
         ['I = Prt: ' + usd(I3) + ' = ' + usd(P3) + ' · ' + f(Q.of(r3).div(100)) + ' · t = ' + usd(perYear) + 't.',
           't = ' + f(I3) + ' ÷ ' + f(perYear) + ' = ' + approx(tq, 4) + ' years.',
-          'That is ' + f(yr) + ' whole years, and the leftover ' + approx(tq.sub(yr), 4) + ' of a year is ' + approx(tq.sub(yr).mul(12), 2) + ' months — ' + plural(mo, 'month') + ' to the nearest month.']);
+          'That is ' + plural(yr, 'whole year') + ', and the leftover ' + approx(tq.sub(yr), 4) + ' of a year is ' + approx(tq.sub(yr).mul(12), 2) + ' months — ' + plural(mo, 'month') + ' to the nearest month.']);
     }
     if (v === 5) {
       var P4 = 1000 * R(2, 12), mrate = Q.of(String(pick(['0.5', '1', '1.25', '1.5', '2']))), nmon = R(2, 5),
@@ -114256,9 +114407,10 @@ var GEN = (function () {
   function wBarPart() {
     var k = pbPick(), c = pick([['$', '', 'A jar holds $' + k.w + ' in all.', 'is worth $' + k.part], ['', ' km', 'A trail is ' + k.w + ' km long.', 'is ' + k.part + ' km long'], ['', ' kg', 'A sack holds ' + k.w + ' kg of rice.', 'weighs ' + k.part + ' kg'], ['', ' pages', 'A book has ' + k.w + ' pages.', 'has ' + k.part + ' pages']]);
     var whole = c[0] + k.w + c[1], part = c[0] + k.part + c[1], ten = k.w / 10;
+    function amt(x) { return c[0] === '$' ? usd(Q.of(x)) : c[0] + f(x) + c[1]; }   // money always has its cents: $7.50
     return wtool(lead(c[2] + ' The whole bar stands for it. Shade the part of the bar that <b>' + c[3] + '</b>.'), 'pbar', { whole: whole, side: 'left' },
       function (st) { return !!st && st.p === k.p; }, { p: k.p }, k.p + '% shaded',
-      ['10% of ' + whole + ' is ' + c[0] + f(ten) + c[1] + ', and 5% is half of that, ' + c[0] + f(ten / 2) + c[1] + '.', part + ' is ' + f(k.part / (ten / 2)) + ' lots of 5%, which is ' + k.p + '%.', 'Check: ' + k.p + '% of ' + whole + ' = ' + f(k.p / 100) + ' · ' + k.w + ' = ' + part + '.']);
+      ['10% of ' + whole + ' is ' + amt(ten) + ', and 5% is half of that, ' + amt(ten / 2) + '.', part + ' is ' + f(k.part / (ten / 2)) + ' lots of 5%, which is ' + k.p + '%.', 'Check: ' + k.p + '% of ' + whole + ' = ' + f(k.p / 100) + ' · ' + k.w + ' = ' + part + '.']);
   }
   // 9-1: what percent was taken off?
   function wBarOff() {
