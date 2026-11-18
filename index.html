@@ -2091,7 +2091,7 @@ a.btn { text-decoration: none; display: inline-block; }
 .tc-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; } .tc-toolbtn { border: 1px solid var(--accent-line); background: var(--accent-soft); color: var(--ink); border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .tc-tool { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px 18px; margin-top: 16px; box-shadow: var(--shadow); break-inside: avoid; } .tc-tool h3 { margin: 0 0 4px; font-size: 19px; } .tc-tool .sub { margin: 0 0 12px; font-size: 15px; }
 .tc-tgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; }
-.tc-trow { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; background: var(--surface-2); } .tc-trow > b { font-size: 22px; text-align: center; border-radius: 10px; padding: 6px 2px; background: var(--accent-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tc-trow { display: grid; grid-template-columns: 1fr 22px 64px; gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; background: var(--surface-2); } .tc-trow > b { font-size: 22px; text-align: center; border-radius: 10px; padding: 6px 2px; background: var(--accent-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tc-trow.pct > b, .tc-trow.ineq > b { font-size: 15px; } .tc-trow.opp > b { font-size: 17px; } .tc-trow .w { display: block; font-size: 14.5px; line-height: 1.4; } .tc-trow .n { display: block; font-size: 13px; color: var(--ink-2); margin-top: 2px; } .tc-trow.flip { border-color: var(--tc-warn); } .tc-trow.flip > b { background: var(--tc-warn-soft); color: var(--tc-warn); }
 .tc-trow.eq > b { background: #e9e3f7; color: #4b3a8a; } .tc-trow.add > b { background: var(--good-soft); color: var(--good); } .tc-trow.mul > b { background: #fff1d6; color: #7a5200; } .tc-trow.div > b { background: #e3eefb; color: #1f5a99; }
 .tc-mistake { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; } .tc-mistake > div { border-radius: 12px; padding: 10px 12px; font-size: 17px; font-weight: 700; } .tc-mistake .no { background: var(--tc-warn-soft); } .tc-mistake .yes { background: var(--tc-ex-soft); } .tc-mistake .k { display: block; } .tc-mistake .no .k { color: var(--tc-warn); } .tc-mistake .yes .k { color: var(--good); } .tc-mistake small { display: block; font-size: 13.5px; font-weight: 500; color: var(--ink-2); margin-top: 2px; }
@@ -2220,6 +2220,21 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 
 /* Chapter 6 pieces: the ratio table, the graph, the proportion, similar figures */
 .tv-shade { fill: var(--c); fill-opacity: .15; stroke: none; } .tv-eqbg { fill: var(--surface); stroke: none; } .tv-a.dashl { stroke-dasharray: 6 5; } .tv-graph .gridl, .tv-cross .gridl { stroke-opacity: .28; }
+
+/* the decoder as a picture (Stage 8): phrase chips → symbol; ⇄ on the phrases that flip; brackets on the ones that group */
+.tc-trow .ch { display: flex; flex-wrap: wrap; gap: 5px; } .tc-trow .to { color: var(--ink-2); font-weight: 800; text-align: center; } .tc-trow .n { grid-column: 1 / -1; }
+.tc-chip { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 14px; line-height: 1.3; }
+.tc-chip i { font-style: normal; font-weight: 800; color: var(--accent); } .tc-chip.fl { border-color: var(--tc-warn); } .tc-chip .sw { color: var(--tc-warn); margin-left: 2px; } .tc-chip.gp i { color: #4b3a8a; }
+.tc-decode button.dc { border: 1px dashed var(--line); font: inherit; padding: 5px 10px; border-radius: 8px; font-size: 16px; cursor: pointer; color: var(--ink); background: var(--surface-2); }
+.tc-decode button.dc.on { border-style: solid; opacity: .55; } .tc-decode button.dc.fl { border-color: var(--tc-warn); } .tc-decode .slot { border: 1px dashed var(--line); color: var(--ink-2); } .tc-decode .slot.on { border-style: solid; color: var(--ink); background: var(--surface-2); }
+.tc-decode .slot.on.fl { border-color: var(--tc-warn); background: var(--tc-warn-soft); } .tc-decode .slot.on.gp { border-color: #8a77c9; }
+.tc-decdone { margin: 8px 0 0; font-weight: 800; font-size: 18px; } .tc-decnext { margin-top: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 14px; cursor: pointer; }
+@media (max-width: 560px) { .tc-trow { grid-template-columns: 1fr 18px 56px; } }
+.tc-trow.meas > b { font-size: 14px; background: #e3f3ee; color: #13684f; }
+:root[data-theme="dark"] .tc-trow.meas > b { background: #12382d; color: #8fe0c4; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tc-trow.meas > b { background: #12382d; color: #8fe0c4; } }
+:root[data-theme="dark"] .tc-trow.eq > b { background: #2f2752; color: #cdbfff; } :root[data-theme="dark"] .tc-trow.mul > b { background: #3b2f12; color: #ffe2a3; } :root[data-theme="dark"] .tc-trow.div > b { background: #17304d; color: #a9cdf5; } :root[data-theme="dark"] .tc-decode .c3 { background: #2f2752; color: #cdbfff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tc-trow.eq > b { background: #2f2752; color: #cdbfff; } :root:not([data-theme="light"]) .tc-trow.mul > b { background: #3b2f12; color: #ffe2a3; } :root:not([data-theme="light"]) .tc-trow.div > b { background: #17304d; color: #a9cdf5; } :root:not([data-theme="light"]) .tc-decode .c3 { background: #2f2752; color: #cdbfff; } }
 
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
@@ -49156,8 +49171,8 @@ var TAC = (function () {
   var TRANS = [
     { sym: '=', cls: 'eq', words: 'is · equals · gives · was · results in · is the same as', note: 'This is where the equals sign goes. Find it first.' },
     { sym: '+', cls: 'add', words: 'sum · total · plus · more than · increased by · combined with · older, longer, heavier than', note: '' },
-    { sym: '−', cls: 'sub', words: 'difference · minus · decreased by · fewer than · younger, shorter than', note: '' },
-    { sym: '−', cls: 'sub flip', words: '“— less than —” · “— subtracted from —”', note: 'These flip the order: 7 less than x is x − 7.' },
+    { sym: '−', cls: 'sub', words: 'difference · minus · decreased by · take away', note: 'The difference of x and 7 is x − 7, in the order named.' },
+    { sym: '−', cls: 'sub flip', words: '“— less than —” · “— fewer than —” · “— subtracted from —” · “— younger, shorter than —” · “the change from — to —”', note: 'These flip the order: 7 less than x is x − 7; the change from x to 30 is 30 − x.' },
     { sym: '×', cls: 'mul', words: 'product · times · multiplied by · of (½ of, 30% of) · twice · double · for each · as many as', note: 'A price for each × how many = the total.' },
     { sym: '÷', cls: 'div', words: 'quotient · divided by · per · split equally · shared among · the ratio of · cut into pieces of · in equal steps', note: 'Miles per hour = miles ÷ hours.' },
     { sym: '1 −', cls: 'sub', words: 'the rest · what is left · the remaining share', note: 'As a fraction of the whole: 1 minus the shares taken.' },
@@ -49168,6 +49183,7 @@ var TAC = (function () {
     { sym: '(−n)', cls: 'sub opp', words: 'below · deep · debt · owes · fee · loss · colder than zero', note: 'Write the amount as a negative number first.' },
     { sym: '≥  ≤', cls: 'ineq', words: 'at least · no less than · a minimum of   |   at most · no more than · a maximum of', note: 'The number itself is allowed. Depth, debt, cold: write the amount as a negative number first; then at least 52 m deep is e ≤ −52.' },
     { sym: '>  <', cls: 'ineq', words: 'more than · over · greater than   |   fewer than · under · less than', note: 'The number itself is not allowed. With a number in front (5 fewer than x) it is a subtraction: x − 5.' },
+    { sym: '90 · 180', cls: 'meas', words: 'complementary: add to 90° · supplementary: add to 180° · perimeter: add the sides · area: multiply · average: add, then ÷ how many', note: 'A measurement word names a sum or a product: the complement of x° is 90 − x.' },
     { sym: '× (1 ± r)', cls: 'pct', words: 'increased by r% · marked up · plus tax or tip   |   r% off · discounted by · marked down', note: 'Up: × (1 + r). Down: × (1 − r). “r% of” alone: × r.' }
   ];
   // ---------------------------------------------------------------- the triangle: any a = b · c (after the owner's speed triangle)
@@ -52051,6 +52067,11 @@ var DJG = (function () {
       } else if (v.root !== undefined) {
         var r = rootOf(right.src, v.v); need(r !== null && r.eq(Q.of(v.root)), 'right equation ' + right.src + ' has root ' + (r && r.toFrac()) + ', expected ' + v.root);
         wrong.forEach(function (w) { var rw = rootOf(w.src, v.v); need(rw === null || !rw.eq(Q.of(v.root)), 'wrong equation ' + w.src + ' has the same root'); });
+      } else if (v.pair) {                     // chips: the first chip (yes / same) is right exactly when the two expressions are equivalent
+        need(it.fmt === 'chips' && it.chips[0].ok === same(v.pair[0], v.pair[1]), 'pair key ' + (it.chips && it.chips[0].ok) + ' for ' + v.pair.join(' vs '));
+      } else if (v.odd) {                      // tiles: the right one is not equivalent to any other, and the others are all equivalent
+        need(right.src !== null && wrong.every(function (w) { return w.src !== null && !same(w.src, right.src); }), 'the odd tile ' + right.src + ' matches another');
+        wrong.forEach(function (w) { need(same(w.src, wrong[0].src), 'tile ' + w.src + ' differs from ' + wrong[0].src); });
       } else if (v.rel || v.all) {
         var rels = v.all || [v.rel], t = rels.every(function (x) { return truth(ev(x[0], v.env), x[1], ev(x[2], v.env)); });
         need(it.fmt === 'chips' && it.chips[0].ok === t, 'chip key ' + (it.chips && it.chips[0].ok) + ' but the relation is ' + t);
@@ -52092,10 +52113,11 @@ var DJG = (function () {
     } catch (err) { out.push('ver threw ' + err.message); }
     return out;
   }
-  function raw(id, lv) { var m = BY[id]; if (!m) throw new Error('no Dojo move ' + id); lv = Math.max(1, Math.min(3, lv || 1)); var run = m.gen(lv); run.forEach(function (it, i) { it.move = id; it.lv = lv; it.skills = it.skills || m.skills; it.part = [i + 1, run.length]; }); return run; }
+  // opts (optional): { el } asks a registry angle (part 6) for one element of the translation registry
+  function raw(id, lv, opts) { var m = BY[id]; if (!m) throw new Error('no Dojo move ' + id); lv = Math.max(1, Math.min(3, lv || 1)); var run = m.gen(lv, opts); run.forEach(function (it, i) { it.move = id; it.lv = lv; it.skills = it.skills || m.skills; it.part = [i + 1, run.length]; }); return run; }
   var rejected = { n: 0, last: null };
-  function make(id, lv) {
-    for (var i = 0; i < 25; i++) { var run = raw(id, lv), bad = null; run.forEach(function (it) { var p = verify(it); if (p.length && !bad) bad = p[0]; }); if (!bad) return run; rejected.n++; rejected.last = id + ' L' + lv + ': ' + bad; }
+  function make(id, lv, opts) {
+    for (var i = 0; i < 25; i++) { var run = raw(id, lv, opts), bad = null; run.forEach(function (it) { var p = verify(it); if (p.length && !bad) bad = p[0]; }); if (!bad) return run; rejected.n++; rejected.last = id + ' L' + lv + ': ' + bad; }
     throw new Error('Dojo move ' + id + ' could not make a verified item (' + rejected.last + ')');
   }
 
@@ -52753,6 +52775,295 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
 })();
 /* ===== DJG part 5 END ===== */
 
+/* --- dojo: dojo_gens6.js --- */
+/* ===== DJG part 6 (Words into math, built out: the translation registry and its angles; November 2026) START =====
+   Same contract as hub/dojo_gens.js. One registry, TRX.EL, holds every word or phrase the course turns into mathematics:
+   its family, the symbol it becomes, the phrasing as a function of what it acts on, the expression it gives, whether it flips
+   the order of the words, and the look-alike translations that are wrong. The moves below are ANGLES on that registry:
+   the same element is met from several sides (words → symbol, symbol → words, does it match, the odd one out, the missing
+   operation, a number put in, a translation to fix), and the combination moves join two or three elements.
+   An item made from one element carries it as `el`; when such an item is missed in a Blob Roll, hub/hub_dojo.js brings the
+   same element back within the round from another angle (TRX.probe), with fresh numbers and other wording.
+
+   Element: { id, fam, sym, w (the signal words), say(P, a, b) → phrase, src(S, a, b) → ascii, k (constants used: 0, 1 or 2),
+              flip (the words come in the other order), wr(S, a, b) → wrong ascii translations, sk (catalog skills), note }
+   P is what the element acts on in words ("x", "twice x"); S the same in ascii, already in parentheses when it is compound. */
+var TRX = (function () {
+  'use strict';
+  var EL = [], BY = {}, FAM = {};
+  function el(id, fam, sym, w, say, src, o) {
+    o = o || {};
+    var e = { id: id, fam: fam, sym: sym, w: w, say: say, src: src, k: o.k === undefined ? 1 : o.k, flip: !!o.flip, wr: o.wr || function () { return []; }, sk: o.sk || FAMSK[fam], note: o.note || '', unit: o.unit || '', pos: o.pos || null, lv: o.lv || 1 };
+    EL.push(e); BY[id] = e; (FAM[fam] = FAM[fam] || []).push(e); return e;
+  }
+  var FAMSK = { add: ['S11'], sub: ['S11'], mul: ['S11'], div: ['S11', 'S8'], pow: ['S12', 'S11'], grp: ['S11', 'S12'], sgn: ['T7', 'T5'], pct: ['C21', 'C8'], chg: ['C21', 'C22'], rate: ['P5', 'U17'], meas: ['G3', 'S40'] };
+  var FNAME = { add: 'add', sub: 'subtract', mul: 'multiply', div: 'divide', pow: 'powers', grp: 'grouping', sgn: 'signs', pct: 'percent', chg: 'change', rate: 'rates', meas: 'measurement' };
+  // parentheses only where they are needed (and never around a power: the kit's pretty-printer drops the ")" of "(x^2)")
+  function prec(S) { var d = 0, top = { add: 0, mul: 0, pow: 0 }; for (var i = 0; i < S.length; i++) { var c = S[i]; if (c === '(') d++; else if (c === ')') d--; else if (!d) { if ((c === '+' || c === '-') && i > 0) top.add = 1; else if (c === '*' || c === '/') top.mul = 1; else if (c === '^') top.pow = 1; } }
+    return top.add ? 'add' : S[0] === '-' ? 'neg' : top.mul ? 'mul' : top.pow ? 'pow' : 'atom'; }
+  function p(S) { var k = prec(S); return k === 'add' || k === 'neg' ? '(' + S + ')' : S; }          // after + − or ·
+  function pl(S) { return prec(S) === 'add' ? '(' + S + ')' : S; }                                 // before + or −
+  function pw(S) { return prec(S) === 'atom' ? S : '(' + S + ')'; }                                   // a base or a denominator
+  // ---------------------------------------------------------------- add
+  el('add.sum', 'add', '+', 'the sum of', function (P, a) { return 'the sum of ' + P + ' and ' + a; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: 'The sum of two things: add them.' });
+  el('add.more', 'add', '+', 'more than', function (P, a) { return a + ' more than ' + P; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: '“7 more than x” is x + 7: x, made bigger by 7.' });
+  el('add.incr', 'add', '+', 'increased by', function (P, a) { return P + ' increased by ' + a; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: 'Increased by a number: add it.' });
+  el('add.plus', 'add', '+', 'plus', function (P, a) { return P + ' plus ' + a; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: 'Plus: add.' });
+  el('add.added', 'add', '+', 'added to', function (P, a) { return a + ' added to ' + P; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: 'Added to: add, in either order.' });
+  el('add.total', 'add', '+', 'the total of', function (P, a) { return 'the total of ' + P + ' and ' + a; }, function (S, a) { return pl(S) + '+' + a; }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + a]; }, note: 'A total adds the parts.' });
+  // ---------------------------------------------------------------- subtract (three of them flip the order of the words)
+  el('sub.diff', 'sub', '−', 'the difference of', function (P, a) { return 'the difference of ' + P + ' and ' + a; }, function (S, a) { return pl(S) + '-' + a; }, { wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: 'The difference of x and 7 is x − 7, in the order named.' });
+  el('sub.less', 'sub', '−', 'less than', function (P, a) { return a + ' less than ' + P; }, function (S, a) { return pl(S) + '-' + a; }, { flip: true, wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: '“7 less than x” is x − 7: the words come in the other order.' });
+  el('sub.fewer', 'sub', '−', 'fewer than', function (P, a) { return a + ' fewer than ' + P; }, function (S, a) { return pl(S) + '-' + a; }, { flip: true, wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: '“7 fewer than x” is x − 7: the order flips.' });
+  el('sub.from', 'sub', '−', 'subtracted from', function (P, a) { return a + ' subtracted from ' + P; }, function (S, a) { return pl(S) + '-' + a; }, { flip: true, wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: '“7 subtracted from x” is x − 7: start from what it is taken from.' });
+  el('sub.decr', 'sub', '−', 'decreased by', function (P, a) { return P + ' decreased by ' + a; }, function (S, a) { return pl(S) + '-' + a; }, { wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: 'Decreased by a number: subtract it.' });
+  el('sub.minus', 'sub', '−', 'minus', function (P, a) { return P + ' minus ' + a; }, function (S, a) { return pl(S) + '-' + a; }, { wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: 'Minus: subtract.' });
+  el('sub.left', 'sub', '−', 'left after', function (P, a) { return 'what is left of ' + P + ' after ' + a + ' are taken away'; }, function (S, a) { return pl(S) + '-' + a; }, { wr: function (S, a) { return [a + '-' + p(S), pl(S) + '+' + a]; }, note: 'What is left: the whole minus what was taken.' });
+  // ---------------------------------------------------------------- multiply
+  el('mul.prod', 'mul', '×', 'the product of', function (P, a) { return 'the product of ' + a + ' and ' + P; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return [pl(S) + '+' + a, p(S) + '/' + a]; }, note: 'A product multiplies.' });
+  el('mul.times', 'mul', '×', 'times', function (P, a) { return a + ' times ' + P; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return [pl(S) + '+' + a, p(S) + '/' + a]; }, note: 'Times: multiply.' });
+  el('mul.twice', 'mul', '×', 'twice', function (P) { return 'twice ' + P; }, function (S) { return '2*' + p(S); }, { k: 0, wr: function (S) { return [p(S) + '+2', pw(S) + '^2']; }, note: 'Twice x is 2x, not x².' });
+  el('mul.double', 'mul', '×', 'double', function (P) { return 'double ' + P; }, function (S) { return '2*' + p(S); }, { k: 0, wr: function (S) { return [p(S) + '+2', pw(S) + '^2']; }, note: 'Double: times 2.' });
+  el('mul.triple', 'mul', '×', 'triple', function (P) { return 'triple ' + P; }, function (S) { return '3*' + p(S); }, { k: 0, wr: function (S) { return [p(S) + '+3', pw(S) + '^3']; }, note: 'Triple: times 3, not cubed.' });
+  el('mul.by', 'mul', '×', 'multiplied by', function (P, a) { return P + ' multiplied by ' + a; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return [pl(S) + '+' + a, p(S) + '/' + a]; }, note: 'Multiplied by: times.' });
+  el('mul.of', 'mul', '×', 'of', function (P, a, b) { return FW[a] + ' of ' + P; }, function (S, a) { return '(' + FR[a] + ')*' + p(S); }, { k: 1, wr: function (S, a) { return ['(' + FR[a] + ')+' + p(S), p(S) + '-(' + FR[a] + ')']; }, note: '“Of” after a fraction or a percent means multiply: ¾ of x is ¾x.', pos: 'frac' });
+  // ---------------------------------------------------------------- divide
+  el('div.quot', 'div', '÷', 'the quotient of', function (P, a) { return 'the quotient of ' + P + ' and ' + a; }, function (S, a) { return p(S) + '/' + a; }, { wr: function (S, a) { return [a + '/' + pw(S), a + '*' + p(S)]; }, note: 'The quotient of x and 4 is x ÷ 4, in the order named.' });
+  el('div.by', 'div', '÷', 'divided by', function (P, a) { return P + ' divided by ' + a; }, function (S, a) { return p(S) + '/' + a; }, { wr: function (S, a) { return [a + '/' + pw(S), a + '*' + p(S)]; }, note: 'Divided by: ÷.' });
+  el('div.split', 'div', '÷', 'split equally among', function (P, a) { return P + ' split equally among ' + a; }, function (S, a) { return p(S) + '/' + a; }, { wr: function (S, a) { return [a + '/' + pw(S), a + '*' + p(S)]; }, note: 'Split equally: divide by the number of shares.' });
+  el('div.half', 'div', '÷', 'half of', function (P) { return 'half of ' + P; }, function (S) { return p(S) + '/2'; }, { k: 0, wr: function (S) { return ['2*' + p(S), p(S) + '-2']; }, note: 'Half of x is x ÷ 2.' });
+  el('div.third', 'div', '÷', 'a third of', function (P) { return 'a third of ' + P; }, function (S) { return p(S) + '/3'; }, { k: 0, wr: function (S) { return ['3*' + p(S), p(S) + '-3']; }, note: 'A third of x is x ÷ 3.' });
+  el('div.ratio', 'div', '÷', 'the ratio of … to', function (P, a) { return 'the ratio of ' + P + ' to ' + a; }, function (S, a) { return p(S) + '/' + a; }, { wr: function (S, a) { return [a + '/' + pw(S), pl(S) + '-' + a]; }, note: 'The ratio of x to 4 is x ÷ 4: the first named on top.' });
+  // ---------------------------------------------------------------- powers
+  el('pow.sq', 'pow', 'x²', 'squared', function (P) { return P + ' squared'; }, function (S) { return pw(S) + '^2'; }, { k: 0, wr: function (S) { return ['2*' + p(S), p(S) + '+2']; }, note: 'Squared: times itself, x · x.' });
+  el('pow.cube', 'pow', 'x²', 'cubed', function (P) { return P + ' cubed'; }, function (S) { return pw(S) + '^3'; }, { k: 0, wr: function (S) { return ['3*' + p(S), pw(S) + '^2']; }, note: 'Cubed: three factors, x · x · x.' });
+  el('pow.sqof', 'pow', 'x²', 'the square of', function (P) { return 'the square of ' + P; }, function (S) { return pw(S) + '^2'; }, { k: 0, wr: function (S) { return ['2*' + p(S), p(S) + '/2']; }, note: 'The square of x is x².' });
+  // ---------------------------------------------------------------- grouping (two constants)
+  el('grp.qty', 'grp', '( )', 'the quantity', function (P, a, b) { return a + ' times the quantity ' + P + ' plus ' + b; }, function (S, a, b) { return a + '*(' + S + '+' + b + ')'; }, { k: 2, wr: function (S, a, b) { return [a + '*' + pl(S) + '+' + b, pl(S) + '+' + a * b]; }, note: '“The quantity” puts what follows in parentheses.' });
+  el('grp.twice', 'grp', '( )', 'twice the sum of', function (P, a) { return 'twice the sum of ' + P + ' and ' + a; }, function (S, a) { return '2*(' + S + '+' + a + ')'; }, { wr: function (S, a) { return ['2*' + pl(S) + '+' + a, p(S) + '+2*' + a]; }, note: '“Twice the sum” doubles the whole sum: 2(x + a).' });
+  el('grp.sumby', 'grp', '( )', 'the sum of … divided by', function (P, a, b) { return 'the sum of ' + P + ' and ' + a + ', divided by ' + b; }, function (S, a, b) { return '(' + S + '+' + a + ')/' + b; }, { k: 2, wr: function (S, a, b) { return [S + '+' + a + '/' + b, b + '/(' + S + '+' + a + ')']; }, note: 'The comma closes the sum: (x + a) ÷ b.' });
+  el('grp.diffsq', 'grp', '( )', 'the square of the difference', function (P, a) { return 'the square of the difference of ' + P + ' and ' + a; }, function (S, a) { return '(' + S + '-' + a + ')^2'; }, { wr: function (S, a) { return [pw(S) + '^2-' + a, S + '-' + a + '^2']; }, note: 'Square the whole difference: (x − a)².', lv: 2 });
+  // ---------------------------------------------------------------- signs
+  el('sgn.opp', 'sgn', '−( )', 'the opposite of', function (P) { return 'the opposite of ' + P; }, function (S) { return '-' + p(S); }, { k: 0, wr: function (S) { return ['1/' + pw(S), S]; }, note: 'The opposite of x is −x: the same distance from 0, on the other side.' });
+  el('sgn.recip', 'sgn', '1/x', 'the reciprocal of', function (P) { return 'the reciprocal of ' + P; }, function (S) { return '1/' + pw(S); }, { k: 0, wr: function (S) { return ['-' + p(S), p(S) + '-1']; }, note: 'The reciprocal of x is 1/x: the two multiply to 1.' });
+  el('sgn.below', 'sgn', '−', 'below / debt', function (P, a) { return 'a debt of $' + a; }, function (S, a) { return '-' + a; }, { wr: function (S, a) { return [String(a), '1/' + a]; }, note: 'A debt, a depth or a loss is written as a negative number.', pos: 'const' });
+  // ---------------------------------------------------------------- percent (a is a percent)
+  el('pct.of', 'pct', '%', 'percent of', function (P, a) { return a + '% of ' + P; }, function (S, a) { return (a / 100) + '*' + p(S); }, { wr: function (S, a) { return [a + '*' + p(S), pl(S) + '-' + (a / 100)]; }, note: 'p% of x: the percent as a decimal, times x.', pos: 'pct' });
+  el('pct.more', 'pct', '%', 'percent more than', function (P, a) { return a + '% more than ' + P; }, function (S, a) { return ((100 + a) / 100) + '*' + p(S); }, { wr: function (S, a) { return [(a / 100) + '*' + p(S), pl(S) + '+' + a]; }, note: 'p% more keeps all of x and adds p%: (1 + p/100)x.', pos: 'pct' });
+  el('pct.off', 'pct', '%', 'percent off', function (P, a) { return P + ' after ' + a + '% off'; }, function (S, a) { return ((100 - a) / 100) + '*' + p(S); }, { wr: function (S, a) { return [(a / 100) + '*' + p(S), pl(S) + '-' + a]; }, note: 'p% off leaves (100 − p)% of the price.', pos: 'pct' });
+  el('pct.tax', 'pct', '%', 'plus tax', function (P, a) { return P + ' plus ' + a + '% tax'; }, function (S, a) { return ((100 + a) / 100) + '*' + p(S); }, { wr: function (S, a) { return [(a / 100) + '*' + p(S), pl(S) + '+' + a]; }, note: 'Tax is a percent of the price, added on.', pos: 'pct' });
+  el('pct.disc', 'pct', '%', 'a discount of', function (P, a) { return P + ' with a ' + a + '% discount'; }, function (S, a) { return ((100 - a) / 100) + '*' + p(S); }, { wr: function (S, a) { return [(a / 100) + '*' + p(S), pl(S) + '-' + a]; }, note: 'A discount is taken off: what is paid is the rest.', pos: 'pct' });
+  el('pct.markup', 'pct', '%', 'marked up by', function (P, a) { return P + ' marked up by ' + a + '%'; }, function (S, a) { return ((100 + a) / 100) + '*' + p(S); }, { wr: function (S, a) { return [((100 - a) / 100) + '*' + p(S), pl(S) + '+' + a]; }, note: 'A markup adds a percent of the cost.', pos: 'pct' });
+  // ---------------------------------------------------------------- change and rates
+  el('chg.from', 'chg', '−', 'the change from … to', function (P, a) { return 'the change from ' + P + ' to ' + a; }, function (S, a) { return a + '-' + p(S); }, { flip: true, wr: function (S, a) { return [pl(S) + '-' + a, pl(S) + '+' + a]; }, note: 'The change from x to 30 is 30 − x: the new value minus the old.' });
+  el('rate.each', 'rate', '×', 'for each', function (P, a) { return '$' + a + ' for each of ' + P + ' tickets'; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return [pl(S) + '+' + a, p(S) + '/' + a]; }, note: 'The same amount for each one: multiply by how many.' });
+  el('rate.per', 'rate', '÷', 'per', function (P, a) { return P + ' miles in ' + a + ' hours, per hour'; }, function (S, a) { return p(S) + '/' + a; }, { wr: function (S, a) { return [a + '/' + pw(S), a + '*' + p(S)]; }, note: 'Per hour: divide by the hours.' });
+  el('rate.every', 'rate', '×', 'every', function (P, a) { return a + ' gallons every hour for ' + P + ' hours'; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return [pl(S) + '+' + a, p(S) + '/' + a]; }, note: 'Every hour adds the same amount: multiply by the hours.' });
+  // ---------------------------------------------------------------- measurement
+  el('meas.comp', 'meas', '−', 'the complement of', function (P) { return 'the complement of an angle of ' + P + '°'; }, function (S) { return '90-' + p(S); }, { k: 0, wr: function (S) { return ['180-' + p(S), p(S) + '-90']; }, note: 'Complementary angles add to 90°: the complement of x° is 90 − x.' });
+  el('meas.supp', 'meas', '−', 'the supplement of', function (P) { return 'the supplement of an angle of ' + P + '°'; }, function (S) { return '180-' + p(S); }, { k: 0, wr: function (S) { return ['90-' + p(S), p(S) + '-180']; }, note: 'Supplementary angles add to 180°: the supplement of x° is 180 − x.' });
+  el('meas.perim', 'meas', '+', 'the perimeter', function (P) { return 'the perimeter of a square with sides of ' + P; }, function (S) { return '4*' + p(S); }, { k: 0, wr: function (S) { return [pw(S) + '^2', p(S) + '+4']; }, note: 'A perimeter adds the sides: four sides of x is 4x.' });
+  el('meas.area', 'meas', '×', 'the area', function (P, a) { return 'the area of a rectangle ' + a + ' long and ' + P + ' wide'; }, function (S, a) { return a + '*' + p(S); }, { wr: function (S, a) { return ['2*' + a + '+2*' + p(S), a + '+' + p(S)]; }, note: 'An area multiplies length by width.' });
+  el('meas.avg', 'meas', '÷', 'the average of', function (P, a) { return 'the average of ' + P + ' and ' + a; }, function (S, a) { return '(' + S + '+' + a + ')/2'; }, { wr: function (S, a) { return [pl(S) + '+' + a + '/2', '(' + S + '+' + a + ')*2']; }, note: 'An average adds, then divides by how many: (x + a) ÷ 2.' });
+  var FR = { 2: '1/2', 3: '3/4', 4: '2/3', 5: '3/5', 6: '5/6', 7: '1/4', 8: '2/5', 9: '7/10' }, FW = { 2: 'one half', 3: 'three quarters', 4: 'two thirds', 5: 'three fifths', 6: 'five sixths', 7: 'one quarter', 8: 'two fifths', 9: 'seven tenths' };
+
+  // relations: the equals words, and the inequality words (used by sentences and limits)
+  var EQW = ['is', 'gives', 'equals', 'is the same as', 'results in', 'comes to'];
+  var INW = [['at least', '>='], ['at most', '<='], ['no more than', '<='], ['no less than', '>='], ['more than', '>'], ['fewer than', '<'], ['up to', '<='], ['a minimum of', '>='], ['a maximum of', '<='], ['over', '>'], ['under', '<'], ['not more than', '<=']];
+
+  function forLv(lv) { return EL.filter(function (e) { return e.lv <= lv && !e.pos; }); }
+  function pickEl(lv, o) { o = o || {}; var pool = EL.filter(function (e) { return (!o.need || o.need(e)) && (o.any || e.lv <= lv); }); return pool[Math.floor(Math.random() * pool.length)]; }
+  var PLAIN = ['add', 'sub', 'mul', 'div', 'pow', 'grp', 'sgn', 'chg'];
+  // how many other elements say the same as each one (with the same numbers): the odd-one-out angle needs two
+  EL.forEach(function (e) { e.mates = e.pos ? 0 : EL.filter(function (z) { return z !== e && !z.pos && z.k === e.k && z.src('x', 5, 3) === e.src('x', 5, 3) && PLAIN.indexOf(z.fam) >= 0; }).length; });
+  return { EL: EL, BY: BY, FAM: FAM, FNAME: FNAME, EQW: EQW, INW: INW, p: p, pw: pw, forLv: forLv, pickEl: pickEl };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports.TRX = TRX;
+
+(function () {
+  'use strict';
+  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, pick = h.pick, shuffle = h.shuffle, f = h.f, P = h.P, D = h.D, L = h.L, until = h.until, T = h.T, C = h.C, B = h.B, E = h.E, X = h.X, EQ = h.EQ, mv = DJG.mv;
+  var A = [];   // the single-element angles, for probing
+  function say(t) { return D('<span class="dj-say">' + t + '</span>'); }
+  function story(t) { return '<p class="lead dj-story">' + t + '</p>'; }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+  // numbers for an element: k constants, friendly at level 1
+  function nums(e, lv) {
+    if (e.pos === 'pct') return [pick(lv === 1 ? [10, 20, 25, 50] : [5, 15, 30, 40, 60, 75]), 0];
+    if (e.pos === 'frac') return [pick(lv === 1 ? [2, 7] : [3, 4, 5, 6, 8, 9]), 0];
+    var a = R(2, lv === 1 ? 9 : 15), b = until(function () { return R(2, 9); }, function (x) { return x !== a; });
+    return [a, b];
+  }
+  function inst(e, lv, letter, inner) {      // one element applied to x (or to an inner phrase): { say, src, el }
+    var n = nums(e, lv), v = letter || 'x', Pp = inner ? inner.say : v, Ss = inner ? inner.src : v;
+    return { say: e.say(Pp, n[0], n[1]), src: e.src(Ss, n[0], n[1]), wr: e.wr(Ss, n[0], n[1]), el: e, a: n[0], b: n[1] };
+  }
+  function exprEl(lv, o) { o = o || {}; return TRX.pickEl(lv, { need: function (e) { return !e.pos && (!o.k0 || e.k === 0) && (!o.flip || e.flip) && (!o.not || o.not.indexOf(e.id) < 0); } }); }
+  function chosen(opts, test) { var e = opts && opts.el && TRX.BY[opts.el]; return e && (!test || test(e)) ? e : null; }
+  function angle(id, name, card, gen, test) { mv(id, name, ['S11', 'S12', 'S13'], card, function (lv, opts) { return gen(lv, opts || {}); }); A.push({ id: id, test: test || function (e) { return !e.pos; } }); }
+  function tagEl(run, e) { run.forEach(function (it) { it.el = e.id; it.skills = e.sk; }); return run; }
+  // wrong translations of one instance that are really wrong (not equivalent to the right one), with the other elements of
+  // the same family read the wrong way as a reserve
+  function wrongs(x, n) {
+    var out = [], seen = {}; seen[x.src] = 1;
+    x.wr.concat(['x+' + (x.a || 2), (x.a || 2) + '-x', 'x/' + (x.a || 2), (x.a || 2) + '*x', 'x^2', '-x']).forEach(function (w) { if (out.length < n && !seen[w] && !DJG.same(w, x.src)) { seen[w] = 1; out.push(w); } });
+    return out;
+  }
+
+  // ================================================================ ANGLES ON ONE ELEMENT
+  // 1. words → symbol
+  angle('words.sym', 'Signal word to symbol', ['Every signal word has a symbol', 'more than, increased by, the sum of → +. less than, decreased by, the difference → −. times, twice, the product, of → ×. per, split, the quotient, half of → ÷.'], function (lv, o) {
+    var e = chosen(o, function (z) { return ['+', '−', '×', '÷'].indexOf(z.sym) >= 0; }) || TRX.pickEl(lv, { need: function (z) { return ['+', '−', '×', '÷'].indexOf(z.sym) >= 0 && z.fam !== 'meas'; } }), x = inst(e, lv);
+    var syms = ['+', '−', '×', '÷'];
+    return tagEl([C(L('Which operation do these words ask for?') + say(x.say), e.sym, syms.filter(function (s) { return s !== e.sym; }), { order: syms, ver: { fix: 1 }, why: e.note })], e);
+  }, function (e) { return ['+', '−', '×', '÷'].indexOf(e.sym) >= 0; });
+  // 2. words → expression (every phrasing in the registry)
+  angle('words.phrase', 'Words to expression', ['Find the signal word, then the order', 'The thing acted on keeps its place unless the words flip it: “less than”, “fewer than”, “subtracted from” and “the change from … to” turn the order round.'], function (lv, o) {
+    var e = chosen(o) || exprEl(lv), x = inst(e, lv);
+    return tagEl([X(L('Which expression says it?') + say(x.say), x.src, wrongs(x, 3), { ver: { eq: x.src }, why: e.note })], e);
+  });
+  // 3. expression → words
+  angle('words.say', 'Expression to words', ['Read the expression aloud, then match the words', 'x − 7 can be “7 less than x”, “x decreased by 7” or “the difference of x and 7”, but never “x less than 7”.'], function (lv, o) {
+    var e = chosen(o, SAYOK) || TRX.pickEl(lv, { need: SAYOK }), x = inst(e, lv), ws = wrongs(x, 3);
+    // the wrong tiles are other phrasings whose meaning is one of the wrong translations
+    var tiles = ws.map(function (w) { var alt = phraseFor(w, x, lv); return alt ? { t: alt, src: w } : null; }).filter(Boolean);
+    if (tiles.length < 2) return DJG.byId['words.phrase'].gen(lv, { el: e.id });
+    return tagEl([C(L('Which words say this?') + D(P(x.src)), { t: x.say, src: x.src }, tiles, { ver: { eq: x.src }, why: e.note })], e);
+  }, SAYOK);
+  function SAYOK(z) { return !z.pos && ['add', 'sub', 'mul', 'div', 'pow', 'sgn', 'chg'].indexOf(z.fam) >= 0; }
+  // a phrasing for a wrong translation, so the wrong tiles in words.say read as real English: built from the registry when
+  // some element with the same numbers gives exactly that ascii
+  function phraseFor(src, x, lv) {
+    var cands = TRX.EL.filter(function (z) { return !z.pos && z.k <= 1; });
+    for (var i = 0; i < cands.length; i++) { var z = cands[i], s0 = z.src('x', x.a, x.b); if (s0 === src || DJG.same(s0, src)) return z.say('x', x.a, x.b); }
+    return null;
+  }
+  // 4. does it match? (yes / no)
+  angle('words.match', 'Does it match?', ['Translate it yourself first, then compare', 'Say the words as a calculation before you look. A translation with the right numbers in the wrong order does not match.'], function (lv, o) {
+    var e = chosen(o) || exprEl(lv), x = inst(e, lv), right = Math.random() < 0.5, shown = right ? x.src : wrongs(x, 1)[0];
+    return tagEl([B(say(x.say) + L('Is this the same?') + D(P(shown)), 'yes', 'no', right, { ver: { pair: [x.src, shown] }, why: e.note })], e);
+  });
+  // 5. two phrasings, same meaning?
+  angle('words.same', 'Same meaning?', ['Translate both, then compare', 'Two phrasings mean the same when they give the same expression: “7 less than x” and “x decreased by 7” do; “7 less than x” and “7 decreased by x” do not.'], function (lv, o) {
+    var e = chosen(o, SAMEOK) || TRX.pickEl(lv, { need: SAMEOK }), x = inst(e, lv), fam = TRX.FAM[e.fam].filter(function (z) { return z.id !== e.id && !z.pos && z.k === e.k; });
+    var z = fam.length ? pick(fam) : e, y = { say: z.say('x', x.a, x.b), src: z.src('x', x.a, x.b) };
+    if (Math.random() < 0.45) { var w = wrongs(x, 1)[0], ph = phraseFor(w, x, lv); if (ph) y = { say: ph, src: w }; }
+    var same = DJG.same(x.src, y.src);
+    return tagEl([B(say(x.say) + L('and') + say(y.say) + L('Do they mean the same?'), 'same', 'different', same, { ver: { pair: [x.src, y.src] }, why: e.note })], e);
+  }, SAMEOK);
+  function SAMEOK(z) { return !z.pos && ['add', 'sub', 'mul', 'div', 'pow', 'grp'].indexOf(z.fam) >= 0; }
+  // 6. the odd one out among four phrasings
+  angle('words.odd', 'The odd one out', ['Three say the same thing', 'Translate each one; the one that gives a different expression is the odd one out. Watch the order words.'], function (lv, o) {
+    var e = chosen(o, ODDOK) || TRX.pickEl(3, { any: true, need: ODDOK }), x = inst(e, lv), mates = TRX.EL.filter(function (z) { return !z.pos && z.k === e.k && z.id !== e.id && ['meas', 'rate'].indexOf(z.fam) < 0 && DJG.same(z.src('x', x.a, x.b), x.src); });
+    if (mates.length < 2) return DJG.byId['words.phrase'].gen(lv, { el: e.id });
+    mates = shuffle(mates).slice(0, 2);
+    var w = wrongs(x, 2).map(function (s0) { return { s: s0, ph: phraseFor(s0, x, lv) }; }).filter(function (z) { return z.ph; })[0];
+    if (!w) return DJG.byId['words.phrase'].gen(lv, { el: e.id });
+    var good = [{ t: x.say, src: x.src }].concat(mates.map(function (z) { return { t: z.say('x', x.a, x.b), src: z.src('x', x.a, x.b) }; }));
+    return tagEl([C(L('Three of these say the same thing about x and ' + x.a + '. Which one does not?'), { t: w.ph, src: w.s }, good, { ver: { odd: 1 }, why: 'The other three are all ' + P(x.src) + '. ' + e.note })], e);
+  }, ODDOK);
+  function ODDOK(z) { return !z.pos && z.mates >= 2 && ['meas', 'rate'].indexOf(z.fam) < 0; }
+  // 7. the missing operation in an equation for a story (numbers)
+  angle('words.gap', 'The missing operation', ['Which operation makes the story true?', 'Read the signal word in the story; then check: the operation must turn the two numbers into the result.'], function (lv, o) {
+    var e = chosen(o, GAPOK) || TRX.pickEl(lv, { need: GAPOK });
+    var a = R(2, 9), xv = e.sym === '÷' ? a * R(2, 9) : e.sym === '−' ? a + R(3, 20) : until(function () { return R(2, 12); }, function (z) { return z !== a; }), src = e.src(String(xv), a), val = DJG.ev(src), mm = src.match(/^(\d+)([+\-*/])(\d+)$/);
+    if (!mm) return DJG.byId['words.sym'].gen(lv, { el: e.id });
+    var shown = mm[1] + ' ▢ ' + mm[3];
+    var ops = { '+': '+', '−': '-', '×': '*', '÷': '/' }, tiles = ['+', '−', '×', '÷'].map(function (s0) { var t0 = s0 === e.sym ? src : fill(src, ops[s0]); return { t: s0, src: t0 }; });
+    var right = tiles.filter(function (t0) { return t0.t === e.sym; })[0], wrong = tiles.filter(function (t0) { return t0.t !== e.sym && !DJG.ev(t0.src).eq(val); });
+    if (wrong.length < 2) return DJG.byId['words.sym'].gen(lv, { el: e.id });
+    return tagEl([C(say(cap(e.say(String(xv), a)) + ' ' + pick(TRX.EQW) + ' ' + f(val) + '.') + L('Which operation goes in the box?') + D(shown + ' = ' + f(val)), right, wrong, { order: ['+', '−', '×', '÷'], ver: { ev: val.toFrac() }, why: e.note })], e);
+    function fill(s0, op) { return mm[1] + op + mm[3]; }
+  }, GAPOK);
+  function GAPOK(z) { return ['add', 'sub', 'mul', 'div'].indexOf(z.fam) >= 0 && z.k === 1 && !z.pos && z.id !== 'sub.left'; }
+  // 8. put a number in and work the phrase out (typed)
+  angle('words.value', 'Put a number in', ['Translate first, then put the number in', 'Write the expression, replace the letter by its value in parentheses, then follow the order of operations.'], function (lv, o) {
+    var e = chosen(o) || exprEl(lv), x = inst(e, lv), xv = lv === 3 ? -R(2, 6) : R(2, 9), env = { x: xv }, val = DJG.ev(x.src, env);
+    var wv = wrongs(x, 2).map(function (w) { try { return DJG.ev(w, env); } catch (er) { return null; } }).filter(function (v0) { return v0 && !v0.eq(val); });
+    return tagEl([T(say(x.say) + L('x = ' + f(xv) + '. What is it worth?'), val, { wrongs: wv, ver: { ev: x.src, env: env }, why: 'It is ' + P(x.src) + ' with x = ' + f(xv) + '. ' + e.note })], e);
+  });
+  // 9. find the error in a translation and fix it
+  angle('words.fix', 'Fix the translation', ['Find what the translation got wrong', 'Check three things in order: the operation, the order of the numbers, and the grouping.'], function (lv, o) {
+    var e = chosen(o) || exprEl(lv), x = inst(e, lv), ws = wrongs(x, 3), bad = ws[0], who = pick(['Zorp', 'Captain Pickle', 'Grandma Thunder', 'Sir Fluffington', 'Professor Wobble', 'Duchess Banana']);
+    return tagEl([X(story(who + ' wrote “' + x.say + '” as ' + P(bad) + '.') + L('What should it be?'), x.src, ws, { ver: { eq: x.src }, why: e.note })], e);
+  });
+
+  // ================================================================ COMBINATIONS
+  // two elements: an inner one that reads only one way ("twice x", "x squared", "half of x", "the opposite of x") inside an
+  // outer one that names what it acts on once ("5 less than twice x", "the sum of x squared and 4", "twice x decreased by 3")
+  var INNER = ['mul.twice', 'mul.triple', 'div.half', 'div.third', 'pow.sq', 'sgn.opp'];
+  function combo(lv, letter) {
+    var inner = inst(TRX.BY[pick(INNER)], lv, letter || 'x'),
+      outer = until(function () { return TRX.pickEl(3, { any: true, need: function (z) { return z.k === 1 && !z.pos && ['add', 'sub', 'mul', 'div'].indexOf(z.fam) >= 0 && z.id !== 'sub.left'; } }); }, function (z) { return z.fam !== inner.el.fam; });
+    var x = inst(outer, lv, letter || 'x', inner); x.inner = inner; return x;
+  }
+  mv('words.combo2', 'Two in one phrase', ['S11', 'S12'], ['Work from the inside out', '“5 less than twice x”: twice x first (2x), then 5 less than that (2x − 5). The last thing said is often the first thing done.'], function (lv) {
+    var x = combo(lv), ws = [];
+    [x.a + '-' + TRX.p(x.inner.src)].concat(x.wr, x.inner.el.wr('x', x.a).map(function (w) { return x.el.src(w, x.a); })).forEach(function (w) { if (ws.length < 3 && !DJG.same(w, x.src) && ws.indexOf(w) < 0) ws.push(w); });
+    if (ws.length < 2) ws = wrongs(x, 3);
+    return [X(L('Which expression says it?') + say(x.say), x.src, ws, { ver: { eq: x.src }, why: 'Build it from the inside: ' + P(x.src) + '.' })];
+  });
+  mv('words.combo3', 'Three, with a group', ['S11', 'S12'], ['A group is worked out first', '“The sum of”, “the quantity”, “the difference of” make a group: it gets parentheses when anything acts on it from outside.'], function (lv) {
+    var g = pick(TRX.FAM.grp), n = [R(2, 6), R(2, 9)], inner = inst(until(function () { return exprEl(1, { k0: true }); }, function (z) { return (z.fam === 'mul' || z.fam === 'pow' || z.fam === 'div') && !(z.fam === 'pow' && g.id === 'grp.diffsq'); }), lv);
+    var x = { say: g.say(inner.say, n[0], n[1]), src: g.src(inner.src, n[0], n[1]), wr: g.wr(inner.src, n[0], n[1]).concat([g.src('x', n[0], n[1])]), a: n[0], b: n[1] };
+    return [X(L('Which expression says it?') + say(x.say), x.src, wrongs(x, 3), { ver: { eq: x.src }, why: g.note })];
+  });
+  mv('words.solveit', 'Say it, write it, solve it', ['S13', 'U14', 'E1'], ['Equals word first, then each side', 'is, gives, equals, results in: that is where = goes. Write each side, then undo in reverse order.'], function (lv) {
+    var xv = lv === 3 ? R(-6, 12) : R(2, 12), x = lv === 1 ? inst(TRX.pickEl(1, { need: function (z) { return ['add', 'sub', 'mul', 'div'].indexOf(z.fam) >= 0 && !z.pos && z.id !== 'sub.left'; } }), 1, 'n') : combo(2, 'n');
+    x = { say: x.say.replace(/\bn\b/, 'a number'), src: x.src };
+    var rhs = DJG.ev(x.src, { n: xv });
+    if (!rhs.isInt() || /\^/.test(x.src)) return DJG.byId['words.solveit'].gen(lv);
+    return [T(say(cap(x.say) + ' ' + pick(TRX.EQW) + ' ' + f(rhs) + '.') + L('What is the number?'), xv, { wrongs: [rhs, -xv], ver: { sol: [x.src, rhs.toFrac()], v: 'n' }, why: 'The equation is ' + P(x.src) + ' = ' + f(rhs) + '. Undo the last step first.' })];
+  });
+  mv('words.limit', 'Story to inequality', ['E27', 'E35', 'T10'], ['At least ≥, at most ≤', 'Write the quantity the story limits, then the word: at least, no less than, a minimum of → ≥; at most, no more than, up to, a maximum of → ≤; more than, over → >; fewer than, under → <.'], function (lv) {
+    var w = pick(TRX.INW), p0 = R(2, 9), k0 = R(3, 12), tot = p0 * k0;
+    var upper = w[1] === '<' || w[1] === '<=', ctx = upper ? pick([['Kazoos cost $' + p0 + ' each. Madame Kazoo can spend ' + w[0] + ' $' + tot + '.', 'kazoos'], ['Each goblin weighs ' + p0 + ' stone. The bridge takes ' + w[0] + ' ' + tot + ' stone.', 'goblins']]) :
+      pick([['Bigfoot eats ' + p0 + ' pancakes an hour. He needs ' + w[0] + ' ' + tot + ' pancakes.', 'hours'], ['Each worm-circus ticket earns $' + p0 + '. The circus must earn ' + w[0] + ' $' + tot + '.', 'tickets']]);
+    if (lv === 1) { var four = ['<', '<=', '>', '>='], tl = four.map(function (op) { return { t: 'x ' + h.sy(op) + ' ' + tot, op: op, v: tot, src: null }; }); return [C(L('Which inequality says it? (x is the amount.)') + say('The amount is ' + w[0] + ' ' + tot + '.'), tl.filter(function (z) { return z.op === w[1]; })[0], tl.filter(function (z) { return z.op !== w[1]; }), { order: tl.map(function (z) { return z.t; }), ver: { fix: 1 }, why: '“' + cap(w[0]) + '” is ' + h.sy(w[1]) + '.' })]; }
+    var lhs = p0 + 'x', tiles = ['<', '<=', '>', '>='].map(function (op) { return { t: lhs + ' ' + h.sy(op) + ' ' + tot, src: null, op: op }; });
+    if (lv === 2) return [C(story(ctx[0]) + L('Which inequality says it? (x is the number of ' + ctx[1] + '.)'), tiles.filter(function (z) { return z.op === w[1]; })[0], tiles.filter(function (z) { return z.op !== w[1]; }), { ver: { fix: 1 }, why: p0 + ' for each one: ' + p0 + 'x. “' + cap(w[0]) + '” is ' + h.sy(w[1]) + '.' })];
+    var sol = ['<', '<=', '>', '>='].map(function (op) { return h.IQ(op, k0); });
+    return [C(story(ctx[0]) + L('Which values of x does it allow? (x is the number of ' + ctx[1] + '.)'), sol.filter(function (z) { return z.op === w[1]; })[0], sol.filter(function (z) { return z.op !== w[1]; }), { ver: { orig: [p0 + '*x', w[1], String(tot)] }, why: p0 + 'x ' + h.sy(w[1]) + ' ' + tot + ', so x ' + h.sy(w[1]) + ' ' + k0 + '.' })];
+  });
+  mv('words.pctch', 'Percent and change', ['C21', 'C22', 'C26'], ['Each percent is one multiplier', 'Up p%: · (1 + p/100). Down p%: · (1 − p/100). Two changes in a row multiply their multipliers.'], function (lv) {
+    var p1 = pick([10, 20, 25, 40]), p2 = pick([5, 10, 20, 50]);
+    if (lv === 1) { var e = pick(TRX.FAM.pct), x = inst(e, 2); return tagEl([X(L('Which expression says it?') + say(x.say), x.src, wrongs(x, 3), { ver: { eq: x.src }, why: e.note })], e); }
+    var up = Math.random() < 0.5, s1 = up ? 'raised by ' + p1 + '%' : p1 + '% off', m1 = up ? (100 + p1) / 100 : (100 - p1) / 100, m2 = (100 - p2) / 100;
+    var src = m1 + '*' + m2 + '*x';
+    if (lv === 2) return [X(L('Which expression is the final price?') + say('A price x is ' + s1 + ', then ' + p2 + '% off the new price.'), src, [((up ? 100 + p1 - p2 : 100 - p1 - p2) / 100) + '*x', 'x-' + (p1 + p2), m1 + '*x-' + p2], { ver: { eq: src }, why: 'Each change multiplies: ' + m1 + ' · ' + m2 + '. The percents do not add.' })];
+    var a = pick([20, 25, 40, 50, 80, 200]), b = a + a * pick([10, 20, 25, 50, 75]) / 100;
+    return [T(say('The price went from $' + a + ' to $' + b + '.') + L('By what percent did it go up?'), q(100 * (b - a), a), { unit: '%', wrongs: [q(100 * (b - a), b), b - a], ver: { ev: '100*(' + b + '-' + a + ')/' + a }, why: 'The change from ' + a + ' to ' + b + ' is ' + (b - a) + '; as a percent of the value before: ' + (b - a) + ' ÷ ' + a + '.' })];
+  });
+  mv('words.ratetot', 'A rate and a total', ['U17', 'E18', 'E23'], ['For each → times; once → added', 'A charge for each hour is multiplied by the hours; a fee paid once is added. “Per” divides a total by how many.'], function (lv) {
+    var r0 = R(3, 12), fee = 5 * R(1, 6), hrs = R(2, 8);
+    if (lv === 1) return [X(story('A unicycle rents for $' + r0 + ' an hour.') + L('Which expression is the cost for h hours?'), r0 + '*h', ['h+' + r0, 'h/' + r0, r0 + '/h'], { ver: { eq: r0 + '*h' }, why: '$' + r0 + ' for each hour: ' + r0 + 'h.' })];
+    if (lv === 2) return [X(story('A unicycle rents for $' + r0 + ' an hour, plus a $' + fee + ' helmet fee paid once.') + L('Which expression is the cost for h hours?'), r0 + '*h+' + fee, [r0 + '*(h+' + fee + ')', (r0 + fee) + '*h', fee + '*h+' + r0], { ver: { eq: r0 + '*h+' + fee }, why: 'The hourly part grows with h: ' + r0 + 'h. The fee is added once.' })];
+    var tot = r0 * hrs + fee;
+    return [T(story('A unicycle rents for $' + r0 + ' an hour plus a $' + fee + ' helmet fee. The bill comes to $' + tot + '.') + L('How many hours?'), hrs, { unit: 'hours', wrongs: [q(tot, r0), (tot + fee) / r0], ver: { sol: [r0 + '*h+' + fee, String(tot)], v: 'h' }, why: r0 + 'h + ' + fee + ' = ' + tot + ': take off the fee, then divide by ' + r0 + '.' })];
+  });
+  mv('words.measure', 'Measurement words', ['G3', 'G8', 'S40'], ['Each measurement word has its sum or product', 'Complementary → add to 90°. Supplementary → add to 180°. Perimeter → add the sides. Area → multiply. Average → add, then divide by how many.'], function (lv) {
+    var e = pick(TRX.FAM.meas), x = inst(e, lv);
+    if (lv < 3) return tagEl([X(L('Which expression says it?') + say(x.say), x.src, wrongs(x, 3), { ver: { eq: x.src }, why: e.note })], e);
+    var xv = R(5, 40), val = DJG.ev(x.src, { x: xv });
+    if (!val.isInt()) return DJG.byId['words.measure'].gen(2);
+    return tagEl([T(say(cap(x.say)) + L('x = ' + xv + '. What is it?'), val, { wrongs: [xv], ver: { ev: x.src, env: { x: xv } }, why: e.note })], e);
+  });
+  mv('words.rule', 'Rules in words', ['P23', 'S30', 'E25'], ['“y is … x”: is becomes =', 'Write y = and translate the rest: “y is 3 more than twice x” is y = 2x + 3. Check it with one row of the table.'], function (lv) {
+    var m0 = R(2, 6), b0 = until(function () { return R(2, 9); }, function (z) { return z !== m0 && z !== m0 + 1; }), ph = lv === 1 ? [m0 + ' times x', m0 + '*x'] : pick([[b0 + ' more than ' + (m0 === 2 ? 'twice' : m0 + ' times') + ' x', m0 + '*x+' + b0], [b0 + ' less than ' + m0 + ' times x', m0 + '*x-' + b0], [m0 + ' times the sum of x and ' + b0, m0 + '*(x+' + b0 + ')']]);
+    if (lv === 3) { var rows = [1, 2, 3].map(function (xx) { return [xx, DJG.ev(ph[1], { x: xx }).toNumber()]; }); return [C(L('Which rule fits this table?') + D('x: 1, 2, 3 → y: ' + rows.map(function (r) { return r[1]; }).join(', ')), { t: 'y is ' + ph[0], src: ph[1] }, [{ t: 'y is ' + m0 + ' more than ' + b0 + ' times x', src: b0 + '*x+' + m0 }, { t: 'y is ' + (m0 + b0) + ' times x', src: (m0 + b0) + '*x' }, { t: 'y is x more than ' + m0, src: 'x+' + m0 }], { ver: { tab: rows }, why: 'Put x = 1, 2, 3 into each rule; only one gives every y.' })]; }
+    return [C(L('Which equation says it?') + say('y is ' + ph[0] + '.'), { t: 'y = ' + P(ph[1]), src: ph[1] }, [{ t: 'y = ' + P(m0 + '*(x+' + b0 + ')'), src: m0 + '*(x+' + b0 + ')' }, { t: 'y = ' + P(b0 + '*x+' + m0), src: b0 + '*x+' + m0 }, { t: 'y = ' + P('x+' + (m0 + b0)), src: 'x+' + (m0 + b0) }].filter(function (z) { return !DJG.same(z.src, ph[1]); }), { ver: { eq: ph[1] }, why: '“is” becomes =; then translate the rest.' })];
+  });
+
+  // the angles that can take a missed element: another angle than the one missed, that fits the element
+  TRX.ANGLES = A;
+  TRX.probe = function (elId, notMove) {
+    var e = TRX.BY[elId]; if (!e) return null;
+    var fit = A.filter(function (a) { return a.id !== notMove && a.test(e); });
+    return fit.length ? fit[Math.floor(Math.random() * fit.length)].id : null;
+  };
+})();
+/* ===== DJG part 6 END ===== */
+
 /* --- dojo: dojo_quests.js --- */
 /* ===== DJG quests (the Dojo's Quest mode: one story, several steps, each step uses the answer of the step before) START =====
    DJG.quest(id, lv) -> { id, title, intro, outro, nodes:[{ place, item }] }      lv 1 = 3 steps, lv 2 = 4, lv 3 = all of them (5 or 6)
@@ -52866,6 +53177,33 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJG;
     ] };
   });
 
+  // ---------------------------------------------------------------- two quests of words into math (Stage 8): each step reads the
+  // answer of the step before as words, a symbol or an expression, so the translation is what carries the story forward
+  function txt(src) { return h.P(src).replace(/<[^>]+>/g, ''); }
+  quest('kazoo', 'Madame Kazoo and the Coded Recipe', ['words'], function () {
+    var k = pick([2, 3]), a = R(2, 6), e = R(3, 7), src = k + '*e+' + a, sp = k * e + a, less = R(2, 6), jar = sp + less, per = R(3, 5), cakes = Math.floor(jar / per), price = R(3, 6), band = R(5, 9), take = cakes * price - band;
+    var kw = k === 2 ? 'twice' : 'three times', ex = txt(src);
+    return { intro: 'Madame Kazoo’s recipe for a cake that hums is written in a code. Every line is words, and every line has to become mathematics.', outro: 'The cakes hummed in harmony. The band was jealous.', nodes: [
+      node('The Recipe Card', C(S('The card says: “Glitter: ' + a + ' spoons more than ' + kw + ' the number of eggs, e.”') + L('Which expression is the glitter?'), { t: ex, src: src }, [{ t: txt(k + '*(e+' + a + ')'), src: k + '*(e+' + a + ')' }, { t: txt(a + '*e+' + k), src: a + '*e+' + k }, { t: txt(k + '*e-' + a), src: k + '*e-' + a }], { sk: ['S11', 'S12'], ver: { eq: src }, why: kw + ' e is ' + k + 'e; ' + a + ' more than that is ' + ex + '.' })),
+      node('The Egg Basket', T(S('The glitter is ' + ex + ' spoons, and the basket holds e = ' + e + ' eggs.') + L('How many spoons of glitter?'), sp, { unit: 'spoons', sk: ['S10'], wrongs: [k * (e + a)], ver: { ev: src, env: { e: e } }, why: 'Put ' + e + ' in for e: ' + k + ' · ' + e + ' + ' + a + '.' }), ex),
+      node('The Glitter Jar', T(S(sp + ' spoons is ' + less + ' fewer than the jar holds.') + L('How many spoons does the jar hold?'), jar, { unit: 'spoons', sk: ['S13', 'U14'], wrongs: [sp - less], ver: { sol: ['j-' + less, String(sp)], v: 'j' }, why: '“' + less + ' fewer than the jar” is j − ' + less + ' = ' + sp + ', so j = ' + sp + ' + ' + less + '.' }), sp),
+      node('The Rule of the Jar', C(S('The jar holds ' + jar + ' spoons, and each cake takes ' + per + ' spoons. She may use no more than the jar.') + L('Which inequality is the number of cakes c?'), per + 'c ≤ ' + jar, [per + 'c ≥ ' + jar, per + 'c < ' + jar, 'c ≤ ' + jar + ' + ' + per], { sk: ['E27', 'E35'], ver: { fix: 1 }, why: per + ' spoons for each cake: ' + per + 'c. No more than ' + jar + ': ≤.' }), jar),
+      node('The Oven Door', T(S('The rule is ' + per + 'c ≤ ' + jar + '.') + L('What is the largest whole number of cakes?'), cakes, { unit: 'cakes', sk: ['E36'], wrongs: [cakes + 1], ver: { floor: jar + '/' + per }, why: 'c ≤ ' + jar + ' ÷ ' + per + ' = ' + f(q(jar, per)) + '; a whole number of cakes, so round down.' }), per + 'c ≤ ' + jar),
+      node('The Band', T(S('She bakes ' + cakes + ' cakes and sells each for $' + price + '. The band takes the difference of the takings and $' + band + '.') + L('How much does the band take?'), take, { pre: '$', sk: ['S11', 'U17'], wrongs: [band - cakes * price, cakes * price + band], ver: { ev: cakes + '*' + price + '-' + band }, why: 'The takings are ' + cakes + ' · ' + price + '; the difference of the takings and ' + band + ' is takings − ' + band + '.' }), cakes)
+    ] };
+  });
+  quest('bigfoot', 'Bigfoot and the Riddle Gate', ['words'], function () {
+    var m = pick([3, 4]), b = R(3, 9), s0 = R(9, 14), code = m * s0 - b, d = R(4, 9), num = code + d, warm = R(num + 5, num + 25), temp = warm - num, side = temp, per = 4 * side, h2 = 2 * per;
+    var src = m + '*s-' + b, ex = txt(src), mw = m === 3 ? 'three' : 'four';
+    return { intro: 'The gate to Bigfoot’s cave opens only for riddles, and every riddle is a sentence that has to be turned into numbers.', outro: 'The gate opened. Bigfoot was out.', nodes: [
+      node('The First Riddle', C(S('“The code is ' + b + ' less than ' + mw + ' times my shoe size, s.”') + L('Which expression is the code?'), { t: ex, src: src }, [{ t: txt(b + '-' + m + '*s'), src: b + '-' + m + '*s' }, { t: txt(m + '*(s-' + b + ')'), src: m + '*(s-' + b + ')' }, { t: txt(m + '*s+' + b), src: m + '*s+' + b }], { sk: ['S11'], ver: { eq: src }, why: '“' + b + ' less than” flips the order: ' + m + 's first, then − ' + b + '.' })),
+      node('The Shoe Rack', T(S('The code is ' + ex + ', and the shoe in the rack is size ' + s0 + '.') + L('What is the code?'), code, { sk: ['S10'], wrongs: [b - m * s0, m * (s0 - b)], ver: { ev: src, env: { s: s0 } }, why: m + ' · ' + s0 + ' − ' + b + '.' }), ex),
+      node('The Second Riddle', T(S('“' + code + ' is the difference of a number and ' + d + '.”') + L('What is the number?'), num, { sk: ['S13', 'U14'], wrongs: [code - d], ver: { sol: ['n-' + d, String(code)], v: 'n' }, why: 'n − ' + d + ' = ' + code + ', so n = ' + code + ' + ' + d + '.' }), code),
+      node('The Cold Lock', T(S('“The lock is at the opposite of ' + num + ', increased by ' + warm + ' degrees.”') + L('What temperature is the lock?'), temp, { unit: '°', sk: ['T7', 'T5'], wrongs: [num + warm, -temp], ver: { ev: '-' + num + '+' + warm }, why: 'The opposite of ' + num + ' is −' + num + '; increased by ' + warm + ': −' + num + ' + ' + warm + '.' }), num),
+      node('The Square Door', T(S('The door is a square with sides of ' + side + ' inches.') + L('What is its perimeter?'), per, { unit: 'inches', sk: ['S40', 'G30'], wrongs: [side * side, side + 4], ver: { ev: '4*' + side }, why: 'A perimeter adds the four sides: 4 · ' + side + '.' }), side),
+      node('The Last Riddle', T(S('“My height is ' + per + ' inches less than twice ' + per + '.”') + L('How tall is Bigfoot?'), per, { unit: 'inches', sk: ['S11', 'S10'], wrongs: [h2 + per, per * 3], ver: { ev: '2*' + per + '-' + per }, why: 'Twice ' + per + ' is ' + h2 + '; ' + per + ' less than that is ' + h2 + ' − ' + per + '.' }), per)
+    ] };
+  });
   DJG.QUESTS = QUESTS; DJG.questById = BYQ;
   DJG.questLen = function (lv) { return lv === 1 ? 3 : lv === 2 ? 4 : 6; };
   DJG.questRaw = function (id, lv) {
@@ -253615,10 +253953,35 @@ var HTC = (function () {
   }
   // ---------------------------------------------------------------- the translation decoder
   function transHTML() {
-    return '<section class="tc-tool tc-trans" id="tc-trans"><h3>Words → symbols decoder</h3><p class="sub">Find the phrase, read off the symbol. Find the equals word first.</p>' +
-      '<div class="tc-tgrid">' + TAC.TRANS.map(function (r) { return '<div class="tc-trow ' + r.cls + '"><b>' + r.sym + '</b><div><span class="w">' + r.words + '</span>' + (r.note ? '<span class="n">' + r.note + '</span>' : '') + '</div></div>'; }).join('') + '</div>' +
+    // each row: the phrases as chips, an arrow, the symbol they become; phrases that flip the order carry ⇄, phrases that make a
+    // group carry brackets
+    function chips(r) { return r.words.split(/\s*·\s*|\s*\|\s*/).filter(Boolean).map(function (w) { w = w.replace(/[“”]/g, '').replace(/^—\s*|\s*—$/g, '').replace(/—/g, '…'); return '<span class="tc-chip' + (/flip/.test(r.cls) ? ' fl' : '') + (/grp/.test(r.cls) ? ' gp' : '') + '">' + (/grp/.test(r.cls) ? '<i>(</i>' : '') + w + (/grp/.test(r.cls) ? '<i>)</i>' : '') + (/flip/.test(r.cls) ? '<i class="sw" aria-label="flips the order">⇄</i>' : '') + '</span>'; }).join(''); }
+    return '<section class="tc-tool tc-trans" id="tc-trans"><h3>Words → symbols decoder</h3><p class="sub">Find the phrase, read off the symbol. Find the equals word first. ⇄ marks the phrases that turn the order round.</p>' +
+      '<div class="tc-tgrid">' + TAC.TRANS.map(function (r) { return '<div class="tc-trow ' + r.cls + '"><div class="ch">' + chips(r) + '</div><span class="to" aria-hidden="true">→</span><b>' + r.sym + '</b>' + (r.note ? '<span class="n">' + r.note + '</span>' : '') + '</div>'; }).join('') + '</div>' +
       '<div class="tc-mistake"><div class="no"><span class="k">Common mistake</span>“7 less than x” → 7 − x<small>Reading left to right feels natural here, but it is backwards.</small></div><div class="yes"><span class="k">Correct</span>“7 less than x” → x − 7<small>The thing being changed comes first. Reword it: “x, less 7”.</small></div></div>' +
-      '<div class="tc-decode"><span class="k">Decode it</span><div class="row"><span class="c1">a number</span><span class="c2">increased by 6</span><span class="c3">gives</span><span class="c4">20</span></div><div class="arrow" aria-hidden="true">↓</div><div class="row m"><span class="c1">n</span><span class="c2">+ 6</span><span class="c3">=</span><span class="c4">20</span></div></div></section>';
+      decodeHTML(0) + '</section>';
+  }
+  // "Decode it": tap each phrase of the sentence; its symbols drop into their place in the equation. A phrase that flips the
+  // order lands to the right of the phrase after it, and the strip shows the two crossing.
+  var DECODE = [
+    [['a number', 'n', 0], ['increased by 6', '+ 6', 1], ['gives', '=', 2], ['20', '20', 3]],
+    [['7 less than', '− 7', 1, 'fl'], ['a number', 'n', 0], ['is', '=', 2], ['12', '12', 3]],
+    [['twice', '2', 0], ['the sum of a number and 3', '(n + 3)', 1, 'gp'], ['equals', '=', 2], ['18', '18', 3]],
+    [['5 subtracted from', '− 5', 1, 'fl'], ['twice a number', '2n', 0], ['results in', '=', 2], ['11', '11', 3]],
+    [['the quotient of a number and 4', 'n ÷ 4', 0], ['is at least', '≥', 1], ['5', '5', 2]],
+    [['30% of', '0.3 ·', 0], ['the price', 'p', 1], ['is', '=', 2], ['$12', '12', 3]]
+  ];
+  function decodeHTML(k, placed) {
+    var D0 = DECODE[k % DECODE.length], n = D0.length, slots = [], done = (placed || []).length === n;
+    placed = placed || [];
+    D0.forEach(function (c) { slots[c[2]] = placed.indexOf(D0.indexOf(c)) >= 0 ? c : null; });
+    var cross = D0.some(function (c, i) { return c[3] === 'fl' && placed.indexOf(i) >= 0; });
+    return '<div class="tc-decode" data-dec="' + k + '"><span class="k">Decode it: tap each phrase in turn</span>' +
+      '<div class="row">' + D0.map(function (c, i) { return '<button type="button" class="dc c' + (c[1] === '=' || /[≥≤<>]/.test(c[1]) ? '3' : i === 0 ? '1' : '2') + (c[3] ? ' ' + c[3] : '') + (placed.indexOf(i) >= 0 ? ' on' : '') + '" data-dc="' + i + '" aria-pressed="' + (placed.indexOf(i) >= 0) + '">' + c[0] + '</button>'; }).join('') + '</div>' +
+      '<div class="arrow" aria-hidden="true">' + (cross ? '⇄ the order turns round' : '↓') + '</div>' +
+      '<div class="row m" aria-live="polite">' + slots.map(function (c) { return '<span class="slot' + (c ? ' on' + (c[3] ? ' ' + c[3] : '') : '') + '">' + (c ? c[1] : '▢') + '</span>'; }).join('') + '</div>' +
+      (done ? '<p class="tc-decdone">' + slots.map(function (c) { return c[1]; }).join(' ') + '</p>' : '') +
+      '<button type="button" class="tc-decnext" data-decnext="1">Another sentence</button></div>';
   }
   // ---------------------------------------------------------------- the triangle for any a = b · c
   function triSVG(T, cover) {
@@ -253641,6 +254004,13 @@ var HTC = (function () {
   function wire(root) {
     root.addEventListener('click', function (e) {
       var tb = e.target.closest('[data-tool]'); if (tb) { openTool(tb.dataset.tool); return; }
+      var dbox = e.target.closest('.tc-decode');
+      if (dbox) {
+        var k = +dbox.dataset.dec, pl = (dbox.dataset.placed || '').split(',').filter(Boolean).map(Number), dc = e.target.closest('[data-dc]');
+        if (e.target.closest('[data-decnext]')) { dbox.outerHTML = decodeHTML(k + 1); return; }
+        if (dc && pl.indexOf(+dc.dataset.dc) < 0) { pl.push(+dc.dataset.dc); var tmp = document.createElement('div'); tmp.innerHTML = decodeHTML(k, pl); var nb = tmp.firstChild; nb.dataset.placed = pl.join(','); dbox.parentNode.replaceChild(nb, dbox); var nx = nb.querySelector('.dc:not(.on)') || nb.querySelector('[data-decnext]'); if (nx) nx.focus({ preventScroll: true }); }
+        return;
+      }
       var sec = e.target.closest('.tc-triangle'); if (!sec) return;
       var pk = e.target.closest('[data-tripick]'); if (pk) { sec.dataset.tri = pk.dataset.tripick; Array.prototype.forEach.call(sec.querySelectorAll('[data-tripick]'), function (b) { b.setAttribute('aria-pressed', String(b === pk)); }); sec.querySelector('.tc-tribody').innerHTML = triBody(sec.dataset.tri, null); return; }
       var cv = e.target.closest('[data-cover]'); if (cv) { var was = cv.classList.contains('covered'); sec.querySelector('.tc-tribody').innerHTML = triBody(sec.dataset.tri, was ? null : cv.dataset.cover); }
@@ -253898,7 +254268,7 @@ var HDJ = (function () {
     var sub = timed ? DJ.LEVELS.roll[lv - 1] + (focus && focus.style ? ' · ' + styleName(focus.style) : ' · Sensei’s mix') : kind === 'warm' && L0 ? 'Chapter ' + L0.ch + ' · ' + (L0.unit || '') + ' · Level ' + L0.level : kind === 'skill' && CAT.skills[arg] ? HX.skillShort(arg) : kind === 'move' && DJG.byId[arg] ? DJG.byId[arg].name : '';
     var sh = shell(main, title, sub);
     if (!queue.length) { sh.body.innerHTML = '<div class="hb-card">Nothing to practise here yet. <a href="#dojo">Back to the Dojo</a></div>'; return; }
-    begin(timed ? 'roll' : kind === 'warm' ? 'warm' : 'drill', lv, focus, { queue: queue, qi: 0, run: null, ri: 0, seenCard: {}, timed: timed, left: DJ.K.CLOCK[lv] * 1000, max: DJ.K.CLOCK_MAX * 1000, paused: true, kind: kind, arg: arg });
+    begin(timed ? 'roll' : kind === 'warm' ? 'warm' : 'drill', lv, focus, { queue: queue, qi: 0, run: null, ri: 0, seenCard: {}, probed: {}, timed: timed, left: DJ.K.CLOCK[lv] * 1000, max: DJ.K.CLOCK_MAX * 1000, paused: true, kind: kind, arg: arg });
     S.pit = cockpit(sh.side, { belt: belts.roll }); pit();
     if (timed) sh.topr.innerHTML = '<div class="dj-clock" role="timer" aria-label="Time left"><div class="dj-fuse"><i></i><span class="spark"></span></div><div class="dj-secs"><b>' + DJ.K.CLOCK[lv] + '</b><span>s</span></div><div class="dj-bump" aria-hidden="true"></div></div>';
     else sh.topr.innerHTML = '<div class="dj-count"><b>0</b> of ' + nUnits + '</div>';
@@ -253926,7 +254296,7 @@ var HDJ = (function () {
       var u = S.queue[S.qi++]; S.unit = u; setClock();
       if (u.type === 'kata') return showKata(u);
       var mv = DJG.byId[u.id], ilv = Math.min(3, S.lv + S.heat);
-      try { S.run = DJG.make(u.id, ilv); } catch (e) { setTimeout(function () { throw e; }, 0); S.run = null; return next(); }
+      try { S.run = DJG.make(u.id, ilv, u.el ? { el: u.el } : undefined); } catch (e) { setTimeout(function () { throw e; }, 0); S.run = null; return next(); }
       S.ri = 0; S.ilv = ilv;
       var fresh = mv.skills.every(function (s) { var x = S.m0.skills[s]; return (!x || !x.n) && !S.touched[s]; });   // the model as it was at the start: no rebuild between reps
       if ((fresh || !timed) && !S.seenCard[u.id]) { S.seenCard[u.id] = 1; hold(true); sh.body.innerHTML = '<section class="hb-card dj-card dj-intro">' + cardHTML(mv) + '<div class="hb-row"><button class="btn primary" type="button" data-ok="1">Got it</button><span class="hb-muted">' + (timed ? 'The clock is stopped.' : '') + '</span></div></section>'; var b = sh.body.querySelector('[data-ok]'); b.onclick = function () { hold(false); showItem(); }; b.focus({ preventScroll: true }); return; }
@@ -253940,7 +254310,9 @@ var HDJ = (function () {
         S.ri++;
         if (res.ok) { S.score += S.ilv * (1 + Math.floor(S.combo / 5)); if (timed) { S.left = Math.min(S.max, S.left + DJ.K.BUMP[S.lv] * 1000); setClock(DJ.K.BUMP[S.lv]); } if (timed && S.combo > 0 && S.combo % DJ.K.HEAT_UP === 0 && S.lv + S.heat < 3) { S.heat++; } pit(sgn(r.d, 2) + ' blobs'); S.timers.push(setTimeout(next, timed ? 380 : 520)); return; }
         if (timed) { S.left = Math.max(0, S.left - DJ.K.MISS[S.lv] * 1000); setClock(-DJ.K.MISS[S.lv]); }
-        S.heat = Math.max(0, S.heat - 1); S.run = S.run.slice(0, S.ri); hold(true); pit(sgn(r.d, 2) + ' blobs');
+        S.heat = Math.max(0, S.heat - 1); S.run = S.run.slice(0, S.ri); hold(true);
+        // a missed word or phrase of the translation registry comes back in this round, from another angle, with new numbers
+        if (it.el && typeof TRX !== 'undefined' && S.probed && !S.probed[it.el] && S.kind !== 'move' && Object.keys(S.probed).length < 5) { var pm = TRX.probe(it.el, it.move); if (pm) { S.probed[it.el] = 1; S.queue.splice(Math.min(S.qi + 1, S.queue.length), 0, { type: 'move', id: pm, kind: 'due', raw: 'probe', el: it.el, why: 'The same words, from another side' }); } } pit(sgn(r.d, 2) + ' blobs');
         var fb = sh.body.querySelector('.dj-fb');
         fb.innerHTML = '<div class="fb no fade-in"><span class="mark">' + X.ICON.x + '</span><div class="txt"><span class="t">Not this time</span><span class="a">Answer: <b>' + it.show + '</b></span><span class="dj-whytxt">' + esc(it.why) + '</span></div></div><details class="dj-more"><summary>Show the tactic</summary>' + cardHTML(mv) + '</details><div class="hb-row"><button class="btn primary" type="button" data-next="1">Keep rolling</button>' + (timed ? '<span class="hb-muted">The clock is stopped.</span>' : '') + '</div>';
         var nb = fb.querySelector('[data-next]'); nb.onclick = function () { hold(false); if (timed && S.left <= 0) return finish('Time'); next(); }; nb.focus({ preventScroll: true });
