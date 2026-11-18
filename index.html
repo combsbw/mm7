@@ -2236,6 +2236,21 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 :root[data-theme="dark"] .tc-trow.eq > b { background: #2f2752; color: #cdbfff; } :root[data-theme="dark"] .tc-trow.mul > b { background: #3b2f12; color: #ffe2a3; } :root[data-theme="dark"] .tc-trow.div > b { background: #17304d; color: #a9cdf5; } :root[data-theme="dark"] .tc-decode .c3 { background: #2f2752; color: #cdbfff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .tc-trow.eq > b { background: #2f2752; color: #cdbfff; } :root:not([data-theme="light"]) .tc-trow.mul > b { background: #3b2f12; color: #ffe2a3; } :root:not([data-theme="light"]) .tc-trow.div > b { background: #17304d; color: #a9cdf5; } :root:not([data-theme="light"]) .tc-decode .c3 { background: #2f2752; color: #cdbfff; } }
 
+/* a Review group's Skills & Tactics (Stage 9) */
+.tc-grp .tc-grplede { max-width: 760px; } .tc-grpnav { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 18px; } .tc-grpnav a { border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 14px; color: var(--ink); text-decoration: none; background: var(--surface); }
+.tc-grp section { margin-top: 22px; } .tc-grp h2 { font-size: 22px; margin: 0 0 4px; }
+.tc-cuegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; } .tc-cue, .tc-trapc, .tc-iq { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; box-shadow: var(--shadow); min-width: 0; }
+.tc-cuehd { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; } .tc-terr, .tc-tag { font-size: 12.5px; font-weight: 700; border-radius: 999px; padding: 2px 9px; background: var(--accent-soft); color: var(--ink); } .tc-tag { background: var(--tc-warn-soft); color: var(--tc-warn); }
+.tc-cuerow { display: grid; grid-template-columns: 1fr; gap: 6px; align-items: start; } .tc-cuerow .k, .tc-iqsteps .k { display: block; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); } .tc-cuerow b { display: block; font-size: 15px; margin: 2px 0 6px; }
+.tc-arrow { font-weight: 800; color: var(--ink-2); transform: rotate(90deg); justify-self: start; margin-left: 6px; line-height: 1; } .tc-see { padding-bottom: 6px; border-bottom: 1px dashed var(--line); } .tc-see, .tc-do { min-width: 0; overflow-x: auto; }
+.tc-refs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; } .tc-ref { font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--ink); text-decoration: none; background: var(--surface-2); }
+.tc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.tc-integ .tc-iq { margin-top: 12px; } .tc-iqhd { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: center; } .tc-iqhd h3 { margin: 0; font-size: 18px; } .tc-iqprob { font-size: 17px; font-weight: 600; margin: 8px 0; }
+.tc-iqsteps { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; } .tc-iqsteps li { border: 1px dashed var(--line); border-radius: 12px; padding: 8px 10px; overflow-x: auto; } .tc-iqsteps li b { display: block; margin: 2px 0 6px; }
+.tc-iqbtns { display: flex; gap: 8px; margin-top: 10px; } .tc-trapgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; } .tc-dojolinks { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 560px) { .tc-cuegrid, .tc-trapgrid { grid-template-columns: 1fr; } }
+@media print { .tc-iqsteps li[hidden] { display: block !important; } .tc-iqbtns, .tc-grpnav, .tc-grpdojo { display: none !important; } }
+
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
 .hb-update button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--accent-ink, #fff); color: var(--accent, #2d6a86); cursor: pointer; }
@@ -49201,9 +49216,12 @@ var TAC = (function () {
     par: { top: 'A', l: 'b', r: 'h', names: ['area', 'base', 'perpendicular height'], say: 'A = b · h', eg: 'A = 54, b = 9 → h = 54 ÷ 9 = 6' },
     vol: { top: 'V', l: 'B', r: 'h', names: ['volume', 'base area', 'height'], say: 'V = B · h', eg: 'V = 120, B = 30 → h = 120 ÷ 30 = 4' }
   };
+  // Review-group sheets (Stage 9): TAC.group(id, o) registers one, TAC.group(id) reads it
+  var GR = {}, GORD = [];
+  function group(id, o) { if (o) { o.id = id; if (!GR[id]) GORD.push(id); GR[id] = o; return o; } return GR[id] || null; }
   function forms(id) { var T = TRI[id]; return T ? [T.top + ' = ' + T.l + ' · ' + T.r, T.l + ' = ' + T.top + ' ÷ ' + T.r, T.r + ' = ' + T.top + ' ÷ ' + T.l] : []; }
   function toolsOf(card) { return card && card.tool ? String(card.tool).split(',') : []; }
-  return { ch: ch, lv: lv, viz: viz, rule: rule, THREADS: THREADS, RULES: RULES, RORDER: RORDER, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
+  return { group: group, groups: function () { return GORD.map(function (k) { return GR[k]; }); }, ch: ch, lv: lv, viz: viz, rule: rule, THREADS: THREADS, RULES: RULES, RORDER: RORDER, CH: CH, LV: LV, TRANS: TRANS, TRI: TRI, forms: forms, toolsOf: toolsOf,
     level: function (key) { return LV[key] || null; }, chapter: function (n) { return CH[n] || null; } };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
@@ -51663,6 +51681,62 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   V('14-3', { th: ['pow', 'area'], from: '14-1', r: ['pyth', 'legsub', 'converse', 'polyarea'], t: 'Find the right triangle, then use it', spot: ['rtri', { a: '12', b: '9', c: '15', sq: true, sa: '144', sb: '81', sc: '225', ro: ['g', 'n', 'n'] }],
     doit: [['flow', ['isosceles 15, 15, base 18', { op: '√(15² − 9²)' }, 'h = 12', { op: '½ · 18 · 12' }, { t: '108 cm²', r: 'g' }]], ['flow', ['field 240 × 450', { op: '√(240² + 450²)' }, '510 m', { op: '690 − 510' }, { t: '180 m shorter', r: 'g' }]], ['flow', ['32² + 60² = 4624 = 68²', { op: '' }, { t: 'the corner is square', r: 'g' }]]],
     trap: ['height = 15 − 9 = 6 cm', 'a leg:   √(15² − 9²) = 12 cm'], alt: 'A height, a diagonal or a ladder makes a right triangle: name the hypotenuse, then add or subtract the squares. Half the base of an isosceles triangle is a leg. Sides that fit the rule prove a square corner.', v: [['225-81', '144'], ['12*12', '144'], ['9*9', '81'], ['15*15', '225'], ['0.5*18*12', '108'], ['240^2+450^2', '260100'], ['510^2', '260100'], ['240+450-510', '180'], ['32^2+60^2', '4624'], ['68^2', '4624']] });
+})();
+
+/* --- tactics_groups.js --- */
+/* Skills & Tactics for a Review group (Stage 9 of MM7_Course_Completion_Plan.md). Not a repeat of the chapter sheets: it is
+   organised by the group's territories, the merged ideas its Review and Exam are built on.
+     cues   what you see in a problem → the tactic it calls for, drawn; each row links to the chapter cards it comes from
+     integ  problems that need two chapters' tactics, stepped through one move at a time on tap
+     traps  the slips the group's banks tag most often (the wrong-answer tags of its Review and Exam), the wrong way beside the right
+     dojo   the Dojo focus areas that drill the group, and the chapters whose formula flash cards belong here
+   Every number a picture shows is listed in v or re-computed from the picture (hub/test_tactics.js). */
+(function () {
+  'use strict';
+  TAC.group('ch34', {
+    name: 'Chapters 3–4', chs: [3, 4],
+    lede: 'One-step equations, constant speed, writing equations and sequences (Chapter 3) with every kind of rational number (Chapter 4): the same moves, now with fractions, decimals and signs.',
+    cues: [
+      { terr: 'M3', cue: 'x with one operation on it', tactic: 'Undo it on both sides', see: ['cue', [['x', 'x'], ['−', 'o', 'one move'], ['4.7', 'n'], ['=', ''], ['−2.1', '']]],
+        vis: ['steps', [['x − 4.7', '−2.1'], { op: '+ 4.7' }, ['x', '2.6', 'ans']]], refs: ['3:1-1', '4:10-1'], alt: 'x − 4.7 = −2.1: one operation on x, so do the opposite to both sides. Adding 4.7 gives x = 2.6.', v: [['-2.1+4.7', '2.6']] },
+      { terr: 'M3', cue: 'a fraction of x is known', tactic: '÷ the fraction: · its reciprocal', see: ['cue', [['{f:3|4}', 'n', 'of x'], ['x', 'x'], ['=', ''], ['−12', '']]],
+        vis: ['steps', [['{n:{f:3|4}}x', '−12'], { op: '· {f:4|3}' }, ['x', '−16', 'ans']]], refs: ['3:2-2', '4:10-2'], alt: 'Three quarters of x is −12. Multiply both sides by four thirds, the reciprocal, so x = −16.', v: [['-12*4/3', '-16']] },
+      { terr: 'M6', cue: 'speed, time, distance', tactic: 'Cover what you want; units first', see: ['flow', ['45 min at 60 km/h', { op: 'min → h' }, { t: '0.75 h', r: 'x' }]],
+        vis: ['tri', 'dvt', 'top'], refs: ['3:6-1', '3:7-2'], tool: 'tri:dvt', alt: 'For constant speed, cover the letter you want on the d = v · t triangle. Put the time in the unit of the speed first: 45 minutes is 0.75 hours.', v: [['45/60', '0.75']] },
+      { terr: 'M1', cue: 'signed fractions or decimals', tactic: 'Count the signs, then the size', see: ['flow', ['(−{f:2|3}) · (−{f:9|4})', { op: 'two −' }, { t: '+', r: 'g' }]],
+        vis: ['flow', ['{f:2|3} · {f:9|4}', { op: 'cancel' }, { t: '{f:3|2}', r: 'g' }]], refs: ['2:9-1', '4:6-1'], alt: 'Two negative factors make a positive product. Then multiply the sizes, cancelling first: two thirds times nine quarters is three halves.', v: [['(-2/3)*(-9/4)', '3/2']] },
+      { terr: 'M1', cue: 'add numbers with different signs', tactic: 'Subtract the sizes; the larger’s sign', see: ['nline', { min: -3, max: 1, step: 0.5, marks: [[-2.5, '−2½'], [-1, '−1'], [0, '0']], jumps: [[0, -1, 'n', '− 1'], [-1, -2.5, 'n', '− 1½']], pts: [[0, 'm'], [-2.5, 'g']] }],
+        vis: ['flow', ['−3.2 + 1.5', { op: '3.2 − 1.5' }, { t: '−1.7', r: 'g' }]], refs: ['2:3-1', '4:5-1'], alt: 'With different signs, subtract the sizes and keep the sign of the larger: −3.2 + 1.5 = −1.7. On the number line, jumps left add negatives.', v: [['-3.2+1.5', '-1.7'], ['-1-1.5', '-2.5']] },
+      { terr: 'M2', cue: 'a fraction that will not stop', tactic: 'Divide until a remainder repeats', see: ['flow', ['{f:5|11}', { op: '5 ÷ 11' }, { t: '0.{v:45}', r: 'g' }]],
+        vis: ['rdiv', { n: 5, d: 11, val: '0.{v:45}' }], refs: ['4:2-2', '4:2-3'], alt: 'Long division of 5 by 11: when a remainder comes back, the digits repeat. Five elevenths is 0.454545…, written with a bar over 45.', v: [['5/11', '5/11']] },
+      { terr: 'M13', cue: 'a story with parts and a total', tactic: 'Bar first, then the equation', see: ['bar', { rows: [{ parts: [['x', 1, 'x'], ['3x', 3, 'x']], over: [[0, 2, '12.6 m', 'm']] }] }],
+        vis: ['steps', [['x + 3x', '12.6'], ['{n:4}x', '12.6'], { op: '÷ 4' }, ['x', '3.15', 'ans']]], refs: ['3:5-1', '4:10-3'], alt: 'A rope of 12.6 m cut into a piece and a piece three times as long: the bar shows x and 3x making 12.6, so 4x = 12.6 and x = 3.15 m.', v: [['12.6/4', '3.15']] },
+      { terr: 'M9', cue: 'two steps of a sequence known', tactic: 'Change ÷ steps apart; then the start', see: ['seq', { n: ['3', '…', '7'], v: ['4.5', '…', '10.5'], span: [0, 2, '+ 6', '4 steps'], alt: 'Step 3 is 4.5 and step 7 is 10.5' }],
+        vis: ['flow', ['6 ÷ 4', { op: '' }, '1.5 a step', { op: '4.5 − 3 · 1.5' }, { t: 'start 0', r: 'g' }]], refs: ['3:9-2', '3:9-3'], alt: 'From step 3 to step 7 the value rises 6 in 4 steps: 1.5 a step. Going back 3 steps from 4.5 gives the start, at step 0, of 0.', v: [['10.5-4.5', '6'], ['6/4', '1.5'], ['4.5-3*1.5', '0']] }
+    ],
+    integ: [
+      { h: 'A trip in fractions of an hour', terrs: ['M6', 'M1'], prob: 'Zorp’s saucer flies at 48.6 km/h for 2¼ hours. How far does it go?',
+        steps: [{ say: 'Name the unknown and the triangle', vis: ['tri', 'dvt', 'top'] }, { say: 'The time as a decimal', vis: ['flow', ['2{f:1|4} h', { op: '' }, { t: '2.25 h', r: 'x' }]] }, { say: 'Estimate, then multiply', vis: ['flow', ['50 · 2', { op: '' }, '≈ 100', { op: '48.6 · 2.25' }, { t: '109.35 km', r: 'g' }]] }],
+        refs: ['3:6-1', '4:7-1'], alt: 'Distance is speed times time. Two and a quarter hours is 2.25 hours; 50 times 2 says about 100; 48.6 times 2.25 is 109.35 km.', v: [['48.6*2.25', '109.35'], ['2+1/4', '2.25']] },
+      { h: 'A negative fraction in front', terrs: ['M3', 'M1'], prob: '−{f:2|3}x = 4.8. Find x.',
+        steps: [{ say: 'Undo the coefficient with its reciprocal', vis: ['steps', [['{n:−{f:2|3}}x', '4.8'], { op: '· (−{f:3|2})' }, ['x', '−7.2', 'ans']]] }, { say: 'Check: the signs, then the size', vis: ['flow', ['−{f:2|3} · (−7.2)', { op: '' }, { t: '4.8 ✓', r: 'g' }]] }],
+        refs: ['3:2-2', '4:10-2'], alt: 'Multiply both sides by negative three halves, the reciprocal of negative two thirds: x = −7.2. Check: −2/3 times −7.2 is 4.8.', v: [['4.8*(-3/2)', '-7.2'], ['(-2/3)*(-7.2)', '4.8']] },
+      { h: 'A sentence with a decimal', terrs: ['M13', 'M1'], prob: '“3.5 less than a number, divided by 4, is −0.75.” Find the number.',
+        steps: [{ say: 'Words → equation (less than flips)', vis: ['flow', ['3.5 less than n', { op: '' }, { t: 'n − 3.5', r: 'x' }]] }, { say: 'Undo in reverse order', vis: ['steps', [['{f:n − 3.5|4}', '−0.75'], { op: '· 4' }, ['n − 3.5', '−3'], { op: '+ 3.5' }, ['n', '0.5', 'ans']]] }],
+        refs: ['3:4-1', '4:10-3'], alt: '3.5 less than n is n − 3.5. Divided by 4 it is −0.75, so n − 3.5 = −3 and n = 0.5.', v: [['-0.75*4', '-3'], ['-3+3.5', '0.5']] }
+    ],
+    traps: [
+      { terr: 'M1', tag: 'sign', trap: ['−{f:3|4} − {f:1|2} = −{f:1|4}', 'both go left:   −{f:5|4}'], alt: 'Subtracting a positive from a negative moves further left: −3/4 − 1/2 is −5/4, not −1/4.', v: [['-3/4-1/2', '-5/4']] },
+      { terr: 'M3', tag: 'inverse', trap: ['{f:x|4} = −5:   x = −{f:5|4}', 'undo ÷ 4 with · 4:   x = −20'], alt: 'x divided by 4 is −5: undo the division by multiplying by 4, so x = −20, not −5/4.', v: [['-5*4', '-20']] },
+      { terr: 'M6', tag: 'units', trap: ['45 min at 60 km/h:   2700 km', '45 min = 0.75 h:   45 km'], alt: 'Put the time in hours before using a speed in km per hour: 0.75 hours at 60 km/h is 45 km.', v: [['60*0.75', '45']] },
+      { terr: 'M2', tag: 'decimal', trap: ['0.3 · 0.2 = 0.6', 'two decimal places:   0.06'], alt: 'The product has as many decimal places as the factors together: 0.3 times 0.2 is 0.06.', v: [['0.3*0.2', '0.06']] },
+      { terr: 'M1', tag: 'frac', trap: ['{f:2|3} ÷ {f:1|3} = {f:2|9}', '· the reciprocal:   2'], alt: 'Dividing by one third is multiplying by 3: two thirds divided by one third is 2.', v: [['(2/3)/(1/3)', '2']] },
+      { terr: 'M13', tag: 'trans', trap: ['“7 less than x”:   7 − x', 'the order flips:   x − 7'], alt: 'Less than flips the order of the words: 7 less than x is x − 7.', v: [] },
+      { terr: 'M9', tag: 'pattern', trap: ['the start is step 1', 'the start is step 0'], alt: 'In start + add × step, the start is the value at step 0, one step before step 1.', v: [] },
+      { terr: 'M6', tag: 'incomplete', trap: ['t = 1.25 h (asked in minutes)', '1.25 · 60 = 75 minutes'], alt: 'Answer in the unit the question asks for: 1.25 hours is 75 minutes.', v: [['1.25*60', '75']] }
+    ],
+    dojo: [['eq1', 'One-step equations'], ['rat', 'Fractions and decimals'], ['drt', 'Distance, rate and time'], ['words', 'Words into math'], ['pat', 'Patterns and sequences']]
+  });
 })();
 
 /* --- dojo: dojo_gens.js --- */
@@ -254038,14 +254112,14 @@ var HTC = (function () {
   }
   // ---------------------------------------------------------------- flash cards: self quiz on the formulas (nothing here is graded or kept)
   function flashHTML(n) {
-    var hasU = FML.list(n, 'u').length > 0, dj = typeof DJG !== 'undefined' && DJG.byId['form.r' + n];
-    return '<section class="tc-flash" id="tc-flash" data-ch="' + n + '"><div class="tc-fhead"><h3>Flash cards</h3><div class="tc-seg sm" role="group" aria-label="Which cards"><button type="button" data-deck="all" aria-pressed="true">All</button><button type="button" data-deck="f" aria-pressed="false">Formulas</button>' + (hasU ? '<button type="button" data-deck="u" aria-pressed="false">Undo rules</button>' : '') + '</div>' +
+    var ns = [].concat(n), hasU = ns.some(function (c) { return FML.list(c, 'u').length > 0; }), dj = typeof DJG !== 'undefined' && ns.length === 1 && DJG.byId['form.r' + n];
+    return '<section class="tc-flash" id="tc-flash" data-ch="' + ns.join(',') + '"><div class="tc-fhead"><h3>Flash cards</h3><div class="tc-seg sm" role="group" aria-label="Which cards"><button type="button" data-deck="all" aria-pressed="true">All</button><button type="button" data-deck="f" aria-pressed="false">Formulas</button>' + (hasU ? '<button type="button" data-deck="u" aria-pressed="false">Undo rules</button>' : '') + '</div>' +
       (dj ? '<a class="btn ghost sm" href="#dojo/move/form.r' + n + '">Drill in the Dojo</a>' : '') + '</div><div class="tc-fbody"></div></section>';
   }
   function flashWire(sec) {
-    var n = +sec.dataset.ch, body = sec.querySelector('.tc-fbody'), St = null;
+    var ns = String(sec.dataset.ch).split(',').map(Number), body = sec.querySelector('.tc-fbody'), St = null;
     function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-    function start(deck) { var cs = FML.cards(n).filter(function (c) { return deck === 'all' || c.grp === deck; }); St = { deck: deck, total: cs.length, q: shuffle(cs.slice()), got: 0, again: 0, flip: false }; draw(); }
+    function start(deck) { var cs = [].concat.apply([], ns.map(FML.cards)).filter(function (c) { return deck === 'all' || c.grp === deck; }); St = { deck: deck, total: cs.length, q: shuffle(cs.slice()), got: 0, again: 0, flip: false }; draw(); }
     function draw() {
       if (!St.q.length) { body.innerHTML = '<div class="tc-fdone"><div class="big">' + St.total + ' of ' + St.total + '</div><p>Every card answered.' + (St.again ? ' ' + St.again + ' came round again.' : '') + '</p><button type="button" class="btn primary" data-fc="restart">Go again</button></div>'; return; }
       var c = St.q[0], dots = ''; for (var i = 0; i < St.total; i++) dots += '<i class="' + (i < St.got ? 'on' : '') + '"></i>';
@@ -254096,7 +254170,35 @@ var HTC = (function () {
     // a deep link: a card taller than the window shows its title, not its middle
     if (at) { var t = wrap.querySelector('#tc-ch' + n + '-' + at); if (t) setTimeout(function () { t.scrollIntoView({ block: t.getBoundingClientRect().height > window.innerHeight - 240 ? 'start' : 'center' }); t.classList.add('flash'); }, 60); }
   }
-  return { init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
+  // ---------------------------------------------------------------- a Review group's Skills & Tactics (Stage 9)
+  function refLink(r) { var mm = String(r).match(/^(\d+):(\d+-\d+)$/), c = mm && TAC.level('ch' + mm[1] + ':' + mm[2]); return c ? '<a class="tc-ref" href="#ch/' + mm[1] + '/tactics/' + mm[2] + '">Ch ' + mm[1] + ' · ' + esc(c.t || c.title || mm[2]) + '</a>' : ''; }
+  function terrLab(t) { return (CAT.territories[t] && CAT.territories[t].name) || t; }
+  function groupView(main, gid) {
+    var G = TAC.group(gid), wrap = el('div', 'hb-wrap tc-wrap tc-grp novar'); main.appendChild(wrap);
+    var tg = typeof H !== 'undefined' && H.TAGS ? H.TAGS : {};
+    var h = '<div class="hb-chhead"><a class="back" href="#reviews">←<span>Reviews &amp; Exams</span></a><h1><small>' + esc(G.name) + '</small>Skills &amp; Tactics</h1></div><p class="sub tc-grplede">' + esc(G.lede) + '</p>' +
+      '<nav class="tc-grpnav" aria-label="On this page"><a href="#reviews/' + gid + '/tactics" data-jump="tc-cues">What you see → what to do</a><a href="#reviews/' + gid + '/tactics" data-jump="tc-integ">Two chapters, one problem</a><a href="#reviews/' + gid + '/tactics" data-jump="tc-traps">Trap gallery</a><a href="#reviews/' + gid + '/tactics" data-jump="tc-flash">Formulas</a></nav>' +
+      '<section class="tc-cues" id="tc-cues"><h2>What you see → what to do</h2><p class="sub">The cue in a problem, the tactic it calls for, and the cards it comes from.</p><div class="tc-cuegrid">' +
+      G.cues.map(function (c) { return '<article class="tc-cue tv"><div class="tc-cuehd"><span class="tc-terr">' + esc(terrLab(c.terr)) + '</span></div><div class="tc-cuerow"><div class="tc-see"><span class="k">You see</span><b>' + esc(c.cue) + '</b>' + (c.see ? TVZ.draw(c.see) : '') + '</div><div class="tc-arrow" aria-hidden="true">→</div><div class="tc-do"><span class="k">Do</span><b>' + esc(c.tactic) + '</b>' + TVZ.draw(c.vis) + '</div></div><div class="tc-refs">' + c.refs.map(refLink).join('') + (c.tool ? '<button type="button" class="tc-toolbtn" data-tool="' + esc(c.tool) + '">The triangle</button>' : '') + '</div><p class="tc-sr">' + esc(c.alt) + '</p></article>'; }).join('') + '</div></section>' +
+      '<section class="tc-integ" id="tc-integ"><h2>Two chapters, one problem</h2><p class="sub">Read the problem, try it, then step through one move at a time.</p>' +
+      G.integ.map(function (p, i) { return '<article class="tc-iq" data-iq="' + i + '" data-shown="0"><div class="tc-iqhd"><h3>' + esc(p.h) + '</h3><span>' + p.terrs.map(function (t) { return '<span class="tc-terr">' + esc(terrLab(t)) + '</span>'; }).join('') + '</span></div><p class="tc-iqprob">' + TVZ.fmt(p.prob) + '</p><ol class="tc-iqsteps">' +
+        p.steps.map(function (st, j) { return '<li class="tv" data-step="' + j + '" hidden><span class="k">Step ' + (j + 1) + '</span><b>' + esc(st.say) + '</b>' + TVZ.draw(st.vis) + '</li>'; }).join('') + '</ol><div class="tc-iqbtns"><button type="button" class="btn primary sm" data-iqnext="1">Show step 1</button><button type="button" class="btn ghost sm" data-iqall="1">Show all</button></div><div class="tc-refs">' + p.refs.map(refLink).join('') + '</div></article>'; }).join('') + '</section>' +
+      '<section class="tc-traps" id="tc-traps"><h2>Trap gallery</h2><p class="sub">The slips the Review and the Exam of ' + esc(G.name) + ' see most, each beside the right way.</p><div class="tc-trapgrid">' +
+      G.traps.map(function (t) { return '<article class="tc-trapc tv"><div class="tc-cuehd"><span class="tc-terr">' + esc(terrLab(t.terr)) + '</span><span class="tc-tag">' + esc((tg[t.tag] && tg[t.tag].label) || t.tag) + '</span></div>' + TVZ.draw(['trap', t.trap[0], t.trap[1]]) + '<p class="tc-sr">' + esc(t.alt) + '</p></article>'; }).join('') + '</div></section>' +
+      '<section class="tc-grpfl"><h2>Formulas</h2><p class="sub">The formula flash cards of Chapter' + (G.chs.length > 1 ? 's ' : ' ') + G.chs.join(' and ') + ' in one deck.</p>' + flashHTML(G.chs) + '</section>' +
+      '<section class="tc-grpdojo"><h2>Drill it in the Dojo</h2><div class="tc-dojolinks">' + G.dojo.map(function (d) { return '<a class="btn ghost" href="#dojo/focus/' + esc(d[0]) + '">' + esc(d[1]) + '</a>'; }).join('') + '</div></section>';
+    wrap.innerHTML = h; wire(wrap); flashWire(wrap.querySelector('.tc-flash'));
+    wrap.addEventListener('click', function (e) {
+      var j = e.target.closest('[data-jump]'); if (j) { e.preventDefault(); var t = document.getElementById(j.dataset.jump); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      var art = e.target.closest('.tc-iq'); if (!art) return;
+      var steps = art.querySelectorAll('[data-step]'), n = +art.dataset.shown;
+      if (e.target.closest('[data-iqall]')) n = steps.length; else if (e.target.closest('[data-iqnext]')) n = Math.min(steps.length, n + 1); else return;
+      art.dataset.shown = n; Array.prototype.forEach.call(steps, function (s, k) { s.hidden = k >= n; });
+      var nb = art.querySelector('[data-iqnext]'); if (n >= steps.length) { nb.disabled = true; nb.textContent = 'All steps shown'; art.querySelector('[data-iqall]').hidden = true; } else nb.textContent = 'Show step ' + (n + 1);
+      if (steps[n - 1]) steps[n - 1].scrollIntoView({ block: 'nearest' });
+    });
+  }
+  return { groupView: groupView, init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
 })();
 /* ===== HTC END ===== */
 
@@ -254542,6 +254644,7 @@ var HDJ = (function () {
   function view(main, p) {
     loadUi(); stop(); S = null;
     var a = p[0];
+    if (a === 'focus' && DJG.STYLES.some(function (st) { return st.id === p[1]; })) { ui.focus = { style: p[1] }; saveUi(); location.hash = 'dojo'; return; }   // a link from a Review group's Skills & Tactics
     if (a === 'roll') return viewRoll(main, 'roll');
     if (a === 'warm' && CAT.levels[p[1]]) return viewRoll(main, 'warm', p[1]);
     if (a === 'skill' && CAT.skills[p[1]]) return viewRoll(main, 'skill', p[1]);
@@ -254901,7 +255004,7 @@ var HDJ = (function () {
       else if (name === 'practice') viewPlayer(main, 'practice');
       else if (name === 'chapters') viewChapters(main);
       else if (name === 'ch' && chOf(+p[1])) { if (p[2] === 'path') viewChapterPath(main, +p[1], p[3]); else if (p[2] === 'tactics' && typeof HTC !== 'undefined') HTC.view(main, +p[1], p[3], chapterHead(+p[1], 'tactics')); else viewChapterDash(main, +p[1]); }
-      else if (name === 'reviews') viewReviews(main);
+      else if (name === 'reviews') { if (p[2] === 'tactics' && typeof HTC !== 'undefined' && HTC.groupView && TAC.group(p[1])) HTC.groupView(main, p[1]); else viewReviews(main); }
       else if (name === 'app' && MANIFEST[p[1]]) viewApp(main, p[1]);
       else if (name === 'dashboard' || name === 'progress') { var tjOn = TJ && name === 'dashboard' && p[1] !== 'progress'; if (TJ) dashNav(main, tjOn); if (tjOn) TJ.view(main); else viewProgress(main); }   // #dashboard opens on Trajectory; #dashboard/progress and the old #progress open Progress
       else if (name === 'history' && typeof HHI !== 'undefined') HHI.view(main, p[1]);
@@ -255604,6 +255707,7 @@ var HDJ = (function () {
       var h = '<div class="xch"><div><h3 style="font-size:22px">' + esc(g.name) + '</h3><p class="sub">' + esc(g.blurb || '') + '</p></div></div><div class="hb-apps">';
       h += '<div class="hb-app' + (hasR ? '' : ' soon') + '"><h3>Review</h3><p>' + (hasR ? (ans.length || trials.length ? plural(ans.length, 'answer') + ' and ' + plural(trials.length, 'timed round') + ' so far' + (lastR ? '; last on ' + fmtDate(lastR) : '') + '.' : 'Dashboard, Warm-up, Time Trial and Transfer sets. Not started yet.') : 'Coming soon. It is being built now.') + '</p>' + (hasR ? '<div><a class="btn primary sm" href="#app/' + g.review + '">Open the Review</a></div>' : '') + '</div>';
       h += '<div class="hb-app' + (hasX ? '' : ' soon') + '"><h3>Exam</h3><p>' + (hasX ? (a ? 'Last submitted ' + fmtDate(a.submittedAt) + '.' : 'An adaptive exam, about 45–70 minutes, with a full report at the end.') : 'Coming soon. It is being built now.') + '</p>' + (hasX ? '<div><a class="btn ' + (a ? 'ghost' : 'primary') + ' sm" href="#app/' + g.exam + '">Open the Exam</a></div>' : '') + '</div></div>';
+      if (typeof TAC !== 'undefined' && TAC.group && TAC.group(g.id)) h += '<div class="hb-app"><h3>Skills &amp; Tactics</h3><p>What you see → what to do, problems that join the chapters, the slips to watch for, and the formulas.</p><div><a class="btn ghost" href="#reviews/' + g.id + '/tactics">Open</a></div></div>';
       if (a) {
         var sc = attemptScore(a), lanes = Object.keys(a.lanes || {});
         h += '<div class="hb-tiles"><div class="hb-tile"><div class="l">Core (tiers 1–2)</div><div class="v">' + fmtPts(sc.core) + ' / ' + sc.coreMax + '</div><div class="s">comparable to a chapter test</div></div><div class="hb-tile"><div class="l">Stretch (tiers 3–4)</div><div class="v">' + fmtPts(sc.stretch) + ' / ' + sc.stretchMax + '</div><div class="s">transfer and challenge</div></div></div>';
