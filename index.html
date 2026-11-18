@@ -3915,8 +3915,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -43330,7 +43330,7 @@ var GEN = (function () {
         r = piOK(PI_EXACT, function (pi) { return Cn / pi / 2; }, dp1);
       if (d === null || r === null) return t3l2();
       return flds(lead('The circumference of a circle is ' + f(C) + ' ' + U + '. Find its diameter and its radius, each ' +
-        toDp(1) + '.') + VIS.circle({ d: '?', centerLabel: 'O' }),
+        toDp(1) + '.' + RULE4) + VIS.circle({ d: '?', centerLabel: 'O' }),
         [{ lab: 'diameter (' + U + ')', val: d, tol: tolDp(1) }, { lab: 'radius (' + U + ')', val: r, tol: tolDp(1) }], [
         'C = πd, so go backwards by dividing: d = C ÷ π.',
         'd = ' + f(C) + ' ÷ π ≈ ' + f(rd(Cn / PI_KEY, 4)) + ' ' + U + ', which is ' + fmtDp(d, 1) + ' ' + U + ' to one decimal place.',
@@ -43342,7 +43342,7 @@ var GEN = (function () {
         C2 = piOK(PI_EXACT, function (pi) { return pi * rn * 2; }, dp1);
       if (C2 === null) return t3l2();
       return flds(lead('Complete the table row for a circle with a radius of ' + f(r2) + ' ' + U + '. Give the diameter and the circumference ' +
-        toDp(1) + '.') +
+        toDp(1) + '.' + RULE4) +
         VIS.blanks(['radius (' + U + ')', 'diameter (' + U + ')', 'circumference (' + U + ')'],
           [[f(r2), f(d2), f(C2)]], { blank: [[0, 1], [0, 2]], caption: 'One row of the circle table' }),
         [{ lab: 'diameter (' + U + ')', val: d2, tol: tolDp(1) }, { lab: 'circumference (' + U + ')', val: C2, tol: tolDp(1) }], [
@@ -43357,7 +43357,7 @@ var GEN = (function () {
         r3 = piOK(PI_EXACT, function (pi) { return Cn3 / pi / 2; }, dp1);
       if (d3 === null || r3 === null) return t3l2();
       return flds(lead('Complete the table row for a circle with a circumference of ' + f(C3) + ' ' + U + '. Give the diameter and the radius ' +
-        toDp(1) + '.') +
+        toDp(1) + '.' + RULE4) +
         VIS.blanks(['radius (' + U + ')', 'diameter (' + U + ')', 'circumference (' + U + ')'],
           [[f(r3), f(d3), f(C3)]], { blank: [[0, 0], [0, 1]], caption: 'One row of the circle table' }),
         [{ lab: 'diameter (' + U + ')', val: d3, tol: tolDp(1) }, { lab: 'radius (' + U + ')', val: r3, tol: tolDp(1) }], [
@@ -43370,7 +43370,7 @@ var GEN = (function () {
     var r4 = R(3, 18), side = piOK(PI_EXACT, function (pi) { return pi * 2 * r4 * 10 / 4; }, dp0);
     if (side === null) return t3l2();
     return num(lead('A circle has a radius of ' + f(r4) + ' cm. A square has the same perimeter as the circle\'s circumference. ' +
-      'How long is each side of the square, to the nearest millimetre?') + VIS.circle({ r: f(r4) + ' cm', centerLabel: 'O' }),
+      'How long is each side of the square, to the nearest millimetre?' + RULE4) + VIS.circle({ r: f(r4) + ' cm', centerLabel: 'O' }),
       side, [
       'The circle\'s circumference is C = πd = π · ' + f(2 * r4) + ' cm ≈ ' + f(rd(PI_KEY * 2 * r4, 3)) + ' cm.',
       'A square has four equal sides, so each side is the shared perimeter divided by 4: ' +
@@ -43476,7 +43476,7 @@ var GEN = (function () {
         VIS.circle({ r: f(r2) + ' cm', centerLabel: 'O' }),
         a2, [
         'Square the radius: (' + f(r2) + ' cm)' + SQ + ' = ' + f(r2 * r2) + ' cm' + SQ + '.',
-        'A = πr' + SQ + ' = ' + f(r2 * r2) + 'π ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' cm' + SQ + '.',
+        'A = πr' + SQ + ' = ' + f(r2 * r2) + 'π ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' cm' + SQ + '.',
         'To the nearest 10 cm' + SQ + ', A ≈ ' + f(a2) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ });
     }
@@ -43487,7 +43487,7 @@ var GEN = (function () {
         VIS.circle({ d: f(d3) + ' cm', centerLabel: 'O' }),
         a3, [
         'The area formula uses the radius, so halve the diameter first: r = ' + f(d3) + ' ÷ 2 = ' + f(r3) + ' cm.',
-        'A = πr' + SQ + ' = π · (' + f(r3) + ' cm)' + SQ + ' = ' + f(r3 * r3) + 'π ≈ ' + f(rd(PI_KEY * r3 * r3, 2)) + ' cm' + SQ + '.',
+        'A = πr' + SQ + ' = π · (' + f(r3) + ' cm)' + SQ + ' = ' + f(r3 * r3) + 'π ≈ ' + f(rd(PI_2 * r3 * r3, 2)) + ' cm' + SQ + '.',
         'To the nearest 10 cm' + SQ + ', A ≈ ' + f(a3) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ });
     }
@@ -43516,7 +43516,7 @@ var GEN = (function () {
         { lab: 'A = πr' + SQ + ' (square units)', val: exa, tol: tolDp(1) }], [
       f(halves) + ' half-squares make ' + f(halves) + ' ÷ 2 = ' + f(Q.of(halves).div(Q.of(2))) + ' whole squares.',
       'Counting gives ' + f(whole) + ' + ' + f(Q.of(halves).div(Q.of(2))) + ' = ' + f(est) + ' square units.',
-      'The formula gives A = π · (' + f(r5) + ')' + SQ + ' ≈ ' + f(rd(PI_KEY * rn5 * rn5, 3)) + ', which is ' + fmtDp(exa, 1) + ' square units.'
+      'The formula gives A = π · (' + f(r5) + ')' + SQ + ' ≈ ' + f(rd(PI_2 * rn5 * rn5, 3)) + ', which is ' + fmtDp(exa, 1) + ' square units.'
     ]);
   }
 
@@ -43547,7 +43547,7 @@ var GEN = (function () {
         a2, [
         'Put the radius in one unit: ' + f(ft) + ' ft is ' + f(ft) + ' · 12 = ' + f(ft * 12) + ' in, so r = ' + f(ft * 12) + ' + ' + f(inch) + ' = ' + f(tot) + ' in.',
         'Square it: ' + f(tot) + SQ + ' = ' + f(tot * tot) + '.',
-        'A = ' + f(tot * tot) + 'π ≈ ' + f(rd(PI_KEY * tot * tot, 1)) + ' sq in, which is ' + f(a2) + ' sq in to the nearest 1,000 sq in.'
+        'A = ' + f(tot * tot) + 'π ≈ ' + f(rd(PI_2 * tot * tot, 1)) + ' sq in, which is ' + f(a2) + ' sq in to the nearest 1,000 sq in.'
       ], { unit: 'sq in' });
     }
     if (v <= 5) {                                                   // sec5-t15, back from a π-form area
@@ -43615,7 +43615,7 @@ var GEN = (function () {
       ]);
     }
     if (v <= 4) {                                                   // sec6-t5
-      var d2 = 2 * R(4, 15), r2 = d2 / 2, rough = 2 * Math.round(3.1 * d2 / 2),
+      var d2 = 2 * R(4, 15), r2 = d2 / 2, rough = 2 * Math.round(1.57 * d2),
         est2 = Q.of(rough).mul(Q.of(r2)).div(Q.of(2)),
         exa2 = piOK(PI_LOOSE, function (pi) { return pi * r2 * r2; }, dp0);
       if (exa2 === null || !est2.isInt()) return t4l3();
@@ -43772,8 +43772,8 @@ var GEN = (function () {
       VIS.region({ kind: 'circle-in-square', labels: ['square side ' + f(s) + ' units', 'circle radius ' + f(rr) + ' units'] }),
       left, [
       'The square\'s area is ' + f(s) + ' · ' + f(s) + ' = ' + f(s * s) + ' square units.',
-      'The circle\'s area is πr' + SQ + ' = ' + piCoef(rr * rr) + ' ≈ ' + f(rd(PI_KEY * rr * rr, 3)) + ' square units.',
-      'Subtract in that order — square minus circle: ' + f(s * s) + ' − ' + f(rd(PI_KEY * rr * rr, 3)) + ' ≈ ' + fmtDp(left, 1) + ' square units.'
+      'The circle\'s area is πr' + SQ + ' = ' + piCoef(rr * rr) + ' ≈ ' + f(rd(PI_2 * rr * rr, 3)) + ' square units.',
+      'Subtract in that order — square minus circle: ' + f(s * s) + ' − ' + f(rd(PI_2 * rr * rr, 3)) + ' ≈ ' + fmtDp(left, 1) + ' square units.'
     ], { unit: 'square units', tol: tolDp(1) });
   }
 
@@ -43806,7 +43806,7 @@ var GEN = (function () {
         VIS.region({ kind: 'ring', r: ri, r2: ro, labels: ['fountain radius ' + f(ri) + ' ft', 'bed radius ' + f(ro) + ' ft'] }),
         [{ lab: 'planted area (ft' + SQ + ')', val: ar }, { lab: 'fertiliser (lb)', val: arn / per * lbs }], [
         'Big circle minus small circle: π · ' + f(ro) + SQ + ' − π · ' + f(ri) + SQ + ' = ' + piCoef(ro * ro) + ' − ' + piCoef(ri * ri) + ' = ' + piCoef(ro * ro - ri * ri) + ' ft' + SQ + '.',
-        piCoef(ro * ro - ri * ri) + ' ≈ ' + f(rd(PI_KEY * (ro * ro - ri * ri), 2)) + ' ft' + SQ + ', which is ' + f(ar) + ' ft' + SQ + ' to the nearest ten square feet.',
+        piCoef(ro * ro - ri * ri) + ' ≈ ' + f(rd(PI_2 * (ro * ro - ri * ri), 2)) + ' ft' + SQ + ', which is ' + f(ar) + ' ft' + SQ + ' to the nearest ten square feet.',
         f(ar) + ' ÷ ' + f(per) + ' = ' + f(arn / per) + ', and ' + f(arn / per) + ' · ' + f(lbs) + ' lb = ' + f(arn / per * lbs) + ' lb.'
       ]);
     }
@@ -43821,7 +43821,7 @@ var GEN = (function () {
         ' lb per ' + f(per2) + ' ft' + SQ + '. Find the area to the nearest ten square feet, and the ' + job[2] +
         ' the rounded area needs.' + RULE314) + VIS.circle({ r: f(r2) + ' ft', centerLabel: 'O' }),
         [{ lab: 'area (ft' + SQ + ')', val: ar2 }, { lab: job[2] + ' (lb)', val: an2 / per2 * lb2 }], [
-        'A = πr' + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' ft' + SQ + '.',
+        'A = πr' + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' ft' + SQ + '.',
         'To the nearest ten square feet, that is ' + f(ar2) + ' ft' + SQ + '.',
         f(ar2) + ' ÷ ' + f(per2) + ' = ' + f(an2 / per2) + ' lots, and ' + f(an2 / per2) + ' · ' + f(lb2) + ' lb = ' + f(an2 / per2 * lb2) + ' lb.'
       ]);
@@ -43974,9 +43974,9 @@ var GEN = (function () {
         ' on each short end. Find its perimeter, to the nearest unit.' + RULE314) +
         VIS.semi({ kind: 'stadium', w: L, h: Wd, wLab: f(L) + ' units', hLab: f(Wd) + ' units', rLab: 'r = ' + f(r) }),
         P, [
-        'The two half-circles together make one whole circle of radius ' + f(r) + ', so the curved part of the perimeter is one circumference: C = π · ' + f(Wd) + ' ≈ ' + f(rd(PI_KEY * Wd, 2)) + ' units.',
+        'The two half-circles together make one whole circle of radius ' + f(r) + ', so the curved part of the perimeter is one circumference: C = π · ' + f(Wd) + ' ≈ ' + f(rd(PI_2 * Wd, 2)) + ' units.',
         'The straight parts are the two long sides: 2 · ' + f(L) + ' = ' + f(2 * L) + ' units. The two short ends are not on the outside.',
-        'Perimeter ≈ ' + f(rd(PI_KEY * Wd, 2)) + ' + ' + f(2 * L) + ' = ' + f(rd(2 * L + PI_KEY * Wd, 2)) + ' ≈ ' + f(P) + ' units.'
+        'Perimeter ≈ ' + f(rd(PI_2 * Wd, 2)) + ' + ' + f(2 * L) + ' = ' + f(rd(2 * L + PI_2 * Wd, 2)) + ' ≈ ' + f(P) + ' units.'
       ], { unit: 'units', tol: tolDp(0) });
     }
     if (v <= 3) {                                                   // sec5-t14, the area
@@ -43989,8 +43989,8 @@ var GEN = (function () {
         VIS.semi({ kind: 'stadium', w: L2, h: W2, wLab: f(L2) + ' units', hLab: f(W2) + ' units', rLab: 'r = ' + f(r2) }),
         A, [
         'The rectangle covers ' + f(L2) + ' · ' + f(W2) + ' = ' + f(L2 * W2) + ' square units.',
-        'The two half-circles together make one whole circle of radius ' + f(r2) + ': π · ' + f(r2) + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' square units.',
-        'Total ≈ ' + f(L2 * W2) + ' + ' + f(rd(PI_KEY * r2 * r2, 2)) + ' = ' + f(rd(L2 * W2 + PI_KEY * r2 * r2, 2)) + ' ≈ ' + f(A) + ' square units.'
+        'The two half-circles together make one whole circle of radius ' + f(r2) + ': π · ' + f(r2) + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' square units.',
+        'Total ≈ ' + f(L2 * W2) + ' + ' + f(rd(PI_2 * r2 * r2, 2)) + ' = ' + f(rd(L2 * W2 + PI_2 * r2 * r2, 2)) + ' ≈ ' + f(A) + ' square units.'
       ], { unit: 'square units', tol: tolDp(0) });
     }
     if (v === 4) {                                                  // sec5-t14, scaled into real units
@@ -44003,10 +44003,10 @@ var GEN = (function () {
         sc[1] + ' m. Find the real area, to the nearest square metre.' + RULE314) +
         VIS.semi({ kind: 'stadium', w: L3, h: W3, wLab: f(L3) + ' units', hLab: f(W3) + ' units', rLab: 'r = ' + f(r3) }),
         real, [
-        'In grid units the area is ' + f(L3) + ' · ' + f(W3) + ' + π · ' + f(r3) + SQ + ' ≈ ' + f(rd(L3 * W3 + PI_KEY * r3 * r3, 2)) + ' square grid units.',
+        'In grid units the area is ' + f(L3) + ' · ' + f(W3) + ' + π · ' + f(r3) + SQ + ' ≈ ' + f(rd(L3 * W3 + PI_2 * r3 * r3, 2)) + ' square grid units.',
         'An area scales by the SQUARE of the length scale: one grid unit is ' + sc[1] + ' m, so one grid square is ' +
           sc[1] + ' · ' + sc[1] + ' = ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' m' + SQ + '.',
-        f(rd(L3 * W3 + PI_KEY * r3 * r3, 2)) + ' · ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' ≈ ' + f(real) + ' m' + SQ + '.'
+        f(rd(L3 * W3 + PI_2 * r3 * r3, 2)) + ' · ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' ≈ ' + f(real) + ' m' + SQ + '.'
       ], { unit: 'm' + SQ, tol: tolDp(0) });
     }
     if (v === 5) {                                                  // sec8-t4
@@ -44037,8 +44037,8 @@ var GEN = (function () {
         }),
         At, [
         'Trapezoid: (' + f(bt) + ' + ' + f(tp) + ') ÷ 2 · ' + f(ht) + ' = ' + f(Q.of(bt + tp).div(Q.of(2))) + ' · ' + f(ht) + ' = ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' cm' + SQ + '.',
-        'Half-circle: ½ · π · ' + f(rs) + SQ + ' = ' + f(Q.of(rs * rs).div(Q.of(2))) + 'π ≈ ' + f(rd(PI_KEY * rs * rs / 2, 2)) + ' cm' + SQ + '.',
-        'Total ≈ ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' + ' + f(rd(PI_KEY * rs * rs / 2, 2)) + ' ≈ ' + f(At) + ' cm' + SQ + '.'
+        'Half-circle: ½ · π · ' + f(rs) + SQ + ' = ' + f(Q.of(rs * rs).div(Q.of(2))) + 'π ≈ ' + f(rd(PI_2 * rs * rs / 2, 2)) + ' cm' + SQ + '.',
+        'Total ≈ ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' + ' + f(rd(PI_2 * rs * rs / 2, 2)) + ' ≈ ' + f(At) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ, tol: tolDp(0) });
     }
     if (v === 8) {                                                  // sec7-t9, in exact π-form
@@ -44115,7 +44115,7 @@ var GEN = (function () {
     if (v <= 8) {                                                   // sec7-t10
       var side = 2 * R(4, 9), rad = side / 2, tile = pick([20, 25, 30]), gap = pick([1, 2]),
         per = pick([10, 12, 15, 20]), price = R(120, 300) * 10;
-      var P = 3 * side + PI_KEY * rad, step = (tile + gap) / 100,
+      var P = 3 * side + PI_2 * rad, step = (tile + gap) / 100,
         tiles = Math.ceil(P / step - 1e-9), packs = Math.ceil(tiles / per), cost = Q.of(packs).mul(dq(price, 2));
       var tcheck = piOK(PI_LOOSE, function (pi) { return Math.ceil((3 * side + pi * rad) / step - 1e-9); }, Q.of);
       if (tcheck === null || tiles > 900) return t6l3();
@@ -44126,7 +44126,7 @@ var GEN = (function () {
         VIS.semi({ kind: 'onTop', w: side, h: side, wLab: f(side) + ' m', hLab: f(side) + ' m', rLab: 'r = ' + f(rad) + ' m' }),
         [{ lab: 'tiles', val: tiles }, { lab: 'packages', val: packs }, { lab: 'total cost ($)', val: cost, dp: 2 }], [
         'The outer perimeter is the three straight sides plus the arc: 3 · ' + f(side) + ' m + ½ · π · ' + f(side) + ' m ≈ ' +
-          f(3 * side) + ' + ' + f(rd(PI_KEY * rad, 2)) + ' = ' + f(rd(P, 2)) + ' m.',
+          f(3 * side) + ' + ' + f(rd(PI_2 * rad, 2)) + ' = ' + f(rd(P, 2)) + ' m.',
         'Each tile takes ' + f(tile) + ' cm + ' + f(gap) + ' cm = ' + f(dq(tile + gap, 2)) + ' m, so ' + f(rd(P, 2)) + ' ÷ ' +
           f(dq(tile + gap, 2)) + ' ≈ ' + f(rd(P / step, 2)) + ' — round UP to ' + f(tiles) + ' tiles.',
         f(tiles) + ' ÷ ' + f(per) + ' = ' + f(rd(tiles / per, 2)) + ', so ' + f(packs) + ' whole packages are needed.',
@@ -45528,7 +45528,7 @@ var GEN = (function () {
   function t11l2() {
     var v = R(0, 9);
     if (v <= 1) {                                                   // sec16-t4
-      var b = 2 * R(2, 9), fh = R(4, 14), SA = b * b + 4 * (b * fh / 2), u = pick(['cm', 'in']);
+      var b = 2 * R(2, 9), fh = R(b / 2 + 1, b / 2 + 8), SA = b * b + 4 * (b * fh / 2), u = pick(['cm', 'in']);
       return num(lead('A pyramid has a square base with ' + f(b) + '-' + u + ' sides, and each of its four triangular faces is ' +
         f(fh) + ' ' + u + ' high — that is the FACE height, measured up the middle of a face. Find its surface area.') +
         VIS.solid({ kind: 'pyramid', w: b, h: fh, d: b, l: { w: f(b) + ' ' + u, s: f(fh) + ' ' + u } }),
@@ -45571,20 +45571,20 @@ var GEN = (function () {
         'Two circular bases: 2 · π · ' + f(r) + SQ + ' = ' + piCoef(2 * r * r) + ' ' + u2 + SQ + '.',
         'The lateral face unrolls into a rectangle whose length is the base circumference πd = ' + piCoef(2 * r) +
           ' and whose width is the height ' + f(hc) + ': ' + piCoef(2 * r * hc) + ' ' + u2 + SQ + '.',
-        'Total: ' + piCoef(2 * r * r) + ' + ' + piCoef(2 * r * hc) + ' = ' + piCoef(coef) + ' ' + u2 + SQ + ' ≈ ' + f(rd(PI_KEY * coef, 2)) + ', which is ' + f(rounded) + ' ' + u2 + SQ + '.'
+        'Total: ' + piCoef(2 * r * r) + ' + ' + piCoef(2 * r * hc) + ' = ' + piCoef(coef) + ' ' + u2 + SQ + ' ≈ ' + f(rd(PI_2 * coef, 2)) + ', which is ' + f(rounded) + ' ' + u2 + SQ + '.'
       ]);
     }
     if (v <= 7) {                                                   // sec18-t6, a trapezoidal prism
-      var pa = 2 * R(2, 5), pb = pa + 2 * R(1, 3), alt = R(3, 6), slant = R(alt + 1, alt + 4), dep = R(2, 5);
+      var trp = pick([[3, 4, 5], [4, 3, 5], [6, 8, 10], [8, 6, 10], [5, 12, 13]]), pa = 2 * R(2, 5), pb = pa + trp[0], alt = trp[1], slant = trp[2], dep = R(2, 5);
       var faces = 2 * ((pa + pb) / 2 * alt), rects = (pa + pb + alt + slant) * dep, SA3 = faces + rects;
       return num(lead('A trapezoidal prism is ' + f(dep) + '.0 m deep. Its trapezoidal face has parallel sides of ' + f(pb) +
-        '.0 m and ' + f(pa) + '.0 m and an altitude of ' + f(alt) + '.0 m; one of its slanted sides is perpendicular, ' +
-        f(alt) + '.0 m long, and the other is ' + f(slant) + '.0 m long. Find the prism\'s surface area.') +
+        '.0 m and ' + f(pa) + '.0 m and an altitude of ' + f(alt) + '.0 m; one of its other two sides is perpendicular to the parallel sides (so it is ' +
+        f(alt) + '.0 m long), and the last side slants and is ' + f(slant) + '.0 m long. Find the prism\'s surface area.') +
         VIS.compound({
-          parts: [{ kind: 'trap', x: 0, y: 0, w: pb, h: alt, top: pa }],
-          labels: [{ x: pb / 2, y: alt, text: f(pb) + '.0 m', at: 'bottom' }, { x: pb / 2, y: 0, text: f(pa) + '.0 m', at: 'top' },
-            { x: (pb - pa) / 2, y: alt / 2, text: f(alt) + '.0 m', at: 'left' },
-            { x: pb, y: alt / 2, text: f(slant) + '.0 m', at: 'right' }],
+          parts: [{ kind: 'trap', x: 0, y: 0, w: pb, h: alt, top: pa, off: 0 }],
+          labels: [{ x: pb / 2, y: alt, text: f(pb) + '.0 m', at: 'bottom' }, { x: pa / 2, y: 0, text: f(pa) + '.0 m', at: 'top' },
+            { x: 0, y: alt / 2, text: f(alt) + '.0 m', at: 'left' },
+            { x: (pa + pb) / 2, y: alt / 2, text: f(slant) + '.0 m', at: 'right' }],
           label: 'The trapezoidal face of the prism: parallel sides ' + f(pb) + '.0 m and ' + f(pa) + '.0 m, altitude ' + f(alt) + '.0 m, slanted side ' + f(slant) + '.0 m'
         }),
         SA3, [
@@ -45632,24 +45632,25 @@ var GEN = (function () {
       ]);
     }
     if (v <= 3) {                                                   // sec16-t7
-      var ta = R(3, 6), tb = ta + R(2, 4), th = R(2, 4), tri = R(2, 4), pr = R(60, 160),
-        area = Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))).add(Q.of(2).mul(Q.of(tb).mul(Q.of(tri)).div(Q.of(2)))),
+      var hip = pick([[3, 4, 5], [4, 3, 5], [3, 4, 5], [6, 8, 10]]), ta = R(2, 6), tb = ta + 2 * hip[0], th = hip[2], tri = hip[2], tw = 2 * hip[0], pr = R(60, 160),
+        area = Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))).add(Q.of(2).mul(Q.of(tw).mul(Q.of(tri)).div(Q.of(2)))),
         cost2 = area.mul(Q.of(pr));
       return flds(lead('The hip roof of a haunted doghouse is made of two identical trapezoids (parallel sides ' + f(tb) + '.00 m and ' + f(ta) +
-        '.00 m, height ' + f(th) + '.00 m) and two identical triangles (base ' + f(tb) + '.00 m, height ' + f(tri) +
+        '.00 m, height ' + f(th) + '.00 m) and two identical triangles (base ' + f(tw) + '.00 m, height ' + f(tri) +
         '.00 m). Tiling costs $' + f(pr) + ' per square metre. Fill in the roof\'s area and the cost of tiling it.') +
         VIS.compound({
-          parts: [{ kind: 'trap', x: 0, y: 0, w: tb, h: th, top: ta }, { kind: 'tri', x: tb + 1, y: 0, w: tb, h: tri }],
+          parts: [{ kind: 'trap', x: 0, y: 0, w: tb, h: th, top: ta }, { kind: 'tri', x: tb + 1, y: 0, w: tw, h: tri, apex: 0.5 }],
           labels: [{ x: tb / 2, y: th, text: f(tb) + ' m', at: 'bottom' }, { x: tb / 2, y: 0, text: f(ta) + ' m', at: 'top' },
             { x: (tb - ta) / 2, y: th / 2, text: f(th) + ' m', at: 'left' },
-            { x: tb + 1 + tb / 2, y: tri, text: f(tb) + ' m', at: 'bottom' }],
+            { x: tb + 1 + tw / 2, y: tri, text: f(tw) + ' m', at: 'bottom' }, { x: tb + 1 + tw / 2, y: tri / 2, text: f(tri) + ' m', at: 'right' }],
+          splits: [[(tb - ta) / 2, 0, (tb - ta) / 2, th], [tb + 1 + tw / 2, 0, tb + 1 + tw / 2, tri]],
           label: 'One trapezoidal roof face beside one triangular roof face'
         }),
         [{ lab: 'roof area (m' + SQ + ')', val: area }, { lab: 'cost ($)', val: cost2, dp: 2 }], [
         'One trapezoid: (' + f(tb) + ' + ' + f(ta) + ') ÷ 2 · ' + f(th) + ' = ' + f(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
           f(Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2)))) + ' m' + SQ + '.',
-        'One triangle: ½ · ' + f(tb) + ' · ' + f(tri) + ' = ' + f(Q.of(tb).mul(Q.of(tri)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
-          f(Q.of(2).mul(Q.of(tb).mul(Q.of(tri)).div(Q.of(2)))) + ' m' + SQ + '.',
+        'One triangle: ½ · ' + f(tw) + ' · ' + f(tri) + ' = ' + f(Q.of(tw).mul(Q.of(tri)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
+          f(Q.of(2).mul(Q.of(tw).mul(Q.of(tri)).div(Q.of(2)))) + ' m' + SQ + '.',
         'Total area ' + f(area) + ' m' + SQ + ', and the cost is ' + f(area) + ' · $' + f(pr) + ' = $' + fmtDp(cost2, 2) + '.'
       ]);
     }
@@ -45759,7 +45760,7 @@ var GEN = (function () {
     if (v <= 6) {                                                   // sec18-t3
       var fromR = Math.random() < 0.5, rr = fromR ? R(2, 9) : 0, dd = fromR ? 0 : 2 * R(1, 6),
         rad = fromR ? rr : dd / 2, hh = R(5, 25), u3 = pick(['cm', 'in']);
-      var exactV = PI_KEY * rad * rad * hh, big = exactV > 1000,
+      var exactV = PI_2 * rad * rad * hh, big = exactV > 1000,
         ans = piOK(PI_LOOSE, function (pi) { return pi * rad * rad * hh; }, big ? ten : dp1);
       if (ans === null) return t12l1();
       return num(lead('A cylinder has a base ' + (fromR ? 'radius of ' + f(rr) : 'diameter of ' + f(dd)) + '.0 ' + u3 +
@@ -46199,7 +46200,7 @@ var GEN = (function () {
       b1 = ang - a1 * x; b2 = ang - a2 * x; lab = {}; lab[P[0]] = '(' + lin8(a1, b1) + ')°'; lab[P[1]] = '(' + lin8(a2, b2) + ')°';
       return flds(lead('Two parallel lines are crossed by a third line. The two marked angles are ' + P[2] + ' angles. Find ' + mth('x') + ' and the measure of each marked angle.') + W.geo.par({ t: pa(60, P[0]) === 60 ? ang : 180 - ang, lab: lab }),
         [{ lab: 'x', val: x }, { lab: 'each angle (°)', val: ang }],
-        [cap1(P[2]) + ' angles at parallel lines are equal: ' + lin8(a1, b1) + ' = ' + lin8(a2, b2) + '.', f(b1 - b2) + ' = ' + lin8(a2 - a1, 0) + ', so x = ' + f(x) + '.', 'The angle: ' + a1 + ' · ' + f(x) + (b1 ? (b1 > 0 ? ' + ' + b1 : ' − ' + (-b1)) : '') + ' = ' + deg(ang) + '. Check with the other: ' + a2 + ' · ' + f(x) + (b2 ? (b2 > 0 ? ' + ' + b2 : ' − ' + (-b2)) : '') + ' = ' + deg(ang) + '.']);
+        [cap1(P[2]) + ' angles at parallel lines are equal: ' + lin8(a1, b1) + ' = ' + lin8(a2, b2) + '.', 'Take ' + lin8(a1, 0) + ' from both sides' + (b2 > 0 ? ', then take ' + b2 + ' from both sides' : b2 < 0 ? ', then add ' + (-b2) + ' to both sides' : '') + ': ' + f(b1 - b2) + ' = ' + lin8(a2 - a1, 0) + (a2 - a1 > 1 ? '; divide both sides by ' + (a2 - a1) : '') + ', so x = ' + f(x) + '.', 'The angle: ' + a1 + ' · ' + f(x) + (b1 ? (b1 > 0 ? ' + ' + b1 : ' − ' + (-b1)) : '') + ' = ' + deg(ang) + '. Check with the other: ' + a2 + ' · ' + f(x) + (b2 ? (b2 > 0 ? ' + ' + b2 : ' − ' + (-b2)) : '') + ' = ' + deg(ang) + '.']);
     }
     if (v === 1) {
       P = pick(PAIRS.filter(function (p) { return !p[3]; })); x = R(10, 28); a1 = R(1, 3); a2 = R(2, 4); var A1 = pick([52, 58, 64, 70, 75, 80, 85, 95, 100, 110, 116, 124]), A2 = 180 - A1;
@@ -49181,7 +49182,7 @@ var TAC = (function () {
     pct: { top: 'P', l: 'r', r: 'W', names: ['part', 'percent (as a decimal)', 'whole'], say: 'part = percent · whole', eg: '12 is what percent of 48? r = 12 ÷ 48 = 0.25 = 25%' },
     intr: { top: 'I', l: 'Pr', r: 't', names: ['interest', 'principal × rate', 'time, in the unit of the rate'], say: 'I = P · r · t', eg: '$200 at 5% for 3 years → I = 200 · 0.05 · 3 = $30' },
     circ: { top: 'C', l: 'π', r: 'd', names: ['circumference', 'π', 'diameter'], say: 'C = π · d', eg: 'C = 12π → d = 12, so r = 6' },
-    par: { top: 'A', l: 'b', r: 'h', names: ['area', 'base', 'height'], say: 'A = b · h', eg: 'A = 54, b = 9 → h = 54 ÷ 9 = 6' },
+    par: { top: 'A', l: 'b', r: 'h', names: ['area', 'base', 'perpendicular height'], say: 'A = b · h', eg: 'A = 54, b = 9 → h = 54 ÷ 9 = 6' },
     vol: { top: 'V', l: 'B', r: 'h', names: ['volume', 'base area', 'height'], say: 'V = B · h', eg: 'V = 120, B = 30 → h = 120 ÷ 30 = 4' }
   };
   function forms(id) { var T = TRI[id]; return T ? [T.top + ' = ' + T.l + ' · ' + T.r, T.l + ' = ' + T.top + ' ÷ ' + T.r, T.r + ' = ' + T.top + ' ÷ ' + T.l] : []; }
@@ -49850,6 +49851,82 @@ var TVZ = (function () {
     if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
     return svg(300, H, h, 'tv-pie', o.alt || ('A circle graph: ' + alt.join('; ') + '.'));
   }
+  // ---------------------------------------------------------------- pieces added for Chapter 8 (angles at a point, the circle, the right triangle
+  // with its squares, parallel lines and a transversal, solids)
+  // ang: rays from one point. rays: directions in degrees (0 = right, counter-clockwise); line: draw the 0°–180° line through the point;
+  // cross: a second full line at that direction; full: the rays go all round. arcs: [[from, to, label, role]] the angle from one
+  // direction to another (counter-clockwise), labelled; right: [[a, b]] a square corner between two directions.
+  function ang(o) {
+    var cx = 150, cy = o.full || o.cross !== undefined ? 76 : 92, R = o.full || o.cross !== undefined ? 58 : 74, h = '', alt = [], rad = Math.PI / 180;
+    function P(a, r) { return [cx + r * Math.cos(a * rad), cy - r * Math.sin(a * rad)]; }
+    function line(a) { var p1 = P(a, R + 14), p2 = P(a + 180, R + 14); return '<path class="tv-ln" d="M' + r1(p2[0]) + ' ' + r1(p2[1]) + 'L' + r1(p1[0]) + ' ' + r1(p1[1]) + '"/>'; }
+    if (o.line) h += line(o.line === true ? 0 : o.line);
+    if (o.cross !== undefined) h += line(o.cross);
+    (o.rays || []).forEach(function (a) { var p = P(a, R + 10); h += '<path class="tv-ln" d="M' + cx + ' ' + cy + 'L' + r1(p[0]) + ' ' + r1(p[1]) + '"/>'; });
+    (o.arcs || []).forEach(function (A, k) { var a1 = A[0], a2 = A[1], role = 'r-' + (A[3] || 'x'), span = ((a2 - a1) % 360 + 360) % 360 || 360, rr = 20 + (k % 2) * 8, s1 = P(a1, rr), s2 = P(a2, rr), big = span > 180 ? 1 : 0, mid = a1 + span / 2, lp = P(mid, rr + (span < 40 ? 30 : 20));
+      h += '<path class="tv-a ' + role + '" d="M' + r1(s1[0]) + ' ' + r1(s1[1]) + 'A' + rr + ' ' + rr + ' 0 ' + big + ' 0 ' + r1(s2[0]) + ' ' + r1(s2[1]) + '" fill="none"/>' + tx(lp[0], lp[1] + 4, A[2], 'tv-t sm b ' + role); alt.push(A[2]); });
+    (o.right || []).forEach(function (Rg) { var u = P(Rg[0], 11), v = P(Rg[1], 11), w = [u[0] + v[0] - cx, u[1] + v[1] - cy]; h += '<path class="tv-ln thin" d="M' + r1(u[0]) + ' ' + r1(u[1]) + 'L' + r1(w[0]) + ' ' + r1(w[1]) + 'L' + r1(v[0]) + ' ' + r1(v[1]) + '" fill="none"/>'; alt.push('a right angle'); });
+    h += '<circle class="tv-dot r-m" cx="' + cx + '" cy="' + cy + '" r="3"/>';
+    var H = o.full || o.cross !== undefined ? cy + R + 16 : cy + 12;
+    if (o.say) { h += tx(150, H + 12, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 20; alt.push(o.say); }
+    return svg(300, H, h, 'tv-ang', o.alt || ('Angles at a point: ' + alt.join(', ') + (o.say ? '. ' + o.say : '') + '.'));
+  }
+  // circle: a circle with its radius and diameter, and C and A beside it. o: { r, d, C, A, show: 'r' | 'd' | 'rd', say }
+  function circle(o) {
+    var cx = 84, cy = 66, R = 50, h = '', alt = [], sh = o.show || 'rd';
+    h += '<circle class="tv-b r-x" cx="' + cx + '" cy="' + cy + '" r="' + R + '" style="fill-opacity:.1"/>';
+    if (/d/.test(sh) && o.d) { h += '<path class="tv-a r-o" d="M' + (cx - R) + ' ' + cy + 'H' + (cx + R) + '"/>' + tx(cx - R / 2, cy + 16, 'd = ' + o.d, 'tv-t sm b r-o'); alt.push('diameter ' + o.d); }
+    if (/r/.test(sh) && o.r) { var ax = cx + R * Math.cos(-0.95), ay = cy + R * Math.sin(-0.95); h += '<path class="tv-a r-n" d="M' + cx + ' ' + cy + 'L' + r1(ax) + ' ' + r1(ay) + '"/>' + tx(cx - 6, cy - 22, 'r = ' + o.r, 'tv-t sm b r-n', 'end'); alt.push('radius ' + o.r); }
+    h += '<circle class="tv-dot r-m" cx="' + cx + '" cy="' + cy + '" r="3"/>';
+    function eq(n, v) { return n + (/^≈/.test(String(v)) ? ' ' : ' = ') + v; }
+    var y = 44; if (o.C) { h += tx(158, y, eq('C', o.C), 'tv-t b r-g', 'start'); alt.push('circumference ' + o.C); y += 26; } if (o.A) { h += tx(158, y, eq('A', o.A), 'tv-t b r-g', 'start'); alt.push('area ' + o.A); y += 26; } if (o.say) { h += tx(158, y, o.say, 'tv-t sm b r-m', 'start'); alt.push(o.say); }
+    return svg(300, 124, h, 'tv-circle', o.alt || ('A circle: ' + alt.join(', ') + '.'));
+  }
+  // rtri: a right triangle, legs a (across) and b (up), hypotenuse c; sq: the square on each side, with its area (sa, sb, sc);
+  // ro: the roles of a, b, c (default x, n, g: the hypotenuse found); a leg found: ro ['g', 'n', 'n']
+  function rtri(o) {
+    var ro = (o.ro || ['x', 'n', 'g']).map(function (q) { return 'r-' + q; });
+    var h = '', alt = [], sq = !!o.sq, s = sq ? 14 : 30, ax = 4 * s, by = 3 * s, x0 = sq ? 130 : 96, y0 = sq ? 74 : 104;   // drawn 3 : 4 : 5
+    var P0 = [x0, y0], Pa = [x0 + ax, y0], Pb = [x0, y0 - by];
+    if (sq) { var dx = Pa[0] - Pb[0], dy = Pa[1] - Pb[1], Q1 = [Pa[0] + dy, Pa[1] - dx], Q2 = [Pb[0] + dy, Pb[1] - dx];
+      h += '<path class="tv-b sq ' + ro[0] + '" d="M' + P0[0] + ' ' + P0[1] + 'H' + Pa[0] + 'v' + ax + 'H' + P0[0] + 'Z" style="fill-opacity:.14"/>' + tx(x0 + ax / 2, y0 + ax / 2 + 4, o.sa || '', 'tv-t sm b ' + ro[0]);
+      h += '<path class="tv-b sq ' + ro[1] + '" d="M' + P0[0] + ' ' + P0[1] + 'V' + Pb[1] + 'h' + (-by) + 'V' + P0[1] + 'Z" style="fill-opacity:.14"/>' + tx(x0 - by / 2, y0 - by / 2 + 4, o.sb || '', 'tv-t sm b ' + ro[1]);
+      h += '<path class="tv-b sq ' + ro[2] + '" d="M' + r1(Pa[0]) + ' ' + r1(Pa[1]) + 'L' + r1(Q1[0]) + ' ' + r1(Q1[1]) + 'L' + r1(Q2[0]) + ' ' + r1(Q2[1]) + 'L' + r1(Pb[0]) + ' ' + r1(Pb[1]) + 'Z" style="fill-opacity:.14"/>' + tx((Pa[0] + Q2[0]) / 2, (Pa[1] + Q2[1]) / 2 + 4, o.sc || '', 'tv-t sm b ' + ro[2]); }
+    h += '<path class="tv-ln" d="M' + P0[0] + ' ' + P0[1] + 'L' + Pa[0] + ' ' + Pa[1] + 'L' + Pb[0] + ' ' + Pb[1] + 'Z" fill="none"/><path class="tv-ln thin" d="M' + (x0 + 8) + ' ' + y0 + 'v-8h-8"/>';
+    if (!sq) h += tx(x0 + ax / 2, y0 + 16, o.a, 'tv-t b ' + ro[0]) + tx(x0 - 7, y0 - by / 2 + 4, o.b, 'tv-t b ' + ro[1], 'end') + tx(x0 + ax / 2 + 10, y0 - by / 2 - 6, o.c, 'tv-t b ' + ro[2], 'start');
+    else h += tx(x0 + ax / 2, y0 - 4, o.a, 'tv-t xs b ' + ro[0]) + tx(x0 + 4, y0 - by / 2 + 10, o.b, 'tv-t xs b ' + ro[1], 'start') + tx(x0 + ax / 2 + 8, y0 - by / 2 - 2, o.c, 'tv-t xs b ' + ro[2], 'start');
+    alt.push('legs ' + o.a + ' and ' + o.b + ', hypotenuse ' + o.c); if (sq) alt.push('squares on the sides: ' + [o.sa, o.sb, o.sc].join(', '));
+    var H = sq ? y0 + ax + 6 : y0 + 24;
+    if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
+    return svg(300, H, h, 'tv-rtri', o.alt || ('A right triangle: ' + alt.join('; ') + '.'));
+  }
+  // parl: two parallel lines crossed by a transversal that leans right. Angles 1–4 at the upper crossing (upper left, upper right,
+  // lower left, lower right), 5–8 the same at the lower one. a: the acute angle (it sits at 2, 3, 6, 7). marks: { n: [label, role] }
+  function parl(o) {
+    var a = o.a || 60, y1 = 34, y2 = 96, h = '', alt = [], rad = Math.PI / 180, t = 1 / Math.tan(a * rad), x1 = 150 + (y2 - y1) * t / 2, x2 = 150 - (y2 - y1) * t / 2, ext = 26;
+    h += '<path class="tv-ln" d="M28 ' + y1 + 'H272M28 ' + y2 + 'H272"/><path class="tv-ln" d="M' + r1(x1 + ext * t) + ' ' + (y1 - ext) + 'L' + r1(x2 - ext * t) + ' ' + (y2 + ext) + '"/>';
+    var pos = { 1: [-1, -1], 2: [1, -1], 3: [-1, 1], 4: [1, 1] };
+    Object.keys(o.marks || {}).forEach(function (k) { var n = +k, top = n <= 4, p = pos[top ? n : n - 4], cx = top ? x1 : x2, cy = top ? y1 : y2, m = o.marks[k], role = 'r-' + (m[1] || 'x'), wide = (p[0] < 0) === (p[1] < 0);
+      h += wide ? tx(cx + p[0] * 26, cy + p[1] * 12 + 4, m[0], 'tv-t sm b ' + role) : tx(cx + p[0] * (17 * t + 3), cy + p[1] * 12 + 4, m[0], 'tv-t sm b ' + role, p[0] > 0 ? 'start' : 'end'); alt.push('angle ' + n + ': ' + m[0]); });
+    var H = y2 + ext + 4;
+    if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
+    return svg(300, H, h, 'tv-parl', o.alt || ('Two parallel lines and a transversal: ' + alt.join('; ') + '.'));
+  }
+  // solid: a box, a cylinder or a square pyramid, with labels. o: { kind: 'box' | 'cyl' | 'pyr', labs: [...], say }
+  function solid(o) {
+    var h = '', k = o.kind || 'box', L = o.labs || [], alt = [];
+    if (k === 'box') { var x = 76, y = 46, w = 108, ht = 56, d = 24;
+      h += '<path class="tv-b sq r-x" d="M' + x + ' ' + y + 'l' + d + ' ' + (-d) + 'h' + w + 'l' + (-d) + ' ' + d + 'Z" style="fill-opacity:.1"/><path class="tv-b sq r-x" d="M' + (x + w) + ' ' + y + 'l' + d + ' ' + (-d) + 'v' + ht + 'l' + (-d) + ' ' + d + 'Z" style="fill-opacity:.18"/><rect class="tv-b sq r-x" x="' + x + '" y="' + y + '" width="' + w + '" height="' + ht + '" style="fill-opacity:.06"/>';
+      h += tx(x + w / 2, y + ht + 16, L[0] || '', 'tv-t sm b r-n') + tx(x + w + d / 2 + 8, y + ht - d / 2 + 6, L[1] || '', 'tv-t sm b r-n', 'start') + tx(x - 6, y + ht / 2 + 4, L[2] || '', 'tv-t sm b r-o', 'end'); alt.push('a box ' + L.filter(Boolean).join(' by ')); }
+    if (k === 'cyl') { var cx = 120, top = 36, bot = 100, rx = 44, ry = 11;
+      h += '<path class="tv-b sq r-x" d="M' + (cx - rx) + ' ' + top + 'V' + bot + 'A' + rx + ' ' + ry + ' 0 0 0 ' + (cx + rx) + ' ' + bot + 'V' + top + '" style="fill-opacity:.08"/><ellipse class="tv-b sq r-x" cx="' + cx + '" cy="' + top + '" rx="' + rx + '" ry="' + ry + '" style="fill-opacity:.18"/>';
+      h += '<path class="tv-a r-n" d="M' + cx + ' ' + top + 'H' + (cx + rx) + '"/>' + tx(cx + rx / 2, top - ry - 5, L[0] || '', 'tv-t sm b r-n') + tx(cx + rx + 8, (top + bot) / 2 + 4, L[1] || '', 'tv-t sm b r-o', 'start'); alt.push('a cylinder, ' + L.filter(Boolean).join(', ')); }
+    if (k === 'pyr') { var bx = 76, by = 98, bw = 116, dd = 28, apx = bx + bw / 2 + dd / 2, apy = 14;
+      h += '<path class="tv-b sq r-x" d="M' + bx + ' ' + by + 'h' + bw + 'l' + dd + ' ' + (-dd) + 'h' + (-bw) + 'Z" style="fill-opacity:.1"/><path class="tv-b sq r-x" d="M' + bx + ' ' + by + 'L' + apx + ' ' + apy + 'L' + (bx + bw) + ' ' + by + 'M' + (bx + bw) + ' ' + by + 'L' + apx + ' ' + apy + 'L' + (bx + bw + dd) + ' ' + (by - dd) + '" style="fill-opacity:.12"/>';
+      h += '<path class="tv-a r-o dashl" d="M' + (bx + bw / 2) + ' ' + by + 'L' + apx + ' ' + apy + '"/>' + tx(bx + bw / 2, by + 15, L[0] || '', 'tv-t sm b r-n') + tx((bx + bw / 2 + apx) / 2 - 6, (by + apy) / 2 + 4, L[1] || '', 'tv-t sm b r-o', 'end'); alt.push('a square pyramid, ' + L.filter(Boolean).join(', ')); }
+    var H = 118; if (o.say) { h += tx(150, H + 6, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 16; alt.push(o.say); }
+    return svg(300, H, h, 'tv-solid', o.alt || (alt.join('; ') + '.'));
+  }
   // small line icons for the formula tiles
   var IC = {
     road: '<path class="i1" d="M4 26C14 8 30 34 44 12"/><circle class="i2" cx="4" cy="26" r="3"/><circle class="i2" cx="44" cy="12" r="3"/>',
@@ -49881,11 +49958,14 @@ var TVZ = (function () {
     pie: '<circle class="i1" cx="24" cy="18" r="13"/><path class="i2l" d="M24 18V5M24 18L35 25"/>',
     pctbar: '<rect class="i1" x="6" y="12" width="36" height="12" rx="2"/><path class="i2l" d="M20 8V28"/>',
     graph: '<path class="i1" d="M8 5V31H44"/><path class="i2l" d="M8 31L40 9"/><circle class="i2" cx="24" cy="20" r="3"/>',
+    trig: '<path class="i1" d="M5 32L24 5L43 32Z"/><path class="i2l" d="M24 5V32"/>',
+    rtri: '<path class="i1" d="M7 32V6L43 32Z"/><path class="i2l" d="M7 25h7v7"/>',
+    trapz: '<path class="i1 f" d="M4 31L14 7H34L44 31Z"/><path class="i2l" d="M14 7V31"/>',
     group: '<path class="i1" d="M10 7C4 14 4 24 10 31M27 7C33 14 33 24 27 31"/><circle class="i2" cx="14" cy="19" r="3"/><circle class="i2" cx="23" cy="19" r="3"/><circle class="i2" cx="41" cy="19" r="3"/>'
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pbar: pbar, pie: pie, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pbar: pbar, pie: pie, ang: ang, circle: circle, rtri: rtri, parl: parl, solid: solid, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
@@ -50026,15 +50106,21 @@ var FML = (function () {
   F('intr', 7, { name: 'Simple interest', f: '{g:I} = {x:P} · {o:r} · {n:t}', plain: 'I = P · r · t', lit: ['I', 'P*r*t'], wrong: [['I = P + r + t', 'P+r+t'], ['I = P · r ÷ t', 'P*r/t'], ['I = P · (r + t)', 'P*(r+t)']], sk: ['C38'], leg: [['P', 'the principal'], ['r, t', 'rate and time, one unit']], ic: 'clock', move: 'pct.interest' });
   F('amt', 7, { of: 'intr', name: 'Amount after simple interest', f: '{g:A} = {x:P} + {x:P} · {o:r} · {n:t}', plain: 'A = P + P · r · t', lit: ['A', 'P+P*r*t'], wrong: [['A = P · r · t', 'P*r*t'], ['A = P · (1 + r) · t', 'P*(1+r)*t'], ['A = P + r · t', 'P+r*t']], sk: ['C38'] });
   F('cmpd', 7, { name: 'Compound growth', f: '{g:A} = {x:P} · ({o:1 + r}){n:ⁿ}', plain: 'A = P · (1 + r)ⁿ', lit: ['A', 'P*(1+r)^n'], wrong: [['A = P · (1 + r · n)', 'P*(1+r*n)'], ['A = P · (1 + r) · n', 'P*(1+r)*n'], ['A = P · rⁿ', 'P*r^n']], sk: ['C38'], leg: [['r', 'the rate for one period'], ['n', 'the number of periods']], ic: 'pow' });
-  // ---------------------------------------------------------------- Chapter 8 (Dojo only for now); p stands for π
-  F('circ', 8, { name: 'Circumference', plain: 'C = π · d', lit: ['C', 'p*d'], wrong: [['C = π · d²', 'p*d^2'], ['C = 2 · π · d', '2*p*d'], ['C = π + d', 'p+d']], sk: ['G12'] });
-  F('carea', 8, { name: 'Area of a circle', plain: 'A = π · r²', lit: ['A', 'p*r^2'], wrong: [['A = 2 · π · r', '2*p*r'], ['A = (π · r)²', '(p*r)^2'], ['A = π · r', 'p*r']], sk: ['G14'] });
-  F('par', 8, { name: 'Area of a parallelogram', plain: 'A = b · h', lit: ['A', 'b*h'], wrong: [['A = ½ · b · h', 'b*h/2'], ['A = 2b + 2h', '2*b+2*h'], ['A = b + h', 'b+h']], sk: ['G23'] });
-  F('tria', 8, { name: 'Area of a triangle', plain: 'A = ½ · b · h', lit: ['A', 'b*h/2'], wrong: [['A = b · h', 'b*h'], ['A = b + h', 'b+h'], ['A = 2 · b · h', '2*b*h']], sk: ['G23'] });
-  F('trap', 8, { name: 'Area of a trapezoid', plain: 'A = ½ · (a + b) · h', lit: ['A', '(a+b)*h/2'], wrong: [['A = (a + b) · h', '(a+b)*h'], ['A = ½ · a · b · h', 'a*b*h/2'], ['A = a + b + h', 'a+b+h']], sk: ['G24'] });
-  F('vol', 8, { name: 'Volume of a prism or a cylinder', plain: 'V = base area · height', lit: ['V', 'B*h'], wrong: [['V = base area + height', 'B+h'], ['V = ½ · base area · height', 'B*h/2'], ['V = base area ÷ height', 'B/h']], sk: ['G59'] });
-  F('poly', 8, { name: 'Angle sum of a polygon with n sides', plain: '(n − 2) · 180°', lit: ['S', '(n-2)*180'], wrong: [['n · 180°', 'n*180'], ['(n − 1) · 180°', '(n-1)*180'], ['(n + 2) · 180°', '(n+2)*180']], sk: ['G69'] });
-  F('pyth', 8, { name: 'Right triangle with hypotenuse c', plain: 'c² = a² + b²', lit: ['C', 'a^2+b^2'], wrong: [['c² = (a + b)²', '(a+b)^2'], ['c² = a² − b²', 'a^2-b^2'], ['c² = 2a + 2b', '2*a+2*b']], sk: ['G70'] });
+  // ---------------------------------------------------------------- Chapter 8: geometry (drawn: tiles, legends and flash cards); p stands for π
+  F('circ', 8, { name: 'Circumference', f: '{g:C} = {o:π} · {x:d}', plain: 'C = π · d', lit: ['C', 'p*d'], wrong: [['C = π · d²', 'p*d^2'], ['C = 2 · π · d', '2*p*d'], ['C = π + d', 'p+d']], sk: ['G12'], leg: [['d', 'the diameter, 2r'], ['π', '≈ 3.14, ²²⁄₇ or the key']], ic: 'pie', move: 'geo.circ' });
+  F('diam', 8, { of: 'circ', name: 'The diameter, from the circumference', f: '{x:d} = {f:{g:C}|{o:π}}', plain: 'd = C ÷ π', lit: ['d', 'C/p'], wrong: [['d = C · π', 'C*p'], ['d = π ÷ C', 'p/C'], ['d = C − π', 'C-p']], sk: ['G13'] });
+  F('carea', 8, { name: 'Area of a circle', f: '{g:A} = {o:π} · {x:r}²', plain: 'A = π · r²', lit: ['A', 'p*r^2'], wrong: [['A = 2 · π · r', '2*p*r'], ['A = (π · r)²', '(p*r)^2'], ['A = π · r', 'p*r']], sk: ['G14'], leg: [['r', 'the radius: halve a diameter'], ['r²', 'square it first']], ic: 'pie', move: 'geo.circ' });
+  F('halfcr', 8, { of: 'carea', name: 'Area from the circumference and the radius', f: '{g:A} = ½ · {o:C} · {x:r}', plain: 'A = ½ · C · r', lit: ['A', 'C*r/2'], wrong: [['A = C · r', 'C*r'], ['A = C ÷ r', 'C/r'], ['A = C + r', 'C+r']], sk: ['G22'] });
+  F('par', 8, { name: 'Area of a parallelogram', f: '{g:A} = {x:b} · {n:h}', plain: 'A = b · h', lit: ['A', 'b*h'], wrong: [['A = ½ · b · h', 'b*h/2'], ['A = 2b + 2h', '2*b+2*h'], ['A = b + h', 'b+h']], sk: ['G23'], leg: [['h', 'the perpendicular height'], ['b', 'the side it stands on']], ic: 'rect', move: 'geo.area' });
+  F('tria', 8, { name: 'Area of a triangle', f: '{g:A} = ½ · {x:b} · {n:h}', plain: 'A = ½ · b · h', lit: ['A', 'b*h/2'], wrong: [['A = b · h', 'b*h'], ['A = b + h', 'b+h'], ['A = 2 · b · h', '2*b*h']], sk: ['G23'], leg: [['½', 'half the parallelogram']], ic: 'trig', move: 'geo.area' });
+  F('trap', 8, { name: 'Area of a trapezoid', f: '{g:A} = {f:{x:a} + {x:b}|2} · {n:h}', plain: 'A = ½ · (a + b) · h', lit: ['A', '(a+b)*h/2'], wrong: [['A = (a + b) · h', '(a+b)*h'], ['A = ½ · a · b · h', 'a*b*h/2'], ['A = a + b + h', 'a+b+h']], sk: ['G24'], leg: [['a, b', 'the parallel sides'], ['(a + b) ÷ 2', 'their average']], ic: 'trapz', move: 'geo.area' });
+  F('vol', 8, { name: 'Volume of a prism or a cylinder', f: '{g:V} = {x:B} · {n:h}', plain: 'V = base area · height', lit: ['V', 'B*h'], wrong: [['V = base area + height', 'B+h'], ['V = ½ · base area · height', 'B*h/2'], ['V = base area ÷ height', 'B/h']], sk: ['G59'], leg: [['B', 'the area of the base'], ['cylinder', 'B = πr²']], ic: 'cube', move: 'geo.vol' });
+  F('cylv', 8, { of: 'vol', name: 'Volume of a cylinder', f: '{g:V} = {o:π} · {x:r}² · {n:h}', plain: 'V = π · r² · h', lit: ['V', 'p*r^2*h'], wrong: [['V = 2 · π · r · h', '2*p*r*h'], ['V = π · r · h', 'p*r*h'], ['V = π · r² + h', 'p*r^2+h']], sk: ['G59'] });
+  F('cyls', 8, { name: 'Surface area of a cylinder', f: '{g:S} = 2 · {o:π} · {x:r}² + 2 · {o:π} · {x:r} · {n:h}', plain: 'S = 2 · π · r² + 2 · π · r · h', lit: ['S', '2*p*r^2+2*p*r*h'], wrong: [['S = π · r² + 2 · π · r · h', 'p*r^2+2*p*r*h'], ['S = 2 · π · r² + π · r · h', '2*p*r^2+p*r*h'], ['S = π · r² · h', 'p*r^2*h']], sk: ['G57'], leg: [['2 · π · r²', 'the two circles'], ['2 · π · r · h', 'the side: C long, h high']], ic: 'cube', move: 'geo.vol' });
+  F('poly', 8, { name: 'Angle sum of a polygon with n sides', f: '{g:S} = ({x:n} − 2) · 180°', plain: '(n − 2) · 180°', lit: ['S', '(n-2)*180'], wrong: [['n · 180°', 'n*180'], ['(n − 1) · 180°', '(n-1)*180'], ['(n + 2) · 180°', '(n+2)*180']], sk: ['G69'], leg: [['n − 2', 'triangles from one corner']], ic: 'stairs', move: 'geo.poly' });
+  F('ext', 8, { name: 'Exterior angle of a triangle', f: '{g:E} = {x:a} + {n:b}', plain: 'E = a + b', lit: ['E', 'a+b'], wrong: [['E = 180° − a − b', '180-a-b'], ['E = 180° − a', '180-a'], ['E = a · b', 'a*b']], sk: ['G68'], leg: [['E', 'outside, a side extended'], ['a, b', 'the two far inside angles']], ic: 'trig', move: 'geo.tri' });
+  F('pyth', 8, { name: 'Right triangle with hypotenuse c', f: '{g:c}² = {x:a}² + {n:b}²', plain: 'c² = a² + b²', lit: ['C', 'a^2+b^2'], wrong: [['c² = (a + b)²', '(a+b)^2'], ['c² = a² − b²', 'a^2-b^2'], ['c² = 2a + 2b', '2*a+2*b']], sk: ['G70'], leg: [['c', 'across from the right angle'], ['a, b', 'the legs']], ic: 'rtri', move: 'geo.pyth' });
+  F('leg', 8, { of: 'pyth', name: 'A leg, from the hypotenuse', f: '{x:a}² = {g:c}² − {n:b}²', plain: 'a² = c² − b²', lit: ['A', 'c^2-b^2'], wrong: [['a² = c² + b²', 'c^2+b^2'], ['a² = (c − b)²', '(c-b)^2'], ['a² = b² − c²', 'b^2-c^2']], sk: ['G72'] });
 
   function inCh(e, ch) { return e.ch === ch || (e.also || []).indexOf(ch) >= 0; }   // a formula can sit in an earlier chapter's bank too (also)
   function list(ch, grp) { return ALL.filter(function (e) { return inCh(e, ch) && (!grp || e.grp === grp); }); }
@@ -50279,6 +50365,39 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
   R('axis0', 'Read a graph axis first: an axis that does not start at 0 makes a change look bigger.');
   R('simple', 'Simple interest I = P · r · t, with the rate and the time in the same unit. Amount = P + I.', { refines: 'tri' });
   R('compound', 'Compounding: each period · (1 + r) on the new amount, P(1 + r)ⁿ.', { refines: 'geo' });
+
+  // ---------------------------------------------------------------- Chapter 8: geometry (angles fill 90°, 180°, 360°; circles; area, surface area, volume; the Pythagorean theorem)
+  R.ch = 8;
+  R('straight', 'Angles that fill a straight line add to 180°; round a point, to 360°; a right angle, to 90°.', { refines: 'parts' });
+  R('suppcomp', 'Supplementary angles add to 180°; complementary angles add to 90°.', { refines: 'straight' });
+  R('vertical', 'Vertical angles, across a crossing, are equal.');
+  R('turn', 'An angle is a fraction of a turn: angle ÷ 360°, and that times 100 for the percent.', { refines: 'sector' });
+  R('angeq', 'Angles that fill 90°, 180° or 360° add to it, and equal angles are set equal; then find the angle asked.', { refines: 'both' });
+  R('radius', 'The diameter is twice the radius: d = 2r. Halve a diameter before squaring.');
+  R('circum', 'C = π · d = 2πr: a little over 3 times the diameter.', { refines: 'tri' });
+  R('carea', 'A = π · r²: square the radius, then multiply by π.', { refines: 'radius' });
+  R('piform', 'Keep π as a letter for an exact answer; use the value asked (3.14, 22/7 or the π key) at the end, then round.', { refines: 'round' });
+  R('rsquare', 'Circles compare their areas as the squares of their radii.', { refines: 'perk' });
+  R('halfcr', 'A circle cut into thin sectors makes a near-parallelogram ½C long and r high, so A = ½C · r.');
+  R('polyarea', 'Parallelogram b · h, triangle ½ · b · h, trapezoid (a + b) ÷ 2 · h, with h the perpendicular height.', { refines: 'periarea' });
+  R('split', 'A compound shape: split it into known shapes, add the parts, and subtract any hole.', { refines: 'polyarea' });
+  R('pgram', 'A parallelogram: opposite angles are equal, and neighbouring angles add to 180°.', { refines: 'suppcomp' });
+  R('compass', 'A compass circle marks every point at one distance from its centre.');
+  R('tri180', 'The angles of a triangle add to 180°.', { refines: 'straight' });
+  R('trieq', 'Any two sides of a triangle add to more than the third side.');
+  R('unique', 'Three sides, two sides and their angle, or two angles and a placed side fix a triangle; angles fix only shape.', { refines: 'trieq' });
+  R('unitsq', 'Area units square the length factor (1 m² = 100² cm²); volume units cube it (1 ft³ = 12³ in³).', { refines: 'perk' });
+  R('surface', 'Surface area: add the area of every face; the net lays them all out.', { refines: 'split' });
+  R('prismv', 'A prism or a cylinder: V = B · h, the area of the base times the height.', { refines: 'tri' });
+  R('litre', '1 cm³ = 1 ml, and 1000 cm³ = 1 L.');
+  R('section', 'A cut parallel to the base of a prism or a cylinder copies the base; of a pyramid, it gives a smaller copy.');
+  R('parallel', 'At parallel lines, corresponding and alternate angles are equal; same-side interior angles add to 180°.', { refines: 'vertical' });
+  R('exterior', 'An exterior angle of a triangle equals the two far interior angles added.', { refines: 'tri180' });
+  R('polysum', 'The angles of a polygon with n sides add to (n − 2) · 180°.', { refines: 'tri180' });
+  R('pyth', 'In a right triangle, a² + b² = c², where c is the hypotenuse, across from the right angle.');
+  R('legsub', 'For the hypotenuse, add the squares; for a leg, subtract them. Then take the square root.', { refines: 'pyth' });
+  R('converse', 'If a² + b² = c² for the longest side c, the triangle has a right angle.', { refines: 'pyth' });
+  R('distance', 'The distance between two points: across and up are the legs, the distance is the hypotenuse.', { refines: 'pyth' });
 })();
 
 /* --- tactics_ch1.js --- */
@@ -51352,85 +51471,182 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 })();
 
 /* --- tactics_ch8.js --- */
-/* Skills & Tactics, Chapter 8: Geometry. Format: hub/tactics_core.js. Units 13–14 (parallel lines and angle sums, the Pythagorean theorem) were
-   added in this system. In the re-computed checks π is taken as 314/100, as in the problems that say "use π ≈ 3.14". */
+/* Skills & Tactics, Chapter 8: Geometry. DRAWN cards (TAC.viz; pieces: hub/tactics_viz.js; formulas: hub/formulas.js).
+   Thread plan: hub/staging/threads_ch8.md. Every level's problem types: hub/staging/briefs/ch8_types.md (grouped by form).
+   Cohesion audit 18 Nov: hub/staging/reviews/ch8_audit.json. Angles are parts of a whole (90°, 180°, 360°); C = π · d, A = π · r², V = B · h are a = b · c on the triangle; units of
+   area and volume are Chapter 6's k² and k³; the Pythagorean theorem adds the areas of the squares on the sides.
+   Every calculation a card shows is listed in v or re-computed from its picture. */
 (function () {
   'use strict';
-  var L = function (k, t, m, ex, w, o) { TAC.lv(8, k, t, m, ex, w, o); };
+  var V = function (k, o) { TAC.viz(8, k, o); };
+
   TAC.ch(8, {
-    lede: 'Angles, circles, areas, drawings and constructions, triangles, area units, surface area, volume, parallel lines and the Pythagorean theorem.',
-    tools: ['tri:circ', 'tri:par', 'tri:vol', 'tri:area', 'tri:scale'],
+    lede: 'Geometry: angles that fill 90°, 180° and 360°, the circle, areas of polygons, constructions, triangles, units of area and volume, surface area and volume, parallel lines and the Pythagorean theorem.',
+    tools: ['tri:circ', 'tri:par', 'tri:vol'],
     top: [
-      { h: 'Four angle facts', rule: 'complementary 90°    supplementary 180°    around a point 360°    vertical angles equal', body: 'Angles that fill a right angle add to 90°. Angles along a straight line add to 180°. Angles all the way round a point add to 360°. Where two lines cross, opposite angles are equal.', watch: 'Complementary goes with a Corner (90°), Supplementary with a Straight line (180°).', v: [['180-17', '163'], ['90-17', '73']] },
-      { h: 'Angle equations', rule: 'write the fact  →  solve for x  →  substitute', body: 'Turn the angle fact into an equation: the parts add to the whole, or two angles are equal. Solve for x. Then put x back in to get the angle the question asks for.', watch: 'x is rarely the answer. If the question asks for an angle, substitute.', v: [['(7*12+7)+(6*12+17)', '180'], ['7*12+7', '91']] },
-      { h: 'Circles: radius first', rule: 'd = 2r      C = π · d      A = π · r²', body: 'Circumference is the distance round, in units. Area is the space inside, in square units. Whatever you are given, get the radius or diameter first. Backwards: d = C ÷ π, and r² = A ÷ π.', watch: 'Area uses the radius. If you are given the diameter, halve it before squaring.', v: [['(314/100)*(118/10)', '37052/1000'], ['(314/100)*(85/10)^2', '226865/1000']] },
-      { h: 'Leave π as a letter', rule: 'r = 12  →  C = 24π,  A = 144π', body: 'In π-form you never multiply by 3.14: treat π like a unit. It makes working backwards easy: C = 18π means d = 18; A = 49π means r² = 49, so r = 7. Ratios of areas are ratios of the radii squared.', watch: 'Radii in the ratio 1 : 4 give areas in the ratio 1 : 16.', v: [['12^2', '144'], ['(1/4)^2', '1/16']] },
-      { h: 'Area formulas, and compound figures', rule: 'parallelogram b · h     triangle ½ · b · h     trapezoid ½ · (a + b) · h', body: 'The height is always perpendicular to the base. For a compound figure: cut it into shapes you know and add, or take the whole and subtract the holes. For its perimeter, walk round the outside edge only.', watch: 'A slanted side is not the height.', v: [['(24/10+37/10)/2*(24/10)', '732/100'], ['36-6*4', '12']] },
-      { h: 'Triangles: angles, sides, uniqueness', rule: 'angles add to 180°      two shorter sides together &gt; the longest', body: 'Find a third angle by subtracting from 180°. Three lengths make a triangle only if the two shortest add to more than the longest. Three sides, or two sides and the angle between them, fix one triangle; three angles do not fix its size.', watch: '5, 8 and 14 make no triangle: 5 + 8 is only 13.', v: [['180-58-82', '40'], ['5+8', '13']] },
-      { h: 'Area and volume units', rule: 'length factor k  →  area factor k²  →  volume factor k³', body: '1 yd = 3 ft, so 1 yd² = 9 ft². 1 ft = 12 in, so 1 ft² = 144 in². 1 m = 100 cm, so 1 m² = 10,000 cm². For liquids: 1 L = 1000 cm³. Converting to a bigger unit: divide.', watch: 'Never use the length factor for an area: 1440 in² is 10 ft², not 120 ft².', v: [['15*96/144', '10'], ['3^2', '9'], ['12^2', '144']] },
-      { h: 'Surface area and volume', rule: 'SA = the sum of all the faces      V = base area · height', body: 'Surface area: unfold the solid into its net and add every face. Volume of any prism or cylinder: the area of the base times the height. A cylinder’s base is a circle: V = πr² · h.', watch: 'A pyramid’s faces use the face height (slant), not the height of the solid.', v: [['16*16+4*(1/2)*16*11', '608'], ['28*10+98', '378']] },
-      { h: 'Parallel lines and angle sums', rule: 'corresponding =     alternate =     same-side interior add to 180°', body: 'A line crossing two parallel lines makes eight angles of only two sizes: every angle equals a given one or is its supplement. A polygon with n sides has angles adding to (n − 2) · 180°. An exterior angle of a triangle equals the two far interior angles together.', watch: 'These facts hold only when the lines are parallel.', v: [['(9-2)*180', '1260'], ['1260/9', '140']] },
-      { h: 'The Pythagorean theorem', rule: 'a² + b² = c²      c is the hypotenuse, opposite the right angle', body: 'In a right triangle the squares on the two legs add up to the square on the hypotenuse. Hypotenuse: add the squares, then take the root. Leg: subtract, then take the root. Converse: if the squares add up, it is a right triangle.', watch: 'Add the squares, not the sides: 5 and 12 give 13, not 17.', v: [['5^2+12^2', '13^2'], ['8^2+15^2', '17^2'], ['15^2-9^2', '12^2']] }
-    ],
-    bank: [['COMPLEMENTARY', 'add to 90°'], ['SUPPLEMENTARY', 'add to 180°'], ['VERTICAL ANGLES', 'equal'], ['TRIANGLE', 'angles add to 180°'], ['POLYGON, n SIDES', '(n − 2) · 180°'], ['CIRCUMFERENCE', 'C = π · d = 2 · π · r'], ['CIRCLE AREA', 'A = π · r²'], ['PARALLELOGRAM', 'A = b · h'], ['TRIANGLE AREA', 'A = ½ · b · h'], ['TRAPEZOID', 'A = ½ · (a + b) · h'], ['PRISM, CYLINDER', 'V = base area · height'], ['SURFACE AREA', 'add every face of the net'], ['1 ft²', '144 in²'], ['1 yd²', '9 ft²'], ['1 L', '1000 cm³'], ['RIGHT TRIANGLE', 'a² + b² = c²']]
+      { h: 'Angles fill 90°, 180°, 360°', vis: [['ang', { line: true, rays: [24], arcs: [[0, 24, '24°', 'n'], [24, 180, '156°', 'g']], sum: 180 }], ['ang', { line: true, cross: 72, arcs: [[0, 72, '72°', 'n'], [180, 252, '72°', 'g']], say: 'across the crossing: equal' }]],
+        trap: ['∠CBD = 24°', 'a straight line is 180°:   156°'], alt: 'Angles that fill a right angle add to 90 degrees, a straight line 180 and a full turn 360. Vertical angles, across a crossing, are equal.', v: [['180-24', '156']] },
+      { h: 'Angle equations', vis: [['bar', { rows: [{ parts: [['48°', 48, 'n'], ['3n', 30, 'x'], ['32°', 32, 'n'], ['7n', 70, 'x']], over: [[0, 4, 'a straight line: 180°', 'm']] }] }], ['steps', [['10n + 80', '180'], { op: '− 80' }, ['{n:10}n', '100'], { op: '÷ 10' }, ['n', '10', 'ans']]]],
+        trap: ['n = 10:   the angle is 10°', 'the angle asked:   3n = 30°'], alt: 'Put every angle that fills the 90, 180 or 360 degrees into one sum, or set equal angles equal. Solve, then put the value back for the angle the question asks for.', v: [['48+32', '80'], ['180-80', '100'], ['3*10', '30']] },
+      { h: 'C = π · d', vis: [['circle', { r: '5.7 ft', d: '11.4 ft', C: '≈ 35.8 ft', pi314: true }], ['tri', 'circ', 'top']],
+        trap: ['C ≈ 3.14 · 5.7', 'double the radius first:   d = 11.4'], alt: 'The circumference is pi times the diameter, a little over three times it. Double a radius first. Going back, divide the circumference by pi for the diameter.', v: [['2*5.7', '11.4']] },
+      { h: 'A = π · r²', vis: [['flow', ['d = 48 cm', { op: '÷ 2' }, 'r = 24', { op: 'π · 24²' }, { t: '≈ 1810 cm²', r: 'g' }]], ['flow', ['A = 484π', { op: '÷ π, √' }, { t: 'r = 22', r: 'g' }]], ['flow', ['radii 1 : 2', { op: 'square' }, { t: 'areas 1 : 4', r: 'g' }]]],
+        trap: ['π · 48² ≈ 7238 cm²', 'the radius:   π · 24²'], alt: 'The area is pi times the radius squared: halve a diameter first. In pi-form the answer is exact. Circle areas compare as the squares of their radii.', v: [['48/2', '24'], ['24^2', '576'], ['22*22', '484']] },
+      { h: 'Areas of polygons and compounds', vis: [['flow', ['parallel sides 20 and 28', { op: 'average · 12' }, { t: '288 cm²', r: 'g' }]], ['flow', ['14 × 4 + two half-circles, r = 2', { op: '56 + 4π' }, { t: '≈ 69', r: 'g' }]]],
+        trap: ['two half-circles:   2 · 4π', 'two halves make one circle:   4π'], alt: 'A parallelogram is base times height, a triangle half of that, a trapezoid the average of the parallel sides times the height. Split a compound shape, add the parts and subtract any hole.', v: [['(20+28)/2', '24'], ['24*12', '288'], ['14*4', '56']] },
+      { h: 'Triangles: 180°, sides, one shape', vis: [['flow', ['75° + 83°', { op: '180 − 158' }, { t: '22°', r: 'g' }]], ['flow', ['sides 39 and 65', { op: '65 − 39, 65 + 39' }, { t: '26 < third < 104', r: 'g' }]], ['grid', { head: ['given', 'one triangle?'], rows: [['three sides', '✓'], ['two sides, their angle', '✓'], ['two angles, a side', '✓'], ['three angles', '✗']] }]],
+        trap: ['16, 4, 7:   16 + 4 > 7', 'the two short sides:   4 + 7 < 16'], alt: 'The angles of a triangle add to 180 degrees. The two short sides must add to more than the longest. Three sides, two sides and the angle between, or two angles and a side fix one triangle.', v: [['75+83', '158'], ['180-158', '22'], ['65-39', '26'], ['65+39', '104'], ['4+7', '11']] },
+      { h: 'Area and volume units', vis: [['sim', { a: { w: 3, h: 3, labs: ['1 ft', '1 ft'], area: '1 ft²' }, k: '3', b: { labs: ['3 ft = 1 yd', '3 ft'], area: '9 ft² = 1 yd²' }, tile: true }], ['flow', ['1 ft = 12 in', { op: 'square, cube' }, { t: '144 in², 1728 in³', r: 'g' }]]],
+        trap: ['1 ft² = 12 in²', 'square the 12:   144 in²'], alt: 'Area units square the length factor and volume units cube it: 1 square yard is 9 square feet, 1 square foot 144 square inches, 1 cubic foot 1728 cubic inches.', v: [['3*3', '9'], ['12^2', '144'], ['12^3', '1728']] },
+      { h: 'Surface area and volume', vis: [['solid', { kind: 'pyr', labs: ['12 in', '7 in'] }], ['flow', ['12 · 12 + 4 · ½ · 12 · 7', { op: '144 + 168' }, { t: '312 in²', r: 'g' }]], ['tri', 'vol', 'top']],
+        trap: ['the solid’s height for a face', 'the face height:   ½ · 12 · 7'], alt: 'The surface area adds the area of every face, which the net lays out: a pyramid’s triangles use the face height. A prism or a cylinder has volume base area times height.', v: [['12*12', '144'], ['4*0.5*12*7', '168'], ['144+168', '312']] },
+      { h: 'Parallel lines and angle sums', vis: [['parl', { a: 38, marks: { 2: ['38°', 'n'], 6: ['38°', 'g'], 5: ['142°', 'g'] } }], ['flow', ['n sides', { op: 'n − 2 triangles' }, { t: '(n − 2) · 180°', r: 'g' }]]],
+        trap: ['12 sides:   12 · 180°', '10 triangles:   1800°'], alt: 'At parallel lines, angles in the same kind of corner are equal and a sharp and a wide angle add to 180 degrees. A polygon with n sides splits into n minus 2 triangles from one corner.', v: [['180-38', '142'], ['(12-2)*180', '1800']] },
+      { h: 'a² + b² = c²', vis: [['rtri', { a: '4', b: '3', c: '5', sq: true, sa: '16', sb: '9', sc: '25' }], ['flow', ['hypotenuse: add the squares', { op: 'a leg: subtract' }, { t: 'then √', r: 'g' }]]],
+        trap: ['c = 20 + 15 = 35 ft', 'add the squares:   √625 = 25 ft'], alt: 'In a right triangle the squares on the legs add to the square on the hypotenuse. Add the squares for the hypotenuse, subtract them for a leg, then take the square root.', v: [['16+9', '25'], ['20^2+15^2', '625'], ['25*25', '625']] }
+    ]
   });
 
   // Unit 1: Angles in a Figure
-  L('1-1', 'Complement and supplement', ['Complementary angles add to 90°.', 'Supplementary angles add to 180°.', 'Angles round a point add to 360°.'], 'For 17°:  supplement 180° − 17° = 163°,  complement 90° − 17° = 73°', 'C for Corner (90°), S for Straight (180°).', { v: [['180-17', '163'], ['90-17', '73']] });
-  L('1-2', 'An equation from an angle fact', ['Decide what the angles fill: a right angle, a straight angle, a full turn.', 'Write: the angles added together = that total.', 'Add the known angles and solve.'], 'Three angles fill a straight angle:  x + 53° + 46° = 180°  →  x + 99° = 180°  →  x = 81°', 'Check the total: 81 + 53 + 46 = 180 ✓', { v: [['81+53+46', '180']] });
-  L('1-3', 'A chain of angles', ['Start from the angle you know.', 'Use one fact at a time to reach a neighbour.', 'Vertical angles let you jump across a crossing.'], '∠AOB = 121° on a line, so ∠BOC = 180° − 121° = 59°.   ∠BOD is a right angle: ∠COD = 90° − 59° = 31°', 'Write each angle on the figure as you find it.', { v: [['90-(180-121)', '31']] });
+  V('1-1', { th: ['bar'], from: '7:4-1', shift: 'A straight line is a whole too: its angles add up like the sectors of a circle graph.', r: ['straight', 'suppcomp', 'vertical'], t: 'A straight line is 180°', spot: ['ang', { line: true, rays: [24], arcs: [[0, 24, '24°', 'n'], [24, 180, '156°', 'g']], sum: 180, say: 'a straight line: 180°', sayr: 'm' }],
+    doit: [['flow', ['180° − 24°', { op: '' }, { t: '156°', r: 'g' }]], ['ang', { line: true, cross: 72, arcs: [[0, 72, '72°', 'n'], [72, 180, '108°', 'g'], [180, 252, '72°', 'g']], say: 'across the crossing: equal' }], ['flow', ['56°', { op: '180 − 56' }, 'supplement 124°', { op: '90 − 56' }, { t: 'complement 34°', r: 'g' }]], ['flow', ['protractor on the vertex', { op: '0° on a ray' }, { t: 'read the other', r: 'g' }]]],
+    trap: ['∠CBD = 24°', 'a straight line is 180°:   156°'], alt: 'Angles that fill a straight line add to 180 degrees. Vertical angles, across a crossing, are equal. A supplement makes 180 degrees, a complement 90. To measure, centre the protractor on the vertex and count from 0° on one ray.', v: [['180-24', '156'], ['180-72', '108'], ['180-56', '124'], ['90-56', '34']] });
+  V('1-2', { th: ['bar', 'bal'], from: '1-1', r: ['straight', 'angeq', 'suppcomp'], t: 'All the angles that fill the space', spot: ['ang', { full: true, rays: [0, 90, 148, 178], arcs: [[0, 90, '90°', 'm'], [90, 148, '58°', 'n'], [148, 178, '30°', 'n'], [178, 360, '4x', 'x']], right: [[0, 90]], sum: 360, say: 'round a point: 360°', sayr: 'm' }],
+    doit: [['steps', [['4x + 178', '360'], { op: '− 178' }, ['{n:4}x', '182'], { op: '÷ 4' }, ['x', '45.5', 'ans']]], ['grid', { head: ['two angles', 'word'], rows: [['add to 90°', 'complementary'], ['add to 180°', 'supplementary'], ['across a crossing', 'vertical'], ['share a side', 'adjacent']] }]],
+    trap: ['4x = 360 − 90', 'every angle in the sum:   4x + 178 = 360'], alt: 'The angles round a point add to 360 degrees, along a line to 180 and in a right angle to 90. Put every angle into the sum, then solve. The four words name pairs of angles.', v: [['90+58+30', '178'], ['360-178', '182'], ['182/4', '45.5'], ['4*45.5+178', '360']] });
+  V('1-3', { th: ['bar'], from: '7:4-2', r: ['straight', 'sector', 'turn', 'partpct'], t: 'The easy angle first; a turn is 360°', spot: ['ang', { line: true, full: true, rays: [133, 223], arcs: [[0, 133, '133°', 'n'], [133, 180, '47°', 'g'], [180, 223, '43°', 'g']], right: [[133, 223]] }],
+    doit: [['flow', ['line: 180° − 133°', { op: '' }, '47°', { op: 'right angle: 90° − 47°' }, { t: '43°', r: 'g' }]], ['flow', ['158° + y = 180°', { op: 'one unknown first' }, 'y = 22°', { op: '180 − 73 − 22' }, { t: 'x = 85°', r: 'g' }]], ['flow', ['135°', { op: '÷ 360°' }, '{f:3|8}', { op: '· 100' }, { t: '37.5% of a turn', r: 'g' }]], ['flow', ['{f:3|5} of a turn', { op: '· 360°' }, { t: '216°', r: 'g' }]]],
+    trap: ['x + 73° = 180°', 'y is on that line too:   x + 73° + 22°'], alt: 'A chain of angles: first the one a single fact gives (a line, a right angle, a crossing), then the next. With two unknowns, start where there is one. An angle divided by 360 degrees is its fraction of a turn; times 100, the percent.', v: [['180-133', '47'], ['90-47', '43'], ['180-158', '22'], ['180-73-22', '85'], ['135/360', '3/8'], ['3/5*360', '216']] });
   // Unit 2: Angle Equations
-  L('2-1', 'Parts of an angle as multiples of x', ['The parts add up to the whole angle.', 'Collect the like terms and solve.', 'Substitute to find the part asked for.'], '4y + 6y + 7y = 102  →  17y = 102  →  y = 6.   The smallest part is 4 · 6 = 24°', 'y = 6 is not an angle in the figure. The question asks for 4y.', { v: [['4*6+6*6+7*6', '102']] });
-  L('2-2', 'Expressions for angles', ['Write the fact as an equation with the expressions in parentheses.', 'Combine like terms and solve for x.', 'Substitute into each expression.'], '(7x + 7) + (6x + 17) = 180  →  13x + 24 = 180  →  x = 12.   The angles: 91° and 89°', 'Check that the two angles add to 180°.', { v: [['7*12+7', '91'], ['6*12+17', '89']] });
-  L('2-3', 'Equal angles, and what the figure tells you', ['Vertical angles: set the two expressions equal.', 'Use what the shape says: a right angle is 90°, base angles of an isosceles triangle are equal.', 'Solve, then evaluate the angle asked for.'], 'The top angle of an isosceles right triangle is 2x − 10:  2x − 10 = 90  →  x = 50', 'Equal angles give “=”. Angles on a line give “+ … = 180”. Choose the right one.', { v: [['2*50-10', '90']] });
+  V('2-1', { th: ['bal'], from: '1-1', shift: 'The vertical angles of 1-1 are equal, so the expression is set equal to the angle and solved like any equation.', r: ['vertical', 'angeq', 'dist', 'ratiox'], t: 'Vertical angles: set equal, solve', spot: ['ang', { line: true, cross: 85, arcs: [[0, 85, '5(x + 8)°', 'x'], [180, 265, '85°', 'n']] }],
+    doit: [['steps', [['5(x + 8)', '85'], ['5x + 40', '85'], { op: '− 40' }, ['{n:5}x', '45'], { op: '÷ 5' }, ['x', '9', 'ans']]], ['flow', ['parts 6x + 7x = 104°', { op: 'collect, ÷ 13' }, 'x = 8', { op: '7x' }, { t: 'largest part 56°', r: 'g' }]]],
+    trap: ['5(x + 8) = 180 − 85', 'vertical angles are equal:   5(x + 8) = 85'], alt: 'Vertical angles are equal, so the expression equals the given angle: distribute, then undo. Parts of a whole angle add to it: collect the x-terms. An equation with 180 is for angles side by side on a line, not across a crossing.', v: [['85-40', '45'], ['45/5', '9'], ['5*(9+8)', '85'], ['6+7', '13'], ['104/13', '8'], ['7*8', '56']] });
+  V('2-2', { th: ['bar', 'bal'], from: '5:9-2', r: ['angeq', 'ratiox', 'like', 'straight', 'suppcomp'], t: 'Collect, solve, then the angle asked', spot: ['bar', { rows: [{ parts: [['48°', 48, 'n'], ['3n', 30, 'x'], ['32°', 32, 'n'], ['7n', 70, 'x']], over: [[0, 4, 'a straight line: 180°', 'm']] }] }],
+    doit: [['steps', [['10n + 80', '180'], { op: '− 80' }, ['{n:10}n', '100'], { op: '÷ 10' }, ['n', '10', 'ans']]], ['flow', ['n = 10', { op: '3n and 7n' }, { t: '30° and 70°', r: 'g' }]], ['grid', { head: ['fill', 'sum'], rows: [['a line; supplementary', '180°'], ['round a point', '360°'], ['complementary', '90°']] }]],
+    trap: ['n = 10:   the angle is 10°', 'the angle asked:   3n = 30°, 7n = 70°'], alt: 'Add the angles that fill the line and set the sum to 180; round a point the sum is 360, for a complementary pair 90. Collect the letter terms and the numbers, solve, then put the value back for the angles asked.', v: [['48+32', '80'], ['180-80', '100'], ['3*10', '30'], ['7*10', '70']] });
+  V('2-3', { th: ['bar', 'bal'], from: '2-2', r: ['angeq', 'vertical', 'tri180'], t: 'Two facts in one figure', spot: ['ang', { line: true, rays: [60, 139], arcs: [[0, 60, '60°', 'n'], [60, 139, '(5x + 14)°', 'x'], [139, 180, '41°', 'n']], sum: 180, say: '60 + (5x + 14) + 41 = 180', sayr: 'm' }],
+    doit: [['steps', [['5x + 115', '180'], { op: '− 115' }, ['{n:5}x', '65'], { op: '÷ 5' }, ['x', '13', 'ans']]], ['flow', ['∠BOC = 4x + 10', { op: 'x = 13' }, { t: '62°', r: 'g' }]], ['flow', ['isosceles right triangle', { op: '(180 − 90) ÷ 2' }, { t: '45° each base angle', r: 'g' }]]],
+    trap: ['the top angle is 45°', 'two equal base angles cannot be 90°:   the top is 90°'], alt: 'Angles along a line add to 180 degrees: collect, solve, then use the value in another expression. In an isosceles right triangle the right angle must be the top, so the two equal base angles share the other 90 degrees.', v: [['60+14+41', '115'], ['180-115', '65'], ['65/5', '13'], ['4*13+10', '62'], ['(180-90)/2', '45']] });
   // Unit 3: Circumference
-  L('3-1', 'C = π · d', ['Find the diameter: twice the radius.', 'Multiply by π.', 'Round to the accuracy of the measurement.'], 'd = 11.8 in:  C ≈ 3.14 · 11.8 = 37.052  →  37.1 in', 'Given the radius, double it first.', { v: [['(314/100)*(118/10)', '37052/1000']], tool: 'tri:circ' });
-  L('3-2', 'From C back to d and r', ['Diameter = circumference ÷ π.', 'Radius = diameter ÷ 2.', 'In a table, go r → d → C or back the other way.'], 'r = 12.6 in:  d = 25.2 in,  C = π · 25.2 ≈ 79.2 in', 'Dividing by π makes the number about three times smaller. Check the size.', { v: [['2*(126/10)', '252/10']] });
-  L('3-3', 'One turn of a wheel is one circumference', ['A rope round a circle measures its circumference.', 'A wheel rolls one circumference each turn.', 'Distance = turns · C.'], 'A rope of 18 ft goes once round:  C = 18 ft,  d = 18 ÷ 3.14 ≈ 5.73 ft,  r ≈ 2.87 ft', 'For any circle C ÷ d comes out a little over 3. Use that to check.');
+  V('3-1', { th: ['tri'], from: '7:3-1', r: ['circum', 'radius', 'piform'], t: 'C = π · d; double a radius first', spot: ['circle', { r: '5.7 ft', d: '11.4 ft', C: '≈ 35.8 ft', pi314: true }],
+    doit: [['tri', 'circ', 'top'], ['flow', ['d = 35 m, π ≈ {f:22|7}', { op: '{f:22|7} · 35' }, { t: '110 m', r: 'g' }]], ['flow', ['one turn of a wheel', { op: '' }, { t: 'rolls one circumference', r: 'g' }]]],
+    trap: ['C ≈ 3.14 · 5.7 ≈ 17.9 ft', 'π times the diameter:   d = 11.4 ft'], alt: 'The circumference is pi times the diameter, so double a radius first. Use 3.14, 22 over 7 or the pi key as asked, and round at the end. One turn of a wheel rolls one circumference.', v: [['2*5.7', '11.4'], ['22/7*35', '110']], tool: 'tri:circ' });
+  V('3-2', { th: ['tri'], from: '3-1', r: ['circum', 'radius', 'round'], t: 'Back from C: ÷ π, then halve', spot: ['flow', ['C = 21.2 ft', { op: '÷ π key' }, 'd ≈ 6.748', { op: '' }, { t: 'd ≈ 6.7 ft', r: 'g' }]],
+    doit: [['tri', 'circ', 'r'], ['flow', ['d ≈ 6.748', { op: '÷ 2' }, '≈ 3.374', { op: '' }, { t: 'r ≈ 3.4 ft', r: 'g' }]], ['flow', ['r = 14 cm: C = π · 28', { op: '' }, '≈ 87.96 cm', { op: '÷ 4 sides' }, { t: '≈ 220 mm', r: 'g' }]]],
+    trap: ['d = 21.2 · π ≈ 66.6 ft', 'undo · π with ÷ π:   ≈ 6.7 ft'], alt: 'To go back from a circumference, divide by pi (the key: 3.14 can change the tenths) for the diameter and halve it for the radius. Keep the digits until the end. A square with the same perimeter has a quarter of it on each side.', v: [['2*14', '28']], tool: 'tri:circ' });
+  V('3-3', { th: ['est'], from: '3-1', shift: 'One turn rolls one circumference (3-1): times the turns, or a distance ÷ C, sized first as a little over 3 times d.', r: ['circum', 'estimate', 'round', 'roundup'], t: 'Turns of a wheel; size it first', spot: ['flow', ['d = 20 in, 60 turns', { op: '60 · π · 20' }, '≈ 3769.9 in', { op: 'nearest 10' }, { t: '≈ 3770 in', r: 'g' }]],
+    doit: [['flow', ['d = 60 cm, rolled 11.8 m', { op: '11.8 ÷ (π · 0.6)' }, '≈ 6.26', { op: 'whole turns' }, { t: '6 turns', r: 'g' }]], ['flow', ['a rope of 40 ft round', { op: 'C = 40, ÷ π' }, { t: 'd ≈ 12.7 ft', r: 'g' }]], ['grid', { head: ['d = 30 ft:   C?', '?'], rows: [['94 ft', '✓'], ['900 ft', '✗'], ['60 ft', '✗'], ['15 ft', '✗']] }]],
+    trap: ['C ≈ 2 · d = 60 ft', 'a little over 3 times d:   ≈ 94 ft'], alt: 'Each turn of a wheel covers one circumference: multiply by the turns, or divide a distance by C (one unit first) and keep the whole turns. A rope all round is the circumference, a little over three times the diameter.', v: [['60*20', '1200'], ['3*30', '90'], ['60/100', '0.6']] });
   // Unit 4: Area of a Circle
-  L('4-1', 'A = π · r²', ['Find the radius.', 'Square the radius.', 'Multiply by π. The unit is square.'], 'r = 9 in:  A ≈ 3.14 · 81 = 254.34 in²', 'r² is r · r, not 2 · r.', { v: [['(314/100)*9^2', '25434/100']] });
-  L('4-2', 'Awkward radii, and working backwards', ['Write a mixed number as a decimal and use one unit.', 'Square, then multiply by π.', 'Backwards: r² = A ÷ π, then the square root.'], 'r = 8 1/2 in:  8.5² = 72.25,  3.14 · 72.25 = 226.865  →  227 in²', 'Given the diameter, halve it before squaring.', { v: [['(85/10)^2', '7225/100'], ['(314/100)*(7225/100)', '226865/1000']] });
-  L('4-3', 'Why the area is π · r²', ['Cut the circle into thin slices and lay them alternately.', 'The shape is nearly a parallelogram: base ½C, height r.', 'Area = ½ · C · r = ½ · 2πr · r = πr².'], 'r = 9 in:  the row of slices is about 3.14 · 9 = 28.26 in long and 9 in high', 'Half of the arcs are along the top, so the base is half the circumference.', { v: [['(1/2)*(2*(314/100)*9)', '2826/100'], ['(2826/100)*9', '(314/100)*81']] });
+  V('4-1', { th: ['pow'], from: '3-1', shift: 'The circle of 3-1 again: halve d, then square the radius for the area.', r: ['carea', 'radius', 'round', 'halfcr'], t: 'A = π · r²: halve, square, · π', spot: ['circle', { r: '24 cm', d: '48 cm', A: '≈ 1810 cm²', say: 'r = 48 ÷ 2' }],
+    doit: [['pow', { b: '24', e: 2, val: '576' }], ['flow', ['576 · 3.14', { op: '' }, '1808.64', { op: 'nearest 10' }, { t: '≈ 1810 cm²', r: 'g' }]], ['flow', ['15 whole + 12 half squares', { op: '15 + 6' }, { t: '≈ 21 by counting', r: 'g' }]], ['flow', ['slices point up, down', { op: '' }, { t: '½C long, r high', r: 'g' }]]],
+    trap: ['π · 48² ≈ 7238 cm²', 'the radius, not the diameter:   π · 24²'], alt: 'The area of a circle is pi times the radius squared. Halve a diameter, square the radius, multiply by pi (3.14 here) and round as asked. Counting grid squares estimates it. Slices laid in a row make a shape half C long and r high.', v: [['48/2', '24'], ['24^2', '576'], ['576*3.14', '1808.64'], ['15+12/2', '21']] });
+  V('4-2', { th: ['pow'], from: '4-1', r: ['carea', 'piform', 'radius'], t: 'Exact in π; back from the area', spot: ['flow', ['A = 484π', { op: '÷ π' }, 'r² = 484', { op: '√' }, { t: 'r = 22, d = 44', r: 'g' }]],
+    doit: [['pow', { b: '22', e: 2, val: '484' }], ['flow', ['r = 11 ft 10 in', { op: 'one unit' }, '142 in', { op: '142²' }, { t: '20,164π ≈ 63,000 in²', r: 'g' }]], ['flow', ['A = 324π', { op: 'r = 18' }, 'd = 36', { op: 'C = π · d' }, { t: '36π', r: 'g' }]], ['flow', ['½ · π · 2r · r', { op: '½ · 2 = 1' }, { t: 'πr²', r: 'g' }]]],
+    trap: ['r² = 484:   r = 242', 'the square root:   22 · 22 = 484'], alt: 'Leave pi as a letter for an exact answer. To work back from an area, divide by pi and take the square root for the radius. Put a radius in one unit before squaring it.', v: [['22*22', '484'], ['11*12+10', '142'], ['142^2', '20164'], ['18*18', '324'], ['2*18', '36']] });
+  V('4-3', { th: ['tri'], from: '4-1', shift: 'The slices of 4-1 laid out: a near-parallelogram ½C long and r high, so A = b · h on the triangle.', r: ['halfcr', 'carea', 'estimate'], t: 'A = ½ · C · r: estimate, then π', spot: ['flow', ['d = 8 cm, C ≈ 26', { op: '½ · 26 · 4' }, { t: '≈ 52 cm²', r: 'x' }]],
+    doit: [['flow', ['π · 4² = 16π', { op: '' }, '≈ 50.27', { op: '' }, { t: '≈ 50 cm²', r: 'g' }]], ['flow', ['C = 53.8 cm', { op: '÷ π key, ÷ 2' }, 'r ≈ 8.5625', { op: '½ · C · r' }, { t: '≈ 230.3 cm²', r: 'g' }]], ['flow', ['sectors laid point up, point down', { op: '' }, { t: '½C long, r high', r: 'g' }]], ['tri', 'par', 'top', { top: 'A', l: '½C', r: 'r', say: ['A', '½C · r'] }]],
+    trap: ['A = C · r', 'half of C, times r:   ½C · r'], alt: 'Thin sectors laid out alternately make a near-parallelogram half the circumference long and one radius high: base times height, half of C times r. With C a little over 3 times d it estimates; from C alone use the pi key.', v: [['0.5*26*4', '52'], ['4^2', '16']], tool: 'tri:par' });
   // Unit 5: π-Form and Comparing
-  L('5-1', 'Answers in π-form', ['Use the formula and leave π as a letter.', 'Area: square the radius, then write π.', 'Circumference: double the radius, then write π.'], 'r = 12:  A = 12² · π = 144π,  C = 2 · 12 · π = 24π', '144π is exact. 452.16 is only an approximation.', { v: [['12^2', '144'], ['2*12', '24']] });
-  L('5-2', 'Work backwards in π-form', ['C = dπ: read off the diameter.', 'A = r²π: read off r², then take the root.', 'Ratio of areas = (ratio of radii)².'], 'C = 18π → d = 18, r = 9.     A = 49π → r = 7.     Areas 1 : 16 → radii 1 : 4', 'From an area ratio to a radius ratio, take the square root.', { v: [['7^2', '49'], ['(1/4)^2', '1/16']] });
-  L('5-3', 'Rings, and one area as a percent of another', ['Ring: big circle minus small circle.', 'Percent: one area ÷ the other.', 'Find each area completely before you compare.'], 'A 4.2 cm square in a circle of diameter 6.0 cm:  17.64 ÷ (π · 3²) ≈ 17.64 ÷ 28.274 = 62.4%', 'A ring between radii 5 and 3 is 25π − 9π = 16π, not (5 − 3)²π.', { v: [['(42/10)^2', '1764/100'], ['5^2-3^2', '16']] });
+  V('5-1', { th: ['pow'], from: '4-2', r: ['piform', 'carea', 'circum'], t: 'π-form: square for A, double for C', spot: ['grid', { head: ['circle', 'π-form'], rows: [['r = 3:   A', '9π'], ['r = 3:   C', '6π'], ['d = 20:   C', '20π'], ['C = 37:   d', '{f:37|π}']] }],
+    doit: [['flow', ['r = 3', { op: 'A = π · 3²' }, { t: '9π', r: 'g' }]], ['pow', { b: '3', e: 2, val: '9' }], ['grid', { head: ['formula', '?'], rows: [['C = 2πr', '✓'], ['A = πr²', '✓'], ['C = πr²', '✗'], ['A = 2πr', '✗']] }]],
+    trap: ['r = 3:   A = 6π', 'square, do not double:   9π'], alt: 'In pi-form the number in front of pi is exact: the area squares the radius and the circumference doubles it. A diameter from a circumference is the circumference over pi.', v: [['3^2', '9'], ['2*3', '6']] });
+  V('5-2', { th: ['scale'], from: '6:10-1', r: ['rsquare', 'piform'], t: 'Areas compare as r²', spot: ['flow', ['radii 7 and 14', { op: '({f:1|2})²' }, { t: 'areas {f:1|4}', r: 'g' }]],
+    doit: [['flow', ['areas {f:1|9}', { op: '√ top and bottom' }, { t: 'radii {f:1|3}', r: 'g' }]], ['flow', ['A = 225π', { op: 'r² = 225' }, { t: 'r = 15, d = 30', r: 'g' }]], ['flow', ['C = 22π', { op: '÷ π' }, 'd = 22', { op: '÷ 2' }, { t: 'r = 11', r: 'g' }]]],
+    trap: ['radii 1 : 2,   areas 1 : 2', 'square the ratio:   1 : 4'], alt: 'Pi cancels in a ratio of circle areas, so areas compare as the squares of the radii, and radii as the square roots of the areas. In pi-form, C over pi is the diameter and A over pi the radius squared.', v: [['7/14', '1/2'], ['(1/2)^2', '1/4'], ['7^2', '49'], ['14^2', '196'], ['49/196', '1/4'], ['15^2', '225'], ['22/2', '11']] });
+  V('5-3', { th: ['units'], from: '7:3-3', shift: 'Chapter 7 found each area, then part ÷ whole; with circles the areas are π · r², and price ÷ area compares two buys.', r: ['sameper', 'carea', 'partpct', 'circum'], t: 'Compare by area: price ÷ area', spot: ['flow', ['12-inch pizza, $15', { op: 'π · 6²' }, '≈ 113.1 in²', { op: '15 ÷ 113.1' }, { t: '≈ $0.133 per in²', r: 'g' }]],
+    doit: [['flow', ['two 8-inch', { op: '2 · π · 4²' }, '≈ 100.5 in²', { op: 'one 15-inch: π · 7.5²' }, { t: '≈ 176.7 in²', r: 'g' }]], ['flow', ['square 11.3², circle d = 16', { op: '127.69 ÷ 64π' }, { t: '≈ 63.5%', r: 'g' }]], ['flow', ['d = 36 ft, C = 18 ft?', { op: 'C ≈ 3.14 · 36' }, { t: '≈ 113: wrong row', r: 'g' }]]],
+    trap: ['two 8-inch = one 16-inch', 'add the areas:   ≈ 100.5 in²'], alt: 'Pizzas and pools are compared by area: price over area is a price per square inch. Two small circles are not one of twice the diameter. A part as a percent is part over whole. A circumference near 3 times d checks a row.', v: [['11.3*11.3', '127.69'], ['16/2', '8'], ['8^2', '64'], ['3.14*36', '113.04']] });
   // Unit 6: Polygons and Compounds
-  L('6-1', 'Trapezoids and parallelograms', ['Trapezoid: average the parallel sides, times the altitude.', 'Parallelogram: base times altitude.', 'The altitude is perpendicular to the base.'], 'Parallel sides 2.4 cm and 3.7 cm, altitude 2.4 cm:  (2.4 + 3.7) ÷ 2 · 2.4 = 7.32  →  7.3 cm²', 'Use the altitude, never the slanted side.', { v: [['(24/10+37/10)/2*(24/10)', '732/100']], tool: 'tri:par' });
-  L('6-2', 'Subtract to find what is left', ['Find the area of the whole.', 'Find the area of the pieces taken out.', 'Subtract. For a percent, divide by the whole.'], 'A 6 × 6 cell holds six 2 × 2 parallelograms:  36 − 24 = 12 shaded,  12 ÷ 36 = 33.3%', 'For an unknown dimension, write the area formula as an equation and solve.', { v: [['6*6-6*(2*2)', '12'], ['12/36', '1/3']] });
-  L('6-3', 'Compound figures: area and edge', ['Area: cut into known shapes and add.', 'Perimeter: only the outside edge counts.', 'Then any costs or counts: one unit, and round up to whole packages.'], 'A 16 m square with a half-circle on one side:  edge = 3 · 16 + ½ · π · 16 ≈ 48 + 25.13 = 73.13 m', 'The side under the half-circle is inside the figure, not part of its edge.', { v: [['3*16', '48']] });
+  V('6-1', { th: ['area', 'tri'], from: '1:10-1', r: ['polyarea'], t: 'Parallelograms and trapezoids', spot: ['flow', ['parallel sides 20 and 28', { op: 'average' }, '24', { op: '· 12 high' }, { t: '288 cm²', r: 'g' }]],
+    doit: [['tri', 'par', 'top'], ['flow', ['cut a triangle, slide it', { op: '' }, { t: 'a rectangle b by h', r: 'g' }]], ['flow', ['2 triangles', { op: 'one turned: b · h' }, { t: 'each ½ · b · h', r: 'g' }]], ['flow', ['2 trapezoids', { op: 'one turned' }, { t: 'a parallelogram (a + b) by h', r: 'g' }]]],
+    trap: ['A = 20 · 28 · 12 ÷ 2', '(a + b) ÷ 2 · h:   24 · 12'], alt: 'Moving a triangle makes a parallelogram a rectangle: base times perpendicular height. Two copies of a triangle or a trapezoid make a parallelogram: a triangle is half of b times h, a trapezoid the average of its parallel sides times h.', v: [['(20+28)/2', '24'], ['24*12', '288']], tool: 'tri:par' });
+  V('6-2', { th: ['area'], from: '6-1', r: ['split', 'carea', 'dist'], t: 'Compound: split, add, subtract', spot: ['flow', ['14 × 4 + two half-circles, r = 2', { op: '56 + 4π' }, '≈ 56 + 12.56', { op: '' }, { t: '≈ 69', r: 'g' }]],
+    doit: [['flow', ['its edge: 2 · 14 + two half-circles', { op: '28 + π · 4' }, { t: '≈ 41', r: 'g' }]], ['flow', ['trapezoid 22 and 10, h = 15', { op: '16 · 15' }, '240', { op: '+ ½ · π · 5²' }, { t: '≈ 279 cm²', r: 'g' }]], ['steps', [['25(15 + x)', '525'], ['375 + 25x', '525'], { op: '− 375' }, ['{n:25}x', '150'], { op: '÷ 25' }, ['x', '6', 'ans']]]],
+    trap: ['two half-circles:   2 · 4π', 'two halves make one circle:   4π'], alt: 'Split a compound shape into rectangles, triangles, trapezoids and circles, add the parts and subtract any hole. Two half-circles of one radius make one circle, in the area and on the edge. A missing length comes from an area equation.', v: [['14*4', '56'], ['2^2', '4'], ['2*14', '28'], ['(22+10)/2', '16'], ['16*15', '240'], ['25*15', '375'], ['525-375', '150']] });
+  V('6-3', { th: ['area', 'scale'], from: '7:10-2', r: ['split', 'perk', 'sfactor', 'roundup'], t: 'With letters; and a shrink', spot: ['flow', ['5s × 3s + ½ · 5s · 2s', { op: '' }, '15s² + 5s²', { op: '' }, { t: '20s²', r: 'g' }]],
+    doit: [['flow', ['altitude 8 → 4', { op: 'k = ½' }, 'base 8.2 → 4.1', { op: '½ · 4.1 · 4' }, { t: '8.2 cm²', r: 'g' }]], ['flow', ['square of 10 m + half-circle, r = 5', { op: '3 · 10 + ½ · π · 10' }, '≈ 45.7 m of edge', { op: '÷ 0.31 m a tile' }, { t: '≈ 147.4: 148 tiles', r: 'g' }]]],
+    trap: ['k = ½:   half of 32.8', 'area · k²:   32.8 · ¼ = 8.2'], alt: 'With a side s, each part is a number times s squared, and like terms add. Shrinking by a factor k multiplies the area by k squared. An edge with a half-circle uses half the circumference; whole tiles round up.', v: [['3*10+0.5*3.14*10', '45.7'], ['5*3', '15'], ['0.5*5*2', '5'], ['15+5', '20'], ['8.2/2', '4.1'], ['0.5*4.1*4', '8.2'], ['0.5*8.2*8', '32.8'], ['32.8/4', '8.2']] });
   // Unit 7: Drawing and Scale
-  L('7-1', 'Angles of squares and parallelograms', ['A square or rectangle has four 90° angles.', 'In a parallelogram, opposite angles are equal.', 'Neighbouring angles are supplementary.'], 'A parallelogram with a 35° angle has angles 35°, 145°, 35°, 145°', 'The four angles of any quadrilateral add to 360°.', { v: [['35+145+35+145', '360']] });
-  L('7-2', 'Does the description fix one shape?', ['Ask what is still free to change.', 'One angle fixes all four angles of a parallelogram, not its sides.', 'Try to draw two different shapes that fit.'], '“A parallelogram with a 35° angle”: long and thin or short and fat both fit. Not unique', 'If you can draw two that fit, it is not unique.');
-  L('7-3', 'Scale drawings: lengths first', ['Scale up each measured length.', 'Convert to the unit you need.', 'Only then find the area or perimeter.'], 'A pond at 1 : 500 with a 2.4 in diameter:  1200 in = 100 ft,  r = 50 ft,  A ≈ 3.14 · 2500 = 7850 ft²', 'Scaling an area needs the scale squared. Scaling the lengths first avoids that trap.', { v: [['500*(24/10)/12', '100'], ['(314/100)*50^2', '7850']], tool: 'tri:scale' });
+  V('7-1', { th: ['bar'], from: '1-1', r: ['pgram', 'suppcomp'], t: 'Parallelogram angles', spot: ['flow', ['one angle 28°', { op: 'opposite' }, '28°', { op: '180 − 28' }, { t: 'neighbours 152°', r: 'g' }]],
+    doit: [['ang', { line: true, rays: [28], arcs: [[0, 28, '28°', 'n'], [28, 180, '152°', 'g']], sum: 180, say: 'neighbours: 180°', sayr: 'm' }], ['flow', ['rhombus, 106°', { op: '180 − 106' }, { t: 'neighbours 74°', r: 'g' }]], ['flow', ['a square of 5 cm', { op: 'four right angles' }, { t: '90° each, perimeter 20 cm', r: 'g' }]]],
+    trap: ['the neighbours are 28° too', 'neighbours add to 180°:   152°'], alt: 'In a parallelogram, and so in a rhombus, opposite angles are equal and neighbouring angles add to 180 degrees. A square has four right angles.', v: [['180-28', '152'], ['180-106', '74'], ['4*5', '20']] });
+  V('7-2', { th: ['test'], from: '7-1', shift: 'The angle facts of 7-1 now test whether the givens leave anything free.', r: ['pgram'], t: 'Does it fix one shape?', spot: ['grid', { head: ['given', 'one shape?'], rows: [['rhombus: 124°, side 3 in', '✓'], ['parallelogram: 58°, 122°', '✗'], ['rhombus: side 3 cm', '✗']] }],
+    doit: [['flow', ['two sides, the angle between', { op: '' }, { t: 'one parallelogram', r: 'g' }]]],
+    trap: ['one angle fixes a parallelogram', 'its sides stay free'], alt: 'A shape is fixed when nothing is left free. A rhombus with one angle and one side is fixed. Two neighbouring angles of a parallelogram say nothing new, and its sides are still free.', v: [['58+122', '180']] });
+  V('7-3', { th: ['scale', 'units'], from: '6:12-3', r: ['lenfirst', 'rescale', 'carea'], t: 'Scale the lengths, then the area', spot: ['flow', ['1.5 in at 1 : 300', { op: '· 300' }, '450 in', { op: '÷ 12' }, { t: '37.5 ft', r: 'x' }]],
+    doit: [['flow', ['r = 18.75 ft', { op: 'π · 18.75²' }, '≈ 1104.5', { op: 'nearest 100' }, { t: '≈ 1100 ft²', r: 'g' }]], ['flow', ['1 : 50 redrawn at 1 : 25', { op: '50 ÷ 25 = 2' }, { t: 'every side · 2', r: 'g' }]], ['flow', ['3.1 in, 5.2 in, 55° between', { op: '' }, { t: 'one parallelogram', r: 'g' }]]],
+    trap: ['area on paper · 300', 'scale the diameter first:   37.5 ft'], alt: 'Change each drawn length to a real length first, then find the area from the real lengths. Redrawn at a scale with a smaller number, the drawing grows by old over new. Two sides and the angle between fix a parallelogram.', v: [['300*1.5', '450'], ['450/12', '37.5'], ['37.5/2', '18.75'], ['50/25', '2']] });
   // Unit 8: Constructions
-  L('8-1', 'The compass carries a length', ['Open the compass to the segment to copy it.', 'Equal sides come from equal radii.', 'Classify by angles from the largest: acute, right or obtuse.'], 'Equilateral triangle: arcs of radius AB from A and from B cross at C.  All angles 60°: acute', 'Do not change the compass opening between the two arcs.');
-  L('8-2', 'A triangle from three sides', ['Draw one side.', 'From each end, draw an arc with one of the other lengths.', 'The arcs cross at the third vertex.'], 'A regular hexagon in a circle of radius 3 cm: step the compass round at 3 cm, six times', 'If the arcs never cross, the three lengths make no triangle.');
-  L('8-3', 'Perpendiculars and rectangles', ['Erect a perpendicular at each end of the base.', 'Mark the same height on both with equal circles.', 'Join the two marks.'], 'Base 6 cm:  equal circles of 4 cm on the two perpendiculars give a 6 cm by 4 cm rectangle', 'A radius equal to the base would make a square.');
+  V('8-1', { th: ['test'], from: '2-3', shift: 'The isosceles triangle of 2-3, now built with a compass: two radii are the equal sides.', r: ['compass', 'tri180'], t: 'A compass circle: equal sides', spot: ['flow', ['92° at V, a circle centred at V', { op: 'VP = VQ = r' }, 'isosceles', { op: '(180 − 92) ÷ 2' }, { t: '44° each', r: 'g' }]],
+    doit: [['grid', { head: ['triangle', 'classified'], rows: [['angles 50°, 65°, 65°', 'acute'], ['sides 8, 6.8, 3.2 cm', 'scalene']] }], ['flow', ['two circles, radius = base', { op: '' }, { t: '60° each', r: 'g' }]]],
+    trap: ['the base angles are 92° each', 'equal radii, angles share 88°:   44° each'], alt: 'A compass circle marks every point one radius from its centre, so two radii make an isosceles triangle. Two circles of the base’s length make an equilateral triangle, 60 degrees in each corner.', v: [['180-92', '88'], ['88/2', '44'], ['50+65+65', '180'], ['180/3', '60']] });
+  V('8-2', { th: ['test'], from: '8-1', r: ['compass'], t: 'Two circles locate a point', spot: ['grid', { head: ['to find', 'circles at · radius'], rows: [['D of rhombus ABDC', 'B, C · AB'], ['R: PR = b, QR = c', 'P · b, Q · c'], ['hexagon in r = 3 cm', 'side 3 cm']] }],
+    doit: [['flow', ['equal circles at both ends', { op: 'join the crossings' }, { t: 'perpendicular bisector', r: 'g' }]]],
+    trap: ['D: a circle at A, radius AB', 'D is AB from B and from C:   circles at B and C'], alt: 'A point a given distance from two points lies where two circles, one round each, cross. Equal circles at a segment’s ends cross on its perpendicular bisector. A hexagon in a circle has sides equal to the radius.', v: [['360/6', '60']] });
+  V('8-3', { th: ['test'], from: '8-2', r: ['compass'], t: 'Altitudes and bisectors meet', spot: ['flow', ['altitude through B', { op: 'circles at A, C through B' }, { t: 'join the crossings', r: 'g' }]],
+    doit: [['grid', { head: ['construct', 'find'], rows: [['three altitudes', 'orthocentre'], ['side bisectors', 'centre; radius to a corner'], ['a rectangle', 'radius ≠ the base']] }]],
+    trap: ['obtuse: foot on the side', 'extend the side:   foot outside'], alt: 'The altitude through a corner meets the opposite side at 90 degrees; two circles through the corner find it. Altitudes meet at the orthocentre; side bisectors at the centre of the circle through the corners, radius centre to a corner.', v: [['180-90', '90']] });
   // Unit 9: Triangles and Uniqueness
-  L('9-1', 'The third angle', ['The three angles of a triangle add to 180°.', 'Add the two you know.', 'Subtract from 180°.'], '58° and 82°:  180° − 140° = 40°', 'Two angles that already total 180° or more cannot be in one triangle.', { v: [['180-58-82', '40']] });
-  L('9-2', 'Do three lengths make a triangle?', ['Sort the lengths.', 'Add the two shortest.', 'More than the longest: a triangle. Equal or less: none.'], '14, 8, 5:  5 + 8 = 13, not more than 14.  No triangle', 'Only the two shortest against the longest can fail.', { v: [['5+8', '13'], ['7+11', '18']] });
-  L('9-3', 'What fixes exactly one triangle?', ['Three sides (that pass the test): one triangle.', 'Two sides and the angle between them: one triangle.', 'Three angles: one shape, any size.'], 'Sides 8 in and 14 in forming a 60° angle: unique.   “A 60° angle and sides 8 in and 14 in”: not unique', 'Where the angle sits matters: between the given sides, or not.');
+  V('9-1', { th: ['bar', 'test'], from: '2-3', r: ['tri180', 'trieq'], t: '180° inside; two sides beat a third', spot: ['flow', ['75° + 83° = 158°', { op: '180 − 158' }, { t: '22°', r: 'g' }]],
+    doit: [['ang', { line: true, rays: [75, 158], arcs: [[0, 75, '75°', 'n'], [75, 158, '83°', 'n'], [158, 180, '22°', 'g']], sum: 180 }], ['flow', ['sides 39 and 65', { op: '65 − 39 and 65 + 39' }, { t: '26 < third < 104', r: 'g' }]], ['flow', ['sides 5 and 3', { op: 'more than 5 − 3' }, { t: 'shortest whole: 3 cm', r: 'g' }]], ['flow', ['122° + 93° = 215°', { op: 'over 180°' }, { t: 'no triangle', r: 'g' }]]],
+    trap: ['third angle:   360° − 158°', 'a triangle holds 180°:   22°'], alt: 'The angles of a triangle add to 180 degrees, not 360: side by side they fill a line. Any two sides must add to more than the third, so the third side lies between the difference and the sum of the other two.', v: [['75+83', '158'], ['180-158', '22'], ['65-39', '26'], ['65+39', '104'], ['5-3', '2'], ['122+93', '215']] });
+  V('9-2', { th: ['test'], from: '9-1', r: ['trieq', 'unique'], t: 'Test the two short sides', spot: ['grid', { head: ['short + short > longest?', 'triangle?'], rows: [['4 + 5 > 8', '✓'], ['9 + 7 > 12', '✓'], ['4 + 7 < 16', '✗'], ['6 + 8 = 14:   flat, area 0', '✗']] }],
+    doit: [['flow', ['13, 4, 4:   4 + 4 = 8', { op: '4 + ? > 13' }, { t: 'smallest whole: 10 in', r: 'g' }]], ['flow', ['50°, 65° and a 7-cm side', { op: 'say which side' }, { t: 'one triangle', r: 'g' }]]],
+    trap: ['16, 4, 7:   16 + 4 > 7', 'the two short sides:   4 + 7 < 16'], alt: 'Add the two shortest sides and compare with the longest: only more than it makes a triangle; equal lies flat, area 0. To mend a set, lengthen a short side past the gap. Two angles fix a triangle once the side is placed.', v: [['4+5', '9'], ['9+7', '16'], ['4+7', '11'], ['6+8', '14'], ['4+4', '8'], ['13-4', '9']] });
+  V('9-3', { th: ['test'], from: '9-2', r: ['unique', 'tri180'], t: 'What fixes one triangle?', spot: ['grid', { head: ['given', 'one?'], rows: [['three sides', '✓'], ['two sides, their angle', '✓'], ['two angles, a side', '✓'], ['three angles', '✗']] }],
+    doit: [['flow', ['isosceles, 128°, side 7 in', { op: 'leg or base?' }, { t: '2 triangles', r: 'g' }]]],
+    trap: ['three angles fix a triangle', 'shape only:   any size'], alt: 'Three sides, two sides and the angle between them, or two angles and a side fix one triangle. Three angles fix only its shape. When a given side could sit in two places, there are two triangles.', v: [['42+36+102', '180'], ['(180-128)/2', '26']] });
   // Unit 10: Units of Area
-  L('10-1', 'Square the length factor', ['Find the area in the first unit.', 'Convert the sides, then find the area again.', 'Compare: the area factor is the length factor squared.'], 'A 3-yd square:  9 yd².  In feet: 9 ft by 9 ft = 81 ft².  So 1 yd² = 9 ft²', '1 yd² is 9 ft², not 3 ft².', { v: [['3*3', '9'], ['9*9', '81'], ['81/9', '3^2']] });
-  L('10-2', 'Convert an area', ['Know the area fact: 144 in² = 1 ft², 9 ft² = 1 yd².', 'To a bigger unit: divide. To a smaller one: multiply.', 'Write the units and watch them cancel.'], '15 in by 96 in = 1440 in²,  and 1440 ÷ 144 = 10 ft²', 'Dividing by 12 gives 120: wrong factor.', { v: [['15*96', '1440'], ['1440/144', '10']] });
-  L('10-3', 'Real areas from a map', ['Scale each length to its real size.', 'Multiply the real lengths.', 'Convert: 1 hectare = 10,000 m².'], '3.8 cm by 2.7 cm at 1 : 20,000:  760 m by 540 m = 410,400 m² ≈ 41.0 ha', 'Scale the lengths before you multiply them.', { v: [['(38/10)*20000/100', '760'], ['(27/10)*20000/100', '540'], ['760*540', '410400']] });
+  V('10-1', { th: ['units', 'scale'], from: '6:10-1', r: ['unitsq', 'perk', 'cmkm'], t: 'Area units: square the factor', spot: ['sim', { a: { w: 3, h: 3, labs: ['1 ft', '1 ft'], area: '1 ft²' }, k: '3', b: { labs: ['3 ft = 1 yd', '3 ft'], area: '9 ft² = 1 yd²' }, tile: true }],
+    doit: [['flow', ['8 ft = 96 in', { op: '96 · 96' }, '9216 in²', { op: '÷ 64 ft²' }, { t: '1 ft² = 144 in²', r: 'g' }]], ['grid', { head: ['1 m²', '='], rows: [['dm²', '100'], ['cm²', '10,000'], ['mm²', '1,000,000']] }]],
+    trap: ['1 ft² = 12 in²', 'square the 12:   144 in²'], alt: 'One yard is 3 feet, so a square yard holds 3 · 3 square feet. Square the length factor: a length factor of 3 makes an area factor of 9, of 12 an area factor of 144, of 100 an area factor of 10,000.', v: [['3*3', '9'], ['8*12', '96'], ['96*96', '9216'], ['9216/64', '144'], ['10*10', '100'], ['100*100', '10000'], ['1000*1000', '1000000']] });
+  V('10-2', { th: ['units'], from: '10-1', r: ['unitsq', 'units', 'round'], t: 'The new unit on top, then cancel', spot: ['flow', ['540 in²', { op: '· {f:1 ft²|144 in²}' }, '3.75 ft²', { op: 'one decimal' }, { t: '≈ 3.8 ft²', r: 'g' }]],
+    doit: [['flow', ['3.36 sq mi', { op: '· {f:640 acres|1 sq mi}' }, '2150.4', { op: 'nearest ten' }, { t: '≈ 2150 acres', r: 'g' }]], ['flow', ['47,000 cm²', { op: '· {f:1 m²|10,000 cm²}' }, { t: '4.7 m²', r: 'g' }]], ['flow', ['324,900 ft²', { op: '÷ 9, then ÷ 4840' }, { t: '≈ 7.5 acres', r: 'g' }]]],
+    trap: ['540 in² ÷ 12 = 45 ft²', '144 in² in 1 ft²:   ÷ 144'], alt: 'Multiply by a ratio with the wanted unit on top, so the old unit cancels. When no single factor goes from one unit to the other, chain two ratios. Round only at the end.', v: [['540/144', '3.75'], ['1.6*2.1', '3.36'], ['3.36*640', '2150.4'], ['47000/10000', '4.7'], ['570*570', '324900'], ['324900/9', '36100']] });
+  V('10-3', { th: ['units'], from: '10-2', r: ['units', 'roundup', 'per', 'partpct'], t: 'One unit first; then per, % or whole', spot: ['flow', ['yard 1083 yd²', { op: '· 9' }, '9747 ft²', { op: '− house 714 ft²' }, { t: '9033 ft² left', r: 'g' }]],
+    doit: [['flow', ['lawn 39 × 46 = 1794 ft²', { op: '÷ 1000' }, '1.794', { op: 'round up' }, { t: '2 packages', r: 'g' }]], ['flow', ['21 ha, 2300 people', { op: '· 10,000, ÷ 2300' }, { t: '≈ 91.3 m² each', r: 'g' }]], ['flow', ['village 1.68 km², town 3.61 km²', { op: '1.68 ÷ 3.61' }, { t: '≈ 47% of the town', r: 'g' }]]],
+    trap: ['1083 − 714 = 369', 'one unit first:   9747 − 714'], alt: 'Put every area in one unit before adding or subtracting. Area per person is a division, and one area as a percent of another is part over whole. Whole packages round up, since part of one leaves area uncovered.', v: [['1.2*1.4', '1.68'], ['1.9*1.9', '3.61'], ['57*19', '1083'], ['1083*9', '9747'], ['34*21', '714'], ['9747-714', '9033'], ['39*46', '1794'], ['1794/1000', '1.794'], ['21*10000', '210000']] });
   // Unit 11: Surface Area
-  L('11-1', 'Name the solid from its net', ['Find the base or bases first.', 'Two matching bases joined by rectangles: a prism.', 'One base and triangles: a pyramid. Two circles and a rectangle: a cylinder.'], 'One regular octagon and eight congruent triangles: an octagonal pyramid', 'The solid is named after its base.');
-  L('11-2', 'Surface area: add every face', ['List the faces: bases and sides.', 'Find each area.', 'Add them all.'], 'Square pyramid, base 16 cm, face height 11 cm:  16 · 16 + 4 · (½ · 16 · 11) = 256 + 352 = 608 cm²', 'The triangles use the face height, not the height of the solid.', { v: [['16*16+4*(1/2)*16*11', '608']] });
-  L('11-3', 'Surface area with a letter', ['Write each face with the unknown in it.', 'Add to get an expression.', 'Set it equal to the surface area and solve.'], 'A square prism, base 7 cm, height h:  4 · 7h + 2 · 49 = 28h + 98 = 378  →  h = 10 cm', 'There are two bases.', { v: [['28*10+98', '378']] });
+  V('11-1', { th: ['area'], from: '6-2', r: ['surface'], t: 'A net folds into a solid', spot: ['grid', { head: ['net', 'solid'], rows: [['2 triangles + 3 rectangles', 'triangular prism'], ['2 circles + 1 rectangle', 'cylinder'], ['1 square + 4 triangles', 'square pyramid'], ['6 rectangles', 'box']] }],
+    doit: [['solid', { kind: 'box', labs: ['7 cm', '2 cm', '5 cm'] }], ['flow', ['faces in pairs', { op: '2 · (7 · 5 + 7 · 2 + 2 · 5)' }, { t: '118 cm²', r: 'g' }]], ['flow', ['a leaning cylinder', { op: 'tilted' }, { t: 'circle or ellipse: unknown', r: 'g' }]]],
+    trap: ['2 triangles + 3 rectangles:   a pyramid', '2 equal ends:   a prism'], alt: 'A net lays every face out flat. Two equal ends joined by rectangles make a prism, two circles and a rectangle a cylinder, a base with triangles to a point a pyramid. A box has three pairs of faces. A tilted picture hides circle or ellipse.', v: [['2+3', '5'], ['1+4', '5'], ['2*(7*5+7*2+2*5)', '118']] });
+  V('11-2', { th: ['area', 'scale'], from: '7:10-2', r: ['surface', 'area1r', 'pctchg', 'piform'], t: 'Add every face; k² for a growth', spot: ['solid', { kind: 'pyr', labs: ['12 in', '7 in'], say: '7 in is the face height' }],
+    doit: [['flow', ['base 12 · 12 = 144', { op: '+ 4 · ½ · 12 · 7' }, { t: '144 + 168 = 312 in²', r: 'g' }]], ['flow', ['frustum: 12² + 6²', { op: '+ 4 · (12 + 6) ÷ 2 · 6' }, { t: '180 + 216 = 396 cm²', r: 'g' }]], ['flow', ['cylinder r = 9, h = 8', { op: '2 · 81π + 18π · 8' }, { t: '306π in²', r: 'g' }]], ['flow', ['cube edge 3 → 9', { op: '54 → 486' }, '432 ÷ 54', { op: '' }, { t: 'up 800%', r: 'g' }]]],
+    trap: ['edge · 3:   up 300%', 'area · 3² = 9:   up 800%'], alt: 'Add the area of every face: a pyramid’s triangles use the face height, a frustum’s sides are trapezoids. A cylinder’s side unrolls into a rectangle C long. Lengths times 3 make every area 9 times as big, up 800 percent.', v: [['12*12', '144'], ['4*0.5*12*7', '168'], ['144+168', '312'], ['12^2+6^2', '180'], ['4*(12+6)/2*6', '216'], ['180+216', '396'], ['2*81+18*8', '306'], ['6*3*3', '54'], ['6*9*9', '486'], ['486-54', '432'], ['432/54', '8']] });
+  V('11-3', { th: ['area', 'bal'], from: '11-2', r: ['surface', 'like', 'unitsq'], t: 'Surface with a letter; price per ft²', spot: ['steps', [['28h + 98', '462'], { op: '− 98' }, ['{n:28}h', '364'], { op: '÷ 28' }, ['h', '13', 'ans']]],
+    doit: [['flow', ['box 40 × 20 × h', { op: '2 · 800 + 2 · 40h + 2 · 20h' }, { t: '120h + 1600', r: 'g' }]], ['flow', ['roof: 2 trapezoids + 2 triangles', { op: '40 + 21' }, { t: '61 m²', r: 'g' }]], ['flow', ['6 faces · ½ · 24 · 36 in', { op: '2592 ÷ 144' }, { t: '18 ft² before the price', r: 'g' }]], ['flow', ['two blocks, 542 + 166 m²', { op: '− 2 · 5 · 4 hidden' }, { t: '668 m²', r: 'g' }]]],
+    trap: ['$ per ft² · 2592', 'one unit:   2592 ÷ 144 = 18 ft²'], alt: 'With a letter for the height, each side face is a side times h and like terms add; set the total equal to the surface area and solve. Put the area in the unit of the price first. Where two blocks touch, take the patch away twice.', v: [['542+166-2*5*4', '668'], ['4*7', '28'], ['2*49', '98'], ['462-98', '364'], ['364/28', '13'], ['2*40*20', '1600'], ['2*40+2*20', '120'], ['2*20+2*10.5', '61'], ['6*0.5*24*36', '2592'], ['2592/144', '18']] });
   // Unit 12: Volume and Review
-  L('12-1', 'V = base area · height', ['Find the area of the base: rectangle, triangle or circle.', 'Multiply by the height.', 'The unit is cubic.'], 'A cylinder, r = 8.0 in, h = 12.0 in:  V = π · 64 · 12 = 768π ≈ 2410 in³', 'The base of a triangular prism is the triangle, even when the prism lies on its side.', { v: [['8^2*12', '768']], tool: 'tri:vol' });
-  L('12-2', 'A prism with a compound face', ['Split the end face into simple shapes and add their areas.', 'Multiply the face area by the length of the prism.', 'A slice parallel to the base has the shape of the base.'], 'An end face of 2.6 m² + 1.305 m² + 1.44 m² = 5.345 m², length 7 m:  V = 37.415 m³', 'Add the pieces of the face before you multiply by the length.', { v: [['(2600+1305+1440)*7', '37415']] });
-  L('12-3', 'Capacity: 1 L = 1000 cm³', ['Put every length in centimetres.', 'Find the volume in cm³.', 'Divide by 1000 for litres, then take any fraction.'], 'A tank, d = 110 cm, h = 2 m = 200 cm:  π · 55² · 200 = 605,000π cm³ ≈ 1900.7 L', 'Mixed units are the trap: 2 m is 200 cm.', { v: [['55^2*200', '605000']] });
-  // Unit 13: Parallel Lines and Angle Sums (added in this system)
-  L('13-1', 'Eight angles, two sizes', ['Vertical angles are equal.', 'Corresponding angles (same corner at each crossing) are equal.', 'Alternate interior angles are equal. Neighbours on a line add to 180°.'], 'If one angle is 70°, the eight angles are 70°, 110°, 70°, 110° at each crossing', 'Every angle is either equal to yours or its supplement.', { v: [['180-70', '110']] });
-  L('13-2', 'An equation from a pair of angles', ['Name the pair.', 'Equal pair: set the expressions equal. Same-side interior: they add to 180°.', 'Solve, then substitute.'], 'Same-side interior:  (2x + 32) + (2x + 96) = 180  →  4x = 52  →  x = 13.   Angles 58° and 122°', 'An exterior angle of a triangle equals the two far interior angles added together.', { v: [['2*13+32', '58'], ['2*13+96', '122'], ['58+122', '180']] });
-  L('13-3', 'The angle sum of a polygon', ['A polygon with n sides cuts into n − 2 triangles.', 'Sum of the angles = (n − 2) · 180°.', 'Regular polygon: divide by n for each angle.'], 'A regular nonagon:  (9 − 2) · 180° = 1260°,  and 1260° ÷ 9 = 140° each', 'It is n − 2, not n.', { v: [['(9-2)*180', '1260'], ['1260/9', '140']] });
-  // Unit 14: The Pythagorean Theorem (added in this system)
-  L('14-1', 'Squares on the sides', ['Square each leg.', 'Add the two squares: that is the square on the hypotenuse.', 'Take the square root for its length.'], 'Squares of 25 and 144 on the legs:  25 + 144 = 169,  hypotenuse √169 = 13', 'The hypotenuse is opposite the right angle and is always the longest side.', { v: [['25+144', '13^2']] });
-  L('14-2', 'Find a leg, and test for a right angle', ['Leg: hypotenuse squared minus the other leg squared, then the root.', 'Test: do the two smaller squares add up to the largest?', 'On a grid: the run and the rise are the legs.'], '8, 15, 17:  64 + 225 = 289 = 17², so it is a right triangle', 'For a leg, subtract. Adding gives something longer than the hypotenuse.', { v: [['8^2+15^2', '17^2']] });
-  L('14-3', 'Find the right triangle in the story', ['Draw it and mark the right angle.', 'Decide which side is the hypotenuse.', 'Use a² + b² = c², then answer the question.'], 'Isosceles, sides 15, 15, base 18:  half the base is 9,  height √(225 − 81) = 12,  area ½ · 18 · 12 = 108', 'The height of an isosceles triangle meets the base at its midpoint: use half the base.', { v: [['15^2-9^2', '12^2'], ['(1/2)*18*12', '108']] });
+  V('12-1', { th: ['tri', 'area'], from: '11-1', r: ['prismv', 'section'], t: 'V = B · h: B is the end copied', spot: ['flow', ['½ · 12 · 3 = 18 cm²', { op: '· 11' }, { t: '198 cm³', r: 'g' }]],
+    doit: [['tri', 'vol', 'top'], ['flow', ['cylinder r = 5, h = 14', { op: 'B = 25π, · 14' }, { t: '350π ≈ 1100 cm³', r: 'g' }]], ['flow', ['base 5 × 4 = 20 cubes', { op: '140 ÷ 20' }, { t: '7 layers', r: 'g' }]], ['grid', { head: ['cut', 'face'], rows: [['parallel to base', 'a copy of the base'], ['down a cylinder', 'a rectangle']] }]],
+    trap: ['the face it lies on', 'the end copied:   the triangle'], alt: 'A prism or a cylinder is its base copied straight back: volume is base area times height, however it lies. Layers of cubes count the same. A cut parallel to the base copies it; straight down a cylinder, a rectangle.', v: [['25*14', '350'], ['0.5*12*3', '18'], ['18*11', '198'], ['5*4', '20'], ['140/20', '7']], tool: 'tri:vol' });
+  V('12-2', { th: ['area', 'units'], from: '12-1', r: ['prismv', 'unitsq', 'split', 'section'], t: 'Cube the factor; subtract a block', spot: ['flow', ['(2.4 + 1) ÷ 2 · 1.8', { op: '' }, '3.06 m²', { op: '· 1.6' }, { t: '4.896 m³', r: 'g' }]],
+    doit: [['flow', ['1 ft = 12 in', { op: '12³' }, { t: '1 ft³ = 1728 in³', r: 'g' }]], ['flow', ['46 · 18 · 20 = 16,560 in³', { op: '− 17 · 13 · 18' }, { t: '12,582 in³', r: 'g' }]], ['grid', { head: ['a cube cut', '?'], rows: [['a triangle', '✓'], ['a pentagon', '✓'], ['a hexagon', '✓'], ['a heptagon', '✗']] }], ['grid', { head: ['square pyramid cut', '→'], rows: [['parallel to base', 'a square'], ['through the top', 'a triangle']] }]],
+    trap: ['1 ft³ = 144 in³', 'cube the 12:   1728 in³'], alt: 'Volume units cube the length factor. A trapezoidal prism is its end area times depth. Space a block takes is subtracted. A flat cut of a cube has three to six sides; a pyramid cut parallel to its base, a smaller copy of it.', v: [['(2.4+1)/2*1.8', '3.06'], ['3.06*1.6', '4.896'], ['12^3', '1728'], ['46*18*20', '16560'], ['17*13*18', '3978'], ['16560-3978', '12582']] });
+  V('12-3', { th: ['units'], from: '12-2', r: ['litre', 'prismv', 'roundup'], t: 'One unit; 1000 cm³ = 1 L', spot: ['solid', { kind: 'cyl', labs: ['r = 45 cm', 'h = 1.6 m = 160 cm'] }],
+    doit: [['flow', ['π · 45² · 160', { op: '' }, '324,000π cm³', { op: '÷ 1000' }, { t: '≈ 1017.9 L', r: 'g' }]], ['flow', ['rain 20 mm = 0.02 m', { op: '7.2 · 4.7 · 0.02' }, '0.6768 m³', { op: '· 1000' }, { t: '676.8 L', r: 'g' }]], ['flow', ['room 36 m³ ÷ crate 2.025 m³', { op: '≈ 17.78' }, { t: 'round up: 18 loads', r: 'g' }]]],
+    trap: ['h = 1.6:   π · 45² · 1.6', 'one unit:   h = 160 cm'], alt: 'Put every length in one unit before multiplying. A cubic centimetre is a millilitre and 1000 of them make a litre; a cubic metre holds 1000 litres. A part load still needs a whole one.', v: [['45^2*160', '324000'], ['7.2*4.7*0.02', '0.6768'], ['0.6768*1000', '676.8'], ['6*3*2', '36'], ['1.5*0.9*1.5', '2.025']] });
+  // Unit 13: Parallel Lines and Angle Sums
+  V('13-1', { th: ['bar'], from: '1-1', r: ['parallel', 'vertical', 'straight'], t: 'Parallel lines: two angle sizes', spot: ['parl', { a: 38, marks: { 2: ['38°', 'n'], 6: ['a', 'x'], 5: ['b', 'x'] } }],
+    doit: [['flow', ['a: same corner below', { op: 'corresponding' }, { t: 'a = 38°', r: 'g' }]], ['flow', ['b: beside a on a line', { op: '180 − 38' }, { t: 'b = 142°', r: 'g' }]], ['parl', { a: 38, marks: { 1: ['1', 'm'], 2: ['2', 'g'], 3: ['3', 'x'], 4: ['4', 'm'], 5: ['5', 'm'], 6: ['6', 'g'], 7: ['7', 'g'], 8: ['8', 'm'] } }], ['grid', { head: ['equal to ∠3?', 'why'], rows: [['∠2', 'vertical'], ['∠6', 'alternate'], ['∠7', 'corresponding'], ['∠1:   no', 'adds to 180°']] }]],
+    trap: ['b = 38°', 'b is beside a on a line:   180° − 38°'], alt: 'A line crossing two parallel lines makes only two sizes of angle. Corresponding, alternate and vertical angles are equal; a sharp and a wide angle add to 180 degrees. Numbered 1 to 8, angle 3 equals 2, 6 and 7.', v: [['180-38', '142']] });
+  V('13-2', { th: ['bar', 'bal'], from: '13-1', r: ['parallel', 'angeq', 'exterior', 'xboth'], t: 'Equal or adding to 180°: then solve', spot: ['parl', { a: 64, marks: { 4: ['(x + 93)°', 'x'], 6: ['(2x + 18)°', 'x'] }, say: '(x + 93) + (2x + 18) = 180', sayr: 'm' }],
+    doit: [['steps', [['3x + 111', '180'], { op: '− 111' }, ['{n:3}x', '69'], { op: '÷ 3' }, ['x', '23', 'ans']]], ['flow', ['corresponding: 2x + 80 = 5x + 56', { op: '− 2x − 56' }, '24 = 3x', { op: '÷ 3' }, { t: 'x = 8:   96°', r: 'g' }]], ['flow', ['exterior 92°, a far angle 43°', { op: '92 − 43' }, { t: '49°', r: 'g' }]], ['flow', ['a line through the top, parallel to the base', { op: 'alternate angles' }, { t: 'the three fill 180°', r: 'g' }]]],
+    trap: ['same-side:   x + 93 = 2x + 18', 'they add to 180°:   3x + 111 = 180'], alt: 'Same-side interior angles add to 180 degrees; corresponding and alternate angles are set equal. An exterior angle of a triangle equals the two far interior angles added.', v: [['93+18', '111'], ['180-111', '69'], ['69/3', '23'], ['23+93', '116'], ['2*23+18', '64'], ['80-56', '24'], ['2*8+80', '96'], ['5*8+56', '96'], ['92-43', '49']] });
+  V('13-3', { th: ['bal'], from: '13-2', r: ['polysum', 'exterior', 'tri180', 'xboth'], t: 'n sides: n − 2 triangles', spot: ['flow', ['12 sides', { op: '12 − 2 triangles' }, '10 · 180°', { op: '' }, { t: '1800°', r: 'g' }]],
+    doit: [['flow', ['sum 720°', { op: '÷ 180, + 2' }, { t: '6 sides', r: 'g' }]], ['flow', ['pentagon:   (5 − 2) · 180° = 540°', { op: '− 411°' }, { t: '129°', r: 'g' }]], ['flow', ['regular decagon:   1440°', { op: '÷ 10' }, { t: '144° each', r: 'g' }]], ['steps', [['4x + 43', 'x + 76'], { op: '− x', soft: true }, ['3x + 43', '76'], { op: '− 43' }, ['{n:3}x', '33'], { op: '÷ 3' }, ['x', '11', 'ans']]]],
+    trap: ['12 sides:   12 · 180°', '10 triangles:   1800°'], alt: 'Diagonals from one corner cut a polygon with n sides into n minus 2 triangles, so its angles add to n minus 2 times 180 degrees. A missing angle is the sum minus the angles given; in a regular polygon each is the sum over n.', v: [['(12-2)*180', '1800'], ['(10-2)*180', '1440'], ['1440/10', '144'], ['720/180+2', '6'], ['(5-2)*180', '540'], ['103+100+96+112', '411'], ['540-411', '129'], ['70+6', '76'], ['76-43', '33'], ['33/3', '11'], ['4*11+43', '87']] });
+  // Unit 14: The Pythagorean Theorem
+  V('14-1', { th: ['pow', 'area'], from: '1:1-3', r: ['pyth', 'legsub', 'sqcube'], t: 'Small squares add to the big one', spot: ['rtri', { a: '4', b: '3', c: '5', sq: true, sa: '16', sb: '9', sc: '25' }],
+    doit: [['flow', ['20² + 15²', { op: '400 + 225' }, '625', { op: '√' }, { t: '25 ft', r: 'g' }]], ['flow', ['squares 169 and 25', { op: '169 − 25' }, '144', { op: '√' }, { t: 'leg 12', r: 'g' }]], ['grid', { head: ['right angle between p and q', '?'], rows: [['p² + q² = r²', '✓'], ['p² + r² = q²', '✗']] }]],
+    trap: ['c = 20 + 15 = 35 ft', 'add the squares:   √625 = 25 ft'], alt: 'In a right triangle the squares on the two legs together have the area of the square on the hypotenuse, the side across from the right angle. Add the squares, then take the square root.', v: [['16+9', '25'], ['20^2+15^2', '625'], ['25*25', '625'], ['169-25', '144'], ['12*12', '144']] });
+  V('14-2', { th: ['graph'], from: '14-1', shift: 'The squares of 14-1 taken apart for a leg; on a graph, across and up are the legs.', r: ['legsub', 'converse', 'distance'], t: 'A leg: subtract; a distance: legs', spot: ['flow', ['13² − 12²', { op: '169 − 144' }, '25', { op: '√' }, { t: 'leg 5 in', r: 'g' }]],
+    doit: [['graph', { x: [0, 7], y: [-3, 11], xs: 1, ys: 2, xt: [2, 4, 6], yt: [4, 8], path: { pts: [[1, -2], [6, 10]], role: 'g' }, pts: [[1, -2, 'x', '(1, −2)', 'br'], [6, 10, 'x', '(6, 10)', 'l']], rise: { a: [1, -2], b: [6, 10], labs: ['across 5', 'up 12'] } }], ['flow', ['across 5, up 12', { op: '√(25 + 144)' }, { t: '13', r: 'g' }]], ['flow', ['legs 2 and 6:   4 + 36 = 40', { op: '√' }, { t: '≈ 6.3', r: 'g' }]], ['flow', ['8² + 15² = 289 = 17²', { op: '' }, { t: 'a right triangle', r: 'g' }]]],
+    trap: ['leg² = 13² + 12²', 'a leg:   subtract, 169 − 144'], alt: 'For a leg, subtract the other leg’s square from the hypotenuse’s square. Across and up between two points are the legs; the distance is the hypotenuse. A root that is not whole is rounded. Sides that fit a² + b² = c² make a right angle.', v: [['2^2+6^2', '40'], ['169-144', '25'], ['6-1', '5'], ['10+2', '12'], ['25+144', '169'], ['8^2+15^2', '289'], ['17^2', '289']] });
+  V('14-3', { th: ['pow', 'area'], from: '14-1', r: ['pyth', 'legsub', 'converse', 'polyarea'], t: 'Find the right triangle, then use it', spot: ['rtri', { a: '12', b: '9', c: '15', sq: true, sa: '144', sb: '81', sc: '225', ro: ['g', 'n', 'n'] }],
+    doit: [['flow', ['isosceles 15, 15, base 18', { op: '√(15² − 9²)' }, 'h = 12', { op: '½ · 18 · 12' }, { t: '108 cm²', r: 'g' }]], ['flow', ['field 240 × 450', { op: '√(240² + 450²)' }, '510 m', { op: '690 − 510' }, { t: '180 m shorter', r: 'g' }]], ['flow', ['32² + 60² = 4624 = 68²', { op: '' }, { t: 'the corner is square', r: 'g' }]]],
+    trap: ['height = 15 − 9 = 6 cm', 'a leg:   √(15² − 9²) = 12 cm'], alt: 'A height, a diagonal or a ladder makes a right triangle: name the hypotenuse, then add or subtract the squares. Half the base of an isosceles triangle is a leg. Sides that fit the rule prove a square corner.', v: [['225-81', '144'], ['12*12', '144'], ['9*9', '81'], ['15*15', '225'], ['0.5*18*12', '108'], ['240^2+450^2', '260100'], ['510^2', '260100'], ['240+450-510', '180'], ['32^2+60^2', '4624'], ['68^2', '4624']] });
 })();
 
 /* --- dojo: dojo_gens.js --- */
@@ -55347,8 +55563,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -63300,8 +63516,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -71439,8 +71655,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -79512,8 +79728,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -88484,8 +88700,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -97702,8 +97918,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -107841,8 +108057,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -117575,8 +117791,8 @@ function polyFig(opts) {
     minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
   function shape(p) {
     var x = +p.x || 0, y = +p.y || 0, w = fgP(p.w, 1), h = fgP(p.h, 1);
-    if (p.kind === 'tri') return p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
-    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
+    if (p.kind === 'tri') return p.apex !== undefined ? [[x, y + h], [x + w, y + h], [x + w * p.apex, y]] : p.flip ? [[x, y + h], [x + w, y + h], [x + w, y]] : [[x, y + h], [x + w, y + h], [x, y]];
+    if (p.kind === 'trap') { var tw = fgP(p.top, w / 2), o = p.off !== undefined ? +p.off : (w - tw) / 2; return [[x, y + h], [x + w, y + h], [x + o + tw, y], [x + o, y]]; }
     return [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
   }
   var shapes = ps.map(shape);
@@ -123065,7 +123281,7 @@ var GEN = (function () {
         r = piOK(PI_EXACT, function (pi) { return Cn / pi / 2; }, dp1);
       if (d === null || r === null) return t3l2();
       return flds(lead('The circumference of a circle is ' + f(C) + ' ' + U + '. Find its diameter and its radius, each ' +
-        toDp(1) + '.') + VIS.circle({ d: '?', centerLabel: 'O' }),
+        toDp(1) + '.' + RULE4) + VIS.circle({ d: '?', centerLabel: 'O' }),
         [{ lab: 'diameter (' + U + ')', val: d, tol: tolDp(1) }, { lab: 'radius (' + U + ')', val: r, tol: tolDp(1) }], [
         'C = πd, so go backwards by dividing: d = C ÷ π.',
         'd = ' + f(C) + ' ÷ π ≈ ' + f(rd(Cn / PI_KEY, 4)) + ' ' + U + ', which is ' + fmtDp(d, 1) + ' ' + U + ' to one decimal place.',
@@ -123077,7 +123293,7 @@ var GEN = (function () {
         C2 = piOK(PI_EXACT, function (pi) { return pi * rn * 2; }, dp1);
       if (C2 === null) return t3l2();
       return flds(lead('Complete the table row for a circle with a radius of ' + f(r2) + ' ' + U + '. Give the diameter and the circumference ' +
-        toDp(1) + '.') +
+        toDp(1) + '.' + RULE4) +
         VIS.blanks(['radius (' + U + ')', 'diameter (' + U + ')', 'circumference (' + U + ')'],
           [[f(r2), f(d2), f(C2)]], { blank: [[0, 1], [0, 2]], caption: 'One row of the circle table' }),
         [{ lab: 'diameter (' + U + ')', val: d2, tol: tolDp(1) }, { lab: 'circumference (' + U + ')', val: C2, tol: tolDp(1) }], [
@@ -123092,7 +123308,7 @@ var GEN = (function () {
         r3 = piOK(PI_EXACT, function (pi) { return Cn3 / pi / 2; }, dp1);
       if (d3 === null || r3 === null) return t3l2();
       return flds(lead('Complete the table row for a circle with a circumference of ' + f(C3) + ' ' + U + '. Give the diameter and the radius ' +
-        toDp(1) + '.') +
+        toDp(1) + '.' + RULE4) +
         VIS.blanks(['radius (' + U + ')', 'diameter (' + U + ')', 'circumference (' + U + ')'],
           [[f(r3), f(d3), f(C3)]], { blank: [[0, 0], [0, 1]], caption: 'One row of the circle table' }),
         [{ lab: 'diameter (' + U + ')', val: d3, tol: tolDp(1) }, { lab: 'radius (' + U + ')', val: r3, tol: tolDp(1) }], [
@@ -123105,7 +123321,7 @@ var GEN = (function () {
     var r4 = R(3, 18), side = piOK(PI_EXACT, function (pi) { return pi * 2 * r4 * 10 / 4; }, dp0);
     if (side === null) return t3l2();
     return num(lead('A circle has a radius of ' + f(r4) + ' cm. A square has the same perimeter as the circle\'s circumference. ' +
-      'How long is each side of the square, to the nearest millimetre?') + VIS.circle({ r: f(r4) + ' cm', centerLabel: 'O' }),
+      'How long is each side of the square, to the nearest millimetre?' + RULE4) + VIS.circle({ r: f(r4) + ' cm', centerLabel: 'O' }),
       side, [
       'The circle\'s circumference is C = πd = π · ' + f(2 * r4) + ' cm ≈ ' + f(rd(PI_KEY * 2 * r4, 3)) + ' cm.',
       'A square has four equal sides, so each side is the shared perimeter divided by 4: ' +
@@ -123211,7 +123427,7 @@ var GEN = (function () {
         VIS.circle({ r: f(r2) + ' cm', centerLabel: 'O' }),
         a2, [
         'Square the radius: (' + f(r2) + ' cm)' + SQ + ' = ' + f(r2 * r2) + ' cm' + SQ + '.',
-        'A = πr' + SQ + ' = ' + f(r2 * r2) + 'π ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' cm' + SQ + '.',
+        'A = πr' + SQ + ' = ' + f(r2 * r2) + 'π ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' cm' + SQ + '.',
         'To the nearest 10 cm' + SQ + ', A ≈ ' + f(a2) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ });
     }
@@ -123222,7 +123438,7 @@ var GEN = (function () {
         VIS.circle({ d: f(d3) + ' cm', centerLabel: 'O' }),
         a3, [
         'The area formula uses the radius, so halve the diameter first: r = ' + f(d3) + ' ÷ 2 = ' + f(r3) + ' cm.',
-        'A = πr' + SQ + ' = π · (' + f(r3) + ' cm)' + SQ + ' = ' + f(r3 * r3) + 'π ≈ ' + f(rd(PI_KEY * r3 * r3, 2)) + ' cm' + SQ + '.',
+        'A = πr' + SQ + ' = π · (' + f(r3) + ' cm)' + SQ + ' = ' + f(r3 * r3) + 'π ≈ ' + f(rd(PI_2 * r3 * r3, 2)) + ' cm' + SQ + '.',
         'To the nearest 10 cm' + SQ + ', A ≈ ' + f(a3) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ });
     }
@@ -123251,7 +123467,7 @@ var GEN = (function () {
         { lab: 'A = πr' + SQ + ' (square units)', val: exa, tol: tolDp(1) }], [
       f(halves) + ' half-squares make ' + f(halves) + ' ÷ 2 = ' + f(Q.of(halves).div(Q.of(2))) + ' whole squares.',
       'Counting gives ' + f(whole) + ' + ' + f(Q.of(halves).div(Q.of(2))) + ' = ' + f(est) + ' square units.',
-      'The formula gives A = π · (' + f(r5) + ')' + SQ + ' ≈ ' + f(rd(PI_KEY * rn5 * rn5, 3)) + ', which is ' + fmtDp(exa, 1) + ' square units.'
+      'The formula gives A = π · (' + f(r5) + ')' + SQ + ' ≈ ' + f(rd(PI_2 * rn5 * rn5, 3)) + ', which is ' + fmtDp(exa, 1) + ' square units.'
     ]);
   }
 
@@ -123282,7 +123498,7 @@ var GEN = (function () {
         a2, [
         'Put the radius in one unit: ' + f(ft) + ' ft is ' + f(ft) + ' · 12 = ' + f(ft * 12) + ' in, so r = ' + f(ft * 12) + ' + ' + f(inch) + ' = ' + f(tot) + ' in.',
         'Square it: ' + f(tot) + SQ + ' = ' + f(tot * tot) + '.',
-        'A = ' + f(tot * tot) + 'π ≈ ' + f(rd(PI_KEY * tot * tot, 1)) + ' sq in, which is ' + f(a2) + ' sq in to the nearest 1,000 sq in.'
+        'A = ' + f(tot * tot) + 'π ≈ ' + f(rd(PI_2 * tot * tot, 1)) + ' sq in, which is ' + f(a2) + ' sq in to the nearest 1,000 sq in.'
       ], { unit: 'sq in' });
     }
     if (v <= 5) {                                                   // sec5-t15, back from a π-form area
@@ -123350,7 +123566,7 @@ var GEN = (function () {
       ]);
     }
     if (v <= 4) {                                                   // sec6-t5
-      var d2 = 2 * R(4, 15), r2 = d2 / 2, rough = 2 * Math.round(3.1 * d2 / 2),
+      var d2 = 2 * R(4, 15), r2 = d2 / 2, rough = 2 * Math.round(1.57 * d2),
         est2 = Q.of(rough).mul(Q.of(r2)).div(Q.of(2)),
         exa2 = piOK(PI_LOOSE, function (pi) { return pi * r2 * r2; }, dp0);
       if (exa2 === null || !est2.isInt()) return t4l3();
@@ -123507,8 +123723,8 @@ var GEN = (function () {
       VIS.region({ kind: 'circle-in-square', labels: ['square side ' + f(s) + ' units', 'circle radius ' + f(rr) + ' units'] }),
       left, [
       'The square\'s area is ' + f(s) + ' · ' + f(s) + ' = ' + f(s * s) + ' square units.',
-      'The circle\'s area is πr' + SQ + ' = ' + piCoef(rr * rr) + ' ≈ ' + f(rd(PI_KEY * rr * rr, 3)) + ' square units.',
-      'Subtract in that order — square minus circle: ' + f(s * s) + ' − ' + f(rd(PI_KEY * rr * rr, 3)) + ' ≈ ' + fmtDp(left, 1) + ' square units.'
+      'The circle\'s area is πr' + SQ + ' = ' + piCoef(rr * rr) + ' ≈ ' + f(rd(PI_2 * rr * rr, 3)) + ' square units.',
+      'Subtract in that order — square minus circle: ' + f(s * s) + ' − ' + f(rd(PI_2 * rr * rr, 3)) + ' ≈ ' + fmtDp(left, 1) + ' square units.'
     ], { unit: 'square units', tol: tolDp(1) });
   }
 
@@ -123541,7 +123757,7 @@ var GEN = (function () {
         VIS.region({ kind: 'ring', r: ri, r2: ro, labels: ['fountain radius ' + f(ri) + ' ft', 'bed radius ' + f(ro) + ' ft'] }),
         [{ lab: 'planted area (ft' + SQ + ')', val: ar }, { lab: 'fertiliser (lb)', val: arn / per * lbs }], [
         'Big circle minus small circle: π · ' + f(ro) + SQ + ' − π · ' + f(ri) + SQ + ' = ' + piCoef(ro * ro) + ' − ' + piCoef(ri * ri) + ' = ' + piCoef(ro * ro - ri * ri) + ' ft' + SQ + '.',
-        piCoef(ro * ro - ri * ri) + ' ≈ ' + f(rd(PI_KEY * (ro * ro - ri * ri), 2)) + ' ft' + SQ + ', which is ' + f(ar) + ' ft' + SQ + ' to the nearest ten square feet.',
+        piCoef(ro * ro - ri * ri) + ' ≈ ' + f(rd(PI_2 * (ro * ro - ri * ri), 2)) + ' ft' + SQ + ', which is ' + f(ar) + ' ft' + SQ + ' to the nearest ten square feet.',
         f(ar) + ' ÷ ' + f(per) + ' = ' + f(arn / per) + ', and ' + f(arn / per) + ' · ' + f(lbs) + ' lb = ' + f(arn / per * lbs) + ' lb.'
       ]);
     }
@@ -123556,7 +123772,7 @@ var GEN = (function () {
         ' lb per ' + f(per2) + ' ft' + SQ + '. Find the area to the nearest ten square feet, and the ' + job[2] +
         ' the rounded area needs.' + RULE314) + VIS.circle({ r: f(r2) + ' ft', centerLabel: 'O' }),
         [{ lab: 'area (ft' + SQ + ')', val: ar2 }, { lab: job[2] + ' (lb)', val: an2 / per2 * lb2 }], [
-        'A = πr' + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' ft' + SQ + '.',
+        'A = πr' + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' ft' + SQ + '.',
         'To the nearest ten square feet, that is ' + f(ar2) + ' ft' + SQ + '.',
         f(ar2) + ' ÷ ' + f(per2) + ' = ' + f(an2 / per2) + ' lots, and ' + f(an2 / per2) + ' · ' + f(lb2) + ' lb = ' + f(an2 / per2 * lb2) + ' lb.'
       ]);
@@ -123709,9 +123925,9 @@ var GEN = (function () {
         ' on each short end. Find its perimeter, to the nearest unit.' + RULE314) +
         VIS.semi({ kind: 'stadium', w: L, h: Wd, wLab: f(L) + ' units', hLab: f(Wd) + ' units', rLab: 'r = ' + f(r) }),
         P, [
-        'The two half-circles together make one whole circle of radius ' + f(r) + ', so the curved part of the perimeter is one circumference: C = π · ' + f(Wd) + ' ≈ ' + f(rd(PI_KEY * Wd, 2)) + ' units.',
+        'The two half-circles together make one whole circle of radius ' + f(r) + ', so the curved part of the perimeter is one circumference: C = π · ' + f(Wd) + ' ≈ ' + f(rd(PI_2 * Wd, 2)) + ' units.',
         'The straight parts are the two long sides: 2 · ' + f(L) + ' = ' + f(2 * L) + ' units. The two short ends are not on the outside.',
-        'Perimeter ≈ ' + f(rd(PI_KEY * Wd, 2)) + ' + ' + f(2 * L) + ' = ' + f(rd(2 * L + PI_KEY * Wd, 2)) + ' ≈ ' + f(P) + ' units.'
+        'Perimeter ≈ ' + f(rd(PI_2 * Wd, 2)) + ' + ' + f(2 * L) + ' = ' + f(rd(2 * L + PI_2 * Wd, 2)) + ' ≈ ' + f(P) + ' units.'
       ], { unit: 'units', tol: tolDp(0) });
     }
     if (v <= 3) {                                                   // sec5-t14, the area
@@ -123724,8 +123940,8 @@ var GEN = (function () {
         VIS.semi({ kind: 'stadium', w: L2, h: W2, wLab: f(L2) + ' units', hLab: f(W2) + ' units', rLab: 'r = ' + f(r2) }),
         A, [
         'The rectangle covers ' + f(L2) + ' · ' + f(W2) + ' = ' + f(L2 * W2) + ' square units.',
-        'The two half-circles together make one whole circle of radius ' + f(r2) + ': π · ' + f(r2) + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_KEY * r2 * r2, 2)) + ' square units.',
-        'Total ≈ ' + f(L2 * W2) + ' + ' + f(rd(PI_KEY * r2 * r2, 2)) + ' = ' + f(rd(L2 * W2 + PI_KEY * r2 * r2, 2)) + ' ≈ ' + f(A) + ' square units.'
+        'The two half-circles together make one whole circle of radius ' + f(r2) + ': π · ' + f(r2) + SQ + ' = ' + piCoef(r2 * r2) + ' ≈ ' + f(rd(PI_2 * r2 * r2, 2)) + ' square units.',
+        'Total ≈ ' + f(L2 * W2) + ' + ' + f(rd(PI_2 * r2 * r2, 2)) + ' = ' + f(rd(L2 * W2 + PI_2 * r2 * r2, 2)) + ' ≈ ' + f(A) + ' square units.'
       ], { unit: 'square units', tol: tolDp(0) });
     }
     if (v === 4) {                                                  // sec5-t14, scaled into real units
@@ -123738,10 +123954,10 @@ var GEN = (function () {
         sc[1] + ' m. Find the real area, to the nearest square metre.' + RULE314) +
         VIS.semi({ kind: 'stadium', w: L3, h: W3, wLab: f(L3) + ' units', hLab: f(W3) + ' units', rLab: 'r = ' + f(r3) }),
         real, [
-        'In grid units the area is ' + f(L3) + ' · ' + f(W3) + ' + π · ' + f(r3) + SQ + ' ≈ ' + f(rd(L3 * W3 + PI_KEY * r3 * r3, 2)) + ' square grid units.',
+        'In grid units the area is ' + f(L3) + ' · ' + f(W3) + ' + π · ' + f(r3) + SQ + ' ≈ ' + f(rd(L3 * W3 + PI_2 * r3 * r3, 2)) + ' square grid units.',
         'An area scales by the SQUARE of the length scale: one grid unit is ' + sc[1] + ' m, so one grid square is ' +
           sc[1] + ' · ' + sc[1] + ' = ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' m' + SQ + '.',
-        f(rd(L3 * W3 + PI_KEY * r3 * r3, 2)) + ' · ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' ≈ ' + f(real) + ' m' + SQ + '.'
+        f(rd(L3 * W3 + PI_2 * r3 * r3, 2)) + ' · ' + f(dq(Math.round(sc[0] * sc[0] * 10000), 4)) + ' ≈ ' + f(real) + ' m' + SQ + '.'
       ], { unit: 'm' + SQ, tol: tolDp(0) });
     }
     if (v === 5) {                                                  // sec8-t4
@@ -123772,8 +123988,8 @@ var GEN = (function () {
         }),
         At, [
         'Trapezoid: (' + f(bt) + ' + ' + f(tp) + ') ÷ 2 · ' + f(ht) + ' = ' + f(Q.of(bt + tp).div(Q.of(2))) + ' · ' + f(ht) + ' = ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' cm' + SQ + '.',
-        'Half-circle: ½ · π · ' + f(rs) + SQ + ' = ' + f(Q.of(rs * rs).div(Q.of(2))) + 'π ≈ ' + f(rd(PI_KEY * rs * rs / 2, 2)) + ' cm' + SQ + '.',
-        'Total ≈ ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' + ' + f(rd(PI_KEY * rs * rs / 2, 2)) + ' ≈ ' + f(At) + ' cm' + SQ + '.'
+        'Half-circle: ½ · π · ' + f(rs) + SQ + ' = ' + f(Q.of(rs * rs).div(Q.of(2))) + 'π ≈ ' + f(rd(PI_2 * rs * rs / 2, 2)) + ' cm' + SQ + '.',
+        'Total ≈ ' + f(Q.of(bt + tp).mul(Q.of(ht)).div(Q.of(2))) + ' + ' + f(rd(PI_2 * rs * rs / 2, 2)) + ' ≈ ' + f(At) + ' cm' + SQ + '.'
       ], { unit: 'cm' + SQ, tol: tolDp(0) });
     }
     if (v === 8) {                                                  // sec7-t9, in exact π-form
@@ -123850,7 +124066,7 @@ var GEN = (function () {
     if (v <= 8) {                                                   // sec7-t10
       var side = 2 * R(4, 9), rad = side / 2, tile = pick([20, 25, 30]), gap = pick([1, 2]),
         per = pick([10, 12, 15, 20]), price = R(120, 300) * 10;
-      var P = 3 * side + PI_KEY * rad, step = (tile + gap) / 100,
+      var P = 3 * side + PI_2 * rad, step = (tile + gap) / 100,
         tiles = Math.ceil(P / step - 1e-9), packs = Math.ceil(tiles / per), cost = Q.of(packs).mul(dq(price, 2));
       var tcheck = piOK(PI_LOOSE, function (pi) { return Math.ceil((3 * side + pi * rad) / step - 1e-9); }, Q.of);
       if (tcheck === null || tiles > 900) return t6l3();
@@ -123861,7 +124077,7 @@ var GEN = (function () {
         VIS.semi({ kind: 'onTop', w: side, h: side, wLab: f(side) + ' m', hLab: f(side) + ' m', rLab: 'r = ' + f(rad) + ' m' }),
         [{ lab: 'tiles', val: tiles }, { lab: 'packages', val: packs }, { lab: 'total cost ($)', val: cost, dp: 2 }], [
         'The outer perimeter is the three straight sides plus the arc: 3 · ' + f(side) + ' m + ½ · π · ' + f(side) + ' m ≈ ' +
-          f(3 * side) + ' + ' + f(rd(PI_KEY * rad, 2)) + ' = ' + f(rd(P, 2)) + ' m.',
+          f(3 * side) + ' + ' + f(rd(PI_2 * rad, 2)) + ' = ' + f(rd(P, 2)) + ' m.',
         'Each tile takes ' + f(tile) + ' cm + ' + f(gap) + ' cm = ' + f(dq(tile + gap, 2)) + ' m, so ' + f(rd(P, 2)) + ' ÷ ' +
           f(dq(tile + gap, 2)) + ' ≈ ' + f(rd(P / step, 2)) + ' — round UP to ' + f(tiles) + ' tiles.',
         f(tiles) + ' ÷ ' + f(per) + ' = ' + f(rd(tiles / per, 2)) + ', so ' + f(packs) + ' whole packages are needed.',
@@ -125263,7 +125479,7 @@ var GEN = (function () {
   function t11l2() {
     var v = R(0, 9);
     if (v <= 1) {                                                   // sec16-t4
-      var b = 2 * R(2, 9), fh = R(4, 14), SA = b * b + 4 * (b * fh / 2), u = pick(['cm', 'in']);
+      var b = 2 * R(2, 9), fh = R(b / 2 + 1, b / 2 + 8), SA = b * b + 4 * (b * fh / 2), u = pick(['cm', 'in']);
       return num(lead('A pyramid has a square base with ' + f(b) + '-' + u + ' sides, and each of its four triangular faces is ' +
         f(fh) + ' ' + u + ' high — that is the FACE height, measured up the middle of a face. Find its surface area.') +
         VIS.solid({ kind: 'pyramid', w: b, h: fh, d: b, l: { w: f(b) + ' ' + u, s: f(fh) + ' ' + u } }),
@@ -125306,20 +125522,20 @@ var GEN = (function () {
         'Two circular bases: 2 · π · ' + f(r) + SQ + ' = ' + piCoef(2 * r * r) + ' ' + u2 + SQ + '.',
         'The lateral face unrolls into a rectangle whose length is the base circumference πd = ' + piCoef(2 * r) +
           ' and whose width is the height ' + f(hc) + ': ' + piCoef(2 * r * hc) + ' ' + u2 + SQ + '.',
-        'Total: ' + piCoef(2 * r * r) + ' + ' + piCoef(2 * r * hc) + ' = ' + piCoef(coef) + ' ' + u2 + SQ + ' ≈ ' + f(rd(PI_KEY * coef, 2)) + ', which is ' + f(rounded) + ' ' + u2 + SQ + '.'
+        'Total: ' + piCoef(2 * r * r) + ' + ' + piCoef(2 * r * hc) + ' = ' + piCoef(coef) + ' ' + u2 + SQ + ' ≈ ' + f(rd(PI_2 * coef, 2)) + ', which is ' + f(rounded) + ' ' + u2 + SQ + '.'
       ]);
     }
     if (v <= 7) {                                                   // sec18-t6, a trapezoidal prism
-      var pa = 2 * R(2, 5), pb = pa + 2 * R(1, 3), alt = R(3, 6), slant = R(alt + 1, alt + 4), dep = R(2, 5);
+      var trp = pick([[3, 4, 5], [4, 3, 5], [6, 8, 10], [8, 6, 10], [5, 12, 13]]), pa = 2 * R(2, 5), pb = pa + trp[0], alt = trp[1], slant = trp[2], dep = R(2, 5);
       var faces = 2 * ((pa + pb) / 2 * alt), rects = (pa + pb + alt + slant) * dep, SA3 = faces + rects;
       return num(lead('A trapezoidal prism is ' + f(dep) + '.0 m deep. Its trapezoidal face has parallel sides of ' + f(pb) +
-        '.0 m and ' + f(pa) + '.0 m and an altitude of ' + f(alt) + '.0 m; one of its slanted sides is perpendicular, ' +
-        f(alt) + '.0 m long, and the other is ' + f(slant) + '.0 m long. Find the prism\'s surface area.') +
+        '.0 m and ' + f(pa) + '.0 m and an altitude of ' + f(alt) + '.0 m; one of its other two sides is perpendicular to the parallel sides (so it is ' +
+        f(alt) + '.0 m long), and the last side slants and is ' + f(slant) + '.0 m long. Find the prism\'s surface area.') +
         VIS.compound({
-          parts: [{ kind: 'trap', x: 0, y: 0, w: pb, h: alt, top: pa }],
-          labels: [{ x: pb / 2, y: alt, text: f(pb) + '.0 m', at: 'bottom' }, { x: pb / 2, y: 0, text: f(pa) + '.0 m', at: 'top' },
-            { x: (pb - pa) / 2, y: alt / 2, text: f(alt) + '.0 m', at: 'left' },
-            { x: pb, y: alt / 2, text: f(slant) + '.0 m', at: 'right' }],
+          parts: [{ kind: 'trap', x: 0, y: 0, w: pb, h: alt, top: pa, off: 0 }],
+          labels: [{ x: pb / 2, y: alt, text: f(pb) + '.0 m', at: 'bottom' }, { x: pa / 2, y: 0, text: f(pa) + '.0 m', at: 'top' },
+            { x: 0, y: alt / 2, text: f(alt) + '.0 m', at: 'left' },
+            { x: (pa + pb) / 2, y: alt / 2, text: f(slant) + '.0 m', at: 'right' }],
           label: 'The trapezoidal face of the prism: parallel sides ' + f(pb) + '.0 m and ' + f(pa) + '.0 m, altitude ' + f(alt) + '.0 m, slanted side ' + f(slant) + '.0 m'
         }),
         SA3, [
@@ -125367,24 +125583,25 @@ var GEN = (function () {
       ]);
     }
     if (v <= 3) {                                                   // sec16-t7
-      var ta = R(3, 6), tb = ta + R(2, 4), th = R(2, 4), tri = R(2, 4), pr = R(60, 160),
-        area = Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))).add(Q.of(2).mul(Q.of(tb).mul(Q.of(tri)).div(Q.of(2)))),
+      var hip = pick([[3, 4, 5], [4, 3, 5], [3, 4, 5], [6, 8, 10]]), ta = R(2, 6), tb = ta + 2 * hip[0], th = hip[2], tri = hip[2], tw = 2 * hip[0], pr = R(60, 160),
+        area = Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))).add(Q.of(2).mul(Q.of(tw).mul(Q.of(tri)).div(Q.of(2)))),
         cost2 = area.mul(Q.of(pr));
       return flds(lead('The hip roof of a haunted doghouse is made of two identical trapezoids (parallel sides ' + f(tb) + '.00 m and ' + f(ta) +
-        '.00 m, height ' + f(th) + '.00 m) and two identical triangles (base ' + f(tb) + '.00 m, height ' + f(tri) +
+        '.00 m, height ' + f(th) + '.00 m) and two identical triangles (base ' + f(tw) + '.00 m, height ' + f(tri) +
         '.00 m). Tiling costs $' + f(pr) + ' per square metre. Fill in the roof\'s area and the cost of tiling it.') +
         VIS.compound({
-          parts: [{ kind: 'trap', x: 0, y: 0, w: tb, h: th, top: ta }, { kind: 'tri', x: tb + 1, y: 0, w: tb, h: tri }],
+          parts: [{ kind: 'trap', x: 0, y: 0, w: tb, h: th, top: ta }, { kind: 'tri', x: tb + 1, y: 0, w: tw, h: tri, apex: 0.5 }],
           labels: [{ x: tb / 2, y: th, text: f(tb) + ' m', at: 'bottom' }, { x: tb / 2, y: 0, text: f(ta) + ' m', at: 'top' },
             { x: (tb - ta) / 2, y: th / 2, text: f(th) + ' m', at: 'left' },
-            { x: tb + 1 + tb / 2, y: tri, text: f(tb) + ' m', at: 'bottom' }],
+            { x: tb + 1 + tw / 2, y: tri, text: f(tw) + ' m', at: 'bottom' }, { x: tb + 1 + tw / 2, y: tri / 2, text: f(tri) + ' m', at: 'right' }],
+          splits: [[(tb - ta) / 2, 0, (tb - ta) / 2, th], [tb + 1 + tw / 2, 0, tb + 1 + tw / 2, tri]],
           label: 'One trapezoidal roof face beside one triangular roof face'
         }),
         [{ lab: 'roof area (m' + SQ + ')', val: area }, { lab: 'cost ($)', val: cost2, dp: 2 }], [
         'One trapezoid: (' + f(tb) + ' + ' + f(ta) + ') ÷ 2 · ' + f(th) + ' = ' + f(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
           f(Q.of(2).mul(Q.of(ta + tb).mul(Q.of(th)).div(Q.of(2)))) + ' m' + SQ + '.',
-        'One triangle: ½ · ' + f(tb) + ' · ' + f(tri) + ' = ' + f(Q.of(tb).mul(Q.of(tri)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
-          f(Q.of(2).mul(Q.of(tb).mul(Q.of(tri)).div(Q.of(2)))) + ' m' + SQ + '.',
+        'One triangle: ½ · ' + f(tw) + ' · ' + f(tri) + ' = ' + f(Q.of(tw).mul(Q.of(tri)).div(Q.of(2))) + ' m' + SQ + '. Two give ' +
+          f(Q.of(2).mul(Q.of(tw).mul(Q.of(tri)).div(Q.of(2)))) + ' m' + SQ + '.',
         'Total area ' + f(area) + ' m' + SQ + ', and the cost is ' + f(area) + ' · $' + f(pr) + ' = $' + fmtDp(cost2, 2) + '.'
       ]);
     }
@@ -125494,7 +125711,7 @@ var GEN = (function () {
     if (v <= 6) {                                                   // sec18-t3
       var fromR = Math.random() < 0.5, rr = fromR ? R(2, 9) : 0, dd = fromR ? 0 : 2 * R(1, 6),
         rad = fromR ? rr : dd / 2, hh = R(5, 25), u3 = pick(['cm', 'in']);
-      var exactV = PI_KEY * rad * rad * hh, big = exactV > 1000,
+      var exactV = PI_2 * rad * rad * hh, big = exactV > 1000,
         ans = piOK(PI_LOOSE, function (pi) { return pi * rad * rad * hh; }, big ? ten : dp1);
       if (ans === null) return t12l1();
       return num(lead('A cylinder has a base ' + (fromR ? 'radius of ' + f(rr) : 'diameter of ' + f(dd)) + '.0 ' + u3 +
@@ -125934,7 +126151,7 @@ var GEN = (function () {
       b1 = ang - a1 * x; b2 = ang - a2 * x; lab = {}; lab[P[0]] = '(' + lin8(a1, b1) + ')°'; lab[P[1]] = '(' + lin8(a2, b2) + ')°';
       return flds(lead('Two parallel lines are crossed by a third line. The two marked angles are ' + P[2] + ' angles. Find ' + mth('x') + ' and the measure of each marked angle.') + W.geo.par({ t: pa(60, P[0]) === 60 ? ang : 180 - ang, lab: lab }),
         [{ lab: 'x', val: x }, { lab: 'each angle (°)', val: ang }],
-        [cap1(P[2]) + ' angles at parallel lines are equal: ' + lin8(a1, b1) + ' = ' + lin8(a2, b2) + '.', f(b1 - b2) + ' = ' + lin8(a2 - a1, 0) + ', so x = ' + f(x) + '.', 'The angle: ' + a1 + ' · ' + f(x) + (b1 ? (b1 > 0 ? ' + ' + b1 : ' − ' + (-b1)) : '') + ' = ' + deg(ang) + '. Check with the other: ' + a2 + ' · ' + f(x) + (b2 ? (b2 > 0 ? ' + ' + b2 : ' − ' + (-b2)) : '') + ' = ' + deg(ang) + '.']);
+        [cap1(P[2]) + ' angles at parallel lines are equal: ' + lin8(a1, b1) + ' = ' + lin8(a2, b2) + '.', 'Take ' + lin8(a1, 0) + ' from both sides' + (b2 > 0 ? ', then take ' + b2 + ' from both sides' : b2 < 0 ? ', then add ' + (-b2) + ' to both sides' : '') + ': ' + f(b1 - b2) + ' = ' + lin8(a2 - a1, 0) + (a2 - a1 > 1 ? '; divide both sides by ' + (a2 - a1) : '') + ', so x = ' + f(x) + '.', 'The angle: ' + a1 + ' · ' + f(x) + (b1 ? (b1 > 0 ? ' + ' + b1 : ' − ' + (-b1)) : '') + ' = ' + deg(ang) + '. Check with the other: ' + a2 + ' · ' + f(x) + (b2 ? (b2 > 0 ? ' + ' + b2 : ' − ' + (-b2)) : '') + ' = ' + deg(ang) + '.']);
     }
     if (v === 1) {
       P = pick(PAIRS.filter(function (p) { return !p[3]; })); x = R(10, 28); a1 = R(1, 3); a2 = R(2, 4); var A1 = pick([52, 58, 64, 70, 75, 80, 85, 95, 100, 110, 116, 124]), A2 = 180 - A1;
