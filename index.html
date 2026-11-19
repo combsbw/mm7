@@ -2275,6 +2275,25 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 @media (max-width: 600px) { .dj-trapch { grid-template-columns: 1fr; } .dj-trapch .k { padding-top: 0; } }
 .tc-patdojo { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); } .tc-patdojo span { font-size: 13px; color: var(--ink-2); }
 
+/* the full-course review (Stage 11): the route map, region cards, a region's opening picture and its three stops */
+.dj-jmap .stop { outline: none; } .dj-jmap .stop:focus-visible .ring { opacity: 1; }
+.dj-jgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-bottom: 12px; }
+.dj-jcard { display: grid; grid-template-columns: 40px 1fr; gap: 12px; text-decoration: none; color: var(--ink); align-items: start; } .dj-jcard .n { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-weight: 800; }
+.dj-jcard .b { display: grid; gap: 4px; min-width: 0; } .dj-jcard .b b { font-size: 18px; } .dj-jcard .t { color: var(--ink-2); font-size: 14.5px; } .dj-jcard .m { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 12.5px; color: var(--ink-2); margin-top: 4px; } .dj-jcard .m em { font-style: normal; }
+.dj-jcard .th { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; font-weight: 700; color: var(--ink); } .dj-jcard .th svg { width: 17px; height: 17px; }
+.dj-jcard.cur { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset, var(--shadow); } .dj-jcard.cur .n { background: var(--accent); color: var(--accent-ink); }
+.dj-jcard.soon { opacity: .72; } .dj-jcard em.soon { border: 1px dashed var(--line); border-radius: 999px; padding: 2px 9px; }
+.dj-jstops { display: inline-flex; gap: 4px; } .dj-jstops i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font-size: 12px; font-weight: 800; } .dj-jstops i.done { background: var(--good); border-color: var(--good); color: #fff; }
+.dj-jterr { display: flex; flex-wrap: wrap; gap: 6px; align-content: center; } .dj-hero .dj-jterr { grid-template-columns: none; } .dj-jterr span { border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; padding: 4px 11px; font-size: 13px; font-weight: 600; }
+.dj-jterr.in { margin: 12px 0; } .dj-jterr.in span { border-color: var(--line); color: var(--ink-2); }
+.dj-jpic { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 1fr); gap: 18px; align-items: center; margin: 14px 0; } .dj-jpic h2 { margin: 2px 0 6px; } .dj-jpic-v { background: var(--surface-2); border-radius: 14px; padding: 12px; overflow-x: auto; }
+.dj-jstopgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; } .dj-jstop { display: grid; gap: 6px; align-content: start; } .dj-jstop .h { display: flex; align-items: center; gap: 10px; } .dj-jstop h2 { margin: 0; font-size: 20px; }
+.dj-jstop .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-weight: 800; } .dj-jstop.done .n { background: var(--good); color: #fff; } .dj-jstop.next { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset, var(--shadow); }
+.dj-jstop .sz, .dj-jstop .res { margin: 0; font-size: 13.5px; color: var(--ink-2); } .dj-jstop .res { font-weight: 700; color: var(--ink); } .dj-jstop .btn { justify-self: start; margin-top: 4px; }
+.dj-jcardshow { margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--surface-2); } .dj-jadd { font-size: 13.5px; }
+.hb-jrncard { border-left-color: var(--good); }
+@media (max-width: 760px) { .dj-jpic { grid-template-columns: 1fr; } }
+
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
 .hb-update button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--accent-ink, #fff); color: var(--accent, #2d6a86); cursor: pointer; }
@@ -53623,6 +53642,61 @@ if (typeof module !== 'undefined' && module.exports) module.exports.TRX = TRX;
 })();
 /* ===== DJG part 7 END ===== */
 
+/* --- dojo: dojo_gens8.js --- */
+/* ===== DJG part 8 (Combos: two or three skills joined in one short problem, easy numbers; Stage 11, the full-course review) START =====
+   Same contract as hub/dojo_gens.js. A combo is the middle stop of a region of the full-course review (hub/journey.js): after
+   the one-action quick shots and before the full-strength summit. Each joins skills from two or three territories of its region,
+   and each is also an ordinary Dojo move (focus area 'combo'), verified like every other one.
+   Region 1, Signs and number (territories E1, E7, E5, M1, M2): signfrac, story, forms, order, apart. */
+(function () {
+  'use strict';
+  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, nz = h.nz, pick = h.pick, f = h.f, D = h.D, L = h.L, fr = h.fr, until = h.until, T = h.T, C = h.C, mv = DJG.mv;
+  DJG.STYLES.push({ id: 'combo', name: 'Combos', ch: [1, 2, 3, 4, 5, 6, 7, 8], blurb: 'Two or three skills joined in one short problem, with friendly numbers.' });
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  function A(x) { return '(' + x.toFrac() + ')'; }                                    // a rational inside an ascii expression
+  function step(it, name) { it.step = name; return it; }
+  function half(lo, hi) { return q(R(lo * 2, hi * 2), 2); }                           // a number with at most a half: 3, 3.5, 4 …
+  var NICE = [[1, 2], [1, 4], [3, 4], [1, 5], [2, 5], [3, 5], [4, 5], [1, 8], [3, 8], [5, 8], [7, 8], [3, 10], [7, 10], [9, 10]];
+
+  // ---------------------------------------------------------------- Region 1: Signs and number
+  mv('combo.signfrac', 'Signs, a fraction, then add', ['T26', 'R18', 'T15'], ['Sign first, then the size, then the sum', 'Count the negative factors for the sign of the product. A fraction times a whole number: divide by the bottom, multiply by the top. Then add as with integers.'], function (lv) {
+    var t = until(function () { var b = R(2, 6); return { b: b, a: R(1, b - 1), k: R(2, 5), n2: Math.random() < 0.6, d: nz(-12, 12) }; }, function (z) { return gcd(z.a, z.b) === 1; });
+    var c = t.b * t.k, prod = (t.n2 ? 1 : -1) * t.a * t.k, src = '(-' + t.a + '/' + t.b + ')*(' + (t.n2 ? -c : c) + ')' + (lv === 1 ? '' : '+(' + t.d + ')');
+    var html = D('(−' + fr(t.a, t.b) + ') · ' + (t.n2 ? '(−' + c + ')' : c) + (lv === 1 ? '' : (t.d < 0 ? ' − ' + (-t.d) : ' + ' + t.d)));
+    var ans = lv === 1 ? prod : prod + t.d;
+    return [T(html, ans, { wrongs: [lv === 1 ? -prod : -prod + t.d, lv === 1 ? prod + 1 : prod - t.d], tag: 'sign', ver: { ev: src }, why: (t.n2 ? 'Two negatives: the product is positive. ' : 'One negative: the product is negative. ') + c + ' ÷ ' + t.b + ' · ' + t.a + ' = ' + t.a * t.k + ', so the product is ' + f(Q.of(prod)) + (lv === 1 ? '.' : '; then ' + f(Q.of(prod)) + (t.d < 0 ? ' − ' + (-t.d) : ' + ' + t.d) + ' = ' + f(Q.of(ans)) + '.') })];
+  });
+  mv('combo.story', 'Up, down, and how far', ['T36', 'T13', 'R12', 'T23'], ['Each change is a signed number', 'Below zero is negative; a rise adds, a drop subtracts. The distance between two positions is the larger minus the smaller, never negative.'], function (lv) {
+    var kind = pick([['A diver is at ', ' m. She rises ', ' m, then sinks ', ' m.', 'm', ' Where is she now?'], ['The temperature is ', ' °C. It rises ', ' °C, then falls ', ' °C.', '°C', ' What is it now?'], ['A lift is at floor ', '. It goes up ', ' floors, then down ', ' floors.', '', ' Which floor is it on now?']]);
+    var whole = kind[4] === '', t = until(function () { return { s: whole ? Q.of(R(1, 4)) : half(2, 9), u: whole ? Q.of(R(2, 9)) : half(1, 8), v: whole ? Q.of(R(2, 12)) : half(2, 12) }; }, function (z) { return !z.u.eq(z.v); });
+    var start = t.s.neg(), end = start.add(t.u).sub(t.v), bigger = end.cmp(start) > 0 ? end : start, smaller = end.cmp(start) > 0 ? start : end;
+    var lead = L(kind[0] + f(start) + kind[1] + f(t.u) + kind[2] + f(t.v) + kind[3]);
+    var it1 = step(T(L(kind[0] + f(start) + kind[1] + f(t.u) + kind[2] + f(t.v) + kind[3] + kind[5]), end, { wrongs: [start.add(t.u).add(t.v), t.s.add(t.u).sub(t.v)], tag: 'sign', unit: kind[4], ver: { ev: A(start) + '+' + A(t.u) + '-' + A(t.v) }, why: f(start) + ' + ' + f(t.u) + ' − ' + f(t.v) + ' = ' + f(end) + '.' }), 'Where is it now?');
+    var it2 = step(T(lead + L('That ends at ' + f(end) + (kind[4] ? ' ' + kind[4] : '') + '. How far is that from the start?'), bigger.sub(smaller), { wrongs: [end.add(start), bigger.add(smaller)], tag: 'abs', unit: kind[4] === '' ? 'floors' : kind[4], ver: { ev: A(bigger) + '-' + A(smaller) }, why: 'The larger minus the smaller: ' + f(bigger) + ' − (' + f(smaller) + ') = ' + f(bigger.sub(smaller)) + '.' }), 'How far from the start?');
+    return lv === 1 ? [it1] : [it1, it2];
+  });
+  mv('combo.forms', 'One form, then add', ['R5', 'R8', 'R12'], ['Same form before you add', 'Write the fraction as a decimal (top ÷ bottom), then add the decimals with the sign rules.'], function (lv) {
+    var t = until(function () { var p = pick(NICE); return { a: p[0], b: p[1], d: q(nz(-19, 19), 10) }; }, function (z) { return true; });
+    var x = q(-t.a, t.b), sum = x.add(t.d);
+    var it1 = step(T(D('−' + fr(t.a, t.b) + ' as a decimal'), x, { wrongs: [x.neg(), q(-t.b, t.a)], tag: 'decimal', ver: { ev: '-' + t.a + '/' + t.b }, why: t.a + ' ÷ ' + t.b + ' = ' + f(q(t.a, t.b)) + ', and the fraction is negative: ' + f(x) + '.' }), 'Fraction → decimal');
+    var it2 = step(T(D('−' + fr(t.a, t.b) + (t.d.cmp(Q.of(0)) < 0 ? ' − ' + f(t.d.neg()) : ' + ' + f(t.d))), sum, { wrongs: [q(t.a, t.b).add(t.d), x.sub(t.d)], tag: 'sign', ver: { ev: '-' + t.a + '/' + t.b + '+' + A(t.d) }, why: f(x) + (t.d.cmp(Q.of(0)) < 0 ? ' − ' + f(t.d.neg()) : ' + ' + f(t.d)) + ' = ' + f(sum) + '.' }), 'Then add');
+    return lv === 1 ? [it2] : [it1, it2];
+  });
+  mv('combo.order', 'Order mixed forms', ['R3', 'R5', 'T1'], ['One form, then left is less', 'Write every number as a decimal. On the number line the number furthest right is the greatest; among negatives, the one closest to zero.'], function (lv) {
+    var ps = until(function () { return [pick(NICE), pick(NICE), pick(NICE)]; }, function (z) { var v = z.map(function (p) { return p[0] / p[1]; }); return v[0] !== v[1] && v[1] !== v[2] && v[0] !== v[2]; });
+    var neg = lv === 1 ? [true, true, true] : [true, Math.random() < 0.8, Math.random() < 0.6], most = Math.random() < 0.5;
+    var items = ps.map(function (p, i) { var val = q(neg[i] ? -p[0] : p[0], p[1]), asFr = i === 0 || (i === 2 && lv > 1 && Math.random() < 0.5); return { val: val, t: asFr ? (neg[i] ? '−' : '') + fr(p[0], p[1]) : f(val), src: A(val) }; });
+    var best = items.slice().sort(function (x, y) { return most ? y.val.cmp(x.val) : x.val.cmp(y.val); })[0], rest = items.filter(function (x) { return x !== best; });
+    return [C(L('Which is the ' + (most ? 'greatest' : 'least') + ':   ' + items.map(function (x) { return x.t; }).join(',   ') + '?'), { t: best.t, src: best.src }, rest.map(function (x) { return { t: x.t, src: x.src }; }), { tag: 'decimal', ver: { ev: best.src }, why: 'As decimals: ' + items.map(function (x) { return f(x.val); }).join(', ') + '. The ' + (most ? 'greatest' : 'least') + ' is ' + f(best.val) + '.' })];
+  });
+  mv('combo.apart', 'How far apart?', ['T23', 'T3', 'R12'], ['Distance = larger − smaller', 'The distance between two numbers is |a − b|: subtract the smaller from the larger. Subtracting a negative adds.'], function (lv) {
+    var t = until(function () { var p = pick(NICE); return { a: lv === 1 ? half(1, 9).neg() : q(-p[0] - p[1] * R(0, 3), p[1]), b: lv === 3 ? half(1, 6).neg() : half(1, 9), fa: lv > 1 }; }, function (z) { return !z.a.eq(z.b); });
+    var lo = t.a.cmp(t.b) < 0 ? t.a : t.b, hi = t.a.cmp(t.b) < 0 ? t.b : t.a, d = hi.sub(lo);
+    return [T(L('How far apart are ' + f(t.a) + ' and ' + f(t.b) + ' on the number line?'), d, { wrongs: [hi.add(lo), lo.sub(hi)], tag: 'abs', ver: { ev: A(hi) + '-' + A(lo) }, why: 'The larger minus the smaller: ' + f(hi) + ' − (' + f(lo) + ') = ' + f(d) + '.' })];
+  });
+})();
+/* ===== DJG part 8 END ===== */
+
 /* --- dojo: dojo_quests.js --- */
 /* ===== DJG quests (the Dojo's Quest mode: one story, several steps, each step uses the answer of the step before) START =====
    DJG.quest(id, lv) -> { id, title, intro, outro, nodes:[{ place, item }] }      lv 1 = 3 steps, lv 2 = 4, lv 3 = all of them (5 or 6)
@@ -54047,6 +54121,113 @@ var DJ = (function () {
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = DJ;
 /* ===== DJ END ===== */
+
+/* --- dojo: journey.js --- */
+/* ===== JRN (the full-course review: a journey by category; Stage 11 of MM7_Course_Completion_Plan.md) START =====
+   Pure logic, no DOM. Needs DJG (the Dojo's moves) and, for urgency, DJ and a learner model (both optional).
+   Six REGIONS cut across the chapters; every one of the 41 territories of the course belongs to exactly one. A region opens with
+   its guiding picture (an idea of the Course Sheet) and has three STOPS:
+     quick    one-action reps with easy numbers on the region's foundations (the Dojo's verified moves): every territory first
+     combo    easy numbers, two or three skills joined (hub/dojo_gens8.js)
+     summit   a few full-strength problems from the verified Review and Exam banks, one territory each
+   A last stop (all) mixes the regions once they are built.
+   Size: about 100 answers for the whole journey, more than half of them quick shots; one region is one sitting.
+   Clean, fast work shortens a stop; a miss adds two more reps on that move and shows its tactic.
+   Evidence: quick shots and combos are easy-number reps (capped, as in the Dojo); summit answers count in full.
+   hub/test_journey.js prints and gates the coverage table. */
+var JRN = (function () {
+  'use strict';
+  var K = { QUICK: 9, QUICK_MIN: 6, COMBO: 4, COMBO_MIN: 3, SUMMIT: 3, FAST_QUICK: 12000, FAST_COMBO: 30000, ADD: 2, ADD_MAX: 6, FINAL: 6, QUICK_LV: 1, COMBO_LV: 2, SUMMIT_TIERS: [3, 4] };
+  var STOPS = [{ id: 'quick', name: 'Quick shots', blurb: 'One action each, friendly numbers. Every part of the region comes up.' },
+    { id: 'combo', name: 'Combos', blurb: 'Two or three skills joined in one short problem.' },
+    { id: 'summit', name: 'Summit', blurb: 'A few full-strength problems, the kind the final exam asks.' }];
+  // quick: territory -> the moves that practise its foundations; combos: [move, the territories it joins]
+  var REGIONS = [
+    { id: 'r1', name: 'Signs and number', th: 'line', place: 'Signs', blurb: 'Negative numbers, fractions and decimals: where a number sits, how far apart two are, and the four operations with signs.',
+      terrs: ['E1', 'E7', 'E5', 'M1', 'M2'],
+      quick: { E1: ['int.add', 'int.mul', 'trap.negprod'], E7: ['int.sub', 'trap.subneg'], E5: ['int.abs', 'int.cmp'], M1: ['rat.fadd', 'rat.dmul', 'rat.fmul', 'rat.dadd', 'trap.fdiv', 'trap.decplaces'], M2: ['rat.conv', 'rat.cmp', 'num.ten'] },
+      combos: [['combo.signfrac', ['E1', 'M1']], ['combo.story', ['E7', 'M1', 'E5']], ['combo.forms', ['M2', 'M1']], ['combo.order', ['M2', 'E5']], ['combo.apart', ['E5', 'M1']]] },
+    { id: 'r2', name: 'Expressions', th: 'area', place: 'Expressions', blurb: 'Order of operations, powers, like terms, distributing and the area model.', terrs: ['E2', 'E3', 'E8', 'M12'] },
+    { id: 'r3', name: 'Equations and inequalities', th: 'bal', place: 'Equations', blurb: 'One move on both sides, undoing in reverse, words into equations, inequalities and ranges.', terrs: ['E4', 'M3', 'M13', 'M4', 'M5', 'M7', 'M11'] },
+    { id: 'r4', name: 'Rates, ratios and percent', th: 'tri', place: 'Rates', blurb: 'd = v · t, unit rates, proportions, percent of, percent change and interest.', terrs: ['M6', 'R1', 'R2', 'R3', 'R5', 'R6'] },
+    { id: 'r5', name: 'Geometry and measurement', th: 'scale', place: 'Geometry', blurb: 'Angles, circles, area and volume with their units, scale drawings and the Pythagorean theorem.', terrs: ['K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10', 'R7', 'R8'] },
+    { id: 'r6', name: 'Patterns, lines and modelling', th: 'step', place: 'Patterns', blurb: 'Start + add × n, how a sequence grows, slope and start, reading and solving by graph.', terrs: ['E6', 'M9', 'M10', 'M8', 'R4', 'R9', 'R10'] }
+  ];
+  var BY = {}; REGIONS.forEach(function (r) { BY[r.id] = r; });
+  function built(r) { return !!(r.quick && r.combos); }
+  function shuffle(a, rnd) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function urg(model, cat, skills) { return typeof DJ !== 'undefined' && model ? DJ.unitUrgency(model, cat, skills, null).score : 0; }
+
+  // the summit pool of a region: bank entries of its territories at the top tiers that can be served as one problem
+  function summitPool(r, cat) {
+    var out = []; Object.keys(cat.entries).forEach(function (id) { var e = cat.entries[id]; if (r.terrs.indexOf(e.terr) >= 0 && K.SUMMIT_TIERS.indexOf(e.tier) >= 0 && e.onramp !== false && (e.skills || []).length) out.push({ id: id, terr: e.terr, tier: e.tier, skills: e.skills.slice(), name: e.name }); });
+    return out;
+  }
+  // the units of one stop, in order. opts: { model, rnd }
+  function plan(rid, stop, cat, opts) {
+    opts = opts || {}; var r = BY[rid], rnd = opts.rnd || Math.random, m = opts.model || null, out = [];
+    if (!r || !built(r)) return out;
+    function mvUnit(id, terr) { var mv = DJG.byId[id]; return { type: 'move', id: id, terr: terr || null, skills: mv.skills.slice() }; }
+    if (stop === 'quick') {
+      var used = {}, rest = [];
+      shuffle(r.terrs, rnd).forEach(function (t) {                       // first pass: every territory once, its most urgent move
+        var ms = r.quick[t].slice().sort(function (a, b) { return urg(m, cat, DJG.byId[b].skills) - urg(m, cat, DJG.byId[a].skills) + (rnd() - 0.5) * 0.3; });
+        out.push(mvUnit(ms[0], t)); used[ms[0]] = 1; ms.slice(1).forEach(function (id) { rest.push([id, t]); });
+      });
+      rest = shuffle(rest, rnd).sort(function (a, b) { return urg(m, cat, DJG.byId[b[0]].skills) - urg(m, cat, DJG.byId[a[0]].skills); });
+      for (var i = 0; out.length < K.QUICK && i < rest.length; i++) if (!used[rest[i][0]]) { out.push(mvUnit(rest[i][0], rest[i][1])); used[rest[i][0]] = 1; }
+    } else if (stop === 'combo') {
+      shuffle(r.combos, rnd).slice(0, K.COMBO).forEach(function (c) { var u = mvUnit(c[0], null); u.terrs = c[1].slice(); out.push(u); });
+    } else if (stop === 'summit') {
+      var pool = shuffle(summitPool(r, cat), rnd).sort(function (a, b) { return urg(m, cat, b.skills) - urg(m, cat, a.skills); }), seen = {};
+      pool.forEach(function (e) { if (out.length < K.SUMMIT && !seen[e.terr] && (!opts.ok || opts.ok(e))) { seen[e.terr] = 1; out.push({ type: 'kata', ref: { type: 'entry', id: e.id }, entry: e.id, terr: e.terr, skills: e.skills, diff: e.tier, name: e.name }); } });
+    }
+    return out;
+  }
+  // A stop being played: the queue grows on a miss and ends early on clean, fast work.
+  function run(rid, stop, units) {
+    var q = units.slice(), i = 0, log = [], added = 0, short = false, planned = units.length;
+    var min = stop === 'quick' ? K.QUICK_MIN : stop === 'combo' ? K.COMBO_MIN : planned, fast = stop === 'quick' ? K.FAST_QUICK : K.FAST_COMBO, r = BY[rid];
+    function terrsDone() { var t = {}; log.forEach(function (a) { (a.unit.terrs || [a.unit.terr]).forEach(function (x) { if (x) t[x] = 1; }); }); return t; }
+    function median(xs) { var s = xs.slice().sort(function (a, b) { return a - b; }); return s.length ? s[Math.floor(s.length / 2)] : 0; }
+    return {
+      next: function () { return i < q.length ? q[i] : null; },
+      // one unit finished: ok = every item of it right at the first try; ms = the slowest item
+      answer: function (unit, ok, ms) {
+        log.push({ unit: unit, ok: !!ok, ms: ms || 0 }); i++;
+        var res = { added: 0, short: false };
+        if (!ok && unit.type === 'kata' && r.quick[unit.terr] && added + K.ADD <= K.ADD_MAX) { var mid = r.quick[unit.terr][0], mv0 = DJG.byId[mid]; for (var k2 = 0; k2 < K.ADD; k2++) q.splice(i + k2, 0, { type: 'move', id: mid, terr: unit.terr, skills: mv0.skills.slice(), extra: true }); added += K.ADD; res.added = K.ADD; }
+        if (!ok && unit.type === 'move' && added + K.ADD <= K.ADD_MAX) { for (var k = 0; k < K.ADD; k++) q.splice(i + k, 0, { type: 'move', id: unit.id, terr: unit.terr, terrs: unit.terrs, skills: unit.skills, extra: true }); added += K.ADD; res.added = K.ADD; }
+        if (stop !== 'summit' && !short && i < q.length && log.length >= min && log.every(function (a) { return a.ok; }) && median(log.map(function (a) { return a.ms; })) <= fast) {
+          var td = terrsDone(); if (stop !== 'quick' || r.terrs.every(function (t) { return td[t]; })) { q = q.slice(0, i); short = true; res.short = true; }
+        }
+        return res;
+      },
+      state: function () { return { i: i, n: q.length, planned: planned, added: added, short: short, right: log.filter(function (a) { return a.ok; }).length, done: i >= q.length, terrs: Object.keys(terrsDone()) }; }
+    };
+  }
+  // what has been finished, from the saved sessions (mode 'journey', focus { journey, stop }); nothing else is stored
+  function progress(sessions) {
+    var P = {}; REGIONS.forEach(function (r) { P[r.id] = {}; });
+    (sessions || []).forEach(function (s) { if (s.mode !== 'journey' || !s.focus || !P[s.focus.journey] || !s.done) return; var a = s.answers || [], cur = P[s.focus.journey][s.focus.stop];
+      var rec = { right: a.filter(function (x) { return x.ok; }).length, n: a.length, at: s.end || s.start };
+      if (!cur || rec.at >= cur.at) P[s.focus.journey][s.focus.stop] = rec; });
+    return P;
+  }
+  function nextStop(P, rid) { for (var i = 0; i < STOPS.length; i++) if (!P[rid] || !P[rid][STOPS[i].id]) return STOPS[i].id; return null; }
+  // the coverage table: every territory of a built region is met in the quick shots, joined in a combo and has a summit problem
+  function coverage(cat) {
+    var rows = [];
+    REGIONS.forEach(function (r) { var sp = built(r) ? summitPool(r, cat) : [];
+      r.terrs.forEach(function (t) { rows.push({ region: r.id, terr: t, name: cat.territories[t] ? cat.territories[t].name : t, built: built(r),
+        quick: built(r) ? (r.quick[t] || []).length : 0, combo: built(r) ? r.combos.filter(function (c) { return c[1].indexOf(t) >= 0; }).length : 0, summit: sp.filter(function (e) { return e.terr === t; }).length }); }); });
+    return rows;
+  }
+  function size() { var b = REGIONS.length; return { quick: b * K.QUICK, combo: b * K.COMBO, summit: b * K.SUMMIT, final: K.FINAL, all: b * (K.QUICK + K.COMBO + K.SUMMIT) + K.FINAL }; }
+  return { K: K, STOPS: STOPS, REGIONS: REGIONS, byId: BY, built: built, plan: plan, run: run, progress: progress, nextStop: nextStop, coverage: coverage, summitPool: summitPool, size: size };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = JRN;
+/* ===== JRN END ===== */
 
 </script>
 <script type="text/plain" id="app-ch1"><!doctype html>
@@ -254850,7 +255031,7 @@ var HDJ = (function () {
   }
   function saveDay() { if (!HX.setItem(LMS.DOJO_PREFIX + S.day, JSON.stringify(S.rec))) HX.toast('This browser’s storage is full or blocked. Export the learner record from Settings.'); HX.dirty(); }
   function pit(extraPop) { if (S && S.pit) S.pit.update(S.live.read(now()), { combo: S.combo, heat: S.mode === 'roll' ? Math.min(3, (S.lv || 1) + S.heat) : 0, pop: extraPop, belt: beltNow() }); }
-  function beltNow() { var md = S.mode === 'warm' || S.mode === 'drill' ? 'roll' : S.mode; return DJ.beltOf(S.belts[md].xp + DJ.sessionXP(S.sess)); }   // no storage read per answer
+  function beltNow() { var md = S.mode === 'warm' || S.mode === 'drill' ? 'roll' : S.mode; if (!S.belts[md]) return null; return DJ.beltOf(S.belts[md].xp + DJ.sessionXP(S.sess)); }   // no storage read per answer
   function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; if (S) { (S.timers || []).forEach(clearTimeout); if (S.view && S.view.destroy) try { S.view.destroy(); } catch (e) { } S.over = true; } }
   function leave() { stop(); S = null; }
 
@@ -255127,6 +255308,116 @@ var HDJ = (function () {
     startCard(sh.body, { art: blobArt(), h: 'Three challengers', p: 'Full-strength problems that need several skills at once, each with a figure, a table or a tool. No clock. A right answer counts for every skill in it, times the multiplier.', list: ['Use the battle plan and the scratch pad.', 'Help is there, but it halves the credit.'], btn: 'Face them' }, round);
   }
 
+  // =============================================================== THE FULL-COURSE REVIEW (hub/journey.js): a route map, six regions, three stops each
+  function jrnHalt() { stop(); }   // inside jrnStop the name 'stop' is the stop's id
+  function jrnDone(P, r) { return JRN.STOPS.every(function (s) { return P[r.id] && P[r.id][s.id]; }); }
+  function jrnCrumb(wrap, href, label) { var c = wrap.querySelector('.hb-crumb'); if (c) c.innerHTML = '<a href="#' + href + '">‹ ' + esc(label) + '</a>'; }
+  function viewJourney(main, p) {
+    var r = p[1] ? JRN.byId[p[1]] : null;
+    if (r && JRN.built(r) && p[2] && JRN.STOPS.some(function (s) { return s.id === p[2]; })) return jrnStop(main, r, p[2]);
+    if (r) return jrnRegion(main, r);
+    return jrnMap(main);
+  }
+  function jrnStopsRow(P, r) { return '<span class="dj-jstops">' + JRN.STOPS.map(function (s, i) { var d = P[r.id] && P[r.id][s.id]; return '<i class="' + (d ? 'done' : '') + '" title="' + esc(s.name) + (d ? ': ' + d.right + ' of ' + d.n + ' right' : '') + '">' + (d ? '✓' : i + 1) + '</i>'; }).join('') + '</span>'; }
+  function jrnMap(main) {
+    var P = JRN.progress(allSessions()), sz = JRN.size(), wrap = el('div', 'hb-wrap dj-wrap dj-jrn novar'); main.appendChild(wrap);
+    var cur = JRN.REGIONS.filter(function (r) { return JRN.built(r) && !jrnDone(P, r); })[0] || null, nodes = JRN.REGIONS.map(function (r) { return { place: r.place }; }).concat([{ place: 'All together' }]);
+    wrap.innerHTML = '<div class="hb-crumb"><a href="#reviews">‹ Reviews &amp; Exams</a></div>' +
+      '<section class="dj-hero"><div><div class="eyebrow">The whole course</div><h1>Full-course review</h1><p>Six regions that cut across the chapters. Each opens with its picture and has three stops: quick shots, combos, then a summit of full-strength problems. A last stop mixes them all.</p></div>' +
+      '<div class="dj-herostats"><div><b>' + JRN.REGIONS.length + '</b><span>regions</span></div><div><b>' + JRN.REGIONS.filter(function (r) { return jrnDone(P, r); }).length + '</b><span>finished</span></div><div><b>~' + Math.round(sz.all / 10) * 10 + '</b><span>answers in all</span></div><div class="g"><b>15–20 min</b><span>for one region</span></div></div></section>' +
+      '<div class="dj-mapbox dj-jmap">' + mapSVG(nodes) + '</div>' +
+      '<div class="dj-jgrid">' + JRN.REGIONS.map(function (r, i) { var I = ideaOf(r.th), T0 = typeof TAC !== 'undefined' ? TAC.THREADS[r.th] : null, ok = JRN.built(r);
+        return '<a class="hb-card dj-jcard' + (ok ? '' : ' soon') + (cur === r ? ' cur' : '') + '" href="#dojo/journey/' + r.id + '"><span class="n">' + (i + 1) + '</span><span class="b"><b>' + esc(r.name) + '</b><span class="t">' + esc(r.blurb) + '</span>' +
+          '<span class="m">' + (T0 ? '<em class="th">' + TVZ.icon(T0.ic) + esc(I ? I.h : T0.name) + '</em>' : '') + '<em>' + r.terrs.length + ' territories</em>' + (ok ? jrnStopsRow(P, r) : '<em class="soon">being built</em>') + '</span></span></a>'; }).join('') +
+      '<div class="hb-card dj-jcard soon"><span class="n">7</span><span class="b"><b>All together</b><span class="t">A last stop that mixes every region, when the six are done.</span><span class="m"><em class="soon">being built</em></span></span></div></div>' +
+      '<p class="hb-muted dj-fine">Quick shots and combos are easy-number reps: they refresh memory and fill a skill part of the way. Summit problems count in full. <a href="#course">The Course Sheet</a> has the ten ideas the regions open with.</p>';
+    var svg = wrap.querySelector('.dj-map');
+    Array.prototype.forEach.call(svg.querySelectorAll('.stop'), function (g) { var k = +g.dataset.stop, r = JRN.REGIONS[k]; g.classList.toggle('done', !!(r && jrnDone(P, r))); g.classList.toggle('cur', !!(r && r === cur)); if (r) { g.style.cursor = 'pointer'; g.setAttribute('role', 'link'); g.setAttribute('tabindex', '0'); g.setAttribute('aria-label', r.name); } });
+    var w = svg.querySelector('.walker'); if (w) w.style.display = 'none';
+    function go(e) { var g = e.target.closest ? e.target.closest('.stop') : null; if (g && JRN.REGIONS[+g.dataset.stop] && (e.type === 'click' || e.key === 'Enter')) location.hash = 'dojo/journey/' + JRN.REGIONS[+g.dataset.stop].id; }
+    svg.addEventListener('click', go); svg.addEventListener('keydown', go);
+  }
+  function jrnRegion(main, r) {
+    var P = JRN.progress(allSessions()), I = ideaOf(r.th), idx = JRN.REGIONS.indexOf(r), ok = JRN.built(r), nx = ok ? JRN.nextStop(P, r.id) : null, wrap = el('div', 'hb-wrap dj-wrap dj-jrn novar'); main.appendChild(wrap);
+    var sizes = { quick: JRN.K.QUICK + ' quick reps; ' + JRN.K.QUICK_MIN + ' if they are clean and fast', combo: JRN.K.COMBO + ' short problems; ' + JRN.K.COMBO_MIN + ' if clean and fast', summit: JRN.K.SUMMIT + ' full-strength problems, no clock' };
+    wrap.innerHTML = '<div class="hb-crumb"><a href="#dojo/journey">‹ Full-course review</a></div>' +
+      '<section class="dj-hero"><div><div class="eyebrow">Region ' + (idx + 1) + ' of ' + JRN.REGIONS.length + '</div><h1>' + esc(r.name) + '</h1><p>' + esc(r.blurb) + '</p></div><div class="dj-herostats dj-jterr">' + r.terrs.map(function (t) { return '<span>' + esc((CAT.territories[t] || {}).name || t) + '</span>'; }).join('') + '</div></section>' +
+      (I ? '<section class="hb-card dj-jpic"><div class="dj-jpic-t"><div class="eyebrow">The picture this region opens with</div><h2>' + esc(I.h) + '</h2><p class="sub">' + esc(I.line) + '</p><a class="hb-link" href="#course">See it on the Course Sheet</a></div><div class="dj-jpic-v tv">' + TVZ.draw(I.big) + '</div></section>' : '') +
+      (ok ? '<div class="dj-jstopgrid">' + JRN.STOPS.map(function (s, i) { var d = P[r.id][s.id]; return '<section class="hb-card dj-jstop' + (nx === s.id ? ' next' : '') + (d ? ' done' : '') + '"><div class="h"><span class="n">' + (d ? '✓' : i + 1) + '</span><h2>' + esc(s.name) + '</h2></div><p class="sub">' + esc(s.blurb) + '</p><p class="sz">' + esc(sizes[s.id]) + '</p>' + (d ? '<p class="res">Last time: ' + d.right + ' of ' + d.n + ' right</p>' : '') +
+          '<a class="btn ' + (nx === s.id || (!nx && i === 0) ? 'primary' : 'ghost') + '" href="#dojo/journey/' + r.id + '/' + s.id + '">' + (d ? 'Again' : 'Start') + '</a></section>'; }).join('') + '</div>' +
+        '<p class="hb-muted dj-fine">A miss adds two more reps of the same kind and shows its tactic. Any stop can be opened at any time; the order shown is the one that builds up.</p>'
+        : '<section class="hb-card"><h2>Being built</h2><p class="sub">This region is not open yet. <a href="#dojo/journey/' + JRN.REGIONS.filter(JRN.built)[0].id + '">' + esc(JRN.REGIONS.filter(JRN.built)[0].name) + '</a> is ready.</p></section>');
+  }
+  function jrnStop(main, r, stop) {
+    var m = model(), ST = JRN.STOPS.filter(function (s) { return s.id === stop; })[0], cache = {}, lv = stop === 'combo' ? JRN.K.COMBO_LV : JRN.K.QUICK_LV;
+    function okEntry(e) { try { var it = HX.makeItem({ type: 'entry', id: e.id }); if (it && it.p) { cache[e.id] = it.p; return true; } } catch (x) { } return false; }
+    var units = JRN.plan(r.id, stop, CAT, { model: m, ok: okEntry }), sh = shell(main, ST.name, 'Full-course review · ' + r.name);
+    jrnCrumb(sh.wrap, 'dojo/journey/' + r.id, r.name);
+    if (!units.length) { sh.body.innerHTML = '<div class="hb-card">Nothing to serve here. <a href="#dojo/journey/' + r.id + '">Back</a></div>'; return; }
+    begin('journey', lv, { journey: r.id, stop: stop }, { J: JRN.run(r.id, stop, units), run: null, ri: 0, seenCard: {} });
+    S.pit = cockpit(sh.side, {}); pit();
+    sh.topr.innerHTML = '<div class="dj-count"><b>0</b> of <span>' + units.length + '</span></div>';
+    function count() { var st = S.J.state(); sh.topr.querySelector('b').textContent = st.i; sh.topr.querySelector('span').textContent = st.n; }
+    startCard(sh.body, { art: blobArt(), h: ST.name + ': ' + r.name, p: esc(ST.blurb), list: stop === 'summit' ? ['No clock. Use the worked steps after an answer, not before.', 'A miss adds two quick reps on that ground.'] : ['Clean and fast, and the stop ends early.', 'A miss adds two more of the same kind and shows the tactic.'], btn: 'Start' }, next);
+    function next() {
+      if (!S || S.over) return;
+      if (S.run && S.ri < S.run.length) return showItem();
+      if (S.unit) { var res = S.J.answer(S.unit, S.uok, S.ums); S.unit = null; S.lastRes = res; }
+      count(); var u = S.J.next(); if (!u) return finish();
+      S.unit = u; S.uok = true; S.ums = 0;
+      if (u.type === 'kata') return showKata(u);
+      try { S.run = DJG.make(u.id, u.extra ? 1 : lv); } catch (e) { setTimeout(function () { throw e; }, 0); S.run = null; S.unit = null; return next(); }
+      S.ri = 0;
+      if (stop === 'summit' && !S.seenCard[u.id]) { S.seenCard[u.id] = 1; sh.body.innerHTML = '<section class="hb-card dj-card dj-intro"><p class="sub">Two quick reps on this ground first.</p>' + cardHTML(DJG.byId[u.id]) + '<div class="hb-row"><button class="btn primary" type="button" data-ok="1">Got it</button></div></section>'; var b = sh.body.querySelector('[data-ok]'); b.onclick = showItem; b.focus({ preventScroll: true }); return; }
+      showItem();
+    }
+    function showItem() {
+      var it = S.run[S.ri], u = S.unit, mv = DJG.byId[it.move], shown = now();
+      sh.body.innerHTML = '<section class="hb-card dj-card"><div class="dj-meta"><span class="dj-why k-' + (u.extra ? 'weak' : 'keep') + '">' + (u.extra ? 'One more of these' : esc(ST.name)) + '</span><span class="dj-mvn">' + esc(mv.name) + (it.part[1] > 1 ? ' · step ' + it.part[0] + ' of ' + it.part[1] + (it.step ? ': ' + esc(it.step) : '') : '') + '</span></div><div class="dj-item"></div><div class="dj-fb" aria-live="polite"></div></section>';
+      mountItem(sh.body.querySelector('.dj-item'), it, function (res) {
+        var ms = now() - shown, r0 = log({ move: it.move, skills: it.skills, diff: DJ.rollDiff(u.extra ? 1 : lv), ok: res.ok, tag: res.tag, ms: ms, lv: lv, q: plainT(it.html), qh: it.html, given: res.given, show: plainT(it.show), step: it.step });
+        S.ri++; S.ums = Math.max(S.ums, ms); pit(sgn(r0.d, 2) + ' blobs');
+        if (res.ok) { S.timers.push(setTimeout(next, 480)); return; }
+        S.uok = false; S.run = S.run.slice(0, S.ri);
+        var will = !u.extra || true, fb = sh.body.querySelector('.dj-fb');
+        fb.innerHTML = '<div class="fb no fade-in"><span class="mark">' + X.ICON.x + '</span><div class="txt"><span class="t">Not this time</span><span class="a">Answer: <b>' + it.show + '</b></span><span class="dj-whytxt">' + esc(it.why) + '</span></div></div><div class="dj-jcardshow">' + cardHTML(mv) + '</div><div class="hb-row"><button class="btn primary" type="button" data-next="1">Next</button><span class="hb-muted dj-jadd"></span></div>';
+        var nb = fb.querySelector('[data-next]'); nb.onclick = next; nb.focus({ preventScroll: true });
+        var st = S.J.state(); fb.querySelector('.dj-jadd').textContent = st.added + JRN.K.ADD <= JRN.K.ADD_MAX ? 'Two more of these are coming.' : '';
+      });
+    }
+    function showKata(u) {
+      var p = cache[u.entry]; if (!p) { try { p = HX.makeItem(u.ref).p; } catch (e) { p = null; } } if (!p) { S.unit = null; return next(); }
+      p = castSwap(p, u); var shown = now(), help = false; S.fullP = p;
+      sh.body.innerHTML = '<section class="hb-card dj-card dj-kata"><div class="dj-meta"><span class="dj-why k-keep">Summit</span><span class="dj-mvn">' + esc((CAT.territories[u.terr] || {}).name || '') + ' · a full problem</span></div><div class="dj-prob"></div><div class="hb-pacts dj-acts"></div><div class="dj-fb" aria-live="polite"></div><div class="help hb-steps" hidden><h3>Worked steps</h3><div class="dj-steps"></div></div></section>';
+      var acts = sh.body.querySelector('.dj-acts'), hasSteps = p.steps && p.steps.length;
+      S.view = X.mountProblem(sh.body.querySelector('.dj-prob'), p, { onChange: function () { var b = acts.querySelector('[data-check]'); if (b) b.disabled = !S.view.hasInput(); }, onSubmit: function () { check(); } });
+      acts.innerHTML = (hasSteps ? '<button class="btn ghost sm" type="button" data-help="1">Help</button>' : '<span></span>') + '<button class="btn primary" type="button" data-check="1" disabled>Check</button>';
+      S.view.focus();
+      function steps() { var box = sh.body.querySelector('.hb-steps'); sh.body.querySelector('.dj-steps').innerHTML = X.helpHTML(p); box.hidden = false; }
+      function check() {
+        if (!S.view || !S.view.hasInput()) return; var g = S.view.grade(); if (g.err) return; S.view.lock(g, false);
+        var ms = now() - shown, credit = g.credit !== undefined ? g.credit : (g.ok ? 1 : 0), r0 = log({ entry: u.entry, skills: u.skills, diff: u.diff, ok: !!g.ok, credit: credit, tag: g.tag, help: help, ms: ms, lv: Math.max(1, Math.round(u.diff)), kata: true, q: X.plain ? X.plain(p.prompt) : plainT(p.prompt), qh: p.prompt, given: g.text || '', show: plainT(p.show) });
+        S.uok = !!g.ok; S.ums = ms; pit(sgn(r0.d, 2) + ' blobs'); acts.innerHTML = '';
+        sh.body.querySelector('.dj-fb').innerHTML = '<div class="fb ' + (g.ok ? 'ok' : 'no') + ' fade-in"><span class="mark">' + (g.ok ? X.ICON.check : X.ICON.x) + '</span><div class="txt"><span class="t">' + (g.ok ? 'Correct' : 'Incorrect') + '</span>' + (g.ok ? '' : '<span class="a">Answer: <b>' + p.show + '</b></span><span class="dj-whytxt">Two quick reps on this ground come next.</span>') + '</div><div class="acts">' + (hasSteps && g.ok ? '<button class="btn ghost" type="button" data-steps="1">Worked steps</button>' : '') + '<button class="btn primary" type="button" data-next="1">Next</button></div></div>';
+        if (!g.ok && hasSteps) steps();
+        sh.body.querySelector('[data-next]').focus({ preventScroll: true });
+      }
+      sh.body.querySelector('.dj-card').onclick = function (e) { if (e.target.closest('[data-check]')) check(); else if (e.target.closest('[data-help]')) { help = true; steps(); } else if (e.target.closest('[data-steps]')) steps(); else if (e.target.closest('[data-next]')) { if (S.view && S.view.destroy) try { S.view.destroy(); } catch (e2) { } S.view = null; next(); } };
+    }
+    function finish() {
+      var st = S.J.state(), secs = Math.round((now() - S.t0) / 1000), g = S.live.read(now()), n = S.n, right = S.right; stop_();
+      var P = JRN.progress(allSessions()), nx = JRN.nextStop(P, r.id), nxS = nx ? JRN.STOPS.filter(function (s) { return s.id === nx; })[0] : null;
+      var note = st.short ? 'Clean and fast: the stop ended early, after ' + st.i + ' of ' + st.planned + '.' : st.added ? st.added + ' extra reps were added after misses.' : 'Every planned rep done.';
+      sh.wrap.innerHTML = '<div class="hb-crumb"><a href="#dojo/journey/' + r.id + '">‹ ' + esc(r.name) + '</a></div><section class="hb-card dj-sum"><div class="eyebrow">Full-course review · ' + esc(r.name) + '</div><h1>' + esc(ST.name) + ' done. ' + right + ' of ' + n + ' right.</h1><p class="sub">' + esc(note) + '</p>' +
+        '<div class="dj-sumgrid"><div><b>' + sgn(g.gain, 2) + '</b><span>blobs</span></div><div><b>' + right + ' / ' + n + '</b><span>right</span></div><div><b>' + S.best + '</b><span>best run</span></div><div><b>' + Math.floor(secs / 60) + ':' + ('0' + secs % 60).slice(-2) + '</b><span>time</span></div><div><b>' + st.terrs.length + ' of ' + r.terrs.length + '</b><span>territories met</span></div></div>' +
+        '<div class="dj-jterr in">' + st.terrs.map(function (t) { return '<span>' + esc((CAT.territories[t] || {}).name || t) + '</span>'; }).join('') + '</div>' +
+        '<div class="hb-row">' + (nxS ? '<a class="btn primary" href="#dojo/journey/' + r.id + '/' + nxS.id + '">Next stop: ' + esc(nxS.name) + '</a>' : '<a class="btn primary" href="#dojo/journey">Back to the map</a>') + '<a class="btn ghost" href="#dojo/journey/' + r.id + '">' + esc(r.name) + '</a><a class="hb-link" href="#dojo/journey/' + r.id + '/' + stop + '" data-again="1">Do this stop again</a></div></section>';
+      sh.wrap.onclick = function (e) { var ag = e.target.closest('[data-again]'); if (ag) { e.preventDefault(); S = null; HX.reroute(); } };
+      window.scrollTo(0, 0);
+    }
+    function stop_() { S.sess.done = true; S.sess.end = now(); if (S.sess.answers.length) { DJ.record({ dojo: dayRec() }, S.sess, null); saveDay(); } jrnHalt(); }
+  }
+
   // =============================================================== HOME
   function viewHome(main) {
     var m = model(), sessions = allSessions(), belts = DJ.belts(sessions), ov = DJ.overview(m, CAT, m.curCh), today = new Date(); today.setHours(0, 0, 0, 0);
@@ -255146,7 +255437,7 @@ var HDJ = (function () {
       (fo ? '<div class="dj-movelist"><div class="eyebrow">Moves in ' + esc(styleName(fo)) + ' · tap one to drill it alone, with no clock</div>' + DJG.MOVES.filter(function (mv) { return DJG.inStyle(mv, fo); }).map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(DJ.WHY[u.raw || u.kind]) + '</span></a>'; }).join('') + '</div>' : '') + '</section>' +
       (DJG.TRAPS ? '<section class="hb-card dj-traps" id="dj-traps"><div class="dj-focus-h"><div><h2>Traps</h2><p class="sub">The slips the course sees most, one at a time with fresh numbers: spot the slip, pick the right way, or fix it. Train them all as a Blob Roll, or drill one trap alone.</p></div><button type="button" class="btn ' + (fo === 'trap' ? 'primary' : 'ghost') + ' sm" data-style="trap" aria-pressed="' + (fo === 'trap') + '">Train all traps</button></div>' +
         '<div class="dj-traplist">' + [1, 2, 3, 4, 5, 6, 7, 8].map(function (c) { var mv0 = DJG.MOVES.filter(function (mv) { return mv.style === 'trap' && DJG.TRAPS.some(function (t) { return 'trap.' + t.id === mv.id && t.ch === c; }); }); return mv0.length ? '<div class="dj-trapch"><span class="k">Chapter ' + c + '</span><div class="chips">' + mv0.map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(mv.card.h) + '</span></a>'; }).join('') + '</div></div>' : ''; }).join('') + '</div></section>' : '') +
-      '<section class="hb-card dj-recent"><h2>Recent sessions</h2>' + (sessions.length ? '<div class="dj-rlist">' + sessions.slice(-8).reverse().map(function (s) { var md = s.mode === 'warm' ? 'Warm-up' : s.mode === 'drill' ? 'Drill' : DJ.MODES[s.mode] ? DJ.MODES[s.mode].name : s.mode, nA = (s.answers || []).length, ok = (s.answers || []).filter(function (a) { return a.ok; }).length; return '<div class="r"><b>' + esc(md) + '</b><span>' + new Date(s.start).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span><span>' + ok + ' of ' + nA + ' right</span><span class="g">' + sgn(s.gain || 0, 2) + ' blobs</span></div>'; }).join('') + '</div><a class="hb-link" href="#history">Every problem is in History</a>' : '<p class="hb-muted">Nothing yet. Pick a mode above.</p>') + '</section>' +
+      '<section class="hb-card dj-recent"><h2>Recent sessions</h2>' + (sessions.length ? '<div class="dj-rlist">' + sessions.slice(-8).reverse().map(function (s) { var md = s.mode === 'warm' ? 'Warm-up' : s.mode === 'drill' ? 'Drill' : s.mode === 'journey' ? 'Course review' : DJ.MODES[s.mode] ? DJ.MODES[s.mode].name : s.mode, nA = (s.answers || []).length, ok = (s.answers || []).filter(function (a) { return a.ok; }).length; return '<div class="r"><b>' + esc(md) + '</b><span>' + new Date(s.start).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span><span>' + ok + ' of ' + nA + ' right</span><span class="g">' + sgn(s.gain || 0, 2) + ' blobs</span></div>'; }).join('') + '</div><a class="hb-link" href="#history">Every problem is in History</a>' : '<p class="hb-muted">Nothing yet. Pick a mode above.</p>') + '</section>' +
       '<details class="hb-card hb-how dj-how"><summary>How the Dojo decides, and what counts</summary><div class="body"><p><b>What comes up.</b> Each skill has a memory strength in the learner model. A skill whose recall has dropped below ' + Math.round(LMS.K.DUE_R * 100) + '% is <i>due</i>; between that and ' + Math.round(DJ.K.FADE_HI * 100) + '% it is <i>fading</i>; a started skill with mastery under ' + Math.round(DJ.K.WEAK_E * 100) + '% is <i>to strengthen</i>; a skill never met is <i>new ground</i>. Blob Roll fills its queue in the pattern due, due, strengthen, new, and never repeats a move within ' + DJ.K.GAP + ' turns. ' + ov.dueKata + ' due skills have no quick move, so they come back as a full problem (a kata) with the clock stopped.</p>' +
       '<p><b>What counts.</b> Every answer here goes into the same learner model as the Paths and Reviews. Blob Roll and Quest steps are easy-number reps: they refresh memory in full, and fill a skill up to ' + LMS.K.EASY_CAP + ' of its ' + LMS.K.MASS_Q + ' blobs (they never make a skill Secure alone). Katas and Superlative problems are full-strength evidence. In Superlative a right answer on a problem with k skills counts 1 + ' + LMS.K.SUP_STEP + '(k − 1) times, up to ' + LMS.K.SUP_MAX + ', for each of them; a miss is spread thin because it does not say which skill failed.</p>' +
       '<p><b>The cockpit.</b> Blobs are recomputed after every answer. Velocity is blobs per minute over the last minute, acceleration is the change against the minute before, momentum is course mass × velocity.</p></div></details>';
@@ -255170,6 +255461,7 @@ var HDJ = (function () {
     var a = p[0];
     if (a === 'focus' && DJG.STYLES.some(function (st) { return st.id === p[1]; })) { ui.focus = { style: p[1] }; saveUi(); location.hash = 'dojo'; return; }   // a link from a Review group's Skills & Tactics
     if (a === 'idea' && ideaOf(p[1])) { ui.focus = { idea: p[1] }; saveUi(); location.hash = 'dojo'; return; }   // a link from an idea on the Course Sheet
+    if (a === 'journey' && typeof JRN !== 'undefined') return viewJourney(main, p);
     if (a === 'roll') return viewRoll(main, 'roll');
     if (a === 'warm' && CAT.levels[p[1]]) return viewRoll(main, 'warm', p[1]);
     if (a === 'skill' && CAT.skills[p[1]]) return viewRoll(main, 'skill', p[1]);
@@ -256223,7 +256515,7 @@ var HDJ = (function () {
   }
   function viewReviews(main) {
     var wrap = el('div', 'hb-wrap novar'); main.appendChild(wrap);
-    wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">Cross-chapter work</div><h1>Reviews &amp; Exams</h1></section>' + (typeof TAC !== 'undefined' && TAC.course && TAC.course() ? '<a class="hb-card hb-coursecard" href="#course"><b>The Course Sheet</b><span>The ten ideas that carry the whole course, each with the places you have met it.</span></a>' : '');
+    wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">Cross-chapter work</div><h1>Reviews &amp; Exams</h1></section>' + (typeof TAC !== 'undefined' && TAC.course && TAC.course() ? '<a class="hb-card hb-coursecard" href="#course"><b>The Course Sheet</b><span>The ten ideas that carry the whole course, each with the places you have met it.</span></a>' : '') + (typeof JRN !== 'undefined' ? '<a class="hb-card hb-coursecard hb-jrncard" href="#dojo/journey"><b>Full-course review</b><span>A journey through the whole course in six regions: quick shots, combos, then a summit in each.</span></a>' : '');
     var ff = feedForward();
     GROUPS.forEach(function (g) {
       var sec = el('section', 'hb-card hb-group'); sec.setAttribute('data-group', g.id); wrap.appendChild(sec); sec.style.marginBottom = '18px';
