@@ -2263,6 +2263,18 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .tc-cvh { font-size: 12.5px; font-weight: 700; color: var(--ink-2); } .tc-cvp { overflow: hidden; max-height: 150px; } .tc-cvp > * { transform: scale(.72); transform-origin: top left; width: 139%; } .tc-cvas { font-size: 13px; }
 @media (max-width: 760px) { .tc-patbody { grid-template-columns: 1fr; } .tc-pathd { grid-template-columns: 36px 1fr; } .tc-th { grid-column: 2; justify-self: start; } }
 
+/* the Dojo: the ten Course Sheet ideas as a focus, and the Traps section (19 Nov 2026) */
+.dj-ideas { margin-top: 16px; } .dj-ideagrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-top: 6px; }
+.dj-idea { display: grid; grid-template-columns: 28px 1fr; gap: 2px 8px; text-align: left; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); padding: 8px 10px; font: inherit; cursor: pointer; }
+.dj-idea .i { grid-row: span 2; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); font-weight: 800; font-size: 13px; }
+.dj-idea .n { font-weight: 700; font-size: 14.5px; } .dj-idea .c { display: flex; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--ink-2); } .dj-idea .c em { font-style: normal; } .dj-idea .c em.due, .dj-idea .c em.weak { color: var(--warn, #b7791f); font-weight: 700; }
+.dj-idea.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; } .dj-idea.on .i { background: var(--accent); color: var(--accent-ink); }
+.dj-idea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dj-ideanote .sub { margin: 4px 0 0; }
+.dj-traplist { display: grid; gap: 10px; margin-top: 10px; } .dj-trapch { display: grid; grid-template-columns: 96px 1fr; gap: 6px; align-items: start; } .dj-trapch .chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; } .dj-trapch .k { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); padding-top: 10px; }
+@media (max-width: 600px) { .dj-trapch { grid-template-columns: 1fr; } .dj-trapch .k { padding-top: 0; } }
+.tc-patdojo { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); } .tc-patdojo span { font-size: 13px; color: var(--ink-2); }
+
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
 .hb-update button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--accent-ink, #fff); color: var(--accent, #2d6a86); cursor: pointer; }
@@ -49281,6 +49293,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = TAC;
      nline  {min, max, marks?, pts?, jumps?, ray?, dist?, step?}       the number line: labelled marks, points, jumps (arcs), a ray for an inequality, a distance
      chips  {pos, neg, val?}                                           counters: + and − in zero pairs that cancel, what is left over
      dev    {guess, vals[], caps?, sum?, mean?}                        differences from a guess as bars above and below a line (guess 0: a bar chart)
+     fig    {P:{A:[x, y]}, polys, segs, circs, ticks, pars, angs, rights, dots, names, slabs}   a figure in standard notation (equal marks)
      plane  {pts:[[x, y]], k, out?}                                    a figure on the coordinate grid and its image when every coordinate is multiplied by k
      chain without undo draws the forward direction only (an expression built step by step, with its values).               */
 var TVZ = (function () {
@@ -49904,7 +49917,8 @@ var TVZ = (function () {
   // with its squares, parallel lines and a transversal, solids)
   // ang: rays from one point. rays: directions in degrees (0 = right, counter-clockwise); line: draw the 0°–180° line through the point;
   // cross: a second full line at that direction; full: the rays go all round. arcs: [[from, to, label, role]] the angle from one
-  // direction to another (counter-clockwise), labelled; right: [[a, b]] a square corner between two directions.
+  // direction to another (counter-clockwise), labelled, with arcs: [from, to, label, role, n]: n arcs, the same n on equal angles;
+  // right: [[a, b]] a square corner between two directions.
   function ang(o) {
     var cx = 150, cy = o.full || o.cross !== undefined ? 76 : 92, R = o.full || o.cross !== undefined ? 58 : 74, h = '', alt = [], rad = Math.PI / 180;
     function P(a, r) { return [cx + r * Math.cos(a * rad), cy - r * Math.sin(a * rad)]; }
@@ -49912,8 +49926,10 @@ var TVZ = (function () {
     if (o.line) h += line(o.line === true ? 0 : o.line);
     if (o.cross !== undefined) h += line(o.cross);
     (o.rays || []).forEach(function (a) { var p = P(a, R + 10); h += '<path class="tv-ln" d="M' + cx + ' ' + cy + 'L' + r1(p[0]) + ' ' + r1(p[1]) + '"/>'; });
-    (o.arcs || []).forEach(function (A, k) { var a1 = A[0], a2 = A[1], role = 'r-' + (A[3] || 'x'), span = ((a2 - a1) % 360 + 360) % 360 || 360, rr = 20 + (k % 2) * 8, s1 = P(a1, rr), s2 = P(a2, rr), big = span > 180 ? 1 : 0, mid = a1 + span / 2, lp = P(mid, rr + (span < 40 ? 30 : 20));
-      h += '<path class="tv-a ' + role + '" d="M' + r1(s1[0]) + ' ' + r1(s1[1]) + 'A' + rr + ' ' + rr + ' 0 ' + big + ' 0 ' + r1(s2[0]) + ' ' + r1(s2[1]) + '" fill="none"/>' + tx(lp[0], lp[1] + 4, A[2], 'tv-t sm b ' + role); alt.push(A[2]); });
+    (o.arcs || []).forEach(function (A, k) { var a1 = A[0], a2 = A[1], role = 'r-' + (A[3] || 'x'), span = ((a2 - a1) % 360 + 360) % 360 || 360, rr = (o.arcs.some(function (Z) { return Z[4]; }) ? 20 : 20 + (k % 2) * 8), s1 = P(a1, rr), s2 = P(a2, rr), big = span > 180 ? 1 : 0, mid = a1 + span / 2, lp = P(mid, rr + (span < 40 ? 30 : 20));
+      for (var q = 0; q < (A[4] || 1); q++) { var rq = (A[4] ? 16 + (A[4] > 1 ? 6 : 0) : rr) + q * 4, t1 = P(a1, rq), t2 = P(a2, rq); h += '<path class="tv-a ' + role + '" d="M' + r1(t1[0]) + ' ' + r1(t1[1]) + 'A' + rq + ' ' + rq + ' 0 ' + big + ' 0 ' + r1(t2[0]) + ' ' + r1(t2[1]) + '" fill="none"/>'; }
+      if (A[4]) lp = P(mid, 16 + (A[4] > 1 ? 6 : 0) + 4 * (A[4] - 1) + (span < 40 ? 26 : 16) + Math.max(0, String(A[2]).length - 4) * 2.5);
+      h += tx(lp[0], lp[1] + 4, A[2], 'tv-t sm b ' + role); alt.push(A[2]); });
     (o.right || []).forEach(function (Rg) { var u = P(Rg[0], 11), v = P(Rg[1], 11), w = [u[0] + v[0] - cx, u[1] + v[1] - cy]; h += '<path class="tv-ln thin" d="M' + r1(u[0]) + ' ' + r1(u[1]) + 'L' + r1(w[0]) + ' ' + r1(w[1]) + 'L' + r1(v[0]) + ' ' + r1(v[1]) + '" fill="none"/>'; alt.push('a right angle'); });
     h += '<circle class="tv-dot r-m" cx="' + cx + '" cy="' + cy + '" r="3"/>';
     var H = o.full || o.cross !== undefined ? cy + R + 16 : cy + 12;
@@ -49951,12 +49967,16 @@ var TVZ = (function () {
   }
   // parl: two parallel lines crossed by a transversal that leans right. Angles 1–4 at the upper crossing (upper left, upper right,
   // lower left, lower right), 5–8 the same at the lower one. a: the acute angle (it sits at 2, 3, 6, 7). marks: { n: [label, role] }
+  // In the standard notation: an arrow on each line says parallel; a marked sharp angle carries one arc, a wide one two (arcs: false: none).
   function parl(o) {
     var a = o.a || 60, y1 = 34, y2 = 96, h = '', alt = [], rad = Math.PI / 180, t = 1 / Math.tan(a * rad), x1 = 150 + (y2 - y1) * t / 2, x2 = 150 - (y2 - y1) * t / 2, ext = 26;
     h += '<path class="tv-ln" d="M28 ' + y1 + 'H272M28 ' + y2 + 'H272"/><path class="tv-ln" d="M' + r1(x1 + ext * t) + ' ' + (y1 - ext) + 'L' + r1(x2 - ext * t) + ' ' + (y2 + ext) + '"/>';
-    var pos = { 1: [-1, -1], 2: [1, -1], 3: [-1, 1], 4: [1, 1] };
+    h += '<path class="tv-ln" style="stroke-width:1.6" d="M236 ' + (y1 - 4) + 'L242 ' + y1 + 'L236 ' + (y1 + 4) + 'M236 ' + (y2 - 4) + 'L242 ' + y2 + 'L236 ' + (y2 + 4) + '"/>';   // the arrows that say parallel
+    var pos = { 1: [-1, -1], 2: [1, -1], 3: [-1, 1], 4: [1, 1] }, qa = { 1: [a, 180], 2: [0, a], 3: [180, 180 + a], 4: [180 + a, 360] };
+    if (o.arcs !== false) Object.keys(o.marks || {}).forEach(function (k) { var n = +k, top = n <= 4, q = qa[top ? n : n - 4], cx = top ? x1 : x2, cy = top ? y1 : y2, m = o.marks[k], role = 'r-' + (m[1] || 'x'), cnt = q[1] - q[0] > 90 ? 2 : 1;
+      for (var i = 0; i < cnt; i++) { var rr = (cnt > 1 ? 16 : 13) + 4 * i; h += '<path class="tv-a ' + role + '" style="stroke-width:1.4" d="M' + r1(cx + rr * Math.cos(q[0] * rad)) + ' ' + r1(cy - rr * Math.sin(q[0] * rad)) + 'A' + rr + ' ' + rr + ' 0 0 0 ' + r1(cx + rr * Math.cos(q[1] * rad)) + ' ' + r1(cy - rr * Math.sin(q[1] * rad)) + '"/>'; } });
     Object.keys(o.marks || {}).forEach(function (k) { var n = +k, top = n <= 4, p = pos[top ? n : n - 4], cx = top ? x1 : x2, cy = top ? y1 : y2, m = o.marks[k], role = 'r-' + (m[1] || 'x'), wide = (p[0] < 0) === (p[1] < 0);
-      h += wide ? tx(cx + p[0] * 26, cy + p[1] * 12 + 4, m[0], 'tv-t sm b ' + role) : tx(cx + p[0] * (17 * t + 3), cy + p[1] * 12 + 4, m[0], 'tv-t sm b ' + role, p[0] > 0 ? 'start' : 'end'); alt.push('angle ' + n + ': ' + m[0]); });
+      h += wide ? tx(cx + p[0] * 25, cy + p[1] * (o.arcs === false ? 12 : 19) + 4, m[0], 'tv-t sm b ' + role, o.arcs === false ? 'middle' : p[0] > 0 ? 'start' : 'end') : tx(cx + p[0] * (17 * t + 3), cy + p[1] * 12 + 4, m[0], 'tv-t sm b ' + role, p[0] > 0 ? 'start' : 'end'); alt.push('angle ' + n + ': ' + m[0]); });
     var H = y2 + ext + 4;
     if (o.say) { h += tx(150, H + 10, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
     return svg(300, H, h, 'tv-parl', o.alt || ('Two parallel lines and a transversal: ' + alt.join('; ') + '.'));
@@ -49975,6 +49995,53 @@ var TVZ = (function () {
       h += '<path class="tv-a r-n dashl" d="M' + (bx + bw / 2) + ' ' + by + 'L' + apx + ' ' + apy + '"/>' + tx(bx + bw / 2, by + 15, L[0] || '', 'tv-t sm b r-n') + tx((bx + bw / 2 + apx) / 2 - 6, (by + apy) / 2 + 4, L[1] || '', 'tv-t sm b r-n', 'end'); alt.push('a square pyramid, ' + L.filter(Boolean).join(', ')); }
     var H = 118; if (o.say) { h += tx(150, H + 6, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 16; alt.push(o.say); }
     return svg(300, H, h, 'tv-solid', o.alt || (alt.join('; ') + '.'));
+  }
+  // fig: a figure in the standard notation of geometry. P: named points { A: [x, y] } (y up, any unit; drawn to scale, fitted to the
+  // card). polys [['ABCD', role, fill?]] outlines; segs [['AB', role?, 'dash' | 'ext']] ('ext' runs on past both ends, for lines);
+  // circs [[centre, radius, role?, [from°, to°]?]] circles or compass arcs; ticks [['AB', n]] equal sides carry the same number of
+  // ticks; pars [['AB', n]] parallel lines carry the same number of arrowheads; angs [['ABC', n, label?, role?]] the angle at B, with
+  // n arcs (equal angles carry the same number; 0: a label only; a fifth 'out' sets the label outside the corner); rights ['ABC'] a square corner; dots ['A']; names ['A', …] point names;
+  // slabs [['AB', text, role?]] a length beside a side. h: the most height (default 150).
+  function fig(o) {
+    var P = o.P, W = 300, pad = 24, maxH = o.h || 150, xs = [], ys = [], rad = Math.PI / 180, h = '', alt = [];
+    Object.keys(P).forEach(function (k) { xs.push(P[k][0]); ys.push(P[k][1]); });
+    (o.circs || []).forEach(function (c) { var p = P[c[0]], a1 = c[3] ? c[3][0] : 0, a2 = c[3] ? c[3][1] : 360; for (var a = a1; a <= a2 + 1e-9; a += 5) { xs.push(p[0] + c[1] * Math.cos(a * rad)); ys.push(p[1] + c[1] * Math.sin(a * rad)); } });
+    var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    var s = Math.min((W - 2 * pad) / ((x1 - x0) || 1), (maxH - 2 * pad) / ((y1 - y0) || 1)), ox = (W - s * (x1 - x0)) / 2, H = Math.round(s * (y1 - y0) + 2 * pad);
+    function Q(k) { var p = P[k]; return [ox + s * (p[0] - x0), pad + s * (y1 - p[1])]; }
+    var all = Object.keys(P).map(Q), mx = all.reduce(function (a, p) { return a + p[0]; }, 0) / all.length, my = all.reduce(function (a, p) { return a + p[1]; }, 0) / all.length;
+    function M(p) { return r1(p[0]) + ' ' + r1(p[1]); }
+    function seg(nm) { return [Q(nm[0]), Q(nm[1])]; }
+    function unit(a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy) || 1; return [dx / L, dy / L]; }
+    function out(p, d) { var dx = p[0] - mx, dy = p[1] - my, L = Math.sqrt(dx * dx + dy * dy) || 1; return [p[0] + dx / L * d, p[1] + dy / L * d]; }
+    (o.polys || []).forEach(function (pl) { var pts = pl[0].split('').map(Q); h += '<path class="tv-b sq r-' + (pl[1] || 'x') + '" d="M' + pts.map(M).join('L') + 'Z" style="fill-opacity:' + (pl[2] === undefined ? 0.1 : pl[2]) + '"/>'; });
+    (o.circs || []).forEach(function (c) { var p = Q(c[0]), R = s * c[1], cl = 'tv-a r-' + (c[2] || 'm');
+      if (!c[3]) h += '<circle class="' + cl + '" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="' + r1(R) + '" style="stroke-width:1.2"/>';
+      else { var a1 = c[3][0] * rad, a2 = c[3][1] * rad; h += '<path class="' + cl + '" d="M' + M([p[0] + R * Math.cos(a1), p[1] - R * Math.sin(a1)]) + 'A' + r1(R) + ' ' + r1(R) + ' 0 ' + (c[3][1] - c[3][0] > 180 ? 1 : 0) + ' 0 ' + M([p[0] + R * Math.cos(a2), p[1] - R * Math.sin(a2)]) + '" style="stroke-width:1.2"/>'; } });
+    (o.segs || []).forEach(function (sg) { var e = seg(sg[0]), u = unit(e[0], e[1]), x = sg[2] === 'ext' ? 18 : 0, a = [e[0][0] - u[0] * x, e[0][1] - u[1] * x], b = [e[1][0] + u[0] * x, e[1][1] + u[1] * x];
+      h += '<path class="' + (sg[1] ? 'tv-a r-' + sg[1] : 'tv-ln') + (sg[2] === 'dash' ? (sg[1] ? '" style="stroke-dasharray:4 4' : ' dash') : '') + '" d="M' + M(a) + 'L' + M(b) + '"/>'; });
+    var tk = {}, pa = {}, an = {};
+    (o.ticks || []).forEach(function (t) { var e = seg(t[0]), u = unit(e[0], e[1]), m = [(e[0][0] + e[1][0]) / 2, (e[0][1] + e[1][1]) / 2], n = t[1] || 1;
+      for (var i = 0; i < n; i++) { var c = [m[0] + u[0] * (i - (n - 1) / 2) * 4, m[1] + u[1] * (i - (n - 1) / 2) * 4]; h += '<path class="tv-ln" style="stroke-width:1.6" d="M' + M([c[0] - u[1] * 5, c[1] + u[0] * 5]) + 'L' + M([c[0] + u[1] * 5, c[1] - u[0] * 5]) + '"/>'; }
+      (tk[n] = tk[n] || []).push(t[0]); });
+    (o.pars || []).forEach(function (t) { var e = seg(t[0]), u = unit(e[0], e[1]), m = [(e[0][0] + e[1][0]) / 2, (e[0][1] + e[1][1]) / 2], n = t[1] || 1;
+      for (var i = 0; i < n; i++) { var c = [m[0] + u[0] * (i - (n - 1) / 2) * 6 + u[0] * 3, m[1] + u[1] * (i - (n - 1) / 2) * 6 + u[1] * 3]; h += '<path class="tv-ln" style="stroke-width:1.6" d="M' + M([c[0] - u[0] * 6 - u[1] * 4, c[1] - u[1] * 6 + u[0] * 4]) + 'L' + M(c) + 'L' + M([c[0] - u[0] * 6 + u[1] * 4, c[1] - u[1] * 6 - u[0] * 4]) + '"/>'; }
+      (pa[n] = pa[n] || []).push(t[0]); });
+    (o.rights || []).forEach(function (nm) { var B = Q(nm[1]), u = unit(B, Q(nm[0])), v = unit(B, Q(nm[2])); h += '<path class="tv-ln thin" d="M' + M([B[0] + u[0] * 9, B[1] + u[1] * 9]) + 'L' + M([B[0] + u[0] * 9 + v[0] * 9, B[1] + u[1] * 9 + v[1] * 9]) + 'L' + M([B[0] + v[0] * 9, B[1] + v[1] * 9]) + '"/>'; alt.push('a right angle at ' + nm[1]); });
+    (o.angs || []).forEach(function (A) { var B = Q(A[0][1]), u = unit(B, Q(A[0][0])), v = unit(B, Q(A[0][2])), a1 = Math.atan2(u[1], u[0]), d = Math.atan2(v[1], v[0]) - a1, n = A[1], role = 'r-' + (A[3] || 'x');
+      while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI;
+      for (var i = 0; i < n; i++) { var rr = (o.ar || 13) + 4 * i; h += '<path class="tv-a ' + role + '" style="stroke-width:1.5" d="M' + M([B[0] + rr * Math.cos(a1), B[1] + rr * Math.sin(a1)]) + 'A' + rr + ' ' + rr + ' 0 0 ' + (d > 0 ? 1 : 0) + ' ' + M([B[0] + rr * Math.cos(a1 + d), B[1] + rr * Math.sin(a1 + d)]) + '"/>'; }
+      if (A[2]) { var lr = (o.ar || 13) + 4 * Math.max(n - 1, 0) + (Math.abs(d) < 40 * rad ? 20 : 13), am = a1 + d / 2; if (A[4] === 'out') { am += Math.PI; lr = 14; } h += tx(B[0] + lr * Math.cos(am), B[1] + lr * Math.sin(am) + 4, A[2], 'tv-t sm b ' + role); }
+      if (n) (an[n] = an[n] || []).push(A[0]); if (A[2]) alt.push('angle ' + A[0] + ' ' + A[2]); });
+    (o.dots || []).forEach(function (k) { var p = Q(k); h += '<circle class="tv-dot r-m" cx="' + r1(p[0]) + '" cy="' + r1(p[1]) + '" r="2.6"/>'; });
+    (o.names || []).forEach(function (k) { var p = out(Q(k), 11); h += tx(p[0], p[1] + 4, k, 'tv-t sm r-m'); });
+    (o.slabs || []).forEach(function (sl) { var e = seg(sl[0]), u = unit(e[0], e[1]), m = [(e[0][0] + e[1][0]) / 2, (e[0][1] + e[1][1]) / 2], nrm = [-u[1], u[0]];
+      if ((m[0] - mx) * nrm[0] + (m[1] - my) * nrm[1] < 0) nrm = [u[1], -u[0]]; var dd = sl[3] || 12; h += tx(m[0] + nrm[0] * dd, m[1] + nrm[1] * dd + 4, sl[1], 'tv-t sm b r-' + (sl[2] || 'n')); alt.push(sl[0] + ' ' + sl[1]); });
+    Object.keys(tk).forEach(function (n) { if (tk[n].length > 1) alt.push(tk[n].join(' = ') + ' (equal sides, ' + n + ' tick' + (n > 1 ? 's' : '') + ')'); });
+    Object.keys(pa).forEach(function (n) { if (pa[n].length > 1) alt.push(pa[n].join(' ∥ ') + ' (parallel, ' + n + ' arrow' + (n > 1 ? 's' : '') + ')'); });
+    Object.keys(an).forEach(function (n) { if (an[n].length > 1) alt.push('angles ' + an[n].join(', ') + ' are equal (' + n + ' arc' + (n > 1 ? 's' : '') + ')'); });
+    if (o.say) { h += tx(150, H + 8, o.say, 'tv-t sm b r-' + (o.sayr || 'g')); H += 18; alt.push(o.say); }
+    return svg(W, H, h, 'tv-fig', o.alt || ('A figure: ' + alt.join('; ') + '.'));
   }
   // small line icons for the formula tiles
   var IC = {
@@ -50014,12 +50081,13 @@ var TVZ = (function () {
   };
   function icon(id) { return '<svg class="tv-ic" viewBox="0 0 48 38" aria-hidden="true">' + (IC[id] || IC.undo) + '</svg>'; }
 
-  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pbar: pbar, pie: pie, ang: ang, circle: circle, rtri: rtri, parl: parl, solid: solid, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
+  var KINDS = { steps: steps, cue: cue, map: map, chain: chain, bal: bal, bal2: bal2, bar: bar, seq: seq, tri: tri, road: road, clock: clock, flow: flow, rect: rect, dots: dots, test: test, inv: inv, trap: trap, nline: nline, chips: chips, dev: dev, plane: plane, col: col, rdiv: rdiv, cross: cross, area2: area2, rt: rt, graph: graph, prop: prop, sim: sim, pbar: pbar, pie: pie, ang: ang, circle: circle, rtri: rtri, parl: parl, solid: solid, fig: fig, pow: pow, sqcube: sqcube, fold: fold, sort: sort, amodel: amodel, dist: dist, cmp: cmp, vt: vt, grid: grid };
   function draw(spec) { var f = KINDS[spec[0]]; if (!f) throw new Error('TVZ: unknown piece ' + spec[0]); return f.apply(null, spec.slice(1)); }
   // every string a piece shows, for the word budget and the checks (labels, captions, boxes; math included)
   function strings(spec) {
     var out = []; (function walk(x) { if (typeof x === 'string') out.push(plain(x)); else if (Array.isArray(x)) x.forEach(walk); else if (x && typeof x === 'object') Object.keys(x).forEach(function (k) { if (k !== 'alt' && k !== 'at') walk(x[k]); }); })(spec.slice(1));
     if (spec[0] === 'pow') out.push('factors' + (spec[1].lab ? ' base how many' : '')); if (spec[0] === 'sqcube') out.push('area volume'); if (spec[0] === 'nline' || spec[0] === 'dev' || spec[0] === 'plane' || spec[0] === 'chips') { out = out.filter(function (t) { return !/^[a-z]$/.test(t); }); } if (spec[0] === 'vt' && !spec[1].cols) out.push('each how many value'); if (spec[0] === 'test' && spec[1].whole) out.push('whole');
+    if (spec[0] === 'fig') { var F = spec[1]; out = []; (F.angs || []).forEach(function (A) { if (A[2]) out.push(plain(A[2])); }); (F.slabs || []).forEach(function (L) { out.push(plain(L[1])); }); if (F.say) out.push(plain(F.say)); }
     return out;
   }
   return { draw: draw, fmt: fmt, plain: plain, ascii: ascii, esc: esc, icon: icon, KINDS: KINDS, strings: strings, ICONS: IC, gather: gather, rel: rel, expand: expand, repStr: repStr };
@@ -51533,8 +51601,11 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
     lede: 'Geometry: angles that fill 90°, 180° and 360°, the circle, areas of polygons, constructions, triangles, units of area and volume, surface area and volume, parallel lines and the Pythagorean theorem.',
     tools: ['tri:circ', 'tri:par', 'tri:vol'],
     top: [
-      { h: 'Angles fill 90°, 180°, 360°', vis: [['ang', { line: true, rays: [24], arcs: [[0, 24, '24°', 'n'], [24, 180, '156°', 'g']], sum: 180 }], ['ang', { line: true, cross: 72, arcs: [[0, 72, '72°', 'n'], [180, 252, '72°', 'g']], say: 'across the crossing: equal' }]],
-        trap: ['∠CBD = 24°', 'a straight line is 180°:   156°'], alt: 'Angles that fill a right angle add to 90 degrees, a straight line 180 and a full turn 360. Vertical angles, across a crossing, are equal.', v: [['180-24', '156']] },
+      { h: 'Angles: what adds up, what is equal', vis: [['ang', { line: true, rays: [24], arcs: [[0, 24, '24°', 'n'], [24, 180, '156°', 'g']], sum: 180, say: 'a line: 180°;  a turn: 360°', sayr: 'm' }],
+          ['ang', { line: true, cross: 64, arcs: [[0, 64, '64°', 'n', 1], [64, 180, '116°', 'g', 2], [180, 244, '64°', 'g', 1], [244, 360, '116°', 'g', 2]], say: 'same arcs: equal angles', sayr: 'm' }],
+          ['fig', { P: { A: [0, 0], B: [6, 0], C: [3, 4] }, polys: [['ABC', 'x', 0.06]], ticks: [['CA', 1], ['CB', 1]], angs: [['CAB', 1], ['ABC', 1]], h: 110, say: 'same ticks: equal sides', sayr: 'm' }],
+          ['fig', { P: { A: [0, 0], B: [6, 0], C: [8.4, 2.8], D: [2.4, 2.8] }, polys: [['ABCD', 'x', 0.06]], pars: [['AB', 1], ['DC', 1], ['AD', 2], ['BC', 2]], angs: [['DAB', 1], ['BCD', 1], ['ABC', 2], ['CDA', 2]], h: 100, say: 'same arrows: parallel sides', sayr: 'm' }]],
+        trap: ['one arc and two arcs:   equal', 'one arc + two arcs:   180°'], alt: 'Angles on a line add to 180 degrees, round a point 360. Matching arcs mark equal angles, ticks equal sides, arrows parallel sides: vertical angles, an isosceles triangle’s base angles, a parallelogram’s opposite angles.', v: [['180-24', '156'], ['180-64', '116']] },
       { h: 'Angle equations', vis: [['bar', { rows: [{ parts: [['48°', 48, 'n'], ['3n', 30, 'x'], ['32°', 32, 'n'], ['7n', 70, 'x']], over: [[0, 4, 'a straight line: 180°', 'm']] }] }], ['steps', [['10n + 80', '180'], { op: '− 80' }, ['{n:10}n', '100'], { op: '÷ 10' }, ['n', '10', 'ans']]]],
         trap: ['n = 10:   the angle is 10°', 'the angle asked:   3n = 30°'], alt: 'Put every angle that fills the 90, 180 or 360 degrees into one sum, or set equal angles equal. Solve, then put the value back for the angle the question asks for.', v: [['48+32', '80'], ['180-80', '100'], ['3*10', '30']] },
       { h: 'C = π · d', vis: [['circle', { r: '5.7 ft', d: '11.4 ft', C: '≈ 35.8 ft', pi314: true }], ['tri', 'circ', 'top']],
@@ -51558,7 +51629,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
 
   // Unit 1: Angles in a Figure
   V('1-1', { th: ['bar'], from: '7:4-1', shift: 'A straight line is a whole too: its angles add up like the sectors of a circle graph.', r: ['straight', 'suppcomp', 'vertical'], t: 'A straight line is 180°', spot: ['ang', { line: true, rays: [24], arcs: [[0, 24, '24°', 'n'], [24, 180, '156°', 'g']], sum: 180, say: 'a straight line: 180°', sayr: 'm' }],
-    doit: [['flow', ['180° − 24°', { op: '' }, { t: '156°', r: 'g' }]], ['ang', { line: true, cross: 72, arcs: [[0, 72, '72°', 'n'], [72, 180, '108°', 'g'], [180, 252, '72°', 'g']], say: 'across the crossing: equal' }], ['flow', ['56°', { op: '180 − 56' }, 'supplement 124°', { op: '90 − 56' }, { t: 'complement 34°', r: 'g' }]], ['flow', ['protractor on the vertex', { op: '0° on a ray' }, { t: 'read the other', r: 'g' }]]],
+    doit: [['flow', ['180° − 24°', { op: '' }, { t: '156°', r: 'g' }]], ['ang', { line: true, cross: 72, arcs: [[0, 72, '72°', 'n', 1], [72, 180, '108°', 'g', 2], [180, 252, '72°', 'g', 1]], say: 'same arcs across the crossing: equal' }], ['flow', ['56°', { op: '180 − 56' }, 'supplement 124°', { op: '90 − 56' }, { t: 'complement 34°', r: 'g' }]], ['flow', ['protractor on the vertex', { op: '0° on a ray' }, { t: 'read the other', r: 'g' }]]],
     trap: ['∠CBD = 24°', 'a straight line is 180°:   156°'], alt: 'Angles that fill a straight line add to 180 degrees. Vertical angles, across a crossing, are equal. A supplement makes 180 degrees, a complement 90. To measure, centre the protractor on the vertex and count from 0° on one ray.', v: [['180-24', '156'], ['180-72', '108'], ['180-56', '124'], ['90-56', '34']] });
   V('1-2', { th: ['bar', 'bal'], from: '1-1', r: ['straight', 'angeq', 'suppcomp'], t: 'All the angles that fill the space', spot: ['ang', { full: true, rays: [0, 90, 148, 178], arcs: [[0, 90, '90°', 'm'], [90, 148, '58°', 'n'], [148, 178, '30°', 'n'], [178, 360, '4x', 'x']], right: [[0, 90]], sum: 360, say: 'round a point: 360°', sayr: 'm' }],
     doit: [['steps', [['4x + 178', '360'], { op: '− 178' }, ['{n:4}x', '182'], { op: '÷ 4' }, ['x', '45.5', 'ans']]], ['grid', { head: ['two angles', 'word'], rows: [['add to 90°', 'complementary'], ['add to 180°', 'supplementary'], ['across a crossing', 'vertical'], ['share a side', 'adjacent']] }]],
@@ -51567,14 +51638,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
     doit: [['flow', ['line: 180° − 133°', { op: '' }, '47°', { op: 'right angle: 90° − 47°' }, { t: '43°', r: 'g' }]], ['flow', ['158° + y = 180°', { op: 'one unknown first' }, 'y = 22°', { op: '180 − 73 − 22' }, { t: 'x = 85°', r: 'g' }]], ['flow', ['135°', { op: '÷ 360°' }, '{f:3|8}', { op: '· 100' }, { t: '37.5% of a turn', r: 'g' }]], ['flow', ['{f:3|5} of a turn', { op: '· 360°' }, { t: '216°', r: 'g' }]]],
     trap: ['x + 73° = 180°', 'y is on that line too:   x + 73° + 22°'], alt: 'A chain of angles: first the one a single fact gives (a line, a right angle, a crossing), then the next. With two unknowns, start where there is one. An angle divided by 360 degrees is its fraction of a turn; times 100, the percent.', v: [['180-133', '47'], ['90-47', '43'], ['180-158', '22'], ['180-73-22', '85'], ['135/360', '3/8'], ['3/5*360', '216']] });
   // Unit 2: Angle Equations
-  V('2-1', { th: ['bal'], from: '1-1', shift: 'The vertical angles of 1-1 are equal, so the expression is set equal to the angle and solved like any equation.', r: ['vertical', 'angeq', 'dist', 'ratiox'], t: 'Vertical angles: set equal, solve', spot: ['ang', { line: true, cross: 85, arcs: [[0, 85, '5(x + 8)°', 'x'], [180, 265, '85°', 'n']] }],
+  V('2-1', { th: ['bal'], from: '1-1', shift: 'The vertical angles of 1-1 are equal, so the expression is set equal to the angle and solved like any equation.', r: ['vertical', 'angeq', 'dist', 'ratiox'], t: 'Vertical angles: set equal, solve', spot: ['ang', { line: true, cross: 85, arcs: [[0, 85, '5(x + 8)°', 'x', 1], [180, 265, '85°', 'n', 1]], say: 'the same arc: equal', sayr: 'm' }],
     doit: [['steps', [['5(x + 8)', '85'], ['5x + 40', '85'], { op: '− 40' }, ['{n:5}x', '45'], { op: '÷ 5' }, ['x', '9', 'ans']]], ['flow', ['parts 6x + 7x = 104°', { op: 'collect, ÷ 13' }, 'x = 8', { op: '7x' }, { t: 'largest part 56°', r: 'g' }]]],
     trap: ['5(x + 8) = 180 − 85', 'vertical angles are equal:   5(x + 8) = 85'], alt: 'Vertical angles are equal, so the expression equals the given angle: distribute, then undo. Parts of a whole angle add to it: collect the x-terms. An equation with 180 is for angles side by side on a line, not across a crossing.', v: [['85-40', '45'], ['45/5', '9'], ['5*(9+8)', '85'], ['6+7', '13'], ['104/13', '8'], ['7*8', '56']] });
   V('2-2', { th: ['bar', 'bal'], from: '5:9-2', r: ['angeq', 'ratiox', 'like', 'straight', 'suppcomp'], t: 'Collect, solve, then the angle asked', spot: ['bar', { rows: [{ parts: [['48°', 48, 'n'], ['3n', 30, 'x'], ['32°', 32, 'n'], ['7n', 70, 'x']], over: [[0, 4, 'a straight line: 180°', 'm']] }] }],
     doit: [['steps', [['10n + 80', '180'], { op: '− 80' }, ['{n:10}n', '100'], { op: '÷ 10' }, ['n', '10', 'ans']]], ['flow', ['n = 10', { op: '3n and 7n' }, { t: '30° and 70°', r: 'g' }]], ['grid', { head: ['fill', 'sum'], rows: [['a line; supplementary', '180°'], ['round a point', '360°'], ['complementary', '90°']] }]],
     trap: ['n = 10:   the angle is 10°', 'the angle asked:   3n = 30°, 7n = 70°'], alt: 'Add the angles that fill the line and set the sum to 180; round a point the sum is 360, for a complementary pair 90. Collect the letter terms and the numbers, solve, then put the value back for the angles asked.', v: [['48+32', '80'], ['180-80', '100'], ['3*10', '30'], ['7*10', '70']] });
   V('2-3', { th: ['bar', 'bal'], from: '2-2', r: ['angeq', 'vertical', 'tri180'], t: 'Two facts in one figure', spot: ['ang', { line: true, rays: [60, 139], arcs: [[0, 60, '60°', 'n'], [60, 139, '(5x + 14)°', 'x'], [139, 180, '41°', 'n']], sum: 180, say: '60 + (5x + 14) + 41 = 180', sayr: 'm' }],
-    doit: [['steps', [['5x + 115', '180'], { op: '− 115' }, ['{n:5}x', '65'], { op: '÷ 5' }, ['x', '13', 'ans']]], ['flow', ['∠BOC = 4x + 10', { op: 'x = 13' }, { t: '62°', r: 'g' }]], ['flow', ['isosceles right triangle', { op: '(180 − 90) ÷ 2' }, { t: '45° each base angle', r: 'g' }]]],
+    doit: [['steps', [['5x + 115', '180'], { op: '− 115' }, ['{n:5}x', '65'], { op: '÷ 5' }, ['x', '13', 'ans']]], ['flow', ['∠BOC = 4x + 10', { op: 'x = 13' }, { t: '62°', r: 'g' }]], ['fig', { P: { A: [0, 0], B: [6, 0], C: [3, 3] }, polys: [['ABC', 'x', 0.06]], ticks: [['CA', 1], ['CB', 1]], rights: ['ACB'], angs: [['CAB', 1, '45°', 'g'], ['ABC', 1, '45°', 'g']], say: '(180 − 90) ÷ 2', sayr: 'o' }]],
     trap: ['the top angle is 45°', 'two equal base angles cannot be 90°:   the top is 90°'], alt: 'Angles along a line add to 180 degrees: collect, solve, then use the value in another expression. In an isosceles right triangle the right angle must be the top, so the two equal base angles share the other 90 degrees.', v: [['60+14+41', '115'], ['180-115', '65'], ['65/5', '13'], ['4*13+10', '62'], ['(180-90)/2', '45']] });
   // Unit 3: Circumference
   V('3-1', { th: ['tri'], from: '7:3-1', r: ['circum', 'radius', 'piform'], t: 'C = π · d; double a radius first', spot: ['circle', { r: '5.7 ft', d: '11.4 ft', C: '≈ 35.8 ft', pi314: true }],
@@ -51608,9 +51679,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
     trap: ['two 8-inch = one 16-inch', 'add the areas:   ≈ 100.5 in²'], alt: 'Pizzas and pools are compared by area: price over area is a price per square inch. Two small circles are not one of twice the diameter. A part as a percent is part over whole. A circumference near 3 times d checks a row.', v: [['11.3*11.3', '127.69'], ['16/2', '8'], ['8^2', '64'], ['3.14*36', '113.04']] });
   // Unit 6: Polygons and Compounds
   V('6-1', { th: ['area', 'tri'], from: '1:10-1', r: ['polyarea'], t: 'Parallelograms and trapezoids', spot: ['flow', ['parallel sides 20 and 28', { op: 'average' }, '24', { op: '· 12 high' }, { t: '288 cm²', r: 'g' }]],
-    doit: [['tri', 'par', 'top'], ['flow', ['cut a triangle, slide it', { op: '' }, { t: 'a rectangle b by h', r: 'g' }]], ['flow', ['2 triangles', { op: 'one turned: b · h' }, { t: 'each ½ · b · h', r: 'g' }]], ['flow', ['2 trapezoids', { op: 'one turned' }, { t: 'a parallelogram (a + b) by h', r: 'g' }]]],
+    doit: [['tri', 'par', 'top'], ['fig', { P: { A: [0, 0], E: [1.5, 0], B: [4, 0], C: [5.5, 2.5], D: [1.5, 2.5], G: [8, 0], K: [10.5, 0], H: [12, 0], I: [12, 2.5], J: [8, 2.5] }, polys: [['ABCD', 'x', 0.06], ['AED', 'n', 0.25], ['GHIJ', 'g', 0.1], ['KHI', 'n', 0.25]], segs: [['DE', null, 'dash']], rights: ['AED', 'GHI'], slabs: [['AB', 'b', 'x'], ['GH', 'b', 'x'], ['HI', 'h', 'x']], say: 'cut, slide: a rectangle b · h' }], ['flow', ['2 triangles', { op: 'one turned: b · h' }, { t: 'each ½ · b · h', r: 'g' }]], ['flow', ['2 trapezoids', { op: 'one turned' }, { t: 'a parallelogram (a + b) by h', r: 'g' }]]],
     trap: ['A = 20 · 28 · 12 ÷ 2', '(a + b) ÷ 2 · h:   24 · 12'], alt: 'Moving a triangle makes a parallelogram a rectangle: base times perpendicular height. Two copies of a triangle or a trapezoid make a parallelogram: a triangle is half of b times h, a trapezoid the average of its parallel sides times h.', v: [['(20+28)/2', '24'], ['24*12', '288']], tool: 'tri:par' });
-  V('6-2', { th: ['area'], from: '6-1', r: ['split', 'carea', 'dist', 'piform'], t: 'Compound: split, add, subtract', spot: ['flow', ['14 × 4 + two half-circles, r = 2', { op: '56 + 4π' }, '≈ 56 + 12.56', { op: '' }, { t: '≈ 69', r: 'g' }]],
+  V('6-2', { th: ['area'], from: '6-1', r: ['split', 'carea', 'dist', 'piform'], t: 'Compound: split, add, subtract', spot: ['fig', { P: { A: [0, 0], B: [14, 0], C: [14, 4], D: [0, 4], L: [0, 2], R: [14, 2], T: [16, 2] }, polys: [['ABCD', 'x', 0.1]], circs: [['L', 2, 'x', [90, 270]], ['R', 2, 'x', [-90, 90]]], segs: [['RT', 'n']], slabs: [['AB', '14', 'n'], ['RT', 'r = 2', 'n', 10], ['DA', '4', 'n', -10]], say: '14 · 4 + π · 2² = 56 + 4π ≈ 69' }],
     doit: [['flow', ['its edge: 2 · 14 + two half-circles', { op: '28 + π · 4' }, { t: '≈ 41', r: 'g' }]], ['flow', ['trapezoid 22 and 10, h = 15', { op: '16 · 15' }, '240', { op: '+ ½ · π · 5²' }, { t: '≈ 279 cm²', r: 'g' }]], ['steps', [['25(15 + x)', '525'], ['375 + 25x', '525'], { op: '− 375' }, ['{n:25}x', '150'], { op: '÷ 25' }, ['x', '6', 'ans']]]],
     trap: ['two half-circles:   2 · 4π', 'two halves make one circle:   4π'], alt: 'Split a compound shape into rectangles, triangles, trapezoids and circles, add the parts and subtract any hole. Two half-circles of one radius make one circle, in the area and on the edge. A missing length comes from an area equation.', v: [['14*4', '56'], ['2^2', '4'], ['2*14', '28'], ['(22+10)/2', '16'], ['16*15', '240'], ['25*15', '375'], ['525-375', '150']] });
   V('6-3', { th: ['scale'], from: '7:10-2', r: ['split', 'perk', 'sfactor', 'roundup', 'round'], t: 'With letters; and a shrink', spot: ['flow', ['5s × 3s + ½ · 5s · 2s', { op: '' }, '15s² + 5s²', { op: '' }, { t: '20s²', r: 'g' }]],
@@ -51618,7 +51689,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
     trap: ['k = ½:   half of 32.8', 'area · k²:   32.8 · ¼ = 8.2'], alt: 'With a side s, each part is a number times s squared, and like terms add. Shrinking by a factor k multiplies the area by k squared. An edge with a half-circle uses half the circumference; whole tiles round up.', v: [['3*10+0.5*3.14*10', '45.7'], ['5*3', '15'], ['0.5*5*2', '5'], ['15+5', '20'], ['8.2/2', '4.1'], ['0.5*4.1*4', '8.2'], ['0.5*8.2*8', '32.8'], ['32.8/4', '8.2']] });
   // Unit 7: Drawing and Scale
   V('7-1', { th: ['bar'], from: '1-1', r: ['pgram', 'suppcomp'], t: 'Parallelogram angles', spot: ['flow', ['one angle 28°', { op: 'opposite' }, '28°', { op: '180 − 28' }, { t: 'neighbours 152°', r: 'g' }]],
-    doit: [['ang', { line: true, rays: [28], arcs: [[0, 28, '28°', 'n'], [28, 180, '152°', 'g']], sum: 180, say: 'neighbours: 180°', sayr: 'm' }], ['flow', ['rhombus, 106°', { op: '180 − 106' }, { t: 'neighbours 74°', r: 'g' }]], ['flow', ['a square of 5 cm', { op: 'four right angles' }, { t: '90° each, perimeter 20 cm', r: 'g' }]]],
+    doit: [['fig', { P: { A: [0, 0], B: [4, 0], C: [7.0904, 1.6432], D: [3.0904, 1.6432] }, polys: [['ABCD', 'x', 0.06]], pars: [['AB', 1], ['DC', 1], ['AD', 2], ['BC', 2]], angs: [['DAB', 1, '28°', 'n'], ['BCD', 1, '28°', 'g'], ['ABC', 2, '152°', 'g', 'out'], ['CDA', 2, '152°', 'g', 'out']], say: 'neighbours: 180°', sayr: 'm' }], ['flow', ['rhombus, 106°', { op: '180 − 106' }, { t: 'neighbours 74°', r: 'g' }]], ['flow', ['a square of 5 cm', { op: 'four right angles' }, { t: '90° each, perimeter 20 cm', r: 'g' }]]],
     trap: ['the neighbours are 28° too', 'neighbours add to 180°:   152°'], alt: 'In a parallelogram, and so in a rhombus, opposite angles are equal and neighbouring angles add to 180 degrees. A square has four right angles.', v: [['180-28', '152'], ['180-106', '74'], ['4*5', '20']] });
   V('7-2', { th: ['test'], from: '7-1', shift: 'The angle facts of 7-1 now test whether the givens leave anything free.', r: ['pgram'], t: 'Does it fix one shape?', spot: ['grid', { head: ['given', 'one shape?'], rows: [['rhombus: 124°, side 3 in', '✓'], ['parallelogram: 58°, 122°', '✗'], ['rhombus: side 3 cm', '✗']] }],
     doit: [['flow', ['two sides, the angle between', { op: '' }, { t: 'one parallelogram', r: 'g' }]]],
@@ -51681,7 +51752,7 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
     doit: [['flow', ['a: same corner below', { op: 'corresponding' }, { t: 'a = 38°', r: 'g' }]], ['flow', ['b: beside a on a line', { op: '180 − 38' }, { t: 'b = 142°', r: 'g' }]], ['parl', { a: 38, marks: { 1: ['1', 'm'], 2: ['2', 'g'], 3: ['3', 'x'], 4: ['4', 'm'], 5: ['5', 'm'], 6: ['6', 'g'], 7: ['7', 'g'], 8: ['8', 'm'] } }], ['grid', { head: ['equal to ∠3?', 'why'], rows: [['∠2', 'vertical'], ['∠6', 'alternate'], ['∠7', 'corresponding'], ['∠1:   no', 'adds to 180°']] }]],
     trap: ['b = 38°', 'b is beside a on a line:   180° − 38°'], alt: 'A line crossing two parallel lines makes only two sizes of angle. Corresponding, alternate and vertical angles are equal; a sharp and a wide angle add to 180 degrees. Numbered 1 to 8, angle 3 equals 2, 6 and 7.', v: [['180-38', '142']] });
   V('13-2', { th: ['bar', 'bal'], from: '13-1', r: ['parallel', 'angeq', 'exterior', 'xboth'], t: 'Equal or adding to 180°: then solve', spot: ['parl', { a: 64, marks: { 4: ['(x + 93)°', 'x'], 6: ['(2x + 18)°', 'x'] }, say: '(x + 93) + (2x + 18) = 180', sayr: 'm' }],
-    doit: [['steps', [['3x + 111', '180'], { op: '− 111' }, ['{n:3}x', '69'], { op: '÷ 3' }, ['x', '23', 'ans']]], ['flow', ['corresponding: 2x + 80 = 5x + 56', { op: '− 2x − 56' }, '24 = 3x', { op: '÷ 3' }, { t: 'x = 8:   96°', r: 'g' }]], ['flow', ['exterior 92°, a far angle 43°', { op: '92 − 43' }, { t: '49°', r: 'g' }]], ['flow', ['a line through the top, parallel to the base', { op: 'alternate angles' }, { t: 'the three fill 180°', r: 'g' }]]],
+    doit: [['steps', [['3x + 111', '180'], { op: '− 111' }, ['{n:3}x', '69'], { op: '÷ 3' }, ['x', '23', 'ans']]], ['flow', ['corresponding: 2x + 80 = 5x + 56', { op: '− 2x − 56' }, '24 = 3x', { op: '÷ 3' }, { t: 'x = 8:   96°', r: 'g' }]], ['flow', ['exterior 92°, a far angle 43°', { op: '92 − 43' }, { t: '49°', r: 'g' }]], ['fig', { P: { A: [0, 0], B: [6, 0], C: [3.68, 6.374], L: [-1.2, 6.374], R: [8.6, 6.374] }, polys: [['ABC', 'x', 0.06]], segs: [['LR']], pars: [['AB', 1], ['LR', 1]], angs: [['LCA', 1], ['CAB', 1], ['RCB', 2], ['CBA', 2], ['ACB', 3]], h: 130, say: 'alternate angles: the three fill 180°' }]],
     trap: ['same-side:   x + 93 = 2x + 18', 'they add to 180°:   3x + 111 = 180'], alt: 'Same-side interior angles add to 180 degrees; corresponding and alternate angles are set equal. An exterior angle of a triangle equals the two far interior angles added.', v: [['93+18', '111'], ['180-111', '69'], ['69/3', '23'], ['23+93', '116'], ['2*23+18', '64'], ['80-56', '24'], ['2*8+80', '96'], ['5*8+56', '96'], ['92-43', '49']] });
   V('13-3', { th: ['bal'], from: '13-2', r: ['polysum', 'exterior', 'tri180', 'xboth'], t: 'n sides: n − 2 triangles', spot: ['flow', ['12 sides', { op: '12 − 2 triangles' }, '10 · 180°', { op: '' }, { t: '1800°', r: 'g' }]],
     doit: [['flow', ['sum 720°', { op: '÷ 180, + 2' }, { t: '6 sides', r: 'g' }]], ['flow', ['pentagon:   (5 − 2) · 180° = 540°', { op: '− 411°' }, { t: '129°', r: 'g' }]], ['flow', ['regular decagon:   1440°', { op: '÷ 10' }, { t: '144° each', r: 'g' }]], ['steps', [['4x + 43', 'x + 76'], { op: '− x', soft: true }, ['3x + 43', '76'], { op: '− 43' }, ['{n:3}x', '33'], { op: '÷ 3' }, ['x', '11', 'ans']]]],
@@ -51751,6 +51822,50 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
    Every number a picture shows is listed in v or re-computed from the picture (hub/test_tactics.js). */
 (function () {
   'use strict';
+  TAC.group('ch12', {
+    name: 'Chapters 1–2', chs: [1, 2],
+    lede: 'Expressions, exponents and equations (Chapter 1) with the integers (Chapter 2): the order of operations, like terms and the distributive property, now with a negative number in any slot.',
+    cues: [
+      { terr: 'E1', cue: 'a minus in front of a negative', tactic: 'Add the opposite', see: ['cue', [['7', 'm'], ['−', 'o', 'minus'], ['(−4)', 'n', 'a negative']]],
+        vis: ['flow', ['7 − (−4)', { op: 'add the opposite' }, '7 + 4', { op: '' }, { t: '11', r: 'g' }]], refs: ['2:5-1', '2:5-2'], alt: 'Subtracting a negative number is adding its opposite: 7 minus negative 4 is 7 plus 4, which is 11.', v: [['7-(-4)', '11']] },
+      { terr: 'E2', cue: 'a minus sign and an exponent', tactic: 'The exponent reaches only what it sits on', see: ['pow', { b: '5', e: 2, pre: '−', val: '−25' }],
+        vis: ['pow', { b: '−5', e: 2, par: true, val: '25' }], refs: ['1:1-2', '2:10-1'], alt: 'In −5², the exponent sits on the 5 only, so it is −25. In (−5)², the parentheses put the minus under the exponent, so it is 25.', v: [['-(5^2)', '-25'], ['(-5)^2', '25']] },
+      { terr: 'E2', cue: 'letters with negative values', tactic: 'Values in (parentheses), then the order', see: ['flow', ['3x² − 2y', { op: 'x = −2, y = −5' }, '3 · (−2)² − 2 · (−5)']],
+        vis: ['fold', [['3 · {x:(−2)²} − 2 · (−5)', 'E'], ['{x:3 · 4} − {x:2 · (−5)}', 'MD'], ['{x:12 + 10}', 'AS'], ['22']]], refs: ['1:3-1', '2:10-1'], alt: 'Put each value in parentheses, then follow the order of operations: the power, then the products, then the sum. With x = −2 and y = −5 the value is 22.', v: [['3*(-2)^2-2*(-5)', '22']] },
+      { terr: 'E3', cue: 'a number outside parentheses', tactic: 'Multiply every term inside', see: ['dist', { k: '−2', terms: ['x', '− 6'], out: ['−2x', '+ 12'] }],
+        vis: ['flow', ['−2(x − 6)', { op: '−2 · x,  −2 · (−6)' }, { t: '−2x + 12', r: 'g' }]], refs: ['1:9-1', '2:5-2'], alt: 'The factor outside multiplies every term inside, sign and all: −2 times x is −2x, and −2 times −6 is +12.', v: [['-2*(-6)', '12']] },
+      { terr: 'E3', cue: 'terms with the same letter part', tactic: 'Combine the coefficients; signs ride along', vis: ['sort', { terms: [['5a', 'x'], ['− 3b', 'n'], ['− 8a', 'x'], ['+ 7b', 'n']], bins: [{ r: 'x', sum: '−3a' }, { r: 'n', sum: '4b' }], out: '−3a + 4b' }],
+        refs: ['1:7-2', '2:6-1'], alt: 'Gather the terms with the same letter part, each with the sign in front of it: 5a and −8a make −3a; −3b and 7b make 4b.', v: [['5-8', '-3'], ['-3+7', '4']] },
+      { terr: 'E4', cue: 'a sentence with an unknown number', tactic: 'Name it, write it, undo it', see: ['flow', ['4 less than 3 times a number is −19', { op: '' }, '3n − 4 = −19']],
+        vis: ['steps', [['3n − 4', '−19'], { op: '+ 4' }, ['{n:3}n', '−15'], { op: '÷ 3' }, ['n', '−5', 'ans']]], refs: ['1:5-2', '2:6-3'], alt: '4 less than 3 times a number is 3n − 4. Set it equal to −19, add 4 to both sides, then divide by 3: n = −5.', v: [['-19+4', '-15'], ['-15/3', '-5']] },
+      { terr: 'E5', cue: 'how far apart two numbers are', tactic: 'Distance = |a − b|', see: ['flow', ['|−4 − 5|', { op: '' }, '|−9|', { op: '' }, { t: '9', r: 'g' }]],
+        vis: ['nline', { min: -6, max: 6, marks: [-4, 0, 5], pts: [[-4, 'n'], [5, 'x']], dist: [[-4, 5, '9']] }], refs: ['2:7-1', '2:7-3'], alt: 'The distance between two numbers is the absolute value of their difference: from −4 to 5 is 9 steps, either way round.', v: [['5-(-4)', '9']] },
+      { terr: 'E6', cue: 'a pattern that grows the same each step', tactic: 'Start + add × n', see: ['seq', { n: ['1', '2', '3', '…', 'n'], v: ['−2', '1', '4', '…', '3n − 5'], add: '+ 3' }],
+        vis: ['flow', ['n = 10', { op: '3 · 10 − 5' }, { t: '25', r: 'g' }]], refs: ['1:8-2', '2:8-3'], alt: 'The pattern adds 3 each step and is −2 at step 1, so its start at step 0 is −5 and the rule is 3n − 5. Step 10 is 25.', v: [['3*10-5', '25'], ['3*1-5', '-2']] }
+    ],
+    integ: [
+      { h: 'Evaluate with a negative', terrs: ['E2', 'E1'], prob: 'Find 2(x − 3)² − x when x = −1.',
+        steps: [{ say: 'Put −1 in, in parentheses', vis: ['flow', ['2(x − 3)² − x', { op: 'x = −1' }, '2((−1) − 3)² − (−1)']] }, { say: 'Inside first, then the power, then the rest', vis: ['fold', [['2 · {x:(−1 − 3)}² + 1', 'P'], ['2 · {x:(−4)²} + 1', 'E'], ['{x:2 · 16} + 1', 'MD'], ['{x:32 + 1}', 'AS'], ['33']]] }],
+        refs: ['1:3-2', '2:10-1'], alt: 'Substitute −1 in parentheses. Inside the parentheses −1 − 3 is −4; squared it is 16; twice that is 32; minus −1 adds 1, so the value is 33.', v: [['2*(-1-3)^2-(-1)', '33']] },
+      { h: 'A balance in debts and gains', terrs: ['E4', 'E7'], prob: 'An account is at −$12. It gains $7, then $9 is paid out. What is the balance now?',
+        steps: [{ say: 'Each event is a term', vis: ['flow', ['−12 + 7 − 9', { op: 'gather the negatives' }, '−21 + 7']] }, { say: 'Different signs: subtract the sizes, keep the larger’s sign', vis: ['flow', ['−21 + 7', { op: '21 − 7, keep −' }, { t: '−14', r: 'g' }]] }],
+        refs: ['2:6-3', '2:4-2'], alt: 'Write each event as a signed term: −12 + 7 − 9. The negatives make −21; with +7 the sizes subtract to 14 and the sign is negative: −$14.', v: [['-12+7-9', '-14'], ['-12-9', '-21']] },
+      { h: 'Simplify, then evaluate', terrs: ['E3', 'E2'], prob: 'Simplify 4(x − 2) − 3x, then find its value when x = −5.',
+        steps: [{ say: 'Distribute the 4', vis: ['flow', ['4(x − 2) − 3x', { op: '4 · x,  4 · (−2)' }, '4x − 8 − 3x']] }, { say: 'Combine like terms', vis: ['flow', ['4x − 3x − 8', { op: '' }, { t: 'x − 8', r: 'x' }]] }, { say: 'Put −5 in', vis: ['flow', ['(−5) − 8', { op: '' }, { t: '−13', r: 'g' }]] }],
+        refs: ['1:9-1', '1:7-2', '2:6-2'], alt: 'Distributing gives 4x − 8 − 3x, and 4x − 3x is x, so the expression is x − 8. At x = −5 it is −13.', v: [['4*(-5-2)-3*(-5)', '-13'], ['-5-8', '-13']] }
+    ],
+    traps: [
+      { terr: 'E1', tag: 'subneg', trap: ['−6 − (−2) = −8', 'add the opposite:   −6 + 2 = −4'], alt: 'Subtracting −2 is adding 2: −6 − (−2) is −4, not −8.', v: [['-6-(-2)', '-4']] },
+      { terr: 'E2', tag: 'exp', trap: ['−3² = 9', 'the 2 sits on the 3:   −9'], alt: 'The exponent applies to the 3 only, so −3² is −9. Only (−3)² is 9.', v: [['-(3^2)', '-9']] },
+      { terr: 'E2', tag: 'order', trap: ['12 − 4 · 2 = 16', '· first:   12 − 8 = 4'], alt: 'Multiply before subtracting: 12 − 4 · 2 is 12 − 8, which is 4.', v: [['12-4*2', '4']] },
+      { terr: 'E3', tag: 'dist', trap: ['−3(x − 4) = −3x − 12', '−3 · (−4) = +12:   −3x + 12'], alt: 'The −3 multiplies the −4 as well, and a negative times a negative is positive: −3x + 12.', v: [['-3*(-4)', '12']] },
+      { terr: 'E3', tag: 'like', trap: ['2x + 3x² = 5x³', 'not like terms:   2x + 3x² stays'], alt: 'x and x² are different letter parts, so 2x + 3x² cannot be combined.', v: [] },
+      { terr: 'E5', tag: 'abs', trap: ['from −3 to 5:   2', '|5 − (−3)| = 8'], alt: 'The distance from −3 to 5 is the absolute value of the difference: 8, not 5 − 3.', v: [['5-(-3)', '8']] },
+      { terr: 'E4', tag: 'trans', trap: ['“5 less than y”:   5 − y', 'the order flips:   y − 5'], alt: 'Less than flips the order of the words: 5 less than y is y − 5.', v: [] },
+      { terr: 'E1', tag: 'sign', trap: ['(−2)(−3)(−4) = 24', 'three negatives:   −24'], alt: 'An odd number of negative factors makes the product negative: (−2)(−3)(−4) is −24.', v: [['(-2)*(-3)*(-4)', '-24']] }
+    ],
+    dojo: [['int', 'Signs and integers'], ['exp', 'Expressions and exponents'], ['words', 'Words into math'], ['pat', 'Patterns and sequences'], ['trap', 'Traps']]
+  });
   TAC.group('ch34', {
     name: 'Chapters 3–4', chs: [3, 4],
     lede: 'One-step equations, constant speed, writing equations and sequences (Chapter 3) with every kind of rational number (Chapter 4): the same moves, now with fractions, decimals and signs.',
@@ -51794,6 +51909,146 @@ if (typeof module !== 'undefined' && module.exports) module.exports = FML;
       { terr: 'M6', tag: 'incomplete', trap: ['t = 1.25 h (asked in minutes)', '1.25 · 60 = 75 minutes'], alt: 'Answer in the unit the question asks for: 1.25 hours is 75 minutes.', v: [['1.25*60', '75']] }
     ],
     dojo: [['eq1', 'One-step equations'], ['rat', 'Fractions and decimals'], ['drt', 'Distance, rate and time'], ['words', 'Words into math'], ['pat', 'Patterns and sequences']]
+  });
+  TAC.group('ch5', {
+    name: 'Chapter 5', chs: [5],
+    lede: 'Equations and inequalities (Chapter 5): two-step equations and parentheses, words into equations, inequalities and their graphs, how sequences grow, ranges and the area model.',
+    cues: [
+      { terr: 'M4', cue: 'ax + b = c', tactic: 'Undo + or − first, then × or ÷', see: ['cue', [['3', 'n', 'times'], ['x', 'x'], ['+ 7', 'n', 'plus'], ['=', ''], ['−8', '']]],
+        vis: ['steps', [['3x + 7', '−8'], { op: '− 7' }, ['{n:3}x', '−15'], { op: '÷ 3' }, ['x', '−5', 'ans']]], refs: ['5:1-1', '5:5-1'], alt: 'Undo in reverse order: take away the 7 from both sides first, then divide by 3. 3x + 7 = −8 gives x = −5.', v: [['-8-7', '-15'], ['-15/3', '-5']] },
+      { terr: 'M4', cue: 'a number outside parentheses', tactic: 'Divide by it, or distribute', vis: ['steps', [['4(x − 2.5)', '18'], { op: '÷ 4' }, ['x − 2.5', '4.5'], { op: '+ 2.5' }, ['x', '7', 'ans']]],
+        refs: ['5:3-1', '5:6-1'], alt: 'With a number outside parentheses, divide both sides by it first, or distribute it to every term. 4(x − 2.5) = 18 gives x − 2.5 = 4.5, so x = 7.', v: [['18/4', '4.5'], ['4.5+2.5', '7']] },
+      { terr: 'M4', cue: 'a fraction bar over the x side', tactic: 'Multiply by the bottom first', vis: ['steps', [['{f:x + 5|3}', '−4'], { op: '· 3' }, ['x + 5', '−12'], { op: '− 5' }, ['x', '−17', 'ans']]],
+        refs: ['5:5-2', '5:6-2'], alt: 'A long fraction bar groups the whole top. Multiply both sides by 3 first, then take away 5: x = −17.', v: [['-4*3', '-12'], ['-12-5', '-17']] },
+      { terr: 'M5', cue: 'a fee plus a price for each', tactic: 'total = price · n + fee', see: ['flow', ['$25 to join, $12 a class, $121 in all', { op: '' }, '12n + 25 = 121']],
+        vis: ['steps', [['12n + 25', '121'], { op: '− 25' }, ['{n:12}n', '96'], { op: '÷ 12' }, ['n', '8', 'ans']]], refs: ['5:8-1', '5:12-2'], alt: 'The price for each times how many, plus the fee, is the total: 12n + 25 = 121. Take away the fee, then divide: 8 classes.', v: [['121-25', '96'], ['96/12', '8']] },
+      { terr: 'M7', cue: 'an inequality with a negative coefficient', tactic: 'Divide by the negative: reverse the sign', see: ['nline', { min: -8, max: 1, marks: [-5, 0], ray: { at: -5, dir: 'l', closed: false } }],
+        vis: ['flow', ['−4x + 3 > 23', { op: '− 3' }, '−4x > 20', { op: '÷ (−4), reverse' }, { t: 'x < −5', r: 'g' }]], refs: ['5:11-1', '5:11-2'], alt: 'Solve like an equation, but dividing by −4 reverses the inequality sign: −4x > 20 becomes x < −5. On the line: an open circle at −5 and a ray to the left.', v: [['23-3', '20'], ['20/(-4)', '-5']] },
+      { terr: 'M7', cue: 'at least, at most, whole numbers', tactic: 'Solve, then round the way the story allows', vis: ['flow', ['8n ≤ 100', { op: '÷ 8' }, 'n ≤ 12.5', { op: 'whole n' }, { t: 'at most 12', r: 'g' }]],
+        refs: ['5:10-1', '5:12-1'], alt: 'At most is ≤ and at least is ≥. Solve, then round: n ≤ 12.5 with whole numbers allows at most 12.', v: [['100/8', '12.5']] },
+      { terr: 'M11', cue: 'a distance from a centre', tactic: '|x − c| < d: between c − d and c + d', see: ['flow', ['|x − 3| < 2', { op: '3 − 2 and 3 + 2' }, { t: '1 < x < 5', r: 'g' }]],
+        vis: ['nline', { min: -1, max: 7, marks: [1, 3, 5], seg: { a: 1, b: 5, closed: false } }], refs: ['5:14-1', '5:14-3'], alt: 'The numbers less than 2 away from 3 lie between 3 − 2 and 3 + 2: 1 < x < 5, a segment with open ends.', v: [['3-2', '1'], ['3+2', '5']] },
+      { terr: 'M12', cue: '(x + a)(x + b)', tactic: 'Area model: add the four parts', vis: ['area2', { rows: ['x', '3'], cols: ['x', '5'], cells: [['x²', '5x'], ['3x', '15']], sum: '(x + 3)(x + 5) = x² + 8x + 15' }],
+        refs: ['5:15-1', '5:15-2'], alt: 'Draw a rectangle x + 3 by x + 5 and cut it into four parts: x², 5x, 3x and 15. The middle terms add to 8x.', v: [['3+5', '8'], ['3*5', '15']] },
+      { terr: 'M10', cue: 'how a sequence grows', tactic: 'Same difference: add. Same ratio: multiply', vis: ['flow', ['2, 6, 18, 54', { op: '÷ the step before' }, { t: '· 3 each step', r: 'g' }]],
+        refs: ['5:13-1', '5:13-2'], alt: 'Check the differences and the ratios. 2, 6, 18, 54: each term is 3 times the one before, so the sequence multiplies by 3.', v: [['6/2', '3'], ['18/6', '3'], ['54/18', '3']] }
+    ],
+    integ: [
+      { h: 'A fee and an inequality', terrs: ['M5', 'M7'], prob: 'A gym charges $30 to join and $8 a visit. With $100, how many visits can you pay for?',
+        steps: [{ say: 'Write it: at most $100', vis: ['flow', ['30 + 8v ≤ 100']] }, { say: 'Solve', vis: ['flow', ['8v ≤ 70', { op: '÷ 8' }, 'v ≤ 8.75']] }, { say: 'Whole visits: round down', vis: ['flow', ['v ≤ 8.75', { op: '' }, { t: '8 visits', r: 'g' }]] }],
+        refs: ['5:8-1', '5:12-2'], alt: 'The cost is 30 + 8v and it may be at most 100. Taking away 30 and dividing by 8 gives v ≤ 8.75, so at most 8 whole visits.', v: [['100-30', '70'], ['70/8', '8.75']] },
+      { h: 'A perimeter with one letter', terrs: ['M4', 'M5'], prob: 'A rectangle is 3 cm longer than it is wide. Its perimeter is 38 cm. How wide is it?',
+        steps: [{ say: 'Two sides from one letter', vis: ['flow', ['width w', { op: '+ 3' }, 'length w + 3']] }, { say: 'The four sides add to 38', vis: ['steps', [['2w + 2(w + 3)', '38'], ['4w + 6', '38'], { op: '− 6' }, ['{n:4}w', '32'], { op: '÷ 4' }, ['w', '8', 'ans']]] }],
+        refs: ['5:7-1', '5:7-2'], alt: 'Call the width w; the length is w + 3. The perimeter is 2w + 2(w + 3) = 4w + 6 = 38, so w = 8 cm and the length is 11 cm.', v: [['38-6', '32'], ['32/4', '8'], ['8+3', '11']] },
+      { h: 'A tolerance as a range', terrs: ['M11', 'M7'], prob: 'A part must be 40 mm long, give or take 0.5 mm. Which lengths pass?',
+        steps: [{ say: 'Centre and distance', vis: ['flow', ['|L − 40| ≤ 0.5']] }, { say: 'Both ends', vis: ['flow', ['40 − 0.5 and 40 + 0.5', { op: '' }, { t: '39.5 ≤ L ≤ 40.5', r: 'g' }]] }],
+        refs: ['5:14-2', '5:14-3'], alt: 'Give or take 0.5 means a distance of at most 0.5 from 40: |L − 40| ≤ 0.5, so every length from 39.5 mm to 40.5 mm passes.', v: [['40-0.5', '39.5'], ['40+0.5', '40.5']] }
+    ],
+    traps: [
+      { terr: 'M4', tag: 'inverse', trap: ['2x + 6 = 20:   x = 10 − 6', 'undo + first:   2x = 14, x = 7'], alt: 'Undo in reverse order: subtract 6 first, then divide by 2. Dividing first must divide the 6 as well.', v: [['20-6', '14'], ['14/2', '7']] },
+      { terr: 'M4', tag: 'dist', trap: ['3(x + 4) = 21:   3x + 4 = 21', 'every term:   3x + 12 = 21'], alt: 'The 3 multiplies the 4 too: 3(x + 4) is 3x + 12.', v: [['3*4', '12']] },
+      { terr: 'M7', tag: 'flip', trap: ['−3x < 12:   x < −4', '÷ (−3) reverses:   x > −4'], alt: 'Dividing both sides by a negative number reverses the inequality: −3x < 12 gives x > −4.', v: [['12/(-3)', '-4']] },
+      { terr: 'M7', tag: 'flip', trap: ['{f:x|2} > −3:   x < −6', '· 2 is positive:   x > −6'], alt: 'Only multiplying or dividing by a negative number reverses the sign. A negative number on the right does not.', v: [['-3*2', '-6']] },
+      { terr: 'M5', tag: 'trans', trap: ['“at least 18”:   n > 18', 'at least includes 18:   n ≥ 18'], alt: 'At least 18 allows 18 itself, so it is n ≥ 18.', v: [] },
+      { terr: 'M7', tag: 'incomplete', trap: ['n ≤ 12.5:   13 tickets', 'whole tickets, at most:   12'], alt: 'With at most 12.5 and whole tickets, round down: 12. Thirteen is too many.', v: [] },
+      { terr: 'M11', tag: 'abs', trap: ['|x − 3| = 5:   x = 8', 'both ways:   x = 8 or x = −2'], alt: 'A distance of 5 from 3 reaches both ways: x = 8 or x = −2.', v: [['3+5', '8'], ['3-5', '-2']] },
+      { terr: 'M10', tag: 'pattern', trap: ['2, 6, 18:   next 30', '· 3 each step:   54'], alt: 'The terms multiply by 3 each step; they do not add 12. The next term is 54.', v: [['18*3', '54']] }
+    ],
+    dojo: [['eq2', 'Two-step equations and rearranging'], ['ineq', 'Inequalities'], ['words', 'Words into math'], ['pat', 'Patterns and sequences'], ['trap', 'Traps']]
+  });
+  TAC.group('ch67', {
+    name: 'Chapters 6–7', chs: [6, 7],
+    lede: 'Ratios, rates and proportions (Chapter 6) with percent (Chapter 7): one multiplier carries a unit price, a map, a price change and a growing area.',
+    cues: [
+      { terr: 'R2', cue: 'a rate for several, wanted for one', tactic: 'Per means ÷: go through 1', vis: ['rt', { rows: [['$', '7.50', ['2.50', 'x'], ['12.50', 'g']], ['kg', '3', ['1', 'x'], '5']], ops: [[0, 1, '÷ 3'], [1, 2, '· 5']] }],
+        refs: ['6:2-1', '6:2-3'], alt: '3 kg cost $7.50. Divide both by 3 for the price of 1 kg, $2.50; then multiply both by 5 for 5 kg: $12.50.', v: [['7.5/3', '2.5'], ['2.5*5', '12.5']] },
+      { terr: 'R3', cue: 'y ÷ x is the same in every pair', tactic: 'Proportional: y = k · x', vis: ['rt', { rows: [['x', '2', '5', '8'], ['y', '7', '17.5', '28']], q: { lab: 'y ÷ x', v: ['3.5', '3.5', '3.5'] } }],
+        refs: ['6:4-1', '6:4-2'], alt: 'Divide y by x in each pair. When the quotient never changes, the relationship is proportional with k = 3.5, so y = 3.5x.', v: [['7/2', '3.5'], ['17.5/5', '3.5'], ['28/8', '3.5']] },
+      { terr: 'R5', cue: 'a proportion with one unknown', tactic: 'Units in matching places; cross-multiply', vis: ['prop', { l: ['4.50', '3'], r: ['x', '8'], units: ['$', 'kg'], x: 'x', val: '12' }],
+        refs: ['6:7-1', '6:7-2'], alt: 'Put dollars on top and kilograms below on both sides: 4.50 over 3 equals x over 8. Cross-multiplying gives 3x = 36, so x = 12 dollars.', v: [['4.5*8', '36'], ['36/3', '12']] },
+      { terr: 'R7', cue: 'a figure enlarged by k', tactic: 'Lengths · k, areas · k²', vis: ['flow', ['k = 1.5', { op: 'square' }, '1.5² = 2.25', { op: '· 40 cm²' }, { t: '90 cm²', r: 'g' }]],
+        refs: ['6:10-1', '7:10-2'], alt: 'Every length is multiplied by k, so the area is multiplied by k squared: 1.5 squared is 2.25, and 40 square centimetres becomes 90.', v: [['1.5^2', '2.25'], ['40*2.25', '90']] },
+      { terr: 'R8', cue: 'a map or a drawing scale', tactic: 'Scale the length, then change the unit', vis: ['flow', ['1 : 50,000, 6 cm', { op: '· 50,000' }, '300,000 cm', { op: '÷ 100,000' }, { t: '3 km', r: 'g' }]],
+        refs: ['6:12-1', '6:12-3'], alt: 'At 1 : 50,000, every centimetre on the map is 50,000 cm on the ground: 6 cm is 300,000 cm, which is 3 km.', v: [['6*50000', '300000'], ['300000/100000', '3']] },
+      { terr: 'R3', cue: 'a percent more or less', tactic: 'One multiplier: 1 ± the percent', see: ['map', [['15% off', 'o']], [['· 0.85', 'o']], [0]],
+        vis: ['flow', ['$80, 15% off', { op: '· 0.85' }, { t: '$68', r: 'g' }]], refs: ['7:5-2', '7:5-3'], alt: '15% off leaves 85% of the price, so multiply by 0.85: $80 becomes $68. A rise of 15% would multiply by 1.15.', v: [['1-0.15', '0.85'], ['80*0.85', '68']] },
+      { terr: 'R5', cue: 'how much it went up or down', tactic: 'The change ÷ the value before', vis: ['flow', ['$40 → $46', { op: '6 ÷ 40' }, { t: '0.15:   up 15%', r: 'g' }]],
+        refs: ['7:9-1', '7:9-3'], alt: 'Percent change is the change over the value before it: from $40 to $46 the change is 6, and 6 over 40 is 0.15, a 15% rise.', v: [['46-40', '6'], ['6/40', '0.15']] },
+      { terr: 'R9', cue: 'a line through two points', tactic: 'Slope: rise ÷ run. Start: y at x = 0', vis: ['flow', ['(0, 4) and (3, 10)', { op: 'rise 6, run 3' }, 'm = 2', { op: 'start 4' }, { t: 'y = 2x + 4', r: 'g' }]],
+        refs: ['6:13-1', '6:13-2'], alt: 'From (0, 4) to (3, 10) the line rises 6 in a run of 3, a slope of 2. It starts at 4 when x is 0, so y = 2x + 4.', v: [['10-4', '6'], ['6/3', '2']] },
+      { terr: 'R2', cue: 'simple interest', tactic: 'I = P · r · t; the rate and time match', vis: ['flow', ['$600 at 4% a year, 3 years', { op: '600 · 0.04 · 3' }, { t: 'I = $72', r: 'g' }]],
+        refs: ['7:12-1', '7:12-2'], alt: 'Interest is principal times rate times time, with the rate per year and the time in years: 600 times 0.04 times 3 is $72.', v: [['600*0.04*3', '72']] }
+    ],
+    integ: [
+      { h: 'A unit price, then a coupon', terrs: ['R2', 'R3'], prob: 'Flour costs $2.40 for 3 kg. A baker buys 10 kg with a 25%-off coupon. What does the flour cost?',
+        steps: [{ say: 'Go through 1 kg', vis: ['rt', { rows: [['$', '2.40', ['0.80', 'x'], ['8', 'g']], ['kg', '3', ['1', 'x'], '10']], ops: [[0, 1, '÷ 3'], [1, 2, '· 10']] }] }, { say: 'Then the multiplier', vis: ['flow', ['$8, 25% off', { op: '· 0.75' }, { t: '$6', r: 'g' }]] }],
+        refs: ['6:2-3', '7:5-3'], alt: 'One kilogram costs $2.40 ÷ 3 = $0.80, so 10 kg cost $8. With 25% off the baker pays 75% of that: $6.', v: [['2.4/3', '0.8'], ['0.8*10', '8'], ['8*0.75', '6']] },
+      { h: 'A scale factor as a percent', terrs: ['R7', 'R5'], prob: 'Every side of a garden plan is enlarged by 20%. By what percent does the area grow?',
+        steps: [{ say: 'The multiplier for the sides', vis: ['flow', ['+ 20%', { op: '' }, { t: 'k = 1.2', r: 'x' }]] }, { say: 'Area: square it', vis: ['flow', ['1.2²', { op: '' }, '1.44', { op: '1.44 − 1' }, { t: 'up 44%', r: 'g' }]] }],
+        refs: ['6:10-1', '7:10-3'], alt: 'A 20% enlargement multiplies every length by 1.2, so the area is multiplied by 1.2 squared, 1.44: the area grows by 44%, not 20%.', v: [['1.2^2', '1.44'], ['1.44-1', '0.44']] },
+      { h: 'Two changes in a row', terrs: ['R3', 'R5'], prob: 'A $250 price rises 10%, then falls 10%. What is it now, and by what percent did it change overall?',
+        steps: [{ say: 'Multiply the multipliers', vis: ['flow', ['1.1 · 0.9', { op: '' }, '0.99']] }, { say: 'Apply it', vis: ['flow', ['250 · 0.99', { op: '' }, { t: '$247.50:   down 1%', r: 'g' }]] }],
+        refs: ['7:8-1', '7:9-1'], alt: 'Up 10% is times 1.1 and down 10% is times 0.9; together they multiply by 0.99. The price is $247.50, 1% lower than before.', v: [['1.1*0.9', '0.99'], ['250*0.99', '247.5']] }
+    ],
+    traps: [
+      { terr: 'R2', tag: 'rate', trap: ['3 kg for $7.50:   3 ÷ 7.50', 'dollars per kg:   7.50 ÷ 3 = 2.50'], alt: 'Per means divide by what comes after it: dollars per kilogram is the dollars divided by the kilograms, $2.50.', v: [['7.5/3', '2.5']] },
+      { terr: 'R7', tag: 'scale', trap: ['k = 3:   area · 3', 'area · k²:   · 9'], alt: 'When the lengths are tripled, the area is multiplied by 3 squared, which is 9.', v: [['3^2', '9']] },
+      { terr: 'R5', tag: 'pct', trap: ['$40 → $46:   6 ÷ 46', 'the value before:   6 ÷ 40 = 15%'], alt: 'Percent change divides by the value before the change: 6 over 40 is 15%.', v: [['6/40', '0.15']] },
+      { terr: 'R3', tag: 'pct', trap: ['+10% then −10%:   no change', '1.1 · 0.9 = 0.99:   down 1%'], alt: 'The second percent is taken of the new amount, so the multipliers multiply: 1.1 times 0.9 is 0.99.', v: [['1.1*0.9', '0.99']] },
+      { terr: 'R6', tag: 'pct', trap: ['$108 with 8% tax:   108 − 8.64', 'undo the multiplier:   108 ÷ 1.08 = $100'], alt: 'The tax was 8% of the price before tax. To work back, divide by the multiplier 1.08: $100.', v: [['108/1.08', '100'], ['108*0.08', '8.64']] },
+      { terr: 'R8', tag: 'units', trap: ['6 cm at 1 : 50,000:   300,000 km', '300,000 cm = 3 km'], alt: 'The scale keeps the unit of the map: 6 cm becomes 300,000 cm, which is 3 km.', v: [['6*50000', '300000']] },
+      { terr: 'R1', tag: 'pct', trap: ['25% of a number is 60:   15', '60 is the part:   60 ÷ 0.25 = 240'], alt: 'Here 60 is the part and the whole is unknown: divide 60 by 0.25 to get 240.', v: [['60/0.25', '240']] },
+      { terr: 'R9', tag: 'model', trap: ['(0, 4), (3, 10):   slope 10 ÷ 3', 'rise ÷ run:   6 ÷ 3 = 2'], alt: 'The slope is the rise over the run between the two points: 10 − 4 = 6 over 3, which is 2.', v: [['(10-4)/3', '2']] }
+    ],
+    dojo: [['rate', 'Ratios, rates and proportions'], ['pct', 'Percent'], ['unit', 'Units and conversions'], ['num', 'Number sense'], ['trap', 'Traps']]
+  });
+  TAC.group('ch8', {
+    name: 'Chapter 8', chs: [8],
+    lede: 'Geometry (Chapter 8): angles that fill 90°, 180° and 360°, the circle both ways, areas and their units, surface area and volume, triangles, parallel lines and the Pythagorean theorem.',
+    cues: [
+      { terr: 'K1', cue: 'angles on a line or round a point', tactic: 'Every angle in one sum, then solve', see: ['ang', { line: true, rays: [50, 130], arcs: [[0, 50, '50°', 'n'], [50, 130, '2x', 'x'], [130, 180, 'x + 10', 'x']], sum: 180 }],
+        vis: ['steps', [['3x + 60', '180'], { op: '− 60' }, ['{n:3}x', '120'], { op: '÷ 3' }, ['x', '40', 'ans']]], refs: ['8:1-2', '8:2-2'], alt: 'The three angles fill a straight line, so 50 + 2x + x + 10 = 180. Collect: 3x + 60 = 180, so x = 40, and the angles are 80° and 50°.', v: [['180-60', '120'], ['120/3', '40'], ['2*40', '80'], ['40+10', '50']] },
+      { terr: 'K9', cue: 'matching arcs at parallel lines', tactic: 'Same arcs: set the angles equal', see: ['parl', { a: 58, marks: { 3: ['(3x − 8)°', 'x'], 6: ['(2x + 14)°', 'x'] } }],
+        vis: ['steps', [['3x − 8', '2x + 14'], { op: '− 2x', soft: true }, ['x − 8', '14'], { op: '+ 8' }, ['x', '22', 'ans']]], refs: ['8:2-1', '8:13-2'], alt: 'Alternate angles at parallel lines carry the same arc, so they are equal: 3x − 8 = 2x + 14, x = 22, and each angle is 58°.', v: [['3*22-8', '58'], ['2*22+14', '58']] },
+      { terr: 'K2', cue: 'a circle given by its diameter', tactic: 'Halve it before you square it', see: ['flow', ['A = π · r²', { op: 'r = 14 ÷ 2' }, 'π · 7²']],
+        vis: ['circle', { d: '14 cm', r: '7 cm', A: '≈ 153.9 cm²', show: 'rd' }], refs: ['8:4-1', '8:3-1'], alt: 'The area formula uses the radius. A diameter of 14 cm is a radius of 7 cm, so the area is π times 49, about 153.9 square centimetres.', v: [['14/2', '7'], ['7^2', '49']] },
+      { terr: 'K2', cue: 'the circumference is known', tactic: 'Back from C: ÷ π, then halve', vis: ['flow', ['C = 31.4 m', { op: '÷ 3.14' }, 'd = 10 m', { op: '÷ 2' }, { t: 'r = 5 m', r: 'g' }]],
+        refs: ['8:3-2', '8:4-2'], alt: 'C = π · d, so dividing the circumference by π gives the diameter: 31.4 ÷ 3.14 is 10 m, and the radius is half of it, 5 m.', v: [['31.4/3.14', '10'], ['10/2', '5']] },
+      { terr: 'K4', cue: 'a shape made of pieces, or with a hole', tactic: 'Split, add the parts, subtract a hole', vis: ['fig', { P: { A: [0, 0], B: [10, 0], C: [10, 6], D: [0, 6], E: [3, 2], F: [6, 2], G: [6, 4], H: [3, 4] }, polys: [['ABCD', 'x', 0.12], ['EFGH', 'w', 0.3]], slabs: [['AB', '10 m', 'n'], ['BC', '6 m', 'n']], h: 120, say: '10 · 6 − 3 · 2 = 54 m²' }],
+        refs: ['8:6-2', '8:6-1'], alt: 'A 10 m by 6 m rectangle with a 3 m by 2 m hole: the whole is 60 square metres, the hole 6, so the shape is 54 square metres.', v: [['10*6', '60'], ['3*2', '6'], ['60-6', '54']] },
+      { terr: 'K4', cue: 'an area in another unit', tactic: 'Square the length factor', vis: ['flow', ['2.5 m²', { op: '· 100²' }, { t: '25,000 cm²', r: 'g' }]],
+        refs: ['8:10-1', '8:10-2'], alt: 'One metre is 100 cm, so one square metre is 100 squared, 10,000 square centimetres: 2.5 m² is 25,000 cm².', v: [['2.5*100^2', '25000']] },
+      { terr: 'K8', cue: 'a prism or a cylinder', tactic: 'V = B · h: the base area first', see: ['solid', { kind: 'cyl', labs: ['r = 3 cm', 'h = 10 cm'] }],
+        vis: ['flow', ['B = π · 3² = 9π', { op: '· 10' }, { t: 'V = 90π ≈ 282.7 cm³', r: 'g' }]], refs: ['8:12-1', '8:12-3'], alt: 'The volume of a prism or a cylinder is the base area times the height: the base is π times 9, and times 10 the volume is 90π, about 282.7 cubic centimetres.', v: [['3^2', '9'], ['9*10', '90']] },
+      { terr: 'K7', cue: 'the surface of a box', tactic: 'Add every face; a net shows them', see: ['solid', { kind: 'box', labs: ['5 cm', '2 cm', '3 cm'] }],
+        vis: ['flow', ['2(5 · 3 + 5 · 2 + 3 · 2)', { op: '' }, { t: '62 cm²', r: 'g' }]], refs: ['8:11-1', '8:11-2'], alt: 'A box has three pairs of matching faces. Add the three different faces and double: 2 times (15 + 10 + 6) is 62 square centimetres.', v: [['2*(5*3+5*2+3*2)', '62']] },
+      { terr: 'K6', cue: 'three lengths for a triangle', tactic: 'The two short sides beat the longest', vis: ['grid', { head: ['sides', 'short + short > long?'], rows: [['4, 6, 9', '10 > 9   ✓'], ['3, 5, 9', '8 < 9   ✗']] }],
+        refs: ['8:9-1', '8:9-2'], alt: 'Three lengths make a triangle only when the two shorter add to more than the longest: 4 + 6 = 10 is more than 9, but 3 + 5 = 8 is not.', v: [['4+6', '10'], ['3+5', '8']] },
+      { terr: 'K10', cue: 'a right triangle with two sides known', tactic: 'The squares on the legs add to c²', vis: ['rtri', { a: '9', b: '12', c: '15', sq: true, sa: '81', sb: '144', sc: '225' }],
+        refs: ['8:14-1', '8:14-2'], alt: 'The squares on the legs, 81 and 144, add to the square on the hypotenuse, 225, so the hypotenuse is the square root of 225: 15.', v: [['81+144', '225']] }
+    ],
+    integ: [
+      { h: 'Parallel lines become an equation', terrs: ['K9', 'K1'], prob: 'Two parallel lines are crossed by a transversal. Two same-side interior angles are (x + 70)° and (2x + 20)°. Find both angles.',
+        steps: [{ say: 'Same side, inside: they add to 180°', vis: ['parl', { a: 80, marks: { 4: ['(x + 70)°', 'x'], 6: ['(2x + 20)°', 'x'] } }] }, { say: 'Solve', vis: ['steps', [['3x + 90', '180'], { op: '− 90' }, ['{n:3}x', '90'], { op: '÷ 3' }, ['x', '30', 'ans']]] }, { say: 'The angles asked', vis: ['flow', ['x = 30', { op: 'x + 70,  2x + 20' }, { t: '100° and 80°', r: 'g' }]] }],
+        refs: ['8:13-2', '8:2-2'], alt: 'A wide angle (two arcs) and a sharp one (one arc) at parallel lines add to 180°: 3x + 90 = 180, so x = 30 and the angles are 100° and 80°.', v: [['180-90', '90'], ['90/3', '30'], ['30+70', '100'], ['2*30+20', '80']] },
+      { h: 'A circle in a square', terrs: ['K3', 'K4'], prob: 'A circle just fits inside a square of side 10 cm. How much of the square lies outside the circle? Give it exactly, then to the nearest tenth.',
+        steps: [{ say: 'The radius is half the side', vis: ['flow', ['side 10 cm', { op: '÷ 2' }, { t: 'r = 5 cm', r: 'x' }]] }, { say: 'Square minus circle', vis: ['flow', ['10² − π · 5²', { op: '' }, '100 − 25π', { op: '' }, { t: '≈ 21.5 cm²', r: 'g' }]] }],
+        refs: ['8:5-1', '8:6-2'], alt: 'The circle’s diameter is the side, so its radius is 5 cm. The square is 100 square centimetres and the circle 25π, so exactly 100 − 25π, about 21.5, lies outside.', v: [['10/2', '5'], ['5^2', '25'], ['10^2', '100']] },
+      { h: 'A volume in litres', terrs: ['K8', 'K4'], prob: 'A fish tank is 60 cm long, 30 cm wide and 40 cm high. How many litres does it hold?',
+        steps: [{ say: 'V = B · h', vis: ['flow', ['60 · 30 · 40', { op: '' }, '72,000 cm³']] }, { say: '1000 cm³ make 1 L', vis: ['flow', ['72,000 cm³', { op: '÷ 1000' }, { t: '72 L', r: 'g' }]] }],
+        refs: ['8:12-1', '8:12-3'], alt: 'The volume is 60 times 30 times 40, which is 72,000 cubic centimetres. A litre is 1000 cubic centimetres, so the tank holds 72 litres.', v: [['60*30*40', '72000'], ['72000/1000', '72']] }
+    ],
+    traps: [
+      { terr: 'K1', tag: 'angle', trap: ['x = 40:   the angle is 40°', 'the angle asked:   2x = 80°'], alt: 'Solving gives x; the angle asked may be 2x. Put the value back: 80°.', v: [['2*40', '80']] },
+      { terr: 'K1', tag: 'angle', trap: ['vertical angles add to 180°', 'vertical angles are equal'], alt: 'Angles across a crossing carry the same arcs and are equal. Angles side by side on a line add to 180°.', v: [] },
+      { terr: 'K2', tag: 'radius', trap: ['d = 14:   A = π · 14²', 'halve first:   π · 7²'], alt: 'The area formula squares the radius, not the diameter: 7 squared, not 14 squared.', v: [['14/2', '7']] },
+      { terr: 'K3', tag: 'pi', trap: ['A = 25π ≈ 78 (tenths asked)', 'to the tenth:   ≈ 78.5 cm²'], alt: 'Give the answer to the place the problem asks for: 25π is about 78.5 to the nearest tenth.', v: [['5^2', '25']] },
+      { terr: 'K4', tag: 'units', trap: ['1 m² = 100 cm²', 'square the 100:   10,000 cm²'], alt: 'A square metre is 100 cm by 100 cm, so it is 10,000 square centimetres.', v: [['100^2', '10000']] },
+      { terr: 'K7', tag: 'faces', trap: ['an open box:   6 faces', 'no lid:   5 faces'], alt: 'An open box has no top: count the base and the four sides, five faces.', v: [] },
+      { terr: 'K6', tag: 'tri', trap: ['3, 5, 9:   3 + 9 > 5, a triangle', 'the short sides:   3 + 5 < 9, none'], alt: 'Test the two shorter sides against the longest: 3 + 5 is 8, less than 9, so no triangle.', v: [['3+5', '8']] },
+      { terr: 'K10', tag: 'concept', trap: ['legs 9 and 12:   c = 21', 'add the squares:   √225 = 15'], alt: 'The hypotenuse is not the legs added: 81 + 144 = 225, and its square root is 15.', v: [['9^2+12^2', '225']] }
+    ],
+    dojo: [['geo', 'Angles, circles, area and volume'], ['unit', 'Units and conversions'], ['form', 'Applied formulas'], ['trap', 'Traps']]
   });
 })();
 
@@ -53196,6 +53451,178 @@ if (typeof module !== 'undefined' && module.exports) module.exports.TRX = TRX;
 })();
 /* ===== DJG part 6 END ===== */
 
+/* --- dojo: dojo_gens7.js --- */
+/* ===== DJG part 7 (Traps: the course's common slips, drilled; owner request 19 Nov 2026) START =====
+   Same contract as hub/dojo_gens.js. One focus area, 'trap', with one move per slip. Each slip is a FAMILY:
+     make(lv) -> { q: question html, r: { src, show }, w: { src, show } (the slip), w2?: a second wrong, why, unit?, pre?, ineq? }
+   r.src and w.src are ascii expressions; the slip must differ from the right answer (until). Each rep meets the slip from one of
+   three angles, so the same trap comes back in other words:
+     spot   the question and one worked answer (sometimes the slip, sometimes right): Right or a slip?   ver pair [shown, right]
+     which  the slip and the right answer side by side: which is right?                                  ver pair [first, right]
+     fix    the slip is shown and named as a slip: give the right answer                                  ver ev (typed) / eq (tiles)
+   An inequality family (the flipped sign) is asked with inequality tiles and checked at sample points (ver orig).
+   The moves are tagged with the catalog skills the slip sits in, so a rep counts for those skills like any other move. */
+(function () {
+  'use strict';
+  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, nz = h.nz, pick = h.pick, f = h.f, P = h.P, D = h.D, L = h.L, fr = h.fr, until = h.until, s = h.s, T = h.T, C = h.C, B = h.B, X = h.X, IQ = h.IQ, mv = DJG.mv;
+  DJG.STYLES.push({ id: 'trap', name: 'Traps', ch: [1, 2, 3, 4, 5, 6, 7, 8], blurb: 'The slips the course sees most: spot one, pick the right way, fix it. Fresh numbers every time.' });
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  function ev(src) { return MM.ev(MM.parse(String(src)), {}); }
+  function N(src) { return { src: String(src), show: f(ev(src)) }; }                 // a number from its ascii source
+  function work(t) { return L('Worked answer: <b class="dj-work">' + t + '</b>'); }
+  var FAM = [];
+  function fam(id, name, ch, skills, card, make) { FAM.push({ id: id, ch: ch }); mv('trap.' + id, name, skills, card, function (lv) { return [ask(make(lv), lv)]; }); }
+  function ask(t, lv) {
+    var unit = t.unit || '', U = function (x) { return (t.pre ? (t.pre === '$' ? '$' : t.pre + ' ') : '') + x + (unit ? (/^[%°π]/.test(unit) ? '' : ' ') + unit : ''); };
+    if (t.ineq) {   // inequality tiles: the right one, the slip, a second wrong; checked at sample points against the original
+      var tiles = [t.r, t.w, t.w2], how = lv === 1 || Math.random() < 0.5 ? 'which' : 'fix';
+      var lead = how === 'fix' ? L('Worked answer: <b class="dj-work">' + t.w.t + '</b>. That is a slip. Which is right?') : L('Which answer is right?');
+      return C(t.q + lead, t.r, [t.w, t.w2], { tag: 'trap', why: t.why, ver: { orig: t.orig }, step: how === 'fix' ? 'Fix the slip' : 'Pick the right way' });
+    }
+    var angles = lv === 1 ? ['spot', 'which'] : ['spot', 'which', 'fix'], how2 = pick(angles);
+    if (how2 === 'spot') {
+      var right = Math.random() < 0.45, shown = right ? t.r : t.w;
+      return B(t.q + work(U(shown.show)) + L('Right, or a slip?'), 'Right', 'A slip', right, { tag: 'trap', why: (right ? 'It is right. ' : 'A slip. ') + t.why, ver: { pair: [shown.src, t.r.src] }, step: 'Spot the slip' });
+    }
+    if (how2 === 'which') {
+      var first = Math.random() < 0.5 ? t.r : t.w, second = first === t.r ? t.w : t.r;
+      return B(t.q + L('Which is right?'), U(first.show), U(second.show), first === t.r, { tag: 'trap', why: t.why, ver: { pair: [first.src, t.r.src] }, step: 'Pick the right way' });
+    }
+    if (t.expr) return X(t.q + work(t.w.show) + L('That is a slip. Which is right?'), t.r.src, [t.w.src, t.w2.src], { tag: 'trap', why: t.why, ver: { eq: t.r.src }, step: 'Fix the slip' });
+    var it = T(t.q + work(U(t.w.show)) + L('That is a slip. What is the right answer?'), ev(t.r.src), { wrongs: [ev(t.w.src)], tag: 'trap', unit: unit, pre: t.pre || '', ver: { ev: t.r.src }, why: t.why });
+    it.step = 'Fix the slip'; return it;
+  }
+
+  // ---------------------------------------------------------------- Chapter 1
+  fam('order', 'Left to right is not the order', 1, ['S5', 'S6'], ['× before +', 'Multiply and divide before you add and subtract, even when the + comes first. 2 + 3 · 4 is 2 + 12 = 14, not 5 · 4.'], function (lv) {
+    var t = until(function () { return { a: R(2, 9), b: R(2, 9), c: R(2, 6), m: lv === 3 && Math.random() < 0.5 }; }, function (z) { return z.m ? z.a * 10 > z.b * z.c : true; });
+    if (t.m) return { q: D((t.a * 10) + ' − ' + t.b + ' · ' + t.c), r: N(t.a * 10 + '-' + t.b + '*' + t.c), w: N('(' + t.a * 10 + '-' + t.b + ')*' + t.c), why: 'Multiply first: ' + t.b + ' · ' + t.c + ' = ' + t.b * t.c + ', then subtract.' };
+    return { q: D(t.a + ' + ' + t.b + ' · ' + t.c), r: N(t.a + '+' + t.b + '*' + t.c), w: N('(' + t.a + '+' + t.b + ')*' + t.c), why: 'Multiply first: ' + t.b + ' · ' + t.c + ' = ' + t.b * t.c + ', then add ' + t.a + '.' };
+  });
+  fam('negsq', 'The exponent reaches only what it sits on', 1, ['S1', 'S3', 'T26'], ['−4² is −16', 'The exponent sits on the 4, not on the minus: −4² = −(4 · 4) = −16. With parentheses, (−4)² = 16.'], function (lv) {
+    var a = R(2, lv === 1 ? 6 : 9), par = lv > 1 && Math.random() < 0.4;
+    if (par) return { q: D('(−' + a + ')²'), r: N('(-' + a + ')^2'), w: N('-(' + a + '^2)'), why: 'The parentheses put the minus under the exponent: (−' + a + ') · (−' + a + ') = ' + a * a + '.' };
+    return { q: D('−' + a + '²'), r: N('-(' + a + '^2)'), w: N(a + '^2'), why: 'The exponent sits on the ' + a + ' only: −(' + a + ' · ' + a + ') = −' + a * a + '.' };
+  });
+  fam('dist', 'The factor reaches every term', 1, ['S32'], ['k(x + b) = kx + kb', 'Multiply every term inside the parentheses: 3(x + 4) = 3x + 12, not 3x + 4.'], function (lv) {
+    var k = R(2, 9), b = R(2, 9), neg = lv === 3 && Math.random() < 0.5;
+    var r = neg ? k + '*x-' + k * b : k + '*x+' + k * b, w = neg ? k + '*x-' + b : k + '*x+' + b, w2 = neg ? 'x-' + k * b : 'x+' + k * b;
+    return { expr: true, q: D(k + '(x ' + (neg ? '−' : '+') + ' ' + b + ')'), r: { src: r, show: P(r) }, w: { src: w, show: P(w) }, w2: { src: w2, show: P(w2) }, why: k + ' multiplies both x and ' + b + ': ' + P(r) + '.' };
+  });
+  fam('like', 'Only like terms combine', 1, ['S23', 'S21'], ['x and x² do not combine', 'Like terms have the same letter part. 3x + 2x² stays as it is; 3x + 2x = 5x. Adding never changes an exponent.'], function (lv) {
+    var a = R(2, 9), b = R(2, 9), r = a + '*x+' + b + '*x^2', w = (a + b) + '*x^3', w2 = (a + b) + '*x^2';
+    return { expr: true, q: D('Simplify  ' + P(r)), r: { src: r, show: P(r) + '  (already simplest)' }, w: { src: w, show: P(w) }, w2: { src: w2, show: P(w2) }, why: 'x and x² are not like terms, so ' + P(r) + ' cannot be combined.' };
+  });
+  // ---------------------------------------------------------------- Chapter 2
+  fam('subneg', 'Minus a negative is plus', 2, ['T17', 'T18'], ['− (−b) = + b', 'Subtracting a negative is adding its opposite: 5 − (−3) = 5 + 3 = 8.'], function (lv) {
+    var a = lv === 1 ? R(2, 9) : nz(-9, 9), b = R(2, 9);
+    return { q: D(f(a) + ' − (−' + b + ')'), r: N(s(a) + '+' + b), w: N(s(a) + '-' + b), why: 'Subtract −' + b + ' by adding ' + b + ': ' + f(a) + ' + ' + b + ' = ' + (a + b) + '.' };
+  });
+  fam('negprod', 'Count the negatives', 2, ['T26', 'T27', 'T28'], ['An even count of negatives: +', 'Two negative factors make a positive; three make a negative. Count the minus signs before you multiply.'], function (lv) {
+    var a = R(2, 6), b = R(2, 6), c = R(2, 4), three = lv > 1;
+    if (!three) return { q: D('(−' + a + ') · (−' + b + ')'), r: N('(-' + a + ')*(-' + b + ')'), w: N('-' + a * b), why: 'Two negatives: the product is positive, ' + a * b + '.' };
+    return { q: D('(−' + a + ') · (−' + b + ') · (−' + c + ')'), r: N('(-' + a + ')*(-' + b + ')*(-' + c + ')'), w: N(String(a * b * c)), why: 'Three negatives: the product is negative, −' + a * b * c + '.' };
+  });
+  // ---------------------------------------------------------------- Chapter 3
+  fam('inverse', 'Undo ÷ with ·', 3, ['U6', 'U9'], ['x ÷ 4 = −5: multiply by 4', 'Undo a division by multiplying both sides: x/4 = −5 gives x = −20.'], function (lv) {
+    var k = R(2, 9), n = lv === 1 ? R(2, 9) : nz(-9, 9);
+    return { q: D(fr('x', k) + ' = ' + f(n)), pre: 'x =', r: N(s(n) + '*' + k), w: N(s(n) + '/' + k), why: 'Multiply both sides by ' + k + ': x = ' + f(n) + ' · ' + k + ' = ' + n * k + '.' };
+  });
+  fam('lessthan', '“Less than” flips the order', 3, ['S11', 'S12', 'U14'], ['7 less than x is x − 7', '“Less than” and “fewer than” put the numbers in the other order: start with x, then take 7 away.'], function (lv) {
+    var b = R(2, 15), word = pick(lv === 1 ? ['less than'] : ['less than', 'fewer than', 'subtracted from']), r = 'x-' + b;
+    return { expr: true, q: D('“' + b + ' ' + word + ' x”'), r: { src: r, show: P(r) }, w: { src: b + '-x', show: P(b + '-x') }, w2: { src: 'x+' + b, show: P('x+' + b) }, why: '“' + b + ' ' + word + ' x” starts at x and takes ' + b + ' away: x − ' + b + '.' };
+  });
+  fam('minutes', 'Minutes into hours first', 3, ['U21', 'U20'], ['45 min = 0.75 h', 'A speed in km per hour needs the time in hours: 45 minutes is 45/60 = 0.75 hours.'], function (lv) {
+    var mv0 = until(function () { return [pick([15, 30, 45, 20, 40, 12, 36]), pick([40, 50, 60, 80, 90, 120])]; }, function (z) { return z[0] * z[1] % 60 === 0; }), m = mv0[0], v = mv0[1];
+    return { q: L('A car drives at ' + v + ' km/h for ' + m + ' minutes. How far does it go?'), unit: 'km', r: N(v + '*' + m + '/60'), w: N(v + '*' + m), why: m + ' minutes is ' + f(q(m, 60)) + ' of an hour: ' + v + ' · ' + f(q(m, 60)) + ' = ' + f(q(v * m, 60)) + ' km.' };
+  });
+  fam('step0', 'The start is step 0', 3, ['U28', 'U31'], ['start + add × step', 'In start + add × step, the start is the value at step 0, one step before step 1. At step n the value is start + add · n.'], function (lv) {
+    var st = R(1, 9), d = R(2, 6), n = R(4, 12);
+    return { q: L('A pattern has ' + st + ' at step 0 and adds ' + d + ' each step. What is the value at step ' + n + '?'), r: N(st + '+' + d + '*' + n), w: N(st + '+' + d + '*' + (n - 1)), why: 'From step 0 to step ' + n + ' is ' + n + ' steps: ' + st + ' + ' + d + ' · ' + n + ' = ' + (st + d * n) + '.' };
+  });
+  // ---------------------------------------------------------------- Chapter 4
+  fam('decplaces', 'Count the decimal places', 4, ['R17', 'R21'], ['0.3 · 0.2 = 0.06', 'The product has as many decimal places as both factors together: one + one = two places.'], function (lv) {
+    var a = R(2, 9), b = R(2, 9), two = lv === 3;
+    if (two) return { q: D('0.' + a + ' · 0.0' + b), r: N(a + '*' + b + '/1000'), w: N(a + '*' + b + '/100'), why: 'One place and two places make three: ' + a * b + ' thousandths.' };
+    return { q: D('0.' + a + ' · 0.' + b), r: N(a + '*' + b + '/100'), w: N(a + '*' + b + '/10'), why: 'One place and one place make two: ' + a * b + ' hundredths.' };
+  });
+  fam('fdiv', 'Divide: multiply by the reciprocal', 4, ['R18', 'R20'], ['÷ ⅓ is · 3', 'To divide by a fraction, multiply by its reciprocal: 2/3 ÷ 1/3 = 2/3 · 3 = 2.'], function (lv) {
+    var t = until(function () { return { a: R(1, 5), b: R(2, 7), c: R(1, 5), d: R(2, 7) }; }, function (z) { return z.a < z.b && z.c < z.d && gcd(z.a, z.b) === 1 && gcd(z.c, z.d) === 1 && !q(z.a, z.b).div(q(z.c, z.d)).eq(q(z.a, z.b).mul(q(z.c, z.d))); });
+    return { q: D(fr(t.a, t.b) + ' ÷ ' + fr(t.c, t.d)), r: N('(' + t.a + '/' + t.b + ')/(' + t.c + '/' + t.d + ')'), w: N('(' + t.a + '/' + t.b + ')*(' + t.c + '/' + t.d + ')'), why: 'Multiply by ' + t.d + '/' + t.c + ', the reciprocal: ' + f(q(t.a, t.b).div(q(t.c, t.d))) + '.' };
+  });
+  fam('fadd', 'Common denominator first', 4, ['R13', 'R15'], ['½ + ⅓ = 5/6', 'Fractions add over a common denominator. Adding tops and bottoms (½ + ⅓ = 2/5) makes the sum smaller than one of its parts.'], function (lv) {
+    var t = until(function () { return { a: 1, b: R(2, 6), c: lv === 1 ? 1 : R(1, 3), d: R(2, 7) }; }, function (z) { return z.b !== z.d && z.c < z.d && gcd(z.c, z.d) === 1; });
+    return { q: D(fr(t.a, t.b) + ' + ' + fr(t.c, t.d)), r: N(t.a + '/' + t.b + '+' + t.c + '/' + t.d), w: N('(' + (t.a + t.c) + ')/(' + (t.b + t.d) + ')'), why: 'Over ' + t.b * t.d + ': ' + f(q(t.a, t.b).add(q(t.c, t.d))) + '.' };
+  });
+  // ---------------------------------------------------------------- Chapter 5
+  fam('flip', 'Times a negative: reverse the sign', 5, ['E31', 'E34'], ['−2x < 6 gives x > −3', 'Dividing both sides of an inequality by a negative number reverses the sign.'], function (lv) {
+    var k = R(2, 6), x0 = nz(-6, 6), c = -k * x0, op = pick(['<', '>', '<=', '>=']), rev = { '<': '>', '>': '<', '<=': '>=', '>=': '<=' }[op];
+    return { ineq: true, q: D('−' + k + 'x ' + H.sym(op) + ' ' + f(c)), orig: ['-' + k + '*x', op, s(c)], r: IQ(rev, x0), w: IQ(op, x0), w2: IQ(rev, -x0), why: 'Divide by −' + k + ' and reverse the sign: x ' + H.sym(rev) + ' ' + f(x0) + '.' };
+  });
+  fam('twostep', 'Undo the + before the ×', 5, ['E1', 'E7'], ['2x + 5 = 17: subtract 5 first', 'Undo in reverse order: take away the 5 from both sides, then divide by 2. Dividing first must divide the 5 as well.'], function (lv) {
+    var t = until(function () { return { a: R(2, 6), x: lv === 1 ? R(2, 9) : nz(-9, 9), b: R(2, 12) }; }, function (z) { return !q(z.a * z.x + z.b, z.a).sub(z.b).eq(z.x); });
+    var c = t.a * t.x + t.b;
+    return { q: D(t.a + 'x + ' + t.b + ' = ' + f(c)), pre: 'x =', r: N('(' + s(c) + '-' + t.b + ')/' + t.a), w: N(s(c) + '/' + t.a + '-' + t.b), why: 'Subtract ' + t.b + ' first: ' + t.a + 'x = ' + f(c - t.b) + ', so x = ' + t.x + '.' };
+  });
+  // ---------------------------------------------------------------- Chapter 6
+  fam('rateway', 'Which way up is the rate?', 6, ['P8', 'P11'], ['dollars per kilogram: $ ÷ kg', 'Per means divide by what comes after it: dollars per kilogram is the dollars ÷ the kilograms.'], function (lv) {
+    var kg = pick([3, 4, 5, 6]), per = pick([2, 3, 4, 6, 8]), cost = kg * per;
+    return { q: L(kg + ' kg cost ' + cost + ' dollars. How many dollars per kilogram?'), unit: 'dollars per kg', r: N(cost + '/' + kg), w: N(kg + '/' + cost), why: 'Dollars per kilogram: the dollars ÷ the kilograms, ' + cost + ' ÷ ' + kg + ' = ' + per + '.' };
+  });
+  fam('areak', 'Area scales by k²', 6, ['P44', 'G18'], ['k = 3: area × 9', 'Every length is multiplied by k, so the area picks it up twice: k². Triple the sides and the area is 9 times as big.'], function (lv) {
+    var k = R(2, lv === 1 ? 3 : 5), A = pick([6, 8, 10, 12, 15, 20]);
+    return { q: L('A figure of area ' + A + ' cm² is enlarged with scale factor ' + k + '. What is the new area?'), unit: 'cm²', r: N(A + '*' + k + '^2'), w: N(A + '*' + k), why: 'Area grows by k² = ' + k * k + ': ' + A + ' · ' + k * k + ' = ' + A * k * k + ' cm².' };
+  });
+  // ---------------------------------------------------------------- Chapter 7
+  fam('pctbase', 'Change over the original', 7, ['C31', 'C10'], ['From 40 to 50: 10 ÷ 40', 'Percent change is the difference over the original amount, the one you started from.'], function (lv) {
+    var pr = pick([[40, 50], [20, 25], [80, 100], [100, 125], [25, 50], [40, 80], [50, 40], [25, 20], [100, 80]]), a = pr[0], b = pr[1], up = b > a, d = Math.abs(b - a);
+    return { q: L('A price goes from $' + a + ' to $' + b + '. By what percent did it ' + (up ? 'rise' : 'fall') + '?'), unit: '%', r: N(d + '/' + a + '*100'), w: N(d + '/' + b + '*100'), why: 'The change, ' + d + ', over the original ' + a + ': ' + f(q(d * 100, a)) + '%.' };
+  });
+  fam('updown', 'Up p%, then down p%: not back', 7, ['C21', 'C23'], ['· 1.1 then · 0.9 is · 0.99', 'The second percent is taken of a new amount. Up 10% then down 10% multiplies by 1.1 · 0.9 = 0.99.'], function (lv) {
+    var P0 = pick([100, 200, 400]), p = pick([10, 20, 50]);
+    return { q: L('A $' + P0 + ' price rises ' + p + '%, then the new price falls ' + p + '%. What is it now?'), pre: '$', r: N(P0 + '*(1+' + p + '/100)*(1-' + p + '/100)'), w: N(String(P0)), why: P0 + ' · ' + f(q(100 + p, 100)) + ' · ' + f(q(100 - p, 100)) + ' = ' + f(q(P0 * (100 + p) * (100 - p), 10000)) + '.' };
+  });
+  // ---------------------------------------------------------------- Chapter 8
+  fam('diam', 'Halve the diameter first', 8, ['G14', 'G16'], ['A = π · r²: r, not d', 'The area formula uses the radius. With the diameter given, halve it, then square.'], function (lv) {
+    var d = pick([4, 6, 8, 10, 12, 14, 20]);
+    return { q: L('A circle has diameter ' + d + ' cm. Its area, in terms of π?'), unit: 'π cm²', r: N('(' + d + '/2)^2'), w: N(d + '^2'), why: 'r = ' + d / 2 + ', so A = ' + (d / 2) * (d / 2) + 'π cm².' };
+  });
+  fam('tri180', 'A triangle holds 180°', 8, ['G41', 'G42'], ['third = 180° − the other two', 'The angles of a triangle add to 180°, not 360°: side by side they fill a straight line.'], function (lv) {
+    var t = until(function () { return { a: R(25, 95), b: R(25, 95) }; }, function (z) { return z.a + z.b < 160; });
+    return { q: L('Two angles of a triangle are ' + t.a + '° and ' + t.b + '°. The third?'), unit: '°', r: N('180-' + t.a + '-' + t.b), w: N('360-' + t.a + '-' + t.b), why: '180 − ' + t.a + ' − ' + t.b + ' = ' + (180 - t.a - t.b) + '°.' };
+  });
+  fam('vertical', 'Across a crossing: equal', 8, ['G2', 'G4'], ['vertical angles are equal', 'Angles across a crossing match (the same arcs). Angles beside each other on a line add to 180°.'], function (lv) {
+    var a = until(function () { return R(25, 155); }, function (z) { return z !== 90; });
+    return { q: L('Two lines cross. One angle is ' + a + '°. The angle across the crossing from it?'), unit: '°', r: N(String(a)), w: N('180-' + a), why: 'Vertical angles are equal: ' + a + '°. (' + (180 - a) + '° is the angle beside it.)' };
+  });
+  fam('squnit', 'Square the unit factor', 8, ['G48', 'G49'], ['1 ft² = 144 in²', 'A square foot is 12 in by 12 in, so it holds 12² = 144 square inches. The length factor is squared.'], function (lv) {
+    var u = pick([['yd', 'ft', 3], ['ft', 'in', 12], ['m', 'dm', 10]]), n = R(2, lv === 1 ? 4 : 9);
+    return { q: L(n + ' ' + u[0] + '² in ' + u[1] + '²?'), unit: u[1] + '²', r: N(n + '*' + u[2] + '^2'), w: N(n + '*' + u[2]), why: '1 ' + u[0] + '² = ' + u[2] * u[2] + ' ' + u[1] + '², so ' + n + ' ' + u[0] + '² = ' + n * u[2] * u[2] + ' ' + u[1] + '².' };
+  });
+  fam('pyth', 'Add the squares, not the sides', 8, ['G70', 'G71'], ['c² = a² + b²', 'The hypotenuse is not the legs added: square them, add, then take the square root.'], function (lv) {
+    var t = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [12, 16, 20]]);
+    return { q: L('A right triangle has legs ' + t[0] + ' cm and ' + t[1] + ' cm. The hypotenuse?'), unit: 'cm', r: N(String(t[2])), w: N(t[0] + '+' + t[1]), why: '√(' + t[0] * t[0] + ' + ' + t[1] * t[1] + ') = √' + t[2] * t[2] + ' = ' + t[2] + ' cm.' };
+  });
+  DJG.TRAPS = FAM;
+
+  // ---------------------------------------------------------------- the ten ideas of the Course Sheet (hub/tactics_course.js) as Dojo focus areas
+  // Each idea lists the quick moves that practise it in any chapter; its full problems are the Path levels whose Skills & Tactics cards
+  // wear its thread (found in the hub from TAC), so a Blob Roll on one idea alternates chapters. hub/test_dojo.js checks every id.
+  DJG.IDEA_MOVES = {
+    bal: ['eq1.move', 'eq1.add', 'eq1.mul', 'eq1.check', 'eq1.frac', 'eq2.order', 'eq2.solve', 'eq2.dist', 'eq2.like', 'ineq.flip', 'ineq.solve', 'geo.line', 'geo.par', 'words.solveit', 'trap.twostep', 'trap.flip', 'trap.vertical'],
+    undo: ['eq1.add', 'eq1.mul', 'eq1.frac', 'eq2.order', 'eq2.solve', 'eq2.rearr', 'rat.fmul', 'pct.base', 'form.tri', 'unit.dir', 'trap.inverse', 'trap.twostep', 'trap.fdiv'],
+    tri: ['drt.run', 'drt.form', 'drt.plug', 'form.tri', 'form.cost', 'form.avg', 'rate.unit', 'rate.k', 'pct.type', 'geo.circ', 'geo.form', 'unit.rate', 'trap.rateway', 'trap.diam'],
+    bar: ['rat.of', 'pct.bench', 'pct.type', 'pct.base', 'geo.line', 'geo.tri', 'geo.par', 'geo.poly', 'words.two', 'trap.tri180', 'trap.vertical', 'trap.pctbase'],
+    step: ['pat.next', 'pat.rule', 'pat.step', 'rate.slope', 'rate.k', 'words.rule', 'trap.step0'],
+    line: ['int.add', 'int.sub', 'int.abs', 'int.cmp', 'rat.cmp', 'rat.dadd', 'ineq.test', 'ineq.cmpd', 'trap.subneg', 'trap.negprod'],
+    words: ['words.op', 'words.expr', 'words.eq', 'words.ineq', 'words.pct', 'words.rate', 'words.sym', 'words.phrase', 'words.say', 'words.combo2', 'words.solveit', 'words.limit', 'words.measure', 'words.rule', 'trap.lessthan'],
+    units: ['drt.time', 'unit.dir', 'unit.conv', 'unit.rate', 'unit.match', 'unit.hm', 'geo.units', 'rate.which', 'trap.minutes', 'trap.squnit'],
+    scale: ['rate.equiv', 'rate.prop', 'rate.scale', 'rate.power', 'pct.mult', 'pct.change', 'pct.interest', 'trap.areak', 'trap.updown', 'trap.pctbase'],
+    area: ['pat.area', 'exp.dist', 'exp.fact', 'exp.mental', 'form.rect', 'geo.area', 'geo.vol', 'trap.dist', 'trap.squnit']
+  };
+})();
+/* ===== DJG part 7 END ===== */
+
 /* --- dojo: dojo_quests.js --- */
 /* ===== DJG quests (the Dojo's Quest mode: one story, several steps, each step uses the answer of the step before) START =====
    DJG.quest(id, lv) -> { id, title, intro, outro, nodes:[{ place, item }] }      lv 1 = 3 steps, lv 2 = 4, lv 3 = all of them (5 or 6)
@@ -53431,12 +53858,17 @@ var DJ = (function () {
   var WHY = { due: 'Due for a refresh', fading: 'Starting to fade', weak: 'Needs strengthening', scout: 'New ground', keep: 'Keeping it sharp' };
 
   // ---------------------------------------------------------------- focus: which moves are allowed
-  // focus = null (everything) | { style } | { moves:[ids] } | { skills:[ids] } | { level:'ch3:4-2' }
+  // focus = null (everything) | { style } | { moves:[ids] } | { skills:[ids] } | { level:'ch3:4-2' } |
+  //         { idea, levels:['ch3:1-1', …] }: one idea of the Course Sheet across the whole course (the Path levels whose cards wear it)
+  function ideaSkills(cat, focus) { var o = {}; (focus.levels || []).forEach(function (k) { (cat.levels[k] ? cat.levels[k].skills : []).forEach(function (s) { o[s] = 1; }); }); return Object.keys(o); }
+  // a list in score order, re-dealt so that consecutive picks come from different chapters (an idea is practised across the course)
+  function byChapter(list, chOf) { var G = {}, order = []; list.forEach(function (x) { var c = chOf(x); if (!G[c]) { G[c] = []; order.push(c); } G[c].push(x); }); var out = []; for (var i = 0; out.length < list.length; i++) order.forEach(function (c) { if (G[c][i]) out.push(G[c][i]); }); return out; }
   function focusMoves(cat, focus) {
     if (!focus) return DJG.MOVES.slice();
     if (focus.moves) return focus.moves.map(function (id) { return DJG.byId[id]; }).filter(Boolean);
     if (focus.style) return DJG.MOVES.filter(function (m) { return DJG.inStyle(m, focus.style); });
-    var sk = focus.skills || (focus.level && cat.levels[focus.level] ? cat.levels[focus.level].skills : []);
+    if (focus.idea && DJG.IDEA_MOVES && DJG.IDEA_MOVES[focus.idea]) return DJG.IDEA_MOVES[focus.idea].map(function (id) { return DJG.byId[id]; }).filter(Boolean);
+    var sk = focus.skills || (focus.levels ? ideaSkills(cat, focus) : focus.level && cat.levels[focus.level] ? cat.levels[focus.level].skills : []);
     var direct = DJG.MOVES.filter(function (m) { return m.skills.some(function (s) { return sk.indexOf(s) >= 0; }); });
     if (direct.length) return direct;
     // nothing tagged with these skills: the moves of the same strands (so a warm-up always exists), else none (katas carry it)
@@ -53446,6 +53878,7 @@ var DJ = (function () {
   function focusSkills(cat, focus) {
     if (!focus) return null;
     if (focus.skills) return focus.skills.slice();
+    if (focus.levels) return ideaSkills(cat, focus);
     if (focus.level && cat.levels[focus.level]) return cat.levels[focus.level].skills.slice();
     return null;
   }
@@ -53469,7 +53902,11 @@ var DJ = (function () {
     }
     // katas: due (or focused) skills that no allowed move practises come back as a full problem
     var katas = [];
-    if (opts.katas !== false && !(opts.focus && (opts.focus.style || opts.focus.level || opts.focus.moves))) {
+    if (opts.katas !== false && opts.focus && opts.focus.levels) {   // an idea: its own Path levels from every chapter come back as full problems, chapters taking turns
+      katas = opts.focus.levels.filter(function (k) { return cat.levels[k] && (cat.levels[k].skills || []).length; }).map(function (k) { var L0 = cat.levels[k], u = unitUrgency(model, cat, L0.skills, cur);
+        return { type: 'kata', ref: levelRef(k), skills: L0.skills.slice(), diff: L0.level || 1, level: k, entry: null, kind: u.kind === 'fading' ? 'due' : u.kind, raw: u.raw || u.kind, score: u.score + rnd() * 0.3, skill: L0.skills[0], why: WHY[u.raw || u.kind] }; });
+      katas.sort(function (a2, b2) { return b2.score - a2.score; }); katas = byChapter(katas, function (k) { return cat.levels[k.level].ch; });
+    } else if (opts.katas !== false && !(opts.focus && (opts.focus.style || opts.focus.level || opts.focus.moves))) {
       var allowed = {}; moves.forEach(function (m) { m.skills.forEach(function (s) { allowed[s] = 1; }); });
       (fsk || Object.keys(cat.skills)).forEach(function (s) {
         if (!cat.skills[s] || (allowed[s] && !(fsk && !routes(cat)[s].moves.length))) return;
@@ -53503,21 +53940,28 @@ var DJ = (function () {
     opts = opts || {};
     var lv = opts.lv || 1, rnd = opts.rnd || Math.random, cur = opts.cur || (model && model.curCh) || null, fsk = focusSkills(cat, opts.focus), styleSk = null, out = [], id;
     if (opts.focus && opts.focus.style) { styleSk = {}; DJG.MOVES.forEach(function (m) { if (DJG.inStyle(m, opts.focus.style)) m.skills.forEach(function (s) { styleSk[s] = 1; }); }); }
-    function wanted(sk) { if (fsk) return sk.some(function (s) { return fsk.indexOf(s) >= 0; }); if (styleSk) return sk.some(function (s) { return styleSk[s]; }); return true; }
+    var idea = opts.focus && opts.focus.levels ? opts.focus.levels : null;
+    function wanted(sk, lid) { if (idea && lid) return idea.indexOf(lid) >= 0; if (fsk) return sk.some(function (s) { return fsk.indexOf(s) >= 0; }); if (styleSk) return sk.some(function (s) { return styleSk[s]; }); return true; }
     var tiers = lv === 1 ? [2] : lv === 2 ? [3] : [4, 3], levs = lv === 1 ? [2] : [3];
     for (id in cat.entries) { var e = cat.entries[id]; if (e.onramp === false || (e.skills || []).length < 2 || tiers.indexOf(e.tier) < 0 || !wanted(e.skills)) continue; var u = unitUrgency(model, cat, e.skills, cur); out.push({ ref: { type: 'entry', id: id }, entry: id, level: null, skills: e.skills.slice(), diff: e.tier, name: e.name, terr: e.terr, kind: u.kind, why: WHY[u.raw || u.kind], score: u.score + (e.tier === tiers[0] ? 0.05 : 0) + rnd() * 0.2 }); }
-    for (id in cat.levels) { var L0 = cat.levels[id]; if ((L0.skills || []).length < 2 || levs.indexOf(L0.level) < 0 || !wanted(L0.skills)) continue; var u2 = unitUrgency(model, cat, L0.skills, cur); out.push({ ref: levelRef(id), entry: null, level: id, skills: L0.skills.slice(), diff: L0.level, name: L0.unit || '', terr: null, kind: u2.kind, why: WHY[u2.raw || u2.kind], score: u2.score + rnd() * 0.2 }); }
+    for (id in cat.levels) { var L0 = cat.levels[id]; if ((L0.skills || []).length < 2 || levs.indexOf(L0.level) < 0 || !wanted(L0.skills, id)) continue; var u2 = unitUrgency(model, cat, L0.skills, cur); out.push({ ref: levelRef(id), entry: null, level: id, skills: L0.skills.slice(), diff: L0.level, name: L0.unit || '', terr: null, kind: u2.kind, why: WHY[u2.raw || u2.kind], score: u2.score + rnd() * 0.2 }); }
     out.sort(function (a, b) { return b.score - a.score; });
+    if (idea) { out.forEach(function (x) { if (x.level) x.score += 0.3; }); out.sort(function (a, b) { return b.score - a.score; }); out = byChapter(out, function (x) { return x.level ? cat.levels[x.level].ch : cat.entries[x.entry] ? 'b' + (cat.entries[x.entry].ch || '') : 'b'; }); }
     return out;
   }
   function mult(k) { return Math.min(LMS.K.SUP_MAX, 1 + LMS.K.SUP_STEP * (Math.max(1, k) - 1)); }
   function questOrder(model, cat, opts) {
     opts = opts || {};
     var cur = opts.cur || (model && model.curCh) || null, rnd = opts.rnd || Math.random, last = opts.last || [];
-    return DJG.QUESTS.filter(function (q0) { return !(opts.focus && opts.focus.style) || q0.styles.indexOf(opts.focus.style) >= 0; }).map(function (q0) {
-      var sk = {}; DJG.MOVES.forEach(function (m) { if (q0.styles.indexOf(m.style) >= 0) m.skills.forEach(function (s) { sk[s] = 1; }); });
+    var isk = opts.focus && opts.focus.levels ? ideaSkills(cat, opts.focus) : null;
+    function qsk(q0) { var sk = {}; DJG.MOVES.forEach(function (m) { if (q0.styles.indexOf(m.style) >= 0) m.skills.forEach(function (s) { sk[s] = 1; }); }); return sk; }
+    function share(q0) { var sk = qsk(q0), n = 0; isk.forEach(function (s) { if (sk[s]) n++; }); return n; }
+    var pool = DJG.QUESTS.filter(function (q0) { return !(opts.focus && opts.focus.style) || q0.styles.indexOf(opts.focus.style) >= 0; });
+    if (isk) { var near = pool.filter(function (q0) { return share(q0) > 0; }); if (near.length) pool = near; }   // an idea: the quests whose moves practise its skills
+    return pool.map(function (q0) {
+      var sk = qsk(q0);
       var ids = Object.keys(sk), sum = 0; ids.forEach(function (s) { var u = urgency(model, cat, s, cur); sum += u.kind === 'due' || u.kind === 'fading' || u.kind === 'weak' ? u.score : 0; });
-      return { id: q0.id, title: q0.title, styles: q0.styles, score: (ids.length ? sum / ids.length : 0) + rnd() * 0.1 - (last.indexOf(q0.id) >= 0 ? 1 + (last.length - last.indexOf(q0.id)) * 0.1 : 0) };
+      return { id: q0.id, title: q0.title, styles: q0.styles, score: (ids.length ? sum / ids.length : 0) + (isk ? 0.5 * share(q0) / Math.max(1, ids.length) : 0) + rnd() * 0.1 - (last.indexOf(q0.id) >= 0 ? 1 + (last.length - last.indexOf(q0.id)) * 0.1 : 0) };
     }).sort(function (a, b) { return b.score - a.score; });
   }
 
@@ -53598,7 +54042,7 @@ var DJ = (function () {
   }
   function rollDiff(lv) { return K.ROLL_D[Math.max(1, Math.min(3, lv || 1))]; }
 
-  return { K: K, MODES: MODES, LEVELS: LEVELS, WHY: WHY, routes: routes, kataFor: kataFor, levelRef: levelRef, urgency: urgency, unitUrgency: unitUrgency, focusMoves: focusMoves, focusSkills: focusSkills,
+  return { K: K, MODES: MODES, LEVELS: LEVELS, WHY: WHY, routes: routes, kataFor: kataFor, levelRef: levelRef, urgency: urgency, unitUrgency: unitUrgency, focusMoves: focusMoves, focusSkills: focusSkills, ideaSkills: ideaSkills, byChapter: byChapter,
     rollQueue: rollQueue, supPool: supPool, questOrder: questOrder, mult: mult, overview: overview, live: live, belts: belts, beltOf: beltOf, sessionXP: sessionXP, newSession: newSession, record: record, rollDiff: rollDiff };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = DJ;
@@ -254241,7 +254685,7 @@ var HTC = (function () {
       '<section class="tc-integ" id="tc-integ"><h2>Two chapters, one problem</h2><p class="sub">Read the problem, try it, then step through one move at a time.</p>' +
       G.integ.map(function (p, i) { return '<article class="tc-iq" data-iq="' + i + '" data-shown="0"><div class="tc-iqhd"><h3>' + esc(p.h) + '</h3><span>' + p.terrs.map(function (t) { return '<span class="tc-terr">' + esc(terrLab(t)) + '</span>'; }).join('') + '</span></div><p class="tc-iqprob">' + TVZ.fmt(p.prob) + '</p><ol class="tc-iqsteps">' +
         p.steps.map(function (st, j) { return '<li class="tv" data-step="' + j + '" hidden><span class="k">Step ' + (j + 1) + '</span><b>' + esc(st.say) + '</b>' + TVZ.draw(st.vis) + '</li>'; }).join('') + '</ol><div class="tc-iqbtns"><button type="button" class="btn primary sm" data-iqnext="1">Show step 1</button><button type="button" class="btn ghost sm" data-iqall="1">Show all</button></div><div class="tc-refs">' + p.refs.map(refLink).join('') + '</div></article>'; }).join('') + '</section>' +
-      '<section class="tc-traps" id="tc-traps"><h2>Trap gallery</h2><p class="sub">The slips the Review and the Exam of ' + esc(G.name) + ' see most, each beside the right way.</p><div class="tc-trapgrid">' +
+      '<section class="tc-traps" id="tc-traps"><h2>Trap gallery</h2><p class="sub">The slips the Review and the Exam of ' + esc(G.name) + ' see most, each beside the right way.' + (typeof DJG !== 'undefined' && DJG.TRAPS ? ' <a href="#dojo/focus/trap">Drill the traps in the Dojo</a>' : '') + '</p><div class="tc-trapgrid">' +
       G.traps.map(function (t) { return '<article class="tc-trapc tv"><div class="tc-cuehd"><span class="tc-terr">' + esc(terrLab(t.terr)) + '</span><span class="tc-tag">' + esc((tg[t.tag] && tg[t.tag].label) || t.tag) + '</span></div>' + TVZ.draw(['trap', t.trap[0], t.trap[1]]) + '<p class="tc-sr">' + esc(t.alt) + '</p></article>'; }).join('') + '</div></section>' +
       '<section class="tc-grpfl"><h2>Formulas</h2><p class="sub">The formula flash cards of Chapter' + (G.chs.length > 1 ? 's ' : ' ') + G.chs.join(' and ') + ' in one deck.</p>' + flashHTML(G.chs) + '</section>' +
       '<section class="tc-grpdojo"><h2>Drill it in the Dojo</h2><div class="tc-dojolinks">' + G.dojo.map(function (d) { return '<a class="btn ghost" href="#dojo/focus/' + esc(d[0]) + '">' + esc(d[1]) + '</a>'; }).join('') + '</div></section>';
@@ -254262,7 +254706,8 @@ var HTC = (function () {
     function view(v) { var mm = String(v[0]).match(/^(\d+):(\d+-\d+)$/), c = TAC.level('ch' + mm[1] + ':' + mm[2]); return '<a class="tc-cview tv" href="#ch/' + mm[1] + '/tactics/' + mm[2] + '"><span class="tc-cvh">Ch ' + mm[1] + ' · ' + esc(c.t) + '</span><span class="tc-cvp">' + TVZ.draw(c.spot) + '</span><span class="tc-cvas">' + esc(v[1]) + '</span></a>'; }
     wrap.innerHTML = '<div class="hb-chhead"><a class="back" href="#reviews">←<span>Reviews &amp; Exams</span></a><h1><small>The whole course</small>The Course Sheet</h1></div><p class="sub tc-grplede">' + esc(C.lede) + '</p>' +
       C.patterns.map(function (p, i) { var T0 = TAC.THREADS[p.th]; return '<section class="tc-pat"><div class="tc-pathd"><span class="tc-patn">' + (i + 1) + '</span><div><h2>' + esc(p.h) + '</h2><p>' + esc(p.line) + '</p></div>' + (T0 ? '<span class="tc-th">' + TVZ.icon(T0.ic) + esc(T0.name) + '</span>' : '') + '</div>' +
-        '<div class="tc-patbody"><div class="tc-patbig tv">' + TVZ.draw(p.big) + '</div><div class="tc-patviews"><span class="k">You have met this as</span><div class="tc-cviews">' + p.views.map(view).join('') + '</div></div></div></section>'; }).join('');
+        '<div class="tc-patbody"><div class="tc-patbig tv">' + TVZ.draw(p.big) + '</div><div class="tc-patviews"><span class="k">You have met this as</span><div class="tc-cviews">' + p.views.map(view).join('') + '</div></div></div>' +
+          '<div class="tc-patdojo"><a class="btn ghost sm" href="#dojo/idea/' + esc(p.th) + '">Practise this idea across the course in the Dojo</a><span>Blob Roll, Quest and Superlative, drawn from every chapter that uses it</span></div></section>'; }).join('');
     wire(wrap);
   }
   return { courseView: courseView, groupView: groupView, init: function (hx) { HX = hx; esc = hx.esc; el = hx.el; CAT = hx.CAT; }, view: view, levelCard: cardHTML, has: function (key) { return !!TAC.level(key); }, wire: wire, openTool: openTool, transHTML: transHTML, triHTML: triHTML, bankHTML: bankHTML, flashWire: flashWire };
@@ -254289,6 +254734,12 @@ var HDJ = (function () {
   function model() { return HX.M().m; }
   // every Dojo session, from the day keys (hub/lms_model.js, dojoSessions); read on the home page and when a session starts, never per answer
   function allSessions() { return LMS.dojoSessions(HX.getItem, HX.loadHub()).slice().sort(function (a, b) { return (a.start || 0) - (b.start || 0); }); }
+  // the ideas of the Course Sheet (Stage 10): an idea focus practises one idea across every chapter, through the Path levels whose cards wear it
+  function ideas() { return typeof TAC !== 'undefined' && TAC.course && TAC.course() ? TAC.course().patterns : []; }
+  function ideaOf(th) { return ideas().filter(function (p) { return p.th === th; })[0] || null; }
+  function ideaLevels(th) { return Object.keys(TAC.LV).filter(function (k) { return CAT.levels[k] && (TAC.LV[k].th || []).indexOf(th) >= 0; }); }
+  function realFocus(f) { return f && f.idea ? (ideaOf(f.idea) ? { idea: f.idea, levels: ideaLevels(f.idea) } : null) : f; }
+  function focusName(f) { return f && f.style ? styleName(f.style) : f && f.idea && ideaOf(f.idea) ? ideaOf(f.idea).h : 'Sensei’s mix'; }
   function styleName(id) { var s = DJG.STYLES.filter(function (z) { return z.id === id; })[0]; return s ? s.name : id; }
   function lvOf(mode, belts) { var v = ui.lv[mode]; return v >= 1 && v <= 3 ? v : (belts ? belts[mode].lv : 1); }
 
@@ -254372,7 +254823,7 @@ var HDJ = (function () {
   // =============================================================== sessions: shared bookkeeping
   function begin(mode, lv, focus, extra) {
     var m = model(), belts = DJ.belts(allSessions());
-    S = { mode: mode, lv: lv, focus: focus, m0: m, sess: DJ.newSession(mode, lv, focus), live: DJ.live(m, now()), belts: belts, combo: 0, best: 0, score: 0, right: 0, n: 0, heat: 0, touched: {}, per: {}, t0: now(), over: false, timers: [] };
+    S = { mode: mode, lv: lv, focus: focus, m0: m, sess: DJ.newSession(mode, lv, focus && focus.levels ? { idea: focus.idea } : focus), live: DJ.live(m, now()), belts: belts, combo: 0, best: 0, score: 0, right: 0, n: 0, heat: 0, touched: {}, per: {}, t0: now(), over: false, timers: [] };
     if (extra) for (var k in extra) S[k] = extra[k];
     return S;
   }
@@ -254431,10 +254882,10 @@ var HDJ = (function () {
 
   // =============================================================== BLOB ROLL (and its clock-free forms: warm-up, skill drill)
   function viewRoll(main, kind, arg) {
-    var belts = DJ.belts(allSessions()), lv = kind === 'roll' ? lvOf('roll', belts) : 1, m = model(), focus = kind === 'warm' ? { level: arg } : kind === 'skill' ? { skills: [arg] } : kind === 'move' ? { moves: [arg] } : ui.focus;
+    var belts = DJ.belts(allSessions()), lv = kind === 'roll' ? lvOf('roll', belts) : 1, m = model(), focus = kind === 'warm' ? { level: arg } : kind === 'skill' ? { skills: [arg] } : kind === 'move' ? { moves: [arg] } : realFocus(ui.focus);
     var timed = kind === 'roll', nUnits = timed ? 80 : kind === 'warm' ? DJ.K.WARM_N : DJ.K.DRILL_N, queue = DJ.rollQueue(m, CAT, { focus: focus, lv: lv, n: nUnits, cur: m.curCh });
     var L0 = kind === 'warm' ? CAT.levels[arg] : null, title = timed ? 'Blob Roll' : kind === 'warm' ? 'Warm-up' : kind === 'skill' ? 'Skill drill' : 'Move drill';
-    var sub = timed ? DJ.LEVELS.roll[lv - 1] + (focus && focus.style ? ' · ' + styleName(focus.style) : ' · Sensei’s mix') : kind === 'warm' && L0 ? 'Chapter ' + L0.ch + ' · ' + (L0.unit || '') + ' · Level ' + L0.level : kind === 'skill' && CAT.skills[arg] ? HX.skillShort(arg) : kind === 'move' && DJG.byId[arg] ? DJG.byId[arg].name : '';
+    var sub = timed ? DJ.LEVELS.roll[lv - 1] + ' · ' + focusName(focus) : kind === 'warm' && L0 ? 'Chapter ' + L0.ch + ' · ' + (L0.unit || '') + ' · Level ' + L0.level : kind === 'skill' && CAT.skills[arg] ? HX.skillShort(arg) : kind === 'move' && DJG.byId[arg] ? DJG.byId[arg].name : '';
     var sh = shell(main, title, sub);
     if (!queue.length) { sh.body.innerHTML = '<div class="hb-card">Nothing to practise here yet. <a href="#dojo">Back to the Dojo</a></div>'; return; }
     begin(timed ? 'roll' : kind === 'warm' ? 'warm' : 'drill', lv, focus, { queue: queue, qi: 0, run: null, ri: 0, seenCard: {}, probed: {}, timed: timed, left: DJ.K.CLOCK[lv] * 1000, max: DJ.K.CLOCK_MAX * 1000, paused: true, kind: kind, arg: arg });
@@ -254546,10 +254997,10 @@ var HDJ = (function () {
   }
   function viewQuest(main, forced) {
     var all0 = allSessions(), belts = DJ.belts(all0), lv = lvOf('quest', belts), m = model(), last = all0.filter(function (s) { return s.mode === 'quest' && s.quest; }).slice(-4).map(function (s) { return s.quest; });
-    var order = DJ.questOrder(m, CAT, { focus: ui.focus, last: last }), qid = forced && DJG.questById[forced] ? forced : (order[0] || { id: DJG.QUESTS[0].id }).id, Q0;
+    var F = realFocus(ui.focus), order = DJ.questOrder(m, CAT, { focus: F, last: last }), qid = forced && DJG.questById[forced] ? forced : (order[0] || { id: DJG.QUESTS[0].id }).id, Q0;
     try { Q0 = DJG.quest(qid, lv); } catch (e) { main.appendChild(el('div', 'hb-wrap', '<div class="hb-card">This quest could not be made. <a href="#dojo">Back</a></div>')); setTimeout(function () { throw e; }, 0); return; }
-    var sh = shell(main, Q0.title, 'Quest · ' + DJ.LEVELS.quest[lv - 1]);
-    begin('quest', lv, ui.focus, { Q: Q0, i: 0, tries: 0 }); S.sess.quest = qid;
+    var sh = shell(main, Q0.title, 'Quest · ' + DJ.LEVELS.quest[lv - 1] + (F && !order.length && !forced ? ' · no quest for ' + focusName(F) + ' yet: the Sensei’s pick' : F ? ' · ' + focusName(F) : ''));
+    begin('quest', lv, F, { Q: Q0, i: 0, tries: 0 }); S.sess.quest = qid;
     S.pit = cockpit(sh.side, { belt: belts.quest }); pit();
     sh.topr.innerHTML = '<div class="dj-count"><b>0</b> of ' + Q0.nodes.length + ' stops</div>';
     sh.body.innerHTML = '<div class="dj-mapbox">' + mapSVG(Q0.nodes) + '</div><div class="dj-qstep"></div>';
@@ -254629,10 +255080,10 @@ var HDJ = (function () {
   // =============================================================== SUPERLATIVE
   function visual(p) { return !!p && (p.kind === 'widget' || /<svg|<table|class="(fig|chart|bars|tbl|nl|grid)/.test(String(p.prompt || ''))); }
   function viewSup(main) {
-    var belts = DJ.belts(allSessions()), lv = lvOf('sup', belts), m = model(), pool = DJ.supPool(m, CAT, { lv: lv, focus: ui.focus, cur: m.curCh }), ROUNDS = 3;
-    var sh = shell(main, 'Superlative', DJ.LEVELS.sup[lv - 1] + (ui.focus && ui.focus.style ? ' · ' + styleName(ui.focus.style) : ' · Sensei’s mix'));
+    var belts = DJ.belts(allSessions()), lv = lvOf('sup', belts), m = model(), F = realFocus(ui.focus), pool = DJ.supPool(m, CAT, { lv: lv, focus: F, cur: m.curCh }), ROUNDS = 3;
+    var sh = shell(main, 'Superlative', DJ.LEVELS.sup[lv - 1] + ' · ' + focusName(F));
     if (!pool.length) { sh.body.innerHTML = '<div class="hb-card">No multi-skill problems for this focus. <a href="#dojo">Back to the Dojo</a></div>'; return; }
-    begin('sup', lv, ui.focus, { pool: pool, pi: 0, k: 0, used: {} });
+    begin('sup', lv, F, { pool: pool, pi: 0, k: 0, used: {} });
     S.pit = cockpit(sh.side, { belt: belts.sup }); pit();
     sh.topr.innerHTML = '<div class="dj-count"><b>0</b> of ' + ROUNDS + '</div>';
     function pickNext() {            // the most urgent problem that brings a figure, table or tool; a plain one only when none is left
@@ -254683,20 +255134,26 @@ var HDJ = (function () {
     var wrap = el('div', 'hb-wrap dj-wrap dj-home novar'); main.appendChild(wrap);
     function lvPick(mode) { var cur = lvOf(mode, belts); return '<div class="dj-lv" role="group" aria-label="Challenge level">' + DJ.LEVELS[mode].map(function (n, i) { return '<button type="button" data-lv="' + mode + ':' + (i + 1) + '" aria-pressed="' + (cur === i + 1) + '">' + esc(n) + '</button>'; }).join('') + '</div>'; }
     function modeCard(mode, href, art) { var b = belts[mode]; return '<section class="hb-card dj-mode m-' + mode + '"><div class="dj-mode-h"><h2>' + DJ.MODES[mode].name + '</h2><span class="dj-belt" style="--belt:' + BELT_HEX[b.belt] + '">' + b.belt + '</span></div><p class="sub">' + esc(DJ.MODES[mode].blurb) + '</p>' + art + lvPick(mode) + '<div class="dj-beltbar"><div class="bar"><i style="width:' + (b.frac * 100).toFixed(0) + '%"></i></div><span class="nx">' + (b.next ? b.toNext + ' to ' + b.next : 'top belt') + '</span></div><a class="btn primary" href="#' + href + '">Enter</a></section>'; }
-    var fo = ui.focus && ui.focus.style ? ui.focus.style : null;
+    var fo = ui.focus && ui.focus.style ? ui.focus.style : null, fi = ui.focus && ui.focus.idea && ideaOf(ui.focus.idea) ? ui.focus.idea : null;
     wrap.innerHTML = '<section class="dj-hero"><div><div class="eyebrow">Mathjitsu</div><h1>The Dojo</h1><p>Roll, quest and spar to keep every skill alive. Nothing here is locked: what is due comes first, and new ground is always mixed in.</p></div>' +
       '<div class="dj-herostats"><div><b>' + ov.due + '</b><span>due now</span></div><div><b>' + ov.fading + '</b><span>fading</span></div><div><b>' + ov.weak + '</b><span>to strengthen</span></div><div><b>' + ov.scout + '</b><span>new ground</span></div><div class="g"><b>' + sgn(tGain, 2) + '</b><span>blobs here today · ' + tN + ' answers</span></div></div></section>' +
       '<div class="dj-modes">' + modeCard('roll', 'dojo/roll', '<div class="dj-art a-roll" aria-hidden="true"><i></i><i></i><i></i></div>') + modeCard('quest', 'dojo/quest', '<div class="dj-art a-quest" aria-hidden="true"><svg viewBox="0 0 260 60" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="djm-rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--dj-well-lo)"/><stop offset="1" style="stop-color:var(--dj-well-hi)"/></linearGradient><radialGradient id="djm-floor" cx="66%" cy="68%" r="75%"><stop offset="0" style="stop-color:var(--dj-well-f2)"/><stop offset="1" style="stop-color:var(--dj-well-f1)"/></radialGradient><radialGradient id="djm-dome" cx="34%" cy="28%" r="78%"><stop offset="0" stop-color="#d9fff2"/><stop offset=".5" stop-color="#3fd6a6"/><stop offset="1" stop-color="#127a5f"/></radialGradient></defs><path class="rt" d="M34 40C70 4 96 58 130 26S196 8 226 34"/><path class="tr" d="M34 40C70 4 96 58 130 26"/><circle cx="34" cy="40" r="11" fill="url(#djm-dome)"/><ellipse cx="30.5" cy="35.5" rx="3.4" ry="1.9" fill="#fff" opacity=".7" transform="rotate(-28 30.5 35.5)"/><circle class="rg" cx="130" cy="26" r="16"/><circle cx="130" cy="26" r="12" fill="url(#djm-rim)"/><circle cx="130" cy="26" r="9.5" fill="url(#djm-floor)"/><g class="mb"><ellipse cx="130" cy="26.5" rx="7" ry="6.3" fill="url(#djm-dome)"/><circle cx="127.8" cy="26" r="1.1" fill="#0c2a24"/><circle cx="132.2" cy="26" r="1.1" fill="#0c2a24"/></g><circle cx="226" cy="34" r="13" fill="url(#djm-rim)"/><circle cx="226" cy="34" r="10.3" fill="url(#djm-floor)"/></svg></div>') + modeCard('sup', 'dojo/sup', '<div class="dj-art a-sup" aria-hidden="true"><b>×1.5</b></div>') + '</div>' +
-      '<section class="hb-card dj-focus"><div class="dj-focus-h"><div><h2>Focus</h2><p class="sub">Pick an area to train, or leave it to the Sensei’s mix. The focus applies to all three modes.</p></div><button type="button" class="btn ' + (fo ? 'ghost' : 'primary') + ' sm" data-style="">Sensei’s mix</button></div>' +
+      '<section class="hb-card dj-focus"><div class="dj-focus-h"><div><h2>Focus</h2><p class="sub">Pick an area to train, or leave it to the Sensei’s mix. The focus applies to all three modes.</p></div><button type="button" class="btn ' + (fo || fi ? 'ghost' : 'primary') + ' sm" data-style="">Sensei’s mix</button></div>' +
       '<div class="dj-styles">' + DJG.STYLES.map(function (st) { var o = ov.styles[st.id] || {}, held = o.max ? o.mq / o.max : 0; return '<button type="button" class="dj-style' + (fo === st.id ? ' on' : '') + '" data-style="' + st.id + '" aria-pressed="' + (fo === st.id) + '"><span class="n">' + esc(st.name) + '</span><span class="b">' + esc(st.blurb) + '</span><span class="m"><i style="width:' + (held * 100).toFixed(0) + '%"></i></span><span class="c">' + (o.due ? '<em class="due">' + o.due + ' due</em>' : '') + (o.weak ? '<em class="weak">' + o.weak + ' weak</em>' : '') + '<em>' + o.started + ' of ' + o.n + ' skills met</em><em>Ch ' + st.ch.join(', ') + '</em></span></button>'; }).join('') + '</div>' +
+      (ideas().length ? '<div class="dj-ideas"><div class="eyebrow">Course Sheet ideas · one idea across every chapter, for the final exam</div><div class="dj-ideagrid">' + ideas().map(function (p, i) { var lv0 = ideaLevels(p.th), chs = {}; lv0.forEach(function (k) { chs[CAT.levels[k].ch] = 1; }); var u = DJ.unitUrgency(m, CAT, DJ.ideaSkills(CAT, { levels: lv0 }), m.curCh);
+        return '<button type="button" class="dj-idea' + (fi === p.th ? ' on' : '') + '" data-idea="' + esc(p.th) + '" aria-pressed="' + (fi === p.th) + '"><span class="i">' + (i + 1) + '</span><span class="n">' + esc(p.h) + '</span><span class="c"><em>' + lv0.length + ' Path levels</em><em>Ch ' + Object.keys(chs).sort(function (a, b) { return a - b; }).join(', ') + '</em>' + (u.kind === 'due' || u.kind === 'weak' ? '<em class="' + u.kind + '">' + esc(DJ.WHY[u.raw || u.kind]) + '</em>' : '') + '</span></button>'; }).join('') + '</div></div>' : '') +
+      (fi ? (function () { var lv0 = ideaLevels(fi), I0 = ideaOf(fi), mv0 = DJ.focusMoves(CAT, realFocus({ idea: fi })); return '<div class="dj-movelist dj-ideanote"><div class="eyebrow">' + esc(I0.h) + ' · all three modes now train this idea</div><p class="sub">' + esc(I0.line) + ' Blob Roll mixes ' + mv0.length + ' quick moves with full problems from its ' + lv0.length + ' Path levels, a chapter at a time in turn; Quest picks the stories that use it; Superlative sets problems from its levels across the course. <a href="#course">See it on the Course Sheet</a></p></div>'; })() : '') +
       (fo ? '<div class="dj-movelist"><div class="eyebrow">Moves in ' + esc(styleName(fo)) + ' · tap one to drill it alone, with no clock</div>' + DJG.MOVES.filter(function (mv) { return DJG.inStyle(mv, fo); }).map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(DJ.WHY[u.raw || u.kind]) + '</span></a>'; }).join('') + '</div>' : '') + '</section>' +
+      (DJG.TRAPS ? '<section class="hb-card dj-traps" id="dj-traps"><div class="dj-focus-h"><div><h2>Traps</h2><p class="sub">The slips the course sees most, one at a time with fresh numbers: spot the slip, pick the right way, or fix it. Train them all as a Blob Roll, or drill one trap alone.</p></div><button type="button" class="btn ' + (fo === 'trap' ? 'primary' : 'ghost') + ' sm" data-style="trap" aria-pressed="' + (fo === 'trap') + '">Train all traps</button></div>' +
+        '<div class="dj-traplist">' + [1, 2, 3, 4, 5, 6, 7, 8].map(function (c) { var mv0 = DJG.MOVES.filter(function (mv) { return mv.style === 'trap' && DJG.TRAPS.some(function (t) { return 'trap.' + t.id === mv.id && t.ch === c; }); }); return mv0.length ? '<div class="dj-trapch"><span class="k">Chapter ' + c + '</span><div class="chips">' + mv0.map(function (mv) { var u = DJ.unitUrgency(m, CAT, mv.skills, m.curCh); return '<a class="dj-mvchip k-' + u.kind + '" href="#dojo/move/' + mv.id + '"><b>' + esc(mv.name) + '</b><span>' + esc(mv.card.h) + '</span></a>'; }).join('') + '</div></div>' : ''; }).join('') + '</div></section>' : '') +
       '<section class="hb-card dj-recent"><h2>Recent sessions</h2>' + (sessions.length ? '<div class="dj-rlist">' + sessions.slice(-8).reverse().map(function (s) { var md = s.mode === 'warm' ? 'Warm-up' : s.mode === 'drill' ? 'Drill' : DJ.MODES[s.mode] ? DJ.MODES[s.mode].name : s.mode, nA = (s.answers || []).length, ok = (s.answers || []).filter(function (a) { return a.ok; }).length; return '<div class="r"><b>' + esc(md) + '</b><span>' + new Date(s.start).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</span><span>' + ok + ' of ' + nA + ' right</span><span class="g">' + sgn(s.gain || 0, 2) + ' blobs</span></div>'; }).join('') + '</div><a class="hb-link" href="#history">Every problem is in History</a>' : '<p class="hb-muted">Nothing yet. Pick a mode above.</p>') + '</section>' +
       '<details class="hb-card hb-how dj-how"><summary>How the Dojo decides, and what counts</summary><div class="body"><p><b>What comes up.</b> Each skill has a memory strength in the learner model. A skill whose recall has dropped below ' + Math.round(LMS.K.DUE_R * 100) + '% is <i>due</i>; between that and ' + Math.round(DJ.K.FADE_HI * 100) + '% it is <i>fading</i>; a started skill with mastery under ' + Math.round(DJ.K.WEAK_E * 100) + '% is <i>to strengthen</i>; a skill never met is <i>new ground</i>. Blob Roll fills its queue in the pattern due, due, strengthen, new, and never repeats a move within ' + DJ.K.GAP + ' turns. ' + ov.dueKata + ' due skills have no quick move, so they come back as a full problem (a kata) with the clock stopped.</p>' +
       '<p><b>What counts.</b> Every answer here goes into the same learner model as the Paths and Reviews. Blob Roll and Quest steps are easy-number reps: they refresh memory in full, and fill a skill up to ' + LMS.K.EASY_CAP + ' of its ' + LMS.K.MASS_Q + ' blobs (they never make a skill Secure alone). Katas and Superlative problems are full-strength evidence. In Superlative a right answer on a problem with k skills counts 1 + ' + LMS.K.SUP_STEP + '(k − 1) times, up to ' + LMS.K.SUP_MAX + ', for each of them; a miss is spread thin because it does not say which skill failed.</p>' +
       '<p><b>The cockpit.</b> Blobs are recomputed after every answer. Velocity is blobs per minute over the last minute, acceleration is the change against the minute before, momentum is course mass × velocity.</p></div></details>';
     wrap.onclick = function (e) {
       var b = e.target.closest('[data-lv]'); if (b) { var p = b.dataset.lv.split(':'); ui.lv[p[0]] = +p[1]; saveUi(); Array.prototype.forEach.call(b.parentNode.children, function (c) { c.setAttribute('aria-pressed', String(c === b)); }); return; }
-      var s = e.target.closest('[data-style]'); if (s) { ui.focus = s.dataset.style ? { style: s.dataset.style } : null; saveUi(); HX.reroute(); }
+      var s = e.target.closest('[data-style]'); if (s) { ui.focus = s.dataset.style ? { style: s.dataset.style } : null; saveUi(); HX.reroute(); return; }
+      var d = e.target.closest('[data-idea]'); if (d) { ui.focus = ui.focus && ui.focus.idea === d.dataset.idea ? null : { idea: d.dataset.idea }; saveUi(); HX.reroute(); }
     };
   }
 
@@ -254712,6 +255169,7 @@ var HDJ = (function () {
     loadUi(); stop(); S = null;
     var a = p[0];
     if (a === 'focus' && DJG.STYLES.some(function (st) { return st.id === p[1]; })) { ui.focus = { style: p[1] }; saveUi(); location.hash = 'dojo'; return; }   // a link from a Review group's Skills & Tactics
+    if (a === 'idea' && ideaOf(p[1])) { ui.focus = { idea: p[1] }; saveUi(); location.hash = 'dojo'; return; }   // a link from an idea on the Course Sheet
     if (a === 'roll') return viewRoll(main, 'roll');
     if (a === 'warm' && CAT.levels[p[1]]) return viewRoll(main, 'warm', p[1]);
     if (a === 'skill' && CAT.skills[p[1]]) return viewRoll(main, 'skill', p[1]);
