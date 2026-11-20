@@ -53652,10 +53652,14 @@ if (typeof module !== 'undefined' && module.exports) module.exports.TRX = TRX;
    Same contract as hub/dojo_gens.js. A combo is the middle stop of a region of the full-course review (hub/journey.js): after
    the one-action quick shots and before the full-strength summit. Each joins skills from two or three territories of its region,
    and each is also an ordinary Dojo move (focus area 'combo'), verified like every other one.
-   Region 1, Signs and number (territories E1, E7, E5, M1, M2): signfrac, story, forms, order, apart. */
+   Region 1, Signs and number: signfrac, story, forms, order, apart. Region 2, Expressions: disteval, areaexp, minus, powerord,
+   factarea. Region 3, Equations and inequalities: fare, limit, flip, fracof, undocheck. Region 4, Rates, ratios and percent:
+   ratetime, pctprop, chain, unitchange, interest, speedk. Region 5, Geometry and measurement: angles, circsq, plan, box, pyth,
+   parallel. Region 6, Patterns, lines and modelling: seqline, plans, grow, propgraph, patsolve.
+   Also here: rate.meet, the quick shot for the territory Solving by graph. */
 (function () {
   'use strict';
-  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, nz = h.nz, pick = h.pick, f = h.f, D = h.D, L = h.L, fr = h.fr, until = h.until, T = h.T, C = h.C, mv = DJG.mv;
+  var h = DJG._h, Q = h.Q, q = h.q, R = h.R, nz = h.nz, pick = h.pick, f = h.f, D = h.D, L = h.L, fr = h.fr, until = h.until, T = h.T, C = h.C, B = h.B, X = h.X, EQ = h.EQ, IQ = h.IQ, lin = h.lin, sup = h.sup, s = h.s, sy = h.sy, P = h.P, mv = DJG.mv;
   DJG.STYLES.push({ id: 'combo', name: 'Combos', ch: [1, 2, 3, 4, 5, 6, 7, 8], blurb: 'Two or three skills joined in one short problem, with friendly numbers.' });
   function gcd(a, b) { return b ? gcd(b, a % b) : a; }
   function A(x) { return '(' + x.toFrac() + ')'; }                                    // a rational inside an ascii expression
@@ -53698,6 +53702,224 @@ if (typeof module !== 'undefined' && module.exports) module.exports.TRX = TRX;
     var t = until(function () { var p = pick(NICE); return { a: lv === 1 ? half(1, 9).neg() : q(-p[0] - p[1] * R(0, 3), p[1]), b: lv === 3 ? half(1, 6).neg() : half(1, 9), fa: lv > 1 }; }, function (z) { return !z.a.eq(z.b); });
     var lo = t.a.cmp(t.b) < 0 ? t.a : t.b, hi = t.a.cmp(t.b) < 0 ? t.b : t.a, d = hi.sub(lo);
     return [T(L('How far apart are ' + f(t.a) + ' and ' + f(t.b) + ' on the number line?'), d, { wrongs: [hi.add(lo), lo.sub(hi)], tag: 'abs', ver: { ev: A(hi) + '-' + A(lo) }, why: 'The larger minus the smaller: ' + f(hi) + ' − (' + f(lo) + ') = ' + f(d) + '.' })];
+  });
+  function story(t) { return '<p class="lead dj-story">' + t + '</p>'; }
+  function sg(c) { return c < 0 ? ' − ' + (-c) : ' + ' + c; }                          // " + 3" / " − 3"
+  function kx(k, v) { return (k === 1 ? '' : k === -1 ? '−' : f(k)) + (v || 'x'); }
+  function runOf(lv, a, b) { return lv === 1 ? [a] : [a, b]; }
+
+  // ---------------------------------------------------------------- A quick shot for "Solving by graph" (territory R10)
+  mv('rate.meet', 'Lines that meet, points that fit', ['P61', 'P63', 'P64'], ['Where two lines meet, both sides are equal', 'A point fits y > mx + b when its y is more than the line gives at its x. Two lines meet at the x where the two rules give the same y: set them equal and solve.'], function (lv) {
+    var m = R(1, 4), b = R(1, 6), x0 = R(1, 5), yl = m * x0 + b;
+    if (lv === 1) { var y0 = yl + pick([-3, -2, -1, 1, 2, 3]), op = pick(['>', '<']);
+      return [B(L('Is the point (' + x0 + ', ' + y0 + ') a solution?') + D('y ' + (op === '>' ? '&gt;' : '&lt;') + ' ' + kx(m) + ' + ' + b), 'yes', 'no', op === '>' ? y0 > yl : y0 < yl, { ver: { rel: [String(y0), op, m + '*' + x0 + '+' + b] }, why: 'At x = ' + x0 + ' the line gives ' + m + ' · ' + x0 + ' + ' + b + ' = ' + yl + '. The point has y = ' + y0 + '.' })]; }
+    var t = until(function () { var m1 = R(1, 3), m2 = m1 + R(1, 3), xs = R(1, 6); return { m1: m1, m2: m2, xs: xs, b1: (m2 - m1) * xs + R(0, 4), b2: 0 }; }, function (z) { z.b2 = z.b1 - (z.m2 - z.m1) * z.xs; return z.b2 >= 0; });
+    if (lv === 2) return [T(L('The two lines meet where both give the same y. At what x?') + D('y = ' + P(lin(t.m1, t.b1)) + ' &nbsp; and &nbsp; y = ' + P(lin(t.m2, t.b2))), t.xs, { pre: 'x =', wrongs: [t.b1 - t.b2, t.m1 * t.xs + t.b1], ver: { sol: [lin(t.m1, t.b1), lin(t.m2, t.b2)], v: 'x' }, why: 'Set them equal: ' + P(lin(t.m1, t.b1)) + ' = ' + P(lin(t.m2, t.b2)) + ', so ' + (t.m2 - t.m1 === 1 ? '' : (t.m2 - t.m1)) + 'x = ' + (t.b1 - t.b2) + '.' })];
+    var xa = t.xs + pick([-1, 1, 2]), ya = t.m1 * xa + t.b1, yb = t.m2 * xa + t.b2;
+    return [B(story('Line A: y = ' + P(lin(t.m1, t.b1)) + '. Line B: y = ' + P(lin(t.m2, t.b2)) + '. They cross at x = ' + t.xs + '.') + L('At x = ' + xa + ', which line is higher?'), 'Line A', 'Line B', ya > yb, { ver: { rel: [t.m1 + '*' + xa + '+' + t.b1, '>', t.m2 + '*' + xa + '+' + t.b2] }, why: 'At x = ' + xa + ': A gives ' + ya + ', B gives ' + yb + '. The steeper line is higher to the right of the crossing.' })];
+  });
+
+  // ---------------------------------------------------------------- Region 2: Expressions (E2, E3, E8, M12)
+  mv('combo.disteval', 'Distribute, combine, evaluate', ['S32', 'S23', 'S10', 'T34'], ['Simplify first, then put the number in', 'The factor reaches every term in the parentheses. Combine the x terms. Then substitute, with the negative in parentheses.'], function (lv) {
+    var t = until(function () { return { a: R(2, 5), b: nz(-6, 6), c: nz(-4, 6), x: -R(1, 5) }; }, function (z) { return z.a + z.c !== 0 && z.a !== z.c && z.a + z.c !== 1 && z.a * z.b !== z.b + z.c; });
+    var src = t.a + '*(x+' + s(t.b) + ')+' + s(t.c) + '*x', disp = D(t.a + '(x' + sg(t.b) + ')' + (t.c < 0 ? ' − ' : ' + ') + kx(Math.abs(t.c))), k = t.a + t.c, c0 = t.a * t.b, val = k * t.x + c0;
+    var it1 = step(X(L('Simplify.') + disp, lin(k, c0), [lin(k, t.b), lin(t.a - t.c, c0), lin(k, t.b + t.c)], { tag: 'distribute', ver: { eq: src }, why: t.a + ' reaches both terms: ' + P(lin(t.a, c0)) + '. Then ' + kx(t.a) + (t.c < 0 ? ' − ' : ' + ') + kx(Math.abs(t.c)) + ' = ' + kx(k) + '.' }), 'Simplify');
+    var it2 = step(T(L('That simplifies to ' + P(lin(k, c0)) + '. Find its value at x = ' + f(t.x) + '.') + disp, val, { wrongs: [k * -t.x + c0, -val, t.a * (t.x + t.b) - t.c * t.x], tag: 'sign', ver: { ev: src, env: { x: t.x } }, why: P(lin(k, c0)) + ' at x = ' + f(t.x) + ': ' + f(k) + ' · (' + f(t.x) + ')' + sg(c0) + ' = ' + f(val) + '.' }), 'Evaluate');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.areaexp', 'Area model, then a value', ['E46', 'E48', 'S10'], ['Four parts: x², two x-strips, the corner', '(x + a)(x + b) = x² + (a + b)x + ab. The two strips combine; the corner is a · b.'], function (lv) {
+    var t = until(function () { return { a: R(1, 6), b: R(1, 6), x: R(2, 5) }; }, function (z) { return z.a * z.b !== z.a + z.b; });
+    var src = '(x+' + t.a + ')*(x+' + t.b + ')', right = 'x^2+' + (t.a + t.b) + '*x+' + (t.a * t.b), val = (t.x + t.a) * (t.x + t.b), lead = story('A rectangle is x + ' + t.a + ' long and x + ' + t.b + ' wide.');
+    var it1 = step(X(lead + L('Which is its area?'), right, ['x^2+' + (t.a + t.b) + '*x+' + (t.a + t.b), 'x^2+' + (t.a * t.b), 'x^2+' + (t.a * t.b) + '*x+' + (t.a + t.b)], { tag: 'distribute', ver: { eq: src }, why: 'x · x = x². The strips: ' + kx(t.a) + ' + ' + kx(t.b) + ' = ' + kx(t.a + t.b) + '. The corner: ' + t.a + ' · ' + t.b + ' = ' + t.a * t.b + '.' }), 'Expand');
+    var it2 = step(T(lead + L('Its area is ' + P(right) + '. What is the area when x = ' + t.x + '?'), val, { wrongs: [t.x * t.x + t.a * t.b, (t.x + t.a) + (t.x + t.b)], ver: { ev: src, env: { x: t.x } }, why: 'The sides are ' + (t.x + t.a) + ' and ' + (t.x + t.b) + ': ' + (t.x + t.a) + ' · ' + (t.x + t.b) + ' = ' + val + '.' }), 'Evaluate');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.minus', 'A minus in front, then combine', ['S32', 'T18', 'S23', 'S19'], ['The minus reaches every term inside', '−(bx − c) = −bx + c: each sign inside flips. With a factor, −k(bx − c) = −kbx + kc. Then combine like terms.'], function (lv) {
+    var t = until(function () { return { a: R(4, 12), k: lv === 1 ? 1 : R(2, 3), b: R(1, 3), c: R(1, 9) }; }, function (z) { var m = z.a - z.k * z.b; return m !== 0 && m !== 1 && m !== -1 && z.a + z.k * z.b !== m; });
+    var m = t.a - t.k * t.b, src = t.a + '*x-' + t.k + '*(' + t.b + '*x-' + t.c + ')';
+    return [X(L('Simplify.') + D(kx(t.a) + ' − ' + (t.k === 1 ? '' : t.k) + '(' + kx(t.b) + ' − ' + t.c + ')'), lin(m, t.k * t.c), [lin(m, -t.k * t.c), lin(t.a + t.k * t.b, -t.k * t.c), lin(m, t.c === t.k * t.c ? t.c + 1 : t.c)], { tag: 'sign', ver: { eq: src }, why: 'The minus flips both signs inside: −' + kx(t.k * t.b) + ' + ' + t.k * t.c + '. Then ' + kx(t.a) + ' − ' + kx(t.k * t.b) + ' = ' + kx(m) + '.' })];
+  });
+  mv('combo.powerord', 'A power, then the order', ['S1', 'S5', 'T28', 'T34'], ['Powers first, then ×, then + and −', 'The exponent reaches only what it sits on: (−3)² = 9 but −3² = −9. Multiply before you add or subtract.'], function (lv) {
+    var a = R(2, 6), b = R(2, 5), c = until(function () { return R(2, 5); }, function (z) { return z !== b && a * a !== b * z; }), kind = lv === 1 ? 0 : pick([1, 2]);
+    if (kind === 0) return [T(D(a + sup(2) + ' − ' + b + ' · ' + c), a * a - b * c, { wrongs: [(a * a - b) * c, 2 * a - b * c], tag: 'order', ver: { ev: a + '^2-' + b + '*' + c }, why: 'Power first: ' + a * a + '. Then ' + b + ' · ' + c + ' = ' + b * c + '. Then subtract.' })];
+    if (kind === 1) return [T(D('(−' + a + ')' + sup(2) + ' − ' + b + ' · (−' + c + ')'), a * a + b * c, { wrongs: [a * a - b * c, -a * a + b * c, -a * a - b * c], tag: 'sign', ver: { ev: '(-' + a + ')^2-' + b + '*(-' + c + ')' }, why: '(−' + a + ')² = ' + a * a + '. ' + b + ' · (−' + c + ') = −' + b * c + ', and subtracting a negative adds: ' + a * a + ' + ' + b * c + '.' })];
+    return [T(D('−' + a + sup(2) + ' + ' + b + ' · (−' + c + ')'), -a * a - b * c, { wrongs: [a * a - b * c, -a * a + b * c, a * a + b * c], tag: 'sign', ver: { ev: '-(' + a + '^2)+' + b + '*(-' + c + ')' }, why: 'The exponent sits on ' + a + ' only: −' + a + '² = −' + a * a + '. ' + b + ' · (−' + c + ') = −' + b * c + '. Then −' + a * a + ' − ' + b * c + '.' })];
+  });
+  mv('combo.factarea', 'Area out, factor back', ['S32', 'S35', 'S26', 'E45'], ['Width × length, both ways', 'Area = width · (x + a): the width multiplies both terms. Going back, divide every term of the area by the width.'], function (lv) {
+    var k = R(2, 6), a = R(2, 7), k2 = until(function () { return R(2, 6); }, function (z) { return z !== k; }), a2 = R(2, 7);
+    var it1 = step(X(story('A rectangle is ' + k + ' wide and x + ' + a + ' long.') + L('Which is its area?'), lin(k, k * a), [lin(k, a), lin(1, k * a), lin(k + 1, a)], { tag: 'distribute', ver: { eq: k + '*(x+' + a + ')' }, why: k + ' multiplies both terms: ' + k + ' · x and ' + k + ' · ' + a + '.' }), 'Area');
+    var it2 = step(X(story('Another rectangle has area ' + P(lin(k2, k2 * a2)) + ' and is ' + k2 + ' wide.') + L('How long is it?'), lin(1, a2), [lin(1, k2 * a2), lin(k2, a2), lin(1, k2 * a2 - k2)], { tag: 'distribute', ver: { eq: '(' + lin(k2, k2 * a2) + ')/' + k2 }, why: 'Divide each term by ' + k2 + ': ' + kx(k2) + ' ÷ ' + k2 + ' = x and ' + k2 * a2 + ' ÷ ' + k2 + ' = ' + a2 + '.' }), 'Length');
+    return runOf(lv, it1, it2);
+  });
+
+  // ---------------------------------------------------------------- Region 3: Equations and inequalities (E4, M3, M13, M4, M5, M7, M11)
+  mv('combo.fare', 'Story, equation, solve', ['S13', 'E18', 'E1', 'U17'], ['Fixed part + rate × how many = total', 'The amount paid once stands alone. The rate multiplies the unknown. Undo the + first, then the ×.'], function (lv) {
+    var kind = pick([['A dragon taxi charges $', ' to climb aboard and $', ' for each mile.', 'One ride cost $', 'miles', 'How many miles was the ride?'], ['The Sockville bowling alley charges $', ' for shoes and $', ' for each game.', 'Ogden paid $', 'games', 'How many games did he bowl?'], ['A plumber charges $', ' to show up and $', ' for each hour.', 'The bill for one swamp was $', 'hours', 'How many hours did it take?']]);
+    var t = until(function () { return { c: R(2, 9), k: R(2, 6), n: R(2, 9) }; }, function (z) { return z.c !== z.k && (z.k * z.n + z.c - z.k) % z.c !== 0; });
+    var tot = t.k * t.n + t.c, lead = story(kind[0] + t.c + kind[1] + t.k + kind[2] + ' ' + kind[3] + tot + '.');
+    var it1 = step(C(lead + L('Which equation fits? (n = the number of ' + kind[4] + ')'), EQ(lin(t.k, t.c, 'n'), String(tot)), [EQ(lin(t.c, t.k, 'n'), String(tot)), EQ(lin(t.k + t.c, 0, 'n'), String(tot)), EQ(lin(t.k, -t.c, 'n'), String(tot))], { tag: 'translate', ver: { root: t.n, v: 'n' }, why: '$' + t.c + ' is paid once. $' + t.k + ' is paid for each of the n ' + kind[4] + ': ' + t.k + 'n.' }), 'Equation');
+    var it2 = step(T(lead + L(kind[5]), t.n, { wrongs: [q(tot, t.k + t.c), q(tot + t.c, t.k)], unit: kind[4], ver: { sol: [lin(t.k, t.c, 'n'), String(tot)], v: 'n' }, why: P(lin(t.k, t.c, 'n')) + ' = ' + tot + '. Subtract ' + t.c + ': ' + t.k + 'n = ' + (tot - t.c) + '. Divide by ' + t.k + '.' }), 'Solve');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.limit', 'A limit, then the greatest whole number', ['E27', 'E30', 'E35', 'E18'], ['At most means ≤; then round down', 'Write what you spend ≤ what you have. Solve like an equation. You cannot buy part of a ride: take the whole number below.'], function (lv) {
+    var t = { c: R(2, 8), k: 2 * R(1, 4), m: R(2, 8) }, B0 = t.c + t.k * t.m + t.k / 2, bound = q(B0 - t.c, t.k);
+    var lead = story('Mabel has $' + B0 + ' at the Moon Fair. Getting in costs $' + t.c + ' and each ride costs $' + t.k + '.');
+    var it1 = step(C(lead + L('Which describes the number of rides x she can pay for?'), IQ('<=', bound), [IQ('>=', bound), IQ('<=', q(B0, t.k)), IQ('<=', q(B0 + t.c, t.k))], { tag: 'translate', ver: { orig: [lin(t.k, t.c), '<=', String(B0)] }, why: t.c + ' + ' + t.k + 'x ≤ ' + B0 + '. Subtract ' + t.c + ', then divide by ' + t.k + ': x ≤ ' + f(bound) + '.' }), 'Inequality');
+    var it2 = step(T(lead + L('What is the greatest number of rides she can take?'), t.m, { wrongs: [t.m + 1, Math.floor(B0 / t.k)], unit: 'rides', ver: { floor: '(' + B0 + '-' + t.c + ')/' + t.k }, why: 'x ≤ ' + f(bound) + ', and rides come whole: ' + t.m + '.' }), 'Greatest whole number');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.flip', 'Flip, then a range', ['E31', 'E34', 'E41', 'E42'], ['Divide by a negative: every sign turns', 'Dividing or multiplying by a negative reverses an inequality. In a three-part range, both signs reverse, and the ends swap sides.'], function (lv) {
+    var k = R(2, 5), a = R(1, 5), b = R(1, 5), op = pick(['<=', '>=']), fl = op === '<=' ? '>=' : '<=';
+    var it1 = step(C(L('Solve.') + D('−' + kx(k) + ' ' + H.sym(op) + ' ' + k * a), IQ(fl, -a), [IQ(op, -a), IQ(fl, a), IQ(op, a)], { tag: 'flip', ver: { orig: ['-' + k + '*x', op, String(k * a)] }, why: 'Divide by −' + k + ' and reverse the sign: x ' + sy(fl) + ' ' + f(-a) + '.' }), 'One inequality');
+    function rng(lo, hi) { return { t: f(lo) + ' ≤ x ≤ ' + f(hi), parts: [['>=', lo], ['<=', hi]], src: null }; }
+    var it2 = step(C(L('Solve.') + D(f(-k * a) + ' ≤ −' + kx(k) + ' ≤ ' + k * b), rng(-b, a), [rng(-a, b), rng(-k * a * k, k * b * k), rng(a, a + b + 1)], { tag: 'flip', ver: { orig: [String(-k * a), '<=', '-' + k + '*x', '<=', String(k * b)] }, why: 'Divide all three parts by −' + k + ': both signs reverse, giving ' + a + ' ≥ x ≥ ' + f(-b) + ', which is ' + f(-b) + ' ≤ x ≤ ' + a + '.' }), 'A range');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.fracof', 'A fraction of an unknown', ['R31', 'U15', 'R25', 'R33'], ['“Of” is times; undo with the reciprocal', 'a/b of a number is t: (a/b) · n = t. Divide by a, multiply by b.'], function (lv) {
+    var p = pick([[2, 3], [3, 4], [2, 5], [3, 5], [4, 5], [3, 8], [5, 6]]), m = R(2, 8), part = p[0] * m, n = p[1] * m;
+    var kind = pick([['of the goblins in the choir, ' + part + ' goblins, sing off key.', 'How many goblins are in the choir?', 'goblins'], ['of the socks in the drawer, ' + part + ' socks, have no partner.', 'How many socks are in the drawer?', 'socks'], ['of the pies at the fair, ' + part + ' pies, are turnip.', 'How many pies are at the fair?', 'pies']]);
+    var lead = story(fr(p[0], p[1]) + ' ' + kind[0]), es = '(' + p[0] + '/' + p[1] + ')*n';
+    var it1 = step(C(lead + L('Which equation fits? (n = the whole number of ' + kind[2] + ')'), { t: fr(p[0], p[1]) + ' · n = ' + part, src: es + '=' + part }, [{ t: 'n = ' + fr(p[0], p[1]) + ' · ' + part, src: 'n=(' + p[0] + '/' + p[1] + ')*' + part }, { t: fr(p[0], p[1]) + ' + n = ' + part, src: '(' + p[0] + '/' + p[1] + ')+n=' + part }, { t: 'n − ' + fr(p[0], p[1]) + ' = ' + part, src: 'n-(' + p[0] + '/' + p[1] + ')=' + part }], { tag: 'translate', ver: { root: n, v: 'n' }, why: 'The part is ' + p[0] + '/' + p[1] + ' of the whole: (' + p[0] + '/' + p[1] + ') · n = ' + part + '.' }), 'Equation');
+    var it2 = step(T(lead + L(kind[1]), n, { wrongs: [q(part * p[0], p[1]), part + p[1]], unit: kind[2], ver: { sol: [es, String(part)], v: 'n' }, why: part + ' ÷ ' + p[0] + ' = ' + m + ' is one part of ' + p[1] + '; ' + m + ' · ' + p[1] + ' = ' + n + '.' }), 'Solve');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.undocheck', 'Solve, then check a claim', ['E1', 'E6', 'U4', 'U10'], ['Undo in reverse order; check by putting it back', 'x ÷ k − c = t: add c first, then multiply by k. To check a value, substitute it and see whether both sides match.'], function (lv) {
+    var t = until(function () { return { k: R(2, 6), c: R(1, 9), r: R(2, 9) }; }, function (z) { return z.k * z.r + z.c !== z.k * (z.r + z.c); });
+    var x = t.k * (t.r + t.c), bad = t.k * t.r + t.c, src = 'x/' + t.k + '-' + t.c, disp = D(fr('x', t.k) + ' − ' + t.c + ' = ' + t.r), claim = Math.random() < 0.5 ? x : bad;
+    var it1 = step(T(L('Solve.') + disp, x, { pre: 'x =', wrongs: [bad, t.k * (t.r - t.c)], tag: 'order', ver: { sol: [src, String(t.r)], v: 'x' }, why: 'Add ' + t.c + ': x ÷ ' + t.k + ' = ' + (t.r + t.c) + '. Multiply by ' + t.k + ': x = ' + x + '.' }), 'Solve');
+    var it2 = step(B(L('Thistle says x = ' + claim + '. Substitute it. Is she right?') + disp, 'yes', 'no', claim === x, { ver: { rel: [src, '=', String(t.r)], env: { x: claim } }, why: claim + ' ÷ ' + t.k + ' − ' + t.c + ' = ' + f(q(claim, t.k).sub(t.c)) + (claim === x ? ', which matches.' : ', not ' + t.r + '.') }), 'Check');
+    return runOf(lv, it1, it2);
+  });
+
+  // ---------------------------------------------------------------- Region 4: Rates, ratios and percent (M6, R1, R2, R3, R5, R6)
+  mv('combo.ratetime', 'Unit rate, then d = v · t', ['P8', 'U21', 'U20', 'U22'], ['Minutes into hours first', 'Speed = distance ÷ time, with the time in hours: 30 min = 0.5 h. Then distance = speed · time.'], function (lv) {
+    var v = 4 * R(2, 6), M = pick([15, 30, 45]), d = v * M / 60, h = q(pick([3, 4, 5, 6]), 2), who = pick(['A snail on a skateboard', 'A yak on roller skates', 'A wizard on a unicycle']);
+    var lead = story(who + ' covers ' + d + ' km in ' + M + ' minutes at a steady speed.');
+    var it1 = step(T(lead + L('What is the speed in km per hour?'), v, { wrongs: [q(d, M), d * M, q(d * M, 60)], unit: 'km/h', tag: 'units', ver: { ev: d + '/(' + M + '/60)' }, why: M + ' min = ' + f(q(M, 60)) + ' h. ' + d + ' ÷ ' + f(q(M, 60)) + ' = ' + v + '.' }), 'Speed');
+    var it2 = step(T(lead + L('That is ' + v + ' km/h. How far does it go in ' + f(h) + ' hours?'), h.mul(v), { wrongs: [h.mul(d), q(v).div(h)], unit: 'km', ver: { ev: '(' + d + '/(' + M + '/60))*' + A(h) }, why: 'd = v · t = ' + v + ' · ' + f(h) + ' = ' + f(h.mul(v)) + '.' }), 'Distance');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.pctprop', 'A percent, then the same share', ['C8', 'P28', 'P29'], ['Find the part, then keep the ratio', 'p% of N is the part. The same share in another group keeps part : whole equal, so set up a proportion.'], function (lv) {
+    var p = pick([10, 20, 25, 50, 75]), unit = 100 / gcd(p, 100), N = unit * R(2, 6), red = N * p / 100, k = until(function () { return R(2, 5); }, function (z) { return true; }), red2 = red * k, N2 = N * k;
+    var th = pick([['marbles', 'jar', 'are glow-in-the-dark'], ['frogs', 'pond', 'can whistle'], ['hats', 'shop', 'have a propeller']]);
+    var lead = story(p + '% of the ' + N + ' ' + th[0] + ' in a ' + th[1] + ' ' + th[2] + '.');
+    var it1 = step(T(lead + L('How many is that?'), red, { wrongs: [q(N, p), N - red], unit: th[0], ver: { ev: p + '/100*' + N }, why: p + '% of ' + N + ' = ' + f(q(p, 100)) + ' · ' + N + ' = ' + red + '.' }), 'Percent of');
+    var it2 = step(T(lead + L('That is ' + red + ' of ' + N + '. A bigger ' + th[1] + ' has the same share, and ' + red2 + ' of its ' + th[0] + ' ' + th[2] + '. How many ' + th[0] + ' does it hold?'), N2, { wrongs: [red2 * p / 100, red2 + (N - red)], unit: th[0], tag: 'proportion', ver: { sol: [red + '*x', red2 + '*' + N], v: 'x' }, why: red + ' : ' + N + ' = ' + red2 + ' : ?. ' + red2 + ' is ' + k + ' times ' + red + ', so the whole is ' + k + ' · ' + N + ' = ' + N2 + '.' }), 'Proportion');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.chain', 'Off, then tax: one line', ['C21', 'C23', 'C13', 'C22'], ['Each change is one multiplier', 'p% off multiplies by (1 − p/100). A t% tax multiplies by (1 + t/100). Two changes: multiply by both.'], function (lv) {
+    var pc = until(function () { return [pick([20, 40, 60, 80, 100, 200]), pick([25, 50, 75]), pick([10, 20])]; }, function (z) { return (z[0] * (100 - z[1]) * (100 + z[2])) % 10000 === 0; }), Pr = pc[0], p = pc[1], tx = pc[2], m1 = q(100 - p, 100), m2 = q(100 + tx, 100), ans = m1.mul(m2).mul(Pr), item = pick(['A cape', 'A cauldron', 'A left boot', 'A trombone']);
+    var lead = story(item + ' costs $' + Pr + '. It is ' + p + '% off, and then a ' + tx + '% tax is added.');
+    function tile(a, b, plus) { return { t: Pr + ' · ' + f(a) + (plus ? ' + ' : ' · ') + f(b), src: Pr + '*' + A(a) + (plus ? '+' : '*') + A(b) }; }
+    var it1 = step(C(lead + L('Which gives the final price?'), tile(m1, m2), [tile(q(p, 100), m2), tile(m1, q(tx, 100)), tile(m1, m2, true)], { tag: 'multiplier', ver: { ev: Pr + '*(1-' + p + '/100)*(1+' + tx + '/100)' }, why: p + '% off leaves ' + (100 - p) + '%: · ' + f(m1) + '. A ' + tx + '% tax makes ' + (100 + tx) + '%: · ' + f(m2) + '.' }), 'Multipliers');
+    var it2 = step(T(lead + L('The final price is ' + Pr + ' · ' + f(m1) + ' · ' + f(m2) + '. What is it?'), ans, { pre: '$', wrongs: [m1.mul(Pr), q(Pr).mul(q(100 - p + tx, 100))], ver: { ev: Pr + '*(1-' + p + '/100)*(1+' + tx + '/100)' }, why: Pr + ' · ' + f(m1) + ' = ' + f(m1.mul(Pr)) + '; then · ' + f(m2) + ' = ' + f(ans) + '.' }), 'Final price');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.unitchange', 'Unit price, then the percent change', ['P8', 'P11', 'C31'], ['Change ÷ original', 'Find the price of one in each year. Percent change = the change ÷ the original price, as a percent.'], function (lv) {
+    var t = until(function () { return { u: pick([2, 4, 5, 8, 10, 20]), p: pick([10, 20, 25, 50]), up: Math.random() < 0.6, n: R(2, 6) }; }, function (z) { return (z.u * z.p) % 100 === 0; });
+    var u2 = q(t.u * (100 + (t.up ? t.p : -t.p)), 100), T1 = t.u * t.n, T2 = u2.mul(t.n), th = pick(['glow worms', 'tins of fog', 'left-handed spoons', 'jars of thunder']);
+    var lead = story('Last year ' + t.n + ' ' + th + ' cost $' + T1 + '. This year ' + t.n + ' cost $' + f(T2) + '.');
+    var it1 = step(T(lead + L('What does one cost this year?'), u2, { pre: '$', wrongs: [t.u, T2.mul(t.n)], ver: { ev: A(T2) + '/' + t.n }, why: '$' + f(T2) + ' ÷ ' + t.n + ' = $' + f(u2) + '.' }), 'Unit price');
+    var it2 = step(T(lead + L('One cost $' + t.u + ' last year and $' + f(u2) + ' this year. By what percent did the price ' + (t.up ? 'rise' : 'fall') + '?'), t.p, { unit: '%', wrongs: [u2.sub(t.u).mul(t.up ? 100 : -100).div(u2), u2.sub(t.u).mul(t.up ? 1 : -1)], tag: 'base', ver: { ev: (t.up ? '(' + A(u2) + '-' + t.u + ')' : '(' + t.u + '-' + A(u2) + ')') + '/' + t.u + '*100' }, why: 'The change is $' + f(u2.sub(t.u).mul(t.up ? 1 : -1)) + ' on an original $' + t.u + ': ' + f(u2.sub(t.u).mul(t.up ? 1 : -1)) + ' ÷ ' + t.u + ' = ' + f(q(t.p, 100)) + ' = ' + t.p + '%.' }), 'Percent change');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.interest', 'Interest for part of a year', ['C3', 'C38', 'C39', 'C41'], ['I = P · r · t, with t in years', 'Write the percent as a decimal. One year of interest is P · r. Months become a fraction of a year: 6 months = 0.5 year.'], function (lv) {
+    var t = until(function () { return { P: 100 * pick([2, 4, 6, 8, 12]), r: pick([2, 3, 4, 5, 6]), m: pick([3, 6, 9, 18]) }; }, function (z) { return (z.P * z.r / 100 * z.m) % 12 === 0; });
+    var year = t.P * t.r / 100, I = q(year * t.m, 12), lead = story('The Bank of Trolls pays ' + t.r + '% simple interest a year on $' + t.P + '.');
+    var it1 = step(T(lead + L('How much interest is that for one year?'), year, { pre: '$', wrongs: [t.P * t.r, t.P + year], ver: { ev: t.P + '*' + t.r + '/100' }, why: t.r + '% = ' + f(q(t.r, 100)) + '. ' + t.P + ' · ' + f(q(t.r, 100)) + ' = ' + year + '.' }), 'One year');
+    var it2 = step(T(lead + L('One year earns $' + year + '. How much interest is earned in ' + t.m + ' months?'), I, { pre: '$', wrongs: [year * t.m, q(year, t.m)], tag: 'units', ver: { ev: t.P + '*(' + t.r + '/100)*(' + t.m + '/12)' }, why: t.m + ' months = ' + f(q(t.m, 12)) + ' year. ' + year + ' · ' + f(q(t.m, 12)) + ' = ' + f(I) + '.' }), 'Part of a year');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.speedk', 'A table, its constant, its rule', ['P16', 'P21', 'U20', 'U22'], ['k = y ÷ x, then y = kx', 'In a proportional table every pair gives the same quotient. For distance and time that constant is the speed, and the rule is d = v · t.'], function (lv) {
+    var v = 5 * R(3, 16), t1 = R(2, 3), t2 = t1 + R(1, 3), wt = pick([['A ghost train', 'hours'], ['A flying bathtub', 'hours'], ['A very determined glacier', 'years']]), who = wt[0], tu = wt[1];
+    var lead = story(who + ' moves at a steady speed.') + D('<span class="dj-tab">t (' + tu + '): ' + t1 + ', ' + t2 + ' &nbsp;→&nbsp; d (km): ' + v * t1 + ', ' + v * t2 + '</span>');
+    var it1 = step(T(lead + L('What is the speed (the constant k)?'), v, { wrongs: [v * t1, q(t1, v * t1)], unit: 'km per ' + tu.replace(/s$/, ''), ver: { ev: (v * t2) + '/' + t2 }, why: 'd ÷ t is the same for every pair: ' + v * t1 + ' ÷ ' + t1 + ' = ' + v + '.' }), 'Constant');
+    var it2 = step(C(lead + L('Which rule fits the table?'), { t: 'd = ' + v + 't', src: v + '*x' }, [{ t: 'd = t + ' + v, src: 'x+' + v }, { t: 'd = ' + v * t1 + 't', src: (v * t1) + '*x' }, { t: 'd = t ÷ ' + v, src: 'x/' + v }], { tag: 'rule', ver: { tab: [[t1, v * t1], [t2, v * t2]] }, why: 'Distance = speed · time, with speed ' + v + ': d = ' + v + 't.' }), 'Rule');
+    return runOf(lv, it1, it2);
+  });
+
+  // ---------------------------------------------------------------- Region 5: Geometry and measurement (K1–K10, R7, R8)
+  mv('combo.angles', 'A triangle in x, then the angle outside', ['G41', 'G6', 'G7', 'G5'], ['180° inside, 180° on the line', 'The three angles of a triangle add to 180°: solve for x. An angle outside, on the extended side, and the one inside add to 180° too.'], function (lv) {
+    var t = until(function () { var k = R(1, 3), x = 5 * R(4, 14); return { k: k, x: x, c: 180 - (k + 1) * x }; }, function (z) { return z.c >= 20 && z.c !== z.x; });
+    var lead = story('A triangle has angles x°, ' + (t.k === 1 ? '' : t.k) + 'x° and ' + t.c + '°.');
+    var it1 = step(T(lead + L('Find x.'), t.x, { pre: 'x =', wrongs: [q(180, t.k + 1), q(360 - t.c, t.k + 1)], ver: { sol: ['x+' + t.k + '*x+' + t.c, '180'], v: 'x' }, why: 'x + ' + (t.k === 1 ? '' : t.k) + 'x + ' + t.c + ' = 180, so ' + (t.k + 1) + 'x = ' + (180 - t.c) + '.' }), 'Solve for x');
+    var it2 = step(T(lead + L('So x = ' + t.x + '. One side is extended past the angle x°. How large is the angle outside the triangle there?'), 180 - t.x, { unit: '°', wrongs: [t.x, 360 - t.x, 90 - t.x], ver: { ev: '180-' + t.x }, why: 'The inside and outside angles sit on a straight line: 180 − ' + t.x + ' = ' + (180 - t.x) + '.' }), 'The angle asked for');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.circsq', 'A circle in a square', ['G14', 'G15', 'G23', 'G29'], ['Radius = half the side', 'The circle is as wide as the square, so its diameter is the side. Area = πr², exact with π or with 3.14.'], function (lv) {
+    var sd = 2 * pick([2, 3, 4, 5, 10]), r = sd / 2, left = q(sd * sd).sub(q(314, 100).mul(r * r));
+    var lead = story('A round pizza just fits inside a square box with sides of ' + sd + ' cm.');
+    function pi(n) { return { t: (n === 1 ? '' : n) + 'π cm²', src: String(n) }; }
+    var it1 = step(C(lead + L('What is the area of the pizza, exactly?'), pi(r * r), [pi(sd * sd), pi(sd), pi(2 * r * r)], { tag: 'radius', ver: { ev: '(' + sd + '/2)^2' }, why: 'The radius is half of ' + sd + ': ' + r + '. πr² = π · ' + r + '² = ' + r * r + 'π.' }), 'Exact area');
+    var it2 = step(T(lead + L('Its area is ' + r * r + 'π cm². Use π = 3.14. How much of the bottom of the box is not covered?'), left, { unit: 'cm²', wrongs: [q(314, 100).mul(r * r), q(sd * sd).sub(q(314, 100).mul(sd)), q(sd * sd).sub(q(314, 100).mul(r))], ver: { ev: sd + '^2-3.14*(' + sd + '/2)^2' }, why: 'Square: ' + sd * sd + '. Circle: 3.14 · ' + r * r + ' = ' + f(q(314, 100).mul(r * r)) + '. The difference is ' + f(left) + '.' }), 'What is left');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.plan', 'From a plan: a length, then an area', ['P48', 'G51', 'P44', 'P47'], ['Scale each side before you multiply', 'Multiply each plan length by the scale. For the real area, multiply the two real sides: the area grows by the scale twice.'], function (lv) {
+    var t = until(function () { return { k: R(2, 5), a: R(3, 8), b: R(2, 6) }; }, function (z) { return z.a > z.b; });
+    var room = pick(['the dragon’s bedroom', 'the yeti’s kitchen', 'the royal sock room']), lead = story('On a plan, 1 cm stands for ' + t.k + ' m. On the plan, ' + room + ' is ' + t.a + ' cm long and ' + t.b + ' cm wide.');
+    var it1 = step(T(lead + L('How long is the real room?'), t.a * t.k, { unit: 'm', wrongs: [q(t.a, t.k), t.a + t.k], ver: { ev: t.a + '*' + t.k }, why: 'Each centimetre is ' + t.k + ' m: ' + t.a + ' · ' + t.k + ' = ' + t.a * t.k + '.' }), 'Real length');
+    var it2 = step(T(lead + L('What is the area of the real room?'), t.a * t.b * t.k * t.k, { unit: 'm²', wrongs: [t.a * t.b * t.k, t.a * t.b], tag: 'square', ver: { ev: '(' + t.a + '*' + t.k + ')*(' + t.b + '*' + t.k + ')' }, why: 'Real sides: ' + t.a * t.k + ' m and ' + t.b * t.k + ' m. ' + t.a * t.k + ' · ' + t.b * t.k + ' = ' + t.a * t.b * t.k * t.k + '.' }), 'Real area');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.box', 'One box: volume and surface', ['G59', 'G56', 'G53', 'G52'], ['Volume fills, surface covers', 'Volume = length · width · height, in cubic units. Surface area = the six faces: 2 of each pair, in square units.'], function (lv) {
+    var t = until(function () { return { l: R(3, 8), w: R(2, 6), h: R(2, 5) }; }, function (z) { return z.l > z.w && z.l !== z.h && z.w !== z.h; });
+    var V = t.l * t.w * t.h, SA = 2 * (t.l * t.w + t.l * t.h + t.w * t.h), lead = story('A crate for one small dragon is ' + t.l + ' m long, ' + t.w + ' m wide and ' + t.h + ' m high.');
+    var it1 = step(T(lead + L('What is its volume?'), V, { unit: 'm³', wrongs: [SA, t.l + t.w + t.h, t.l * t.w], ver: { ev: t.l + '*' + t.w + '*' + t.h }, why: t.l + ' · ' + t.w + ' · ' + t.h + ' = ' + V + '.' }), 'Volume');
+    var it2 = step(T(lead + L('What is its surface area (all six faces)?'), SA, { unit: 'm²', wrongs: [SA / 2, V, 6 * t.l * t.w], ver: { ev: '2*' + t.l + '*' + t.w + '+2*' + t.l + '*' + t.h + '+2*' + t.w + '*' + t.h }, why: 'Faces: ' + t.l * t.w + ', ' + t.l * t.h + ' and ' + t.w * t.h + ', two of each: 2 · ' + (t.l * t.w + t.l * t.h + t.w * t.h) + ' = ' + SA + '.' }), 'Surface area');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.pyth', 'A missing leg, then the area', ['G70', 'G72', 'G24', 'G23'], ['Leg² = hypotenuse² − leg²', 'The hypotenuse is the longest side, opposite the right angle. To find a leg, subtract the squares. The two legs are the base and the height.'], function (lv) {
+    var tr = pick([[3, 4, 5], [6, 8, 10], [5, 12, 13], [9, 12, 15], [8, 15, 17], [12, 16, 20]]), sw = Math.random() < 0.5, a = sw ? tr[1] : tr[0], b = sw ? tr[0] : tr[1], c = tr[2];
+    if (lv === 1) return [T(story('A right triangle has legs of ' + a + ' cm and ' + b + ' cm.') + L('How long is the hypotenuse?'), c, { unit: 'cm', wrongs: [a + b, a * a + b * b], ver: { sol: ['x^2', a + '^2+' + b + '^2'], v: 'x' }, why: a + '² + ' + b + '² = ' + (a * a + b * b) + ', and √' + (a * a + b * b) + ' = ' + c + '.' })];
+    var lead = story('A right triangle has a hypotenuse of ' + c + ' cm and one leg of ' + a + ' cm.');
+    var it1 = step(T(lead + L('How long is the other leg?'), b, { unit: 'cm', wrongs: [c - a, c + a], ver: { sol: ['x^2+' + a + '^2', c + '^2'], v: 'x' }, why: c + '² − ' + a + '² = ' + (c * c - a * a) + ', and √' + (c * c - a * a) + ' = ' + b + '.' }), 'The other leg');
+    var it2 = step(T(lead + L('The other leg is ' + b + ' cm. What is the area of the triangle?'), a * b / 2, { unit: 'cm²', wrongs: [a * b, a * c / 2, b * c / 2], ver: { ev: a + '*' + b + '/2' }, why: 'The legs are the base and the height: ' + a + ' · ' + b + ' ÷ 2 = ' + a * b / 2 + '.' }), 'Area');
+    return [it1, it2];
+  });
+  mv('combo.parallel', 'Across the parallels, into a triangle', ['G66', 'G67', 'G41'], ['Alternate angles are equal', 'A line crossing two parallel lines makes equal alternate angles (the Z shape). Carry the angle across, then use 180° in the triangle.'], function (lv) {
+    var t = until(function () { return { a: 5 * R(6, 16), b: 5 * R(6, 16) }; }, function (z) { return z.a + z.b <= 150 && z.a !== z.b && 180 - z.a - z.b !== z.a; });
+    var lead = story('Two parallel rails are crossed by a plank. At the top rail the plank makes an angle of ' + t.a + '°.');
+    var it1 = step(T(lead + L('How large is the alternate angle (the other end of the Z) at the bottom rail?'), t.a, { unit: '°', wrongs: [180 - t.a, 90 - t.a], ver: { ev: '180-(180-' + t.a + ')' }, why: 'Alternate angles between parallel lines are equal: ' + t.a + '°.' }), 'Alternate angle');
+    var it2 = step(T(lead + L('A second plank makes a triangle with the first plank and the bottom rail. Two of its angles are the alternate angle, ' + t.a + '°, and ' + t.b + '°. What is the third?'), 180 - t.a - t.b, { unit: '°', wrongs: [360 - t.a - t.b, t.a + t.b], ver: { ev: '180-' + t.a + '-' + t.b }, why: '180 − ' + t.a + ' − ' + t.b + ' = ' + (180 - t.a - t.b) + '.' }), 'Third angle');
+    return runOf(lv, it1, it2);
+  });
+
+  // ---------------------------------------------------------------- Region 6: Patterns, lines and modelling (E6, M9, M10, M8, R4, R9, R10)
+  mv('combo.seqline', 'A sequence is a line', ['U28', 'U31', 'S30', 'P57', 'P58'], ['Start + add × n; the add is the slope', 'Step 0 is the start. Each step adds the same amount: value = start + add · n. On a graph the add is the slope and the start is where the line begins.'], function (lv) {
+    var t = until(function () { return { a: R(1, 9), d: R(2, 7) }; }, function (z) { return z.a !== z.d; }), seq = [0, 1, 2, 3].map(function (n) { return t.a + t.d * n; });
+    var lead = story('Steps 0, 1, 2, 3 of a pattern have ' + seq.join(', ') + ' dots.');
+    var it1 = step(C(lead + L('Which rule gives the number of dots at step n?'), { t: P(lin(t.d, t.a, 'n')), src: lin(t.d, t.a, 'n') }, [{ t: P(lin(t.a, t.d, 'n')), src: lin(t.a, t.d, 'n') }, { t: P(lin(t.d, 0, 'n')), src: lin(t.d, 0, 'n') }, { t: P(lin(t.d, t.a + t.d, 'n')), src: lin(t.d, t.a + t.d, 'n') }], { tag: 'rule', ver: { tab: [[0, seq[0]], [1, seq[1]], [2, seq[2]]] }, why: 'It starts at ' + t.a + ' (step 0) and adds ' + t.d + ' each step: ' + t.a + ' + ' + t.d + 'n.' }), 'Rule');
+    var it2 = step(T(lead + L('Plot the points (step, dots). They lie on a line. What is its slope?'), t.d, { wrongs: [t.a, seq[1]], ver: { ev: '(' + seq[3] + '-' + seq[1] + ')/(3-1)' }, why: 'Each step across, the dots go up by ' + t.d + ': the slope is the amount added.' }), 'Slope');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.plans', 'Two plans: when they match, which is less', ['P64', 'P61', 'E5', 'E36'], ['Set the two rules equal', 'Write each plan as start + rate · n. They cost the same where the rules are equal. After that, the plan with the smaller rate costs less.'], function (lv) {
+    var t = until(function () { var m = R(2, 6), e = R(1, 5), n = R(2, 8); return { m: m, m2: m + e, n: n, a: e * n }; }, function (z) { return z.a !== z.m2; });
+    var N = t.n + pick([-1, 1, 2]), cA = t.a + t.m * N, cB = t.m2 * N;
+    var lead = story('Gym A for giants: $' + t.a + ' to join, then $' + t.m + ' a month. Gym B: nothing to join, $' + t.m2 + ' a month.');
+    var it1 = step(T(lead + L('After how many months have both cost the same?'), t.n, { unit: 'months', wrongs: [q(t.a, t.m2), q(t.a, t.m)], ver: { sol: [lin(t.m, t.a, 'n'), lin(t.m2, 0, 'n')], v: 'n' }, why: t.a + ' + ' + t.m + 'n = ' + t.m2 + 'n. Subtract ' + t.m + 'n from both sides: ' + t.a + ' = ' + (t.m2 - t.m === 1 ? 'n.' : (t.m2 - t.m) + 'n, so n = ' + t.n + '.') }), 'Equal cost');
+    var it2 = step(B(lead + L('They cost the same after ' + t.n + ' months. After ' + N + ' months, which has cost less?'), 'Gym A', 'Gym B', cA < cB, { ver: { rel: [t.a + '+' + t.m + '*' + N, '<', t.m2 + '*' + N] }, why: 'After ' + N + ' months: A has cost $' + cA + ', B has cost $' + cB + '.' }), 'Which is less');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.grow', 'Adding or multiplying, then the next one', ['E37', 'E38', 'U28', 'U29'], ['Check the gaps, then the ratios', 'Same gap every time: it adds. Same multiplier every time: it multiplies. Use that rule once more for the next number.'], function (lv) {
+    var ar = Math.random() < 0.5, a = R(1, 5), d = R(2, 6), r = pick([2, 3]), seq = ar ? [a, a + d, a + 2 * d, a + 3 * d] : [a, a * r, a * r * r, a * r * r * r], next = ar ? seq[3] + d : seq[3] * r;
+    var disp = D(seq.join(', ') + ', …');
+    var it1 = step(B(L('How does it grow?') + disp, 'adding', 'multiplying', ar, { ver: { seq: seq }, why: ar ? 'The gap is ' + d + ' every time: adding.' : 'Each number is ' + r + ' times the one before: multiplying.' }), 'How it grows');
+    var it2 = step(T(L('What is the next number?') + disp, next, { wrongs: [ar ? seq[3] * 2 : seq[3] + (seq[3] - seq[2]), seq[3] + 1], ver: { ev: ar ? seq[3] + '+(' + seq[1] + '-' + seq[0] + ')' : seq[3] + '*(' + seq[1] + '/' + seq[0] + ')' }, why: ar ? seq[3] + ' + ' + d + ' = ' + next + '.' : seq[3] + ' · ' + r + ' = ' + next + '.' }), 'Next');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.propgraph', 'A line through the origin', ['P21', 'P16', 'P22', 'P57'], ['k = y ÷ x at any point', 'A proportional graph is a line through (0, 0). Any point on it gives k = y ÷ x, which is also the slope. Then y = kx.'], function (lv) {
+    var k = half(1, 5), x1 = 2 * R(1, 4), x2 = until(function () { return 2 * R(1, 6); }, function (z) { return z !== x1; }), y1 = k.mul(x1), y2 = k.mul(x2);
+    var lead = story('A graph of cost against weight is a straight line through (0, 0) and (' + x1 + ', ' + f(y1) + ').');
+    var it1 = step(T(lead + L('What is the constant k (the cost for 1 unit of weight)?'), k, { wrongs: [q(x1).div(y1), y1], ver: { ev: A(y1) + '/' + x1 }, why: 'k = y ÷ x = ' + f(y1) + ' ÷ ' + x1 + ' = ' + f(k) + '.' }), 'Constant');
+    var it2 = step(T(lead + L('So y = ' + f(k) + 'x. What is y when x = ' + x2 + '?'), y2, { wrongs: [y1.add(x2), q(x2).div(k)], ver: { ev: '(' + A(y1) + '/' + x1 + ')*' + x2 }, why: f(k) + ' · ' + x2 + ' = ' + f(y2) + '.' }), 'Use the rule');
+    return runOf(lv, it1, it2);
+  });
+  mv('combo.patsolve', 'Which step, and the last one you can build', ['S30', 'S10', 'E26', 'E35', 'U30'], ['Rule = number, then solve', 'Set the rule equal to the count and solve for n. With a supply that runs out, solve the same way and take the whole step below.'], function (lv) {
+    var t = { k: R(3, 6), c: R(1, 5), n: R(4, 12), n2: R(5, 14) }, cnt = t.k * t.n + t.c, extra = R(1, t.k - 1), sup0 = t.k * t.n2 + t.c + extra;
+    var lead = story('Step n of a pattern uses ' + P(lin(t.k, t.c, 'n')) + ' turnips.');
+    var it1 = step(T(lead + L('Which step uses exactly ' + cnt + ' turnips?'), t.n, { pre: 'n =', wrongs: [t.k * cnt + t.c, q(cnt, t.k)], ver: { sol: [lin(t.k, t.c, 'n'), String(cnt)], v: 'n' }, why: P(lin(t.k, t.c, 'n')) + ' = ' + cnt + '. Subtract ' + t.c + ', then divide by ' + t.k + ': n = ' + t.n + '.' }), 'Which step');
+    var it2 = step(T(lead + L('You have ' + sup0 + ' turnips. What is the largest step you can build?'), t.n2, { pre: 'n =', wrongs: [t.n2 + 1, Math.floor(sup0 / t.k) === t.n2 ? t.n2 - 1 : Math.floor(sup0 / t.k)], ver: { floor: '(' + sup0 + '-' + t.c + ')/' + t.k }, why: P(lin(t.k, t.c, 'n')) + ' ≤ ' + sup0 + ' gives n ≤ ' + f(q(sup0 - t.c, t.k)) + '. Steps are whole: n = ' + t.n2 + '.' }), 'Largest step');
+    return runOf(lv, it1, it2);
   });
 })();
 /* ===== DJG part 8 END ===== */
@@ -54135,8 +54357,9 @@ if (typeof module !== 'undefined' && module.exports) module.exports = DJ;
      quick    one-action reps with easy numbers on the region's foundations (the Dojo's verified moves): every territory first
      combo    easy numbers, two or three skills joined (hub/dojo_gens8.js)
      summit   a few full-strength problems from the verified Review and Exam banks, one territory each
-   A last stop (all) mixes the regions once they are built.
-   Size: about 100 answers for the whole journey, more than half of them quick shots; one region is one sitting.
+   A last stop (journey 'all', stop 'all') takes one full-strength problem from each region.
+   Size: about 100 answers for the whole journey, more than half of them quick shots; one region is one sitting. A region
+   with more than nine territories has one quick shot for each (Geometry and measurement: twelve).
    Clean, fast work shortens a stop; a miss adds two more reps on that move and shows its tactic.
    Evidence: quick shots and combos are easy-number reps (capped, as in the Dojo); summit answers count in full.
    hub/test_journey.js prints and gates the coverage table. */
@@ -54152,13 +54375,25 @@ var JRN = (function () {
       terrs: ['E1', 'E7', 'E5', 'M1', 'M2'],
       quick: { E1: ['int.add', 'int.mul', 'trap.negprod'], E7: ['int.sub', 'trap.subneg'], E5: ['int.abs', 'int.cmp'], M1: ['rat.fadd', 'rat.dmul', 'rat.fmul', 'rat.dadd', 'trap.fdiv', 'trap.decplaces'], M2: ['rat.conv', 'rat.cmp', 'num.ten'] },
       combos: [['combo.signfrac', ['E1', 'M1']], ['combo.story', ['E7', 'M1', 'E5']], ['combo.forms', ['M2', 'M1']], ['combo.order', ['M2', 'E5']], ['combo.apart', ['E5', 'M1']]] },
-    { id: 'r2', name: 'Expressions', th: 'area', place: 'Expressions', blurb: 'Order of operations, powers, like terms, distributing and the area model.', terrs: ['E2', 'E3', 'E8', 'M12'] },
-    { id: 'r3', name: 'Equations and inequalities', th: 'bal', place: 'Equations', blurb: 'One move on both sides, undoing in reverse, words into equations, inequalities and ranges.', terrs: ['E4', 'M3', 'M13', 'M4', 'M5', 'M7', 'M11'] },
-    { id: 'r4', name: 'Rates, ratios and percent', th: 'tri', place: 'Rates', blurb: 'd = v · t, unit rates, proportions, percent of, percent change and interest.', terrs: ['M6', 'R1', 'R2', 'R3', 'R5', 'R6'] },
-    { id: 'r5', name: 'Geometry and measurement', th: 'scale', place: 'Geometry', blurb: 'Angles, circles, area and volume with their units, scale drawings and the Pythagorean theorem.', terrs: ['K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10', 'R7', 'R8'] },
-    { id: 'r6', name: 'Patterns, lines and modelling', th: 'step', place: 'Patterns', blurb: 'Start + add × n, how a sequence grows, slope and start, reading and solving by graph.', terrs: ['E6', 'M9', 'M10', 'M8', 'R4', 'R9', 'R10'] }
+    { id: 'r2', name: 'Expressions', th: 'area', place: 'Expressions', blurb: 'Order of operations, powers, like terms, distributing and the area model.', terrs: ['E2', 'E3', 'E8', 'M12'],
+      quick: { E2: ['exp.eval', 'exp.order', 'exp.pow', 'trap.order', 'trap.negsq'], E3: ['exp.like', 'exp.dist', 'exp.fact', 'exp.rules', 'trap.dist', 'trap.like'], E8: ['exp.neg', 'exp.mental'], M12: ['pat.area'] },
+      combos: [['combo.disteval', ['E3', 'E2']], ['combo.areaexp', ['M12', 'E2']], ['combo.minus', ['E3', 'E8']], ['combo.powerord', ['E2', 'E8']], ['combo.factarea', ['E3', 'M12']]] },
+    { id: 'r3', name: 'Equations and inequalities', th: 'bal', place: 'Equations', blurb: 'One move on both sides, undoing in reverse, words into equations, inequalities and ranges.', terrs: ['E4', 'M3', 'M13', 'M4', 'M5', 'M7', 'M11'],
+      quick: { E4: ['words.eq', 'trap.lessthan'], M3: ['eq1.add', 'eq1.mul', 'trap.inverse'], M13: ['eq1.frac', 'words.solveit'], M4: ['eq2.solve', 'eq2.dist', 'trap.twostep'], M5: ['words.two', 'words.ratetot'], M7: ['ineq.solve', 'ineq.flip', 'trap.flip'], M11: ['ineq.cmpd'] },
+      combos: [['combo.fare', ['E4', 'M5', 'M4', 'M13']], ['combo.limit', ['M7', 'M5']], ['combo.flip', ['M7', 'M11']], ['combo.fracof', ['M13', 'M5', 'M3']], ['combo.undocheck', ['M3', 'M4']]] },
+    { id: 'r4', name: 'Rates, ratios and percent', th: 'tri', place: 'Rates', blurb: 'd = v · t, unit rates, proportions, percent of, percent change and interest.', terrs: ['M6', 'R1', 'R2', 'R3', 'R5', 'R6'],
+      quick: { M6: ['drt.plug', 'drt.time', 'trap.minutes'], R1: ['pct.forms', 'pct.bench', 'rate.equiv'], R2: ['rate.unit', 'pct.interest', 'trap.rateway'], R3: ['rate.k', 'pct.mult', 'rate.tab'], R5: ['rate.prop', 'pct.change', 'trap.pctbase'], R6: ['pct.type', 'rate.setup', 'words.pct'] },
+      combos: [['combo.ratetime', ['R2', 'M6']], ['combo.pctprop', ['R1', 'R5', 'R6']], ['combo.chain', ['R3', 'R6']], ['combo.unitchange', ['R2', 'R5']], ['combo.interest', ['R1', 'R2']], ['combo.speedk', ['R3', 'M6']]] },
+    { id: 'r5', name: 'Geometry and measurement', th: 'scale', place: 'Geometry', blurb: 'Angles, circles, area and volume with their units, scale drawings and the Pythagorean theorem.', terrs: ['K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10', 'R7', 'R8'],
+      quick: { K1: ['geo.line', 'trap.vertical'], K2: ['geo.circ', 'trap.diam'], K3: ['num.sq'], K4: ['geo.area', 'geo.units', 'trap.squnit'], K5: ['words.measure'], K6: ['geo.tri', 'trap.tri180'], K7: ['geo.vol'], K8: ['geo.form'], K9: ['geo.par', 'geo.poly'], K10: ['geo.pyth', 'trap.pyth'], R7: ['trap.areak', 'rate.power'], R8: ['rate.scale'] },
+      combos: [['combo.angles', ['K1', 'K6']], ['combo.circsq', ['K2', 'K3', 'K4']], ['combo.plan', ['R8', 'K5', 'R7']], ['combo.box', ['K8', 'K7']], ['combo.pyth', ['K10', 'K4']], ['combo.parallel', ['K9', 'K6']]] },
+    { id: 'r6', name: 'Patterns, lines and modelling', th: 'step', place: 'Patterns', blurb: 'Start + add × n, how a sequence grows, slope and start, reading and solving by graph.', terrs: ['E6', 'M9', 'M10', 'M8', 'R4', 'R9', 'R10'],
+      quick: { E6: ['pat.rule', 'words.rule'], M9: ['pat.step', 'trap.step0'], M10: ['pat.next'], M8: ['num.whole', 'form.r5'], R4: ['rate.k'], R9: ['rate.slope'], R10: ['rate.meet'] },
+      combos: [['combo.seqline', ['M9', 'E6', 'R9']], ['combo.plans', ['R10', 'M8']], ['combo.grow', ['M10', 'M9']], ['combo.propgraph', ['R4', 'R9']], ['combo.patsolve', ['E6', 'M8', 'M9']]] }
   ];
-  var BY = {}; REGIONS.forEach(function (r) { BY[r.id] = r; });
+  var BY = {}, OF = {}; REGIONS.forEach(function (r) { BY[r.id] = r; r.terrs.forEach(function (t) { OF[t] = r; }); });
+  var ALL = { id: 'all', name: 'All together', place: 'All together', blurb: 'One full-strength problem from each region, the way the final exam mixes them.' };
+  function quickN(r) { return Math.max(K.QUICK, r.terrs.length); }
   function built(r) { return !!(r.quick && r.combos); }
   function shuffle(a, rnd) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function urg(model, cat, skills) { return typeof DJ !== 'undefined' && model ? DJ.unitUrgency(model, cat, skills, null).score : 0; }
@@ -54171,6 +54406,11 @@ var JRN = (function () {
   // the units of one stop, in order. opts: { model, rnd }
   function plan(rid, stop, cat, opts) {
     opts = opts || {}; var r = BY[rid], rnd = opts.rnd || Math.random, m = opts.model || null, out = [];
+    function kata(e) { return { type: 'kata', ref: { type: 'entry', id: e.id }, entry: e.id, terr: e.terr, skills: e.skills, diff: e.tier, name: e.name }; }
+    if (rid === 'all') {                                                // the last stop: each region's most urgent summit problem, in the order of the map
+      REGIONS.filter(built).forEach(function (g) { var pl = shuffle(summitPool(g, cat), rnd).sort(function (a, b) { return urg(m, cat, b.skills) - urg(m, cat, a.skills); }).filter(function (e) { return !opts.ok || opts.ok(e); }); if (pl[0]) out.push(kata(pl[0])); });
+      return out;
+    }
     if (!r || !built(r)) return out;
     function mvUnit(id, terr) { var mv = DJG.byId[id]; return { type: 'move', id: id, terr: terr || null, skills: mv.skills.slice() }; }
     if (stop === 'quick') {
@@ -54180,19 +54420,19 @@ var JRN = (function () {
         out.push(mvUnit(ms[0], t)); used[ms[0]] = 1; ms.slice(1).forEach(function (id) { rest.push([id, t]); });
       });
       rest = shuffle(rest, rnd).sort(function (a, b) { return urg(m, cat, DJG.byId[b[0]].skills) - urg(m, cat, DJG.byId[a[0]].skills); });
-      for (var i = 0; out.length < K.QUICK && i < rest.length; i++) if (!used[rest[i][0]]) { out.push(mvUnit(rest[i][0], rest[i][1])); used[rest[i][0]] = 1; }
+      for (var i = 0; out.length < quickN(r) && i < rest.length; i++) if (!used[rest[i][0]]) { out.push(mvUnit(rest[i][0], rest[i][1])); used[rest[i][0]] = 1; }
     } else if (stop === 'combo') {
       shuffle(r.combos, rnd).slice(0, K.COMBO).forEach(function (c) { var u = mvUnit(c[0], null); u.terrs = c[1].slice(); out.push(u); });
     } else if (stop === 'summit') {
       var pool = shuffle(summitPool(r, cat), rnd).sort(function (a, b) { return urg(m, cat, b.skills) - urg(m, cat, a.skills); }), seen = {};
-      pool.forEach(function (e) { if (out.length < K.SUMMIT && !seen[e.terr] && (!opts.ok || opts.ok(e))) { seen[e.terr] = 1; out.push({ type: 'kata', ref: { type: 'entry', id: e.id }, entry: e.id, terr: e.terr, skills: e.skills, diff: e.tier, name: e.name }); } });
+      pool.forEach(function (e) { if (out.length < K.SUMMIT && !seen[e.terr] && (!opts.ok || opts.ok(e))) { seen[e.terr] = 1; out.push(kata(e)); } });
     }
     return out;
   }
   // A stop being played: the queue grows on a miss and ends early on clean, fast work.
   function run(rid, stop, units) {
     var q = units.slice(), i = 0, log = [], added = 0, short = false, planned = units.length;
-    var min = stop === 'quick' ? K.QUICK_MIN : stop === 'combo' ? K.COMBO_MIN : planned, fast = stop === 'quick' ? K.FAST_QUICK : K.FAST_COMBO, r = BY[rid];
+    var min = stop === 'quick' ? K.QUICK_MIN : stop === 'combo' ? K.COMBO_MIN : planned, fast = stop === 'quick' ? K.FAST_QUICK : K.FAST_COMBO, r = BY[rid] || null;
     function terrsDone() { var t = {}; log.forEach(function (a) { (a.unit.terrs || [a.unit.terr]).forEach(function (x) { if (x) t[x] = 1; }); }); return t; }
     function median(xs) { var s = xs.slice().sort(function (a, b) { return a - b; }); return s.length ? s[Math.floor(s.length / 2)] : 0; }
     return {
@@ -54201,9 +54441,9 @@ var JRN = (function () {
       answer: function (unit, ok, ms) {
         log.push({ unit: unit, ok: !!ok, ms: ms || 0 }); i++;
         var res = { added: 0, short: false };
-        if (!ok && unit.type === 'kata' && r.quick[unit.terr] && added + K.ADD <= K.ADD_MAX) { var mid = r.quick[unit.terr][0], mv0 = DJG.byId[mid]; for (var k2 = 0; k2 < K.ADD; k2++) q.splice(i + k2, 0, { type: 'move', id: mid, terr: unit.terr, skills: mv0.skills.slice(), extra: true }); added += K.ADD; res.added = K.ADD; }
+        if (!ok && unit.type === 'kata' && OF[unit.terr] && OF[unit.terr].quick && added + K.ADD <= K.ADD_MAX) { var mid = OF[unit.terr].quick[unit.terr][0], mv0 = DJG.byId[mid]; for (var k2 = 0; k2 < K.ADD; k2++) q.splice(i + k2, 0, { type: 'move', id: mid, terr: unit.terr, skills: mv0.skills.slice(), extra: true }); added += K.ADD; res.added = K.ADD; }
         if (!ok && unit.type === 'move' && added + K.ADD <= K.ADD_MAX) { for (var k = 0; k < K.ADD; k++) q.splice(i + k, 0, { type: 'move', id: unit.id, terr: unit.terr, terrs: unit.terrs, skills: unit.skills, extra: true }); added += K.ADD; res.added = K.ADD; }
-        if (stop !== 'summit' && !short && i < q.length && log.length >= min && log.every(function (a) { return a.ok; }) && median(log.map(function (a) { return a.ms; })) <= fast) {
+        if (r && stop !== 'summit' && !short && i < q.length && log.length >= min && log.every(function (a) { return a.ok; }) && median(log.map(function (a) { return a.ms; })) <= fast) {
           var td = terrsDone(); if (stop !== 'quick' || r.terrs.every(function (t) { return td[t]; })) { q = q.slice(0, i); short = true; res.short = true; }
         }
         return res;
@@ -54213,7 +54453,7 @@ var JRN = (function () {
   }
   // what has been finished, from the saved sessions (mode 'journey', focus { journey, stop }); nothing else is stored
   function progress(sessions) {
-    var P = {}; REGIONS.forEach(function (r) { P[r.id] = {}; });
+    var P = { all: {} }; REGIONS.forEach(function (r) { P[r.id] = {}; });
     (sessions || []).forEach(function (s) { if (s.mode !== 'journey' || !s.focus || !P[s.focus.journey] || !s.done) return; var a = s.answers || [], cur = P[s.focus.journey][s.focus.stop];
       var rec = { right: a.filter(function (x) { return x.ok; }).length, n: a.length, at: s.end || s.start };
       if (!cur || rec.at >= cur.at) P[s.focus.journey][s.focus.stop] = rec; });
@@ -54228,8 +54468,11 @@ var JRN = (function () {
         quick: built(r) ? (r.quick[t] || []).length : 0, combo: built(r) ? r.combos.filter(function (c) { return c[1].indexOf(t) >= 0; }).length : 0, summit: sp.filter(function (e) { return e.terr === t; }).length }); }); });
     return rows;
   }
-  function size() { var b = REGIONS.length; return { quick: b * K.QUICK, combo: b * K.COMBO, summit: b * K.SUMMIT, final: K.FINAL, all: b * (K.QUICK + K.COMBO + K.SUMMIT) + K.FINAL }; }
-  return { K: K, STOPS: STOPS, REGIONS: REGIONS, byId: BY, built: built, plan: plan, run: run, progress: progress, nextStop: nextStop, coverage: coverage, summitPool: summitPool, size: size };
+  function size() { var b = REGIONS.length, qk = 0; REGIONS.forEach(function (r) { qk += quickN(r); }); return { quick: qk, combo: b * K.COMBO, summit: b * K.SUMMIT, final: K.FINAL, all: qk + b * (K.COMBO + K.SUMMIT) + K.FINAL }; }
+  // everything finished: the three stops of every region and the last stop
+  function done(P) { return REGIONS.every(function (r) { return STOPS.every(function (s) { return P[r.id] && P[r.id][s.id]; }); }) && !!(P.all && P.all.all); }
+  function regionsDone(P) { return REGIONS.every(function (r) { return STOPS.every(function (s) { return P[r.id] && P[r.id][s.id]; }); }); }
+  return { K: K, STOPS: STOPS, REGIONS: REGIONS, ALL: ALL, byId: BY, regionOf: function (t) { return OF[t] || null; }, quickN: quickN, done: done, regionsDone: regionsDone, built: built, plan: plan, run: run, progress: progress, nextStop: nextStop, coverage: coverage, summitPool: summitPool, size: size };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = JRN;
 /* ===== JRN END ===== */
@@ -255319,6 +255562,7 @@ var HDJ = (function () {
   function jrnCrumb(wrap, href, label) { var c = wrap.querySelector('.hb-crumb'); if (c) c.innerHTML = '<a href="#' + href + '">‹ ' + esc(label) + '</a>'; }
   function viewJourney(main, p) {
     var r = p[1] ? JRN.byId[p[1]] : null;
+    if (p[1] === 'all') return jrnStop(main, JRN.ALL, 'all');
     if (r && JRN.built(r) && p[2] && JRN.STOPS.some(function (s) { return s.id === p[2]; })) return jrnStop(main, r, p[2]);
     if (r) return jrnRegion(main, r);
     return jrnMap(main);
@@ -255328,23 +255572,23 @@ var HDJ = (function () {
     var P = JRN.progress(allSessions()), sz = JRN.size(), wrap = el('div', 'hb-wrap dj-wrap dj-jrn novar'); main.appendChild(wrap);
     var cur = JRN.REGIONS.filter(function (r) { return JRN.built(r) && !jrnDone(P, r); })[0] || null, nodes = JRN.REGIONS.map(function (r) { return { place: r.place }; }).concat([{ place: 'All together' }]);
     wrap.innerHTML = '<div class="hb-crumb"><a href="#reviews">‹ Reviews &amp; Exams</a></div>' +
-      '<section class="dj-hero"><div><div class="eyebrow">The whole course</div><h1>Full-course review</h1><p>Six regions that cut across the chapters. Each opens with its picture and has three stops: quick shots, combos, then a summit of full-strength problems. A last stop mixes them all.</p></div>' +
-      '<div class="dj-herostats"><div><b>' + JRN.REGIONS.length + '</b><span>regions</span></div><div><b>' + JRN.REGIONS.filter(function (r) { return jrnDone(P, r); }).length + '</b><span>finished</span></div><div><b>~' + Math.round(sz.all / 10) * 10 + '</b><span>answers in all</span></div><div class="g"><b>15–20 min</b><span>for one region</span></div></div></section>' +
+      '<section class="dj-hero"><div><div class="eyebrow">The whole course</div><h1>Full-course review</h1><p>Six regions that cut across the chapters. Each opens with its picture and has three stops: quick shots, combos, then a summit of full-strength problems. A last stop takes one full-strength problem from each region.</p></div>' +
+      '<div class="dj-herostats"><div><b>' + JRN.REGIONS.length + '</b><span>regions</span></div><div><b>' + JRN.REGIONS.filter(function (r) { return jrnDone(P, r); }).length + '</b><span>finished</span></div><div><b>~' + Math.round(sz.all / 5) * 5 + '</b><span>answers in all</span></div><div class="g"><b>15–20 min</b><span>for one region</span></div></div></section>' +
       '<div class="dj-mapbox dj-jmap">' + mapSVG(nodes) + '</div>' +
       '<div class="dj-jgrid">' + JRN.REGIONS.map(function (r, i) { var I = ideaOf(r.th), T0 = typeof TAC !== 'undefined' ? TAC.THREADS[r.th] : null, ok = JRN.built(r);
         return '<a class="hb-card dj-jcard' + (ok ? '' : ' soon') + (cur === r ? ' cur' : '') + '" href="#dojo/journey/' + r.id + '"><span class="n">' + (i + 1) + '</span><span class="b"><b>' + esc(r.name) + '</b><span class="t">' + esc(r.blurb) + '</span>' +
           '<span class="m">' + (T0 ? '<em class="th">' + TVZ.icon(T0.ic) + esc(I ? I.h : T0.name) + '</em>' : '') + '<em>' + r.terrs.length + ' territories</em>' + (ok ? jrnStopsRow(P, r) : '<em class="soon">being built</em>') + '</span></span></a>'; }).join('') +
-      '<div class="hb-card dj-jcard soon"><span class="n">7</span><span class="b"><b>All together</b><span class="t">A last stop that mixes every region, when the six are done.</span><span class="m"><em class="soon">being built</em></span></span></div></div>' +
+      '<a class="hb-card dj-jcard dj-jall' + (!cur && !P.all.all ? ' cur' : '') + '" href="#dojo/journey/all"><span class="n">' + (P.all.all ? '✓' : JRN.REGIONS.length + 1) + '</span><span class="b"><b>All together</b><span class="t">' + esc(JRN.ALL.blurb) + '</span><span class="m"><em>' + JRN.REGIONS.length + ' problems, no clock</em>' + (P.all.all ? '<em>Last time: ' + P.all.all.right + ' of ' + P.all.all.n + ' right</em>' : JRN.regionsDone(P) ? '' : '<em>best after the six regions</em>') + '</span></span></a></div>' +
       '<p class="hb-muted dj-fine">Quick shots and combos are easy-number reps: they refresh memory and fill a skill part of the way. Summit problems count in full. <a href="#course">The Course Sheet</a> has the ten ideas the regions open with.</p>';
     var svg = wrap.querySelector('.dj-map');
-    Array.prototype.forEach.call(svg.querySelectorAll('.stop'), function (g) { var k = +g.dataset.stop, r = JRN.REGIONS[k]; g.classList.toggle('done', !!(r && jrnDone(P, r))); g.classList.toggle('cur', !!(r && r === cur)); if (r) { g.style.cursor = 'pointer'; g.setAttribute('role', 'link'); g.setAttribute('tabindex', '0'); g.setAttribute('aria-label', r.name); } });
+    Array.prototype.forEach.call(svg.querySelectorAll('.stop'), function (g) { var k = +g.dataset.stop, r = JRN.REGIONS[k]; g.classList.toggle('done', r ? jrnDone(P, r) : !!P.all.all); g.classList.toggle('cur', r ? r === cur : !cur && !P.all.all); if (r || k === JRN.REGIONS.length) { g.style.cursor = 'pointer'; g.setAttribute('role', 'link'); g.setAttribute('tabindex', '0'); g.setAttribute('aria-label', r ? r.name : 'All together'); } });
     var w = svg.querySelector('.walker'); if (w) w.style.display = 'none';
-    function go(e) { var g = e.target.closest ? e.target.closest('.stop') : null; if (g && JRN.REGIONS[+g.dataset.stop] && (e.type === 'click' || e.key === 'Enter')) location.hash = 'dojo/journey/' + JRN.REGIONS[+g.dataset.stop].id; }
+    function go(e) { var g = e.target.closest ? e.target.closest('.stop') : null, k = g ? +g.dataset.stop : -1; if (g && (JRN.REGIONS[k] || k === JRN.REGIONS.length) && (e.type === 'click' || e.key === 'Enter')) location.hash = 'dojo/journey/' + (JRN.REGIONS[k] ? JRN.REGIONS[k].id : 'all'); }
     svg.addEventListener('click', go); svg.addEventListener('keydown', go);
   }
   function jrnRegion(main, r) {
     var P = JRN.progress(allSessions()), I = ideaOf(r.th), idx = JRN.REGIONS.indexOf(r), ok = JRN.built(r), nx = ok ? JRN.nextStop(P, r.id) : null, wrap = el('div', 'hb-wrap dj-wrap dj-jrn novar'); main.appendChild(wrap);
-    var sizes = { quick: JRN.K.QUICK + ' quick reps; ' + JRN.K.QUICK_MIN + ' if they are clean and fast', combo: JRN.K.COMBO + ' short problems; ' + JRN.K.COMBO_MIN + ' if clean and fast', summit: JRN.K.SUMMIT + ' full-strength problems, no clock' };
+    var qn = JRN.quickN(r), qmin = Math.max(JRN.K.QUICK_MIN, r.terrs.length), sizes = { quick: qn + ' quick reps' + (qmin < qn ? '; ' + qmin + ' if they are clean and fast' : ', one for each part of the region'), combo: JRN.K.COMBO + ' short problems; ' + JRN.K.COMBO_MIN + ' if clean and fast', summit: JRN.K.SUMMIT + ' full-strength problems, no clock' };
     wrap.innerHTML = '<div class="hb-crumb"><a href="#dojo/journey">‹ Full-course review</a></div>' +
       '<section class="dj-hero"><div><div class="eyebrow">Region ' + (idx + 1) + ' of ' + JRN.REGIONS.length + '</div><h1>' + esc(r.name) + '</h1><p>' + esc(r.blurb) + '</p></div><div class="dj-herostats dj-jterr">' + r.terrs.map(function (t) { return '<span>' + esc((CAT.territories[t] || {}).name || t) + '</span>'; }).join('') + '</div></section>' +
       (I ? '<section class="hb-card dj-jpic"><div class="dj-jpic-t"><div class="eyebrow">The picture this region opens with</div><h2>' + esc(I.h) + '</h2><p class="sub">' + esc(I.line) + '</p><a class="hb-link" href="#course">See it on the Course Sheet</a></div><div class="dj-jpic-v tv">' + TVZ.draw(I.big) + '</div></section>' : '') +
@@ -255354,16 +255598,17 @@ var HDJ = (function () {
         : '<section class="hb-card"><h2>Being built</h2><p class="sub">This region is not open yet. <a href="#dojo/journey/' + JRN.REGIONS.filter(JRN.built)[0].id + '">' + esc(JRN.REGIONS.filter(JRN.built)[0].name) + '</a> is ready.</p></section>');
   }
   function jrnStop(main, r, stop) {
-    var m = model(), ST = JRN.STOPS.filter(function (s) { return s.id === stop; })[0], cache = {}, lv = stop === 'combo' ? JRN.K.COMBO_LV : JRN.K.QUICK_LV;
+    var isAll = r === JRN.ALL, back = isAll ? 'dojo/journey' : 'dojo/journey/' + r.id;
+    var m = model(), ST = isAll ? { id: 'all', name: 'All together', blurb: JRN.ALL.blurb } : JRN.STOPS.filter(function (s) { return s.id === stop; })[0], cache = {}, lv = stop === 'combo' ? JRN.K.COMBO_LV : JRN.K.QUICK_LV;
     function okEntry(e) { try { var it = HX.makeItem({ type: 'entry', id: e.id }); if (it && it.p) { cache[e.id] = it.p; return true; } } catch (x) { } return false; }
-    var units = JRN.plan(r.id, stop, CAT, { model: m, ok: okEntry }), sh = shell(main, ST.name, 'Full-course review · ' + r.name);
-    jrnCrumb(sh.wrap, 'dojo/journey/' + r.id, r.name);
-    if (!units.length) { sh.body.innerHTML = '<div class="hb-card">Nothing to serve here. <a href="#dojo/journey/' + r.id + '">Back</a></div>'; return; }
+    var units = JRN.plan(r.id, stop, CAT, { model: m, ok: okEntry }), sh = shell(main, ST.name, isAll ? 'Full-course review · the last stop' : 'Full-course review · ' + r.name);
+    jrnCrumb(sh.wrap, back, isAll ? 'Full-course review' : r.name);
+    if (!units.length) { sh.body.innerHTML = '<div class="hb-card">Nothing to serve here. <a href="#' + back + '">Back</a></div>'; return; }
     begin('journey', lv, { journey: r.id, stop: stop }, { J: JRN.run(r.id, stop, units), run: null, ri: 0, seenCard: {} });
     S.pit = cockpit(sh.side, {}); pit();
     sh.topr.innerHTML = '<div class="dj-count"><b>0</b> of <span>' + units.length + '</span></div>';
     function count() { var st = S.J.state(); sh.topr.querySelector('b').textContent = st.i; sh.topr.querySelector('span').textContent = st.n; }
-    startCard(sh.body, { art: blobArt(), h: ST.name + ': ' + r.name, p: esc(ST.blurb), list: stop === 'summit' ? ['No clock. Use the worked steps after an answer, not before.', 'A miss adds two quick reps on that ground.'] : ['Clean and fast, and the stop ends early.', 'A miss adds two more of the same kind and shows the tactic.'], btn: 'Start' }, next);
+    startCard(sh.body, { art: blobArt(), h: isAll ? 'All together' : ST.name + ': ' + r.name, p: esc(ST.blurb), list: stop === 'summit' || isAll ? ['No clock. Use the worked steps after an answer, not before.', 'A miss adds two quick reps on that ground.'] : ['Clean and fast, and the stop ends early.', 'A miss adds two more of the same kind and shows the tactic.'], btn: 'Start' }, next);
     function next() {
       if (!S || S.over) return;
       if (S.run && S.ri < S.run.length) return showItem();
@@ -255373,7 +255618,7 @@ var HDJ = (function () {
       if (u.type === 'kata') return showKata(u);
       try { S.run = DJG.make(u.id, u.extra ? 1 : lv); } catch (e) { setTimeout(function () { throw e; }, 0); S.run = null; S.unit = null; return next(); }
       S.ri = 0;
-      if (stop === 'summit' && !S.seenCard[u.id]) { S.seenCard[u.id] = 1; sh.body.innerHTML = '<section class="hb-card dj-card dj-intro"><p class="sub">Two quick reps on this ground first.</p>' + cardHTML(DJG.byId[u.id]) + '<div class="hb-row"><button class="btn primary" type="button" data-ok="1">Got it</button></div></section>'; var b = sh.body.querySelector('[data-ok]'); b.onclick = showItem; b.focus({ preventScroll: true }); return; }
+      if ((stop === 'summit' || isAll) && !S.seenCard[u.id]) { S.seenCard[u.id] = 1; sh.body.innerHTML = '<section class="hb-card dj-card dj-intro"><p class="sub">Two quick reps on this ground first.</p>' + cardHTML(DJG.byId[u.id]) + '<div class="hb-row"><button class="btn primary" type="button" data-ok="1">Got it</button></div></section>'; var b = sh.body.querySelector('[data-ok]'); b.onclick = showItem; b.focus({ preventScroll: true }); return; }
       showItem();
     }
     function showItem() {
@@ -255393,7 +255638,7 @@ var HDJ = (function () {
     function showKata(u) {
       var p = cache[u.entry]; if (!p) { try { p = HX.makeItem(u.ref).p; } catch (e) { p = null; } } if (!p) { S.unit = null; return next(); }
       p = castSwap(p, u); var shown = now(), help = false; S.fullP = p;
-      sh.body.innerHTML = '<section class="hb-card dj-card dj-kata"><div class="dj-meta"><span class="dj-why k-keep">Summit</span><span class="dj-mvn">' + esc((CAT.territories[u.terr] || {}).name || '') + ' · a full problem</span></div><div class="dj-prob"></div><div class="hb-pacts dj-acts"></div><div class="dj-fb" aria-live="polite"></div><div class="help hb-steps" hidden><h3>Worked steps</h3><div class="dj-steps"></div></div></section>';
+      sh.body.innerHTML = '<section class="hb-card dj-card dj-kata"><div class="dj-meta"><span class="dj-why k-keep">' + (isAll ? esc(JRN.regionOf(u.terr).name) : 'Summit') + '</span><span class="dj-mvn">' + esc((CAT.territories[u.terr] || {}).name || '') + ' · a full problem</span></div><div class="dj-prob"></div><div class="hb-pacts dj-acts"></div><div class="dj-fb" aria-live="polite"></div><div class="help hb-steps" hidden><h3>Worked steps</h3><div class="dj-steps"></div></div></section>';
       var acts = sh.body.querySelector('.dj-acts'), hasSteps = p.steps && p.steps.length;
       S.view = X.mountProblem(sh.body.querySelector('.dj-prob'), p, { onChange: function () { var b = acts.querySelector('[data-check]'); if (b) b.disabled = !S.view.hasInput(); }, onSubmit: function () { check(); } });
       acts.innerHTML = (hasSteps ? '<button class="btn ghost sm" type="button" data-help="1">Help</button>' : '<span></span>') + '<button class="btn primary" type="button" data-check="1" disabled>Check</button>';
@@ -255411,12 +255656,14 @@ var HDJ = (function () {
     }
     function finish() {
       var st = S.J.state(), secs = Math.round((now() - S.t0) / 1000), g = S.live.read(now()), n = S.n, right = S.right; stop_();
-      var P = JRN.progress(allSessions()), nx = JRN.nextStop(P, r.id), nxS = nx ? JRN.STOPS.filter(function (s) { return s.id === nx; })[0] : null;
+      var P = JRN.progress(allSessions()), nx = isAll ? null : JRN.nextStop(P, r.id), nxS = nx ? JRN.STOPS.filter(function (s) { return s.id === nx; })[0] : null, nreg = isAll ? st.terrs.map(function (t) { return JRN.regionOf(t); }).filter(function (g2, i, a) { return a.indexOf(g2) === i; }).length : 0;
+      var allNext = !isAll && !nxS && JRN.regionsDone(P) && !P.all.all, fin = JRN.done(P);
       var note = st.short ? 'Clean and fast: the stop ended early, after ' + st.i + ' of ' + st.planned + '.' : st.added ? st.added + ' extra reps were added after misses.' : 'Every planned rep done.';
-      sh.wrap.innerHTML = '<div class="hb-crumb"><a href="#dojo/journey/' + r.id + '">‹ ' + esc(r.name) + '</a></div><section class="hb-card dj-sum"><div class="eyebrow">Full-course review · ' + esc(r.name) + '</div><h1>' + esc(ST.name) + ' done. ' + right + ' of ' + n + ' right.</h1><p class="sub">' + esc(note) + '</p>' +
-        '<div class="dj-sumgrid"><div><b>' + sgn(g.gain, 2) + '</b><span>blobs</span></div><div><b>' + right + ' / ' + n + '</b><span>right</span></div><div><b>' + S.best + '</b><span>best run</span></div><div><b>' + Math.floor(secs / 60) + ':' + ('0' + secs % 60).slice(-2) + '</b><span>time</span></div><div><b>' + st.terrs.length + ' of ' + r.terrs.length + '</b><span>territories met</span></div></div>' +
+      if (isAll) note = (st.added ? st.added + ' quick reps were added after misses. ' : '') + (fin ? 'That finishes the full-course review: every stop of every region, and the last one.' : 'The last stop is done. The regions still open are on the map.');
+      sh.wrap.innerHTML = '<div class="hb-crumb"><a href="#' + back + '">‹ ' + esc(isAll ? 'Full-course review' : r.name) + '</a></div><section class="hb-card dj-sum"><div class="eyebrow">Full-course review · ' + esc(isAll ? 'the last stop' : r.name) + '</div><h1>' + esc(ST.name) + ' done. ' + right + ' of ' + n + ' right.</h1><p class="sub">' + esc(note) + '</p>' +
+        '<div class="dj-sumgrid"><div><b>' + sgn(g.gain, 2) + '</b><span>blobs</span></div><div><b>' + right + ' / ' + n + '</b><span>right</span></div><div><b>' + S.best + '</b><span>best run</span></div><div><b>' + Math.floor(secs / 60) + ':' + ('0' + secs % 60).slice(-2) + '</b><span>time</span></div><div><b>' + (isAll ? nreg + ' of ' + JRN.REGIONS.length : st.terrs.length + ' of ' + r.terrs.length) + '</b><span>' + (isAll ? 'regions met' : 'territories met') + '</span></div></div>' +
         '<div class="dj-jterr in">' + st.terrs.map(function (t) { return '<span>' + esc((CAT.territories[t] || {}).name || t) + '</span>'; }).join('') + '</div>' +
-        '<div class="hb-row">' + (nxS ? '<a class="btn primary" href="#dojo/journey/' + r.id + '/' + nxS.id + '">Next stop: ' + esc(nxS.name) + '</a>' : '<a class="btn primary" href="#dojo/journey">Back to the map</a>') + '<a class="btn ghost" href="#dojo/journey/' + r.id + '">' + esc(r.name) + '</a><a class="hb-link" href="#dojo/journey/' + r.id + '/' + stop + '" data-again="1">Do this stop again</a></div></section>';
+        '<div class="hb-row">' + (nxS ? '<a class="btn primary" href="#dojo/journey/' + r.id + '/' + nxS.id + '">Next stop: ' + esc(nxS.name) + '</a>' : allNext ? '<a class="btn primary" href="#dojo/journey/all">The last stop: All together</a>' : '<a class="btn primary" href="#dojo/journey">Back to the map</a>') + (isAll ? '' : '<a class="btn ghost" href="#dojo/journey/' + r.id + '">' + esc(r.name) + '</a>') + '<a class="hb-link" href="#' + (isAll ? 'dojo/journey/all' : 'dojo/journey/' + r.id + '/' + stop) + '" data-again="1">Do this stop again</a></div></section>';
       sh.wrap.onclick = function (e) { var ag = e.target.closest('[data-again]'); if (ag) { e.preventDefault(); S = null; HX.reroute(); } };
       window.scrollTo(0, 0);
     }
@@ -256519,7 +256766,7 @@ var HDJ = (function () {
   function unlockAll() { return !!(window.__MM7_UNLOCK || (loadHub().settings || {}).unlockAll); }
   function chLevels(n) { var lv = Object.keys(M.m.levels).filter(function (k) { return M.m.levels[k].ch === n; }); return { n: lv.length, done: lv.filter(function (k) { return M.m.levels[k].completed; }).length }; }
   function reviewSets(g) { var rv = J(g.rkey), st = (rv && rv.sets) || {}; return Object.keys(st).filter(function (k) { return st[k] && st[k].done; }).length; }
-  function journeyDone() { if (typeof JRN === 'undefined' || typeof LMS === 'undefined') return false; var P = JRN.progress(LMS.dojoSessions(getItem, loadHub())); return JRN.REGIONS.every(function (r) { return JRN.STOPS.every(function (s) { return P[r.id] && P[r.id][s.id]; }); }) && !!(P.all && P.all.all); }
+  function journeyDone() { if (typeof JRN === 'undefined' || typeof LMS === 'undefined') return false; return JRN.done(JRN.progress(LMS.dojoSessions(getItem, loadHub()))); }
   function chNames(chs) { return chs.length === 1 ? 'Chapter ' + chs[0] + ' Path' : 'Chapter ' + chs.slice(0, -1).join(', Chapter ') + ' and Chapter ' + chs[chs.length - 1] + ' Paths'; }
   // null when open; otherwise { need, have } in plain words. kind: review | tactics | exam | course | journey | final
   function lockOf(kind, gid) {
