@@ -2294,6 +2294,11 @@ span.r-x, span.r-n, span.r-o, span.r-g, span.r-w, b.r-n, b.r-o { color: var(--c)
 .hb-jrncard { border-left-color: var(--good); }
 @media (max-width: 760px) { .dj-jpic { grid-template-columns: 1fr; } }
 
+/* locks on Reviews, Exams and sheets (19 Nov 2026) */
+.hb-locknote { margin: 6px 0 0; font-size: 14px; color: var(--ink-2); display: block; } .hb-locknote b { color: var(--ink); } .hb-locknote .have { display: block; font-size: 13px; margin-top: 2px; }
+.hb-lockic { display: inline-block; width: 12px; height: 10px; border: 2px solid currentColor; border-radius: 3px; margin-right: 7px; position: relative; top: 1px; } .hb-lockic::before { content: ""; position: absolute; left: 1px; right: 1px; top: -8px; height: 7px; border: 2px solid currentColor; border-bottom: 0; border-radius: 6px 6px 0 0; }
+.hb-coursecard.is-locked { opacity: .85; } .hb-locked h1 { margin: 4px 0 8px; } .hb-locked .have { font-weight: 700; margin: 6px 0 10px; }
+
 .hb-update { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 60; display: flex; align-items: center; gap: 12px;
   background: var(--ink); color: var(--bg); padding: 8px 8px 8px 16px; border-radius: 999px; box-shadow: var(--shadow); font-size: 15px; max-width: calc(100vw - 24px); }
 .hb-update button { font: inherit; font-weight: 700; border: 0; border-radius: 999px; padding: 6px 14px; background: var(--accent-ink, #fff); color: var(--accent, #2d6a86); cursor: pointer; }
@@ -255525,15 +255530,15 @@ var HDJ = (function () {
   // xr/groups/<id>.js `keys` exactly or a student's work is saved where nothing reads it. every group
   // uses its group id.
   var GROUPS = [
-    { id: 'ch12', name: 'Chapters 1–2', chs: [1, 2], review: 'ch12-review', exam: 'ch12-exam', rkey: 'mm7-ch12-review-v1', xkey: 'mm7-ch12-exam-v1', app: 'mm7-ch12-exam',
+    { id: 'ch12', name: 'Chapters 1–2', chs: [1, 2], review: 'ch12-review', exam: 'ch12-exam', rkey: 'mm7-ch12-review-v1', xkey: 'mm7-ch12-exam-v1', app: 'mm7-ch12-exam', sets: 7,
       blurb: 'Integers, expressions, equations by reasoning, patterns and the properties.' },
-    { id: 'ch34', name: 'Chapters 3–4', chs: [3, 4], review: 'ch34-review', exam: 'ch34-exam', rkey: 'mm7-ch34-review-v1', xkey: 'mm7-ch34-exam-v1', app: 'mm7-ch34-exam',
+    { id: 'ch34', name: 'Chapters 3–4', chs: [3, 4], review: 'ch34-review', exam: 'ch34-exam', rkey: 'mm7-ch34-review-v1', xkey: 'mm7-ch34-exam-v1', app: 'mm7-ch34-exam', sets: 4,
       blurb: 'One-step equations, constant speed, rational numbers and writing equations.' },
-    { id: 'ch5', name: 'Chapter 5', chs: [5], review: 'ch5-review', exam: 'ch5-exam', rkey: 'mm7-ch5-review-v1', xkey: 'mm7-ch5-exam-v1', app: 'mm7-ch5-exam',
+    { id: 'ch5', name: 'Chapter 5', chs: [5], review: 'ch5-review', exam: 'ch5-exam', rkey: 'mm7-ch5-review-v1', xkey: 'mm7-ch5-exam-v1', app: 'mm7-ch5-exam', sets: 6,
       blurb: 'Multi-step equations, word problems, patterns and inequalities.' },
-    { id: 'ch67', name: 'Chapters 6–7', chs: [6, 7], review: 'ch67-review', exam: 'ch67-exam', rkey: 'mm7-ch67-review-v1', xkey: 'mm7-ch67-exam-v1', app: 'mm7-ch67-exam',
+    { id: 'ch67', name: 'Chapters 6–7', chs: [6, 7], review: 'ch67-review', exam: 'ch67-exam', rkey: 'mm7-ch67-review-v1', xkey: 'mm7-ch67-exam-v1', app: 'mm7-ch67-exam', sets: 7,
       blurb: 'Ratios, rates, proportional relationships, percent and scale.' },
-    { id: 'ch8', name: 'Chapter 8', chs: [8], review: 'ch8-review', exam: 'ch8-exam', rkey: 'mm7-ch8-review-v1', xkey: 'mm7-ch8-exam-v1', app: 'mm7-ch8-exam',
+    { id: 'ch8', name: 'Chapter 8', chs: [8], review: 'ch8-review', exam: 'ch8-exam', rkey: 'mm7-ch8-review-v1', xkey: 'mm7-ch8-exam-v1', app: 'mm7-ch8-exam', sets: 7,
       blurb: 'Angles, circles, area and surface area, triangles, solids and cross-sections.' },
   ];
   var MANIFEST = {}; try { MANIFEST = JSON.parse(document.getElementById('hb-manifest').textContent); } catch (e) { }
@@ -255821,12 +255826,12 @@ var HDJ = (function () {
       else if (name === 'practice') viewPlayer(main, 'practice');
       else if (name === 'chapters') viewChapters(main);
       else if (name === 'ch' && chOf(+p[1])) { if (p[2] === 'path') viewChapterPath(main, +p[1], p[3]); else if (p[2] === 'tactics' && typeof HTC !== 'undefined') HTC.view(main, +p[1], p[3], chapterHead(+p[1], 'tactics')); else viewChapterDash(main, +p[1]); }
-      else if (name === 'course' && typeof HTC !== 'undefined' && HTC.courseView && TAC.course && TAC.course()) HTC.courseView(main);
-      else if (name === 'reviews') { if (p[2] === 'tactics' && typeof HTC !== 'undefined' && HTC.groupView && TAC.group(p[1])) HTC.groupView(main, p[1]); else viewReviews(main); }
-      else if (name === 'app' && MANIFEST[p[1]]) viewApp(main, p[1]);
+      else if (name === 'course' && typeof HTC !== 'undefined' && HTC.courseView && TAC.course && TAC.course()) { if (lockOf('course')) viewLocked(main, 'The Course Sheet', lockOf('course'), ['reviews', 'Reviews & Exams']); else HTC.courseView(main); }
+      else if (name === 'reviews') { if (p[2] === 'tactics' && typeof HTC !== 'undefined' && HTC.groupView && TAC.group(p[1])) { if (lockOf('tactics', p[1])) viewLocked(main, TAC.group(p[1]).name + ' Skills & Tactics', lockOf('tactics', p[1]), ['reviews', 'Reviews & Exams']); else HTC.groupView(main, p[1]); } else viewReviews(main); }
+      else if (name === 'app' && MANIFEST[p[1]]) { var gk = GROUPS.filter(function (x) { return x.review === p[1] || x.exam === p[1]; })[0], lk = gk ? lockOf(gk.review === p[1] ? 'review' : 'exam', gk.id) : null; if (lk) { document.body.classList.remove('hb-framed'); viewLocked(main, gk.name + (gk.review === p[1] ? ' Review' : ' Exam'), lk, ['reviews', 'Reviews & Exams']); } else viewApp(main, p[1]); }
       else if (name === 'dashboard' || name === 'progress') { var tjOn = TJ && name === 'dashboard' && p[1] !== 'progress'; if (TJ) dashNav(main, tjOn); if (tjOn) TJ.view(main); else viewProgress(main); }   // #dashboard opens on Trajectory; #dashboard/progress and the old #progress open Progress
       else if (name === 'history' && typeof HHI !== 'undefined') HHI.view(main, p[1]);
-      else if (name === 'dojo' && typeof HDJ !== 'undefined') HDJ.view(main, p.slice(1));
+      else if (name === 'dojo' && typeof HDJ !== 'undefined') { if (p[1] === 'journey' && lockOf('journey')) viewLocked(main, 'Full-course review', lockOf('journey'), ['reviews', 'Reviews & Exams']); else HDJ.view(main, p.slice(1)); }
       else if (name === 'settings') viewSettings(main);
       else { go('today'); return; }
     } catch (e) {
@@ -256506,6 +256511,35 @@ var HDJ = (function () {
   }
 
   // =================== REVIEWS & EXAMS ===================
+  // ---------------------------------------------------------------- locks (owner, 19 Nov 2026)
+  // Default: a Review and its Skills & Tactics open when the Paths of its chapters are finished; an Exam when its Review is complete
+  // (every Transfer set done, the Review's own measure); the full-course review and the Course Sheet when the Chapter 8 Exam has
+  // been submitted; the final exam when the full-course review is finished. Settings has one switch that opens everything.
+  // (window.__MM7_UNLOCK is the same switch for the browser tests of pages that are locked by default.)
+  function unlockAll() { return !!(window.__MM7_UNLOCK || (loadHub().settings || {}).unlockAll); }
+  function chLevels(n) { var lv = Object.keys(M.m.levels).filter(function (k) { return M.m.levels[k].ch === n; }); return { n: lv.length, done: lv.filter(function (k) { return M.m.levels[k].completed; }).length }; }
+  function reviewSets(g) { var rv = J(g.rkey), st = (rv && rv.sets) || {}; return Object.keys(st).filter(function (k) { return st[k] && st[k].done; }).length; }
+  function journeyDone() { if (typeof JRN === 'undefined' || typeof LMS === 'undefined') return false; var P = JRN.progress(LMS.dojoSessions(getItem, loadHub())); return JRN.REGIONS.every(function (r) { return JRN.STOPS.every(function (s) { return P[r.id] && P[r.id][s.id]; }); }) && !!(P.all && P.all.all); }
+  function chNames(chs) { return chs.length === 1 ? 'Chapter ' + chs[0] + ' Path' : 'Chapter ' + chs.slice(0, -1).join(', Chapter ') + ' and Chapter ' + chs[chs.length - 1] + ' Paths'; }
+  // null when open; otherwise { need, have } in plain words. kind: review | tactics | exam | course | journey | final
+  function lockOf(kind, gid) {
+    if (unlockAll()) return null;
+    var g = gid ? GROUPS.filter(function (x) { return x.id === gid; })[0] : null, last = GROUPS[GROUPS.length - 1];
+    if ((kind === 'review' || kind === 'tactics') && g) {
+      var st = g.chs.map(function (n) { var c = chLevels(n); c.ch = n; return c; });
+      if (st.every(function (c) { return c.n > 0 && c.done === c.n; })) return null;
+      return { need: 'Finish the ' + chNames(g.chs) + '.', have: st.map(function (c) { return 'Chapter ' + c.ch + ': ' + c.done + ' of ' + c.n + ' levels'; }).join(' · ') };
+    }
+    if (kind === 'exam' && g) { var d = reviewSets(g); return d >= g.sets ? null : { need: 'Complete the ' + g.name + ' Review: every Transfer set.', have: d + ' of ' + g.sets + ' Transfer sets complete' }; }
+    if (kind === 'course' || kind === 'journey') return latestAttempt(last) ? null : { need: 'Submit the ' + last.name + ' Exam.', have: 'Not submitted yet' };
+    if (kind === 'final') return journeyDone() ? null : { need: 'Finish the full-course review: every region and the last stop.', have: 'Not finished yet' };
+    return null;
+  }
+  function lockNote(L) { return '<p class="hb-locknote"><span class="hb-lockic" aria-hidden="true"></span><b>Locked.</b> ' + esc(L.need) + ' <span class="have">' + esc(L.have) + '</span></p>'; }
+  function viewLocked(main, title, L, back) {
+    var wrap = el('div', 'hb-wrap narrow novar'); main.appendChild(wrap);
+    wrap.innerHTML = '<div class="hb-crumb"><a href="#' + back[0] + '">‹ ' + esc(back[1]) + '</a></div><section class="hb-card hb-locked"><div class="eyebrow">Locked</div><h1>' + esc(title) + '</h1><p class="sub">' + esc(L.need) + '</p><p class="have">' + esc(L.have) + '</p><p class="hb-muted">A parent or teacher can open everything from <a href="#settings">Settings</a>.</p><div class="hb-row"><a class="btn primary" href="#' + back[0] + '">' + esc(back[1]) + '</a></div></section>';
+  }
   function examStore(g) { var x = J(g.xkey); return x && Array.isArray(x.attempts) ? x : null; }
   function latestAttempt(g) { var x = examStore(g); if (!x) return null; return x.attempts.filter(function (a) { return a.status === 'submitted'; }).sort(function (a, b) { return (b.submittedAt || 0) - (a.submittedAt || 0); })[0] || null; }
   function attemptScore(a) {
@@ -256515,17 +256549,20 @@ var HDJ = (function () {
   }
   function viewReviews(main) {
     var wrap = el('div', 'hb-wrap novar'); main.appendChild(wrap);
-    wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">Cross-chapter work</div><h1>Reviews &amp; Exams</h1></section>' + (typeof TAC !== 'undefined' && TAC.course && TAC.course() ? '<a class="hb-card hb-coursecard" href="#course"><b>The Course Sheet</b><span>The ten ideas that carry the whole course, each with the places you have met it.</span></a>' : '') + (typeof JRN !== 'undefined' ? '<a class="hb-card hb-coursecard hb-jrncard" href="#dojo/journey"><b>Full-course review</b><span>A journey through the whole course in six regions: quick shots, combos, then a summit in each.</span></a>' : '');
+    var Lc = lockOf('course'), Lj = lockOf('journey');
+    wrap.innerHTML = '<section class="hb-intro"><div class="eyebrow">Cross-chapter work</div><h1>Reviews &amp; Exams</h1></section>' +
+      (typeof TAC !== 'undefined' && TAC.course && TAC.course() ? (Lc ? '<div class="hb-card hb-coursecard is-locked"><b>The Course Sheet</b><span>The ten ideas that carry the whole course, each with the places you have met it.</span>' + lockNote(Lc) + '</div>' : '<a class="hb-card hb-coursecard" href="#course"><b>The Course Sheet</b><span>The ten ideas that carry the whole course, each with the places you have met it.</span></a>') : '') +
+      (typeof JRN !== 'undefined' ? (Lj ? '<div class="hb-card hb-coursecard hb-jrncard is-locked"><b>Full-course review</b><span>A journey through the whole course in six regions: quick shots, combos, then a summit in each.</span>' + lockNote(Lj) + '</div>' : '<a class="hb-card hb-coursecard hb-jrncard" href="#dojo/journey"><b>Full-course review</b><span>A journey through the whole course in six regions: quick shots, combos, then a summit in each.</span></a>') : '');
     var ff = feedForward();
     GROUPS.forEach(function (g) {
       var sec = el('section', 'hb-card hb-group'); sec.setAttribute('data-group', g.id); wrap.appendChild(sec); sec.style.marginBottom = '18px';
-      var hasR = !!MANIFEST[g.review], hasX = !!MANIFEST[g.exam], rv = J(g.rkey), a = latestAttempt(g);
+      var hasR = !!MANIFEST[g.review], hasX = !!MANIFEST[g.exam], rv = J(g.rkey), a = latestAttempt(g), LR = lockOf('review', g.id), LX = lockOf('exam', g.id);
       var ans = rv && rv.events ? rv.events.filter(function (e) { return e.type === 'answer'; }) : [], trials = rv && rv.events ? rv.events.filter(function (e) { return e.type === 'trial'; }) : [];
       var lastR = (rv && rv.events || []).reduce(function (m, e) { return Math.max(m, e.t || 0); }, 0);
       var h = '<div class="xch"><div><h3 style="font-size:22px">' + esc(g.name) + '</h3><p class="sub">' + esc(g.blurb || '') + '</p></div></div><div class="hb-apps">';
-      h += '<div class="hb-app' + (hasR ? '' : ' soon') + '"><h3>Review</h3><p>' + (hasR ? (ans.length || trials.length ? plural(ans.length, 'answer') + ' and ' + plural(trials.length, 'timed round') + ' so far' + (lastR ? '; last on ' + fmtDate(lastR) : '') + '.' : 'Dashboard, Warm-up, Time Trial and Transfer sets. Not started yet.') : 'Coming soon. It is being built now.') + '</p>' + (hasR ? '<div><a class="btn primary sm" href="#app/' + g.review + '">Open the Review</a></div>' : '') + '</div>';
-      h += '<div class="hb-app' + (hasX ? '' : ' soon') + '"><h3>Exam</h3><p>' + (hasX ? (a ? 'Last submitted ' + fmtDate(a.submittedAt) + '.' : 'An adaptive exam, about 45–70 minutes, with a full report at the end.') : 'Coming soon. It is being built now.') + '</p>' + (hasX ? '<div><a class="btn ' + (a ? 'ghost' : 'primary') + ' sm" href="#app/' + g.exam + '">Open the Exam</a></div>' : '') + '</div></div>';
-      if (typeof TAC !== 'undefined' && TAC.group && TAC.group(g.id)) h += '<div class="hb-app"><h3>Skills &amp; Tactics</h3><p>What you see → what to do, problems that join the chapters, the slips to watch for, and the formulas.</p><div><a class="btn ghost" href="#reviews/' + g.id + '/tactics">Open</a></div></div>';
+      h += '<div class="hb-app' + (hasR ? '' : ' soon') + '"><h3>Review</h3><p>' + (hasR ? (ans.length || trials.length ? plural(ans.length, 'answer') + ' and ' + plural(trials.length, 'timed round') + ' so far' + (lastR ? '; last on ' + fmtDate(lastR) : '') + '.' : 'Dashboard, Warm-up, Time Trial and Transfer sets. Not started yet.') : 'Coming soon. It is being built now.') + '</p>' + (hasR ? (LR ? lockNote(LR) : '<div><a class="btn primary sm" href="#app/' + g.review + '">Open the Review</a></div>') : '') + '</div>';
+      h += '<div class="hb-app' + (hasX ? '' : ' soon') + '"><h3>Exam</h3><p>' + (hasX ? (a ? 'Last submitted ' + fmtDate(a.submittedAt) + '.' : 'An adaptive exam, about 45–70 minutes, with a full report at the end.') : 'Coming soon. It is being built now.') + '</p>' + (hasX ? (LX ? lockNote(LX) : '<div><a class="btn ' + (a ? 'ghost' : 'primary') + ' sm" href="#app/' + g.exam + '">Open the Exam</a></div>') : '') + '</div></div>';
+      if (typeof TAC !== 'undefined' && TAC.group && TAC.group(g.id)) h += '<div class="hb-app"><h3>Skills &amp; Tactics</h3><p>What you see → what to do, problems that join the chapters, the slips to watch for, and the formulas.</p>' + (LR ? lockNote(LR) : '<div><a class="btn ghost" href="#reviews/' + g.id + '/tactics">Open</a></div>') + '</div>';
       if (a) {
         var sc = attemptScore(a), lanes = Object.keys(a.lanes || {});
         h += '<div class="hb-tiles"><div class="hb-tile"><div class="l">Core (tiers 1–2)</div><div class="v">' + fmtPts(sc.core) + ' / ' + sc.coreMax + '</div><div class="s">comparable to a chapter test</div></div><div class="hb-tile"><div class="l">Stretch (tiers 3–4)</div><div class="v">' + fmtPts(sc.stretch) + ' / ' + sc.stretchMax + '</div><div class="s">transfer and challenge</div></div></div>';
@@ -256677,6 +256714,7 @@ var HDJ = (function () {
     var c = el('section', 'hb-card hb-set'); wrap.appendChild(c);
     c.innerHTML = '<div class="hb-srow"><div><h3>Theme</h3><p>Auto follows the device.</p></div><div class="seg" role="group" aria-label="Theme" id="hbTheme">' + ['auto', 'light', 'dark'].map(function (k) { return '<button type="button" data-theme="' + k + '" aria-pressed="' + (t === k) + '">' + k.charAt(0).toUpperCase() + k.slice(1) + '</button>'; }).join('') + '</div></div>' +
       '<div class="hb-srow"><div><h3>Today’s main work</h3><p>Which chapter “Start today’s work” and the onramp’s bridge item use.</p></div><select class="hb-select" id="hbCurrent" aria-label="Main chapter"><option value="">Follow my latest Path work</option>' + CAT.chapters.map(function (c0) { return '<option value="' + c0.n + '"' + (curCh === c0.n ? ' selected' : '') + '>Chapter ' + c0.n + ' · ' + esc(c0.title) + '</option>'; }).join('') + '</select></div>' +
+      '<div class="hb-srow"><div><h3>Reviews, Exams and sheets</h3><p>By default a Review and its Skills &amp; Tactics open when the Paths of its chapters are finished, an Exam when its Review is complete, and the full-course review and the Course Sheet after the Chapter 8 Exam. Choose “All unlocked” to open every one of them now.</p></div><div class="seg" role="group" aria-label="Reviews, Exams and sheets" id="hbUnlock">' + [['0', 'Locked by default'], ['1', 'All unlocked']].map(function (k) { return '<button type="button" data-u="' + k[0] + '" aria-pressed="' + ((hub.settings.unlockAll ? '1' : '0') === k[0]) + '">' + k[1] + '</button>'; }).join('') + '</div></div>' +
       '<div class="hb-srow"><div><h3>Export the learner record</h3><p>One JSON file with every Path, Review, Exam and hub record in this browser.</p></div><button class="btn ghost sm" type="button" id="hbExport">Export</button><div class="hb-msg" id="hbExportMsg"></div></div>' +
       '<div class="hb-srow" id="hbFullRow"><div><h3>Export with the full problem history</h3><p>The same learner record plus every whole problem kept on this device (figures and worked steps included). A bigger file; importing it on another device brings the entire History along.</p></div><button class="btn ghost sm" type="button" id="hbExportFull">Export all</button><div class="hb-msg" id="hbExportFullMsg" role="status"></div></div>' +
       '<div class="hb-srow"><div><h3>Import</h3><p>A learner record exported here (it replaces the record in this browser), or an exam report (.html) saved by one of the Exams, whose attempt is added to that exam.</p></div><button class="btn ghost sm" type="button" id="hbImport">Import a file</button><input type="file" id="hbFile" accept=".json,.html,.htm,application/json,text/html" hidden><div class="hb-msg" id="hbImportMsg" role="status"></div></div>' +
@@ -256686,6 +256724,7 @@ var HDJ = (function () {
     c.insertBefore(drow, c.querySelector('#hbExport').closest('.hb-srow'));
     deviceStatus();
     c.querySelector('#hbTheme').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var h = loadHub(); h.settings.theme = b.dataset.theme; saveHub(h); applyTheme(); Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); }); });
+    c.querySelector('#hbUnlock').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var h = loadHub(); h.settings.unlockAll = b.dataset.u === '1'; saveHub(h); Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', String(x === b)); }); toast(h.settings.unlockAll ? 'Every Review, Exam and sheet is open.' : 'Reviews, Exams and sheets open in order again.'); });
     c.querySelector('#hbCurrent').addEventListener('change', function () { var h = loadHub(), v = +this.value; h.settings.current = v ? { ch: v, key: firstOpenLevel(v) } : null; saveHub(h); dirty = true; toast(v ? 'Main work set to Chapter ' + v + '.' : 'Main work follows the latest Path activity.'); });
     // the analysis export: every table as CSV with a data dictionary, in one .zip (hub/lms_export.js)
     if (typeof LMX !== 'undefined' && TJ) {
