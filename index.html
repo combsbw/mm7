@@ -31457,7 +31457,7 @@ var XG = {
    "inCourse": 0,
    "region": "r3",
    "regionName": "Equations and inequalities",
-   "sitting": 1,
+   "sitting": 2,
    "from": [
     "M3",
     "M4",
@@ -31482,7 +31482,7 @@ var XG = {
    "inCourse": 0,
    "region": "r3",
    "regionName": "Equations and inequalities",
-   "sitting": 1,
+   "sitting": 2,
    "from": [
     "E4",
     "M13",
@@ -31506,7 +31506,7 @@ var XG = {
    "inCourse": 0,
    "region": "r4",
    "regionName": "Rates, ratios and percent",
-   "sitting": 2,
+   "sitting": 3,
    "from": [
     "M6",
     "R2",
@@ -31530,7 +31530,7 @@ var XG = {
    "inCourse": 0,
    "region": "r4",
    "regionName": "Rates, ratios and percent",
-   "sitting": 2,
+   "sitting": 3,
    "from": [
     "R1",
     "R5",
@@ -31554,7 +31554,7 @@ var XG = {
    "inCourse": 0,
    "region": "r5",
    "regionName": "Geometry and measurement",
-   "sitting": 2,
+   "sitting": 3,
    "from": [
     "K1",
     "K6",
@@ -31581,7 +31581,7 @@ var XG = {
    "inCourse": 0,
    "region": "r5",
    "regionName": "Geometry and measurement",
-   "sitting": 2,
+   "sitting": 3,
    "from": [
     "K2",
     "K3",
@@ -32556,7 +32556,42 @@ var XG = {
  "exam": {
   "quick": null,
   "replaced": [],
-  "first": {}
+  "first": {},
+  "sessions": [
+   {
+    "name": "Number and expressions",
+    "lanes": [
+     "F1",
+     "F2",
+     "F3",
+     "F4"
+    ],
+    "calc": "no calculator",
+    "blurb": "Integers, rational numbers, evaluating and rewriting, structure and the area model."
+   },
+   {
+    "name": "Equations, patterns and graphs",
+    "lanes": [
+     "F5",
+     "F6",
+     "F11",
+     "F12"
+    ],
+    "calc": "no calculator",
+    "blurb": "Solving equations and inequalities, words into equations, sequences, lines and graphs."
+   },
+   {
+    "name": "Rates, percent and geometry",
+    "lanes": [
+     "F7",
+     "F8",
+     "F9",
+     "F10"
+    ],
+    "calc": "a basic calculator is allowed",
+    "blurb": "Rates and proportional rules, proportions and percent, angles and triangles with the on-screen tools, circles, area and solids."
+   }
+  ]
  },
  "review": {
   "warmModels": {},
@@ -32570,8 +32605,8 @@ var XG = {
  },
  "text": {
   "examH1": "One journey through the whole course",
-  "examIntro": "Twelve climbs start open, two in each region of the course. Answer a question and the climb ahead opens: higher when things go well, another angle at the same step when they do not. The goal is to find how high each climb goes.",
-  "examFormats": "Typed answers, choices, several boxes at once, equations to write and solve, and in geometry a protractor, a ruler and a compass on screen. <b>First sitting</b> (Signs and number, Expressions, Equations and inequalities): no calculator. <b>Second sitting</b> (Rates, ratios and percent; Geometry and measurement; Patterns, lines and modelling): a basic calculator is allowed. The exam saves itself, so the break between sittings can be a day.",
+  "examIntro": "The exam is taken in three sessions, one after another, on the same day or on different days. Each session opens four climbs. Answer a question and the climb ahead opens: higher when things go well, another angle at the same step when they do not. The goal is to find how high each climb goes.",
+  "examFormats": "Typed answers, choices, several boxes at once, equations to write and solve, and in geometry a protractor, a ruler and a compass on screen. Sessions 1 and 2: no calculator. Session 3: a basic calculator is allowed. A session can be paused and left at any point; every answer is saved, and the session carries on from the same place later.",
   "secureHead": "Secure across the course, with room to spare",
   "secureText": "The foundations are solid and the top steps held up well.",
   "mixTitle": "One region, or two joined",
@@ -145150,6 +145185,22 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
 #rMsg { margin: 0 0 12px; }
 @media (max-width: 560px) { .ex-rexport .btn { flex: 1 1 100%; justify-content: center; } }
 
+/* sessions (final exam): the list on the Begin screen, the line above the map */
+.ex-sess { list-style: none; margin: 4px 0 6px; padding: 0; flex: 1 1 100%; display: grid; gap: 10px; }
+.ex-sess li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+.ex-sess li.now { border-color: var(--accent-line); background: var(--accent-soft); }
+.ex-sess li.later { opacity: .62; }
+.ex-sess .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--line); color: var(--ink); }
+.ex-sess li.now .n { background: var(--accent); color: #fff; }
+.ex-sess li.done .n { background: var(--ok, #2e7d4f); color: #fff; }
+.ex-sess .b { min-width: 0; display: grid; gap: 3px; }
+.ex-sess .b b { font-size: 17px; }
+.ex-sess .b small { font-size: 14px; color: var(--ink-2); }
+.ex-sess .b small.c { color: var(--muted); font-weight: 600; }
+.ex-sessline { margin: 12px 4px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+.ex-pausebox .btn + .btn { margin-left: 10px; }
+@media (max-width: 520px) { #finishBtn .fx { display: none; } .ex-pausebox .btn { display: block; width: 100%; margin: 0 0 10px; } .ex-pausebox .btn + .btn { margin-left: 0; } }
+
 </style>
 </head>
 <body data-view="begin">
@@ -145182,7 +145233,7 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
     <div class="ex-fact"><div class="ex-fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></div><div><h2>Results at the end</h2><p>Answers are recorded as you go. The full report, with charts and next steps, opens when you submit, and a copy downloads as a file you can keep.</p></div></div>
   </div>
   <ul class="ex-rules">
-    <li>About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
+    <li id="bLen">About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
     <li>Everything saves automatically in this browser. You can pause, close the page and come back.</li>
     <li>Have scratch paper and a pencil ready: work each problem out before you answer. Tap <b>Not sure</b> on any question you want to skip, or <b>Flag</b> to come back to it.</li>
   </ul>
@@ -155931,12 +155982,28 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
   function prepAll() { S.nodes.forEach(prep); }
 
+  // ---------- sessions (final exam, protocol §25): the lanes are taken in separate sessions, one after another ----------
+  // G.exam.sessions = [{ name, lanes: [ids], calc, blurb }]. S.sess = { cur, done: [time each session was finished] }. Only the
+  // lanes of the current session are on the map; a finished session is locked. A session can be left at any time (Pause, then
+  // "Save and leave"): everything is saved after every answer, and the Begin screen resumes it.
+  var SESS = G.exam && G.exam.sessions && G.exam.sessions.length ? G.exam.sessions : null;
+  function sessOn() { return !!(SESS && S && S.sess); }
+  function sessCur() { return sessOn() ? SESS[Math.min(S.sess.cur, SESS.length - 1)] : null; }
+  function sessLast() { return !sessOn() || S.sess.cur >= SESS.length - 1; }
+  function inSess(T) { var c = sessCur(); return !c || c.lanes.indexOf(T) >= 0; }
+  function sOpen() { return XC.openNodes(S).filter(function (n) { return inSess(n.terr); }); }
+  function sSuggest() { if (!sessOn()) return XC.suggest(S, XM.byId); var r = XC.ranked(S, XM.byId).filter(function (x) { return inSess(x.node.terr); }); return r.length ? r[0].node : null; }
+  function sessAnswered(att, k) { return att.nodes.filter(function (n) { return n.status === 'done' && SESS[k].lanes.indexOf(n.terr) >= 0; }).length; }
+  function sessLabel() { var c = sessCur(); return c ? 'Session ' + (S.sess.cur + 1) + ' of ' + SESS.length + ' · ' + c.name + ' · ' + c.calc : ''; }
+  function finishWord() { return sessOn() && !sessLast() ? 'Finish session' : 'Finish exam'; }
+
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
     view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
+    if (live && sessOn()) $('finishBtn').innerHTML = 'Finish<span class="fx"> ' + (sessLast() ? 'exam' : 'session') + '</span>';
     window.scrollTo(0, 0);
   }
   function renderClock() { if (!S) return; $('exClock').textContent = X.clock(S.elapsed); var n = XC.answered(S).length; $('exCount').textContent = n + ' answered'; }
@@ -155954,12 +156021,22 @@ if (typeof module !== 'undefined') module.exports = XR;
   function renderBegin() {
     var box = $('beginBox'), cur = store.current && store.current.status === 'running' ? store.current : null, last = store.attempts[store.attempts.length - 1];
     var h = '';
-    if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
+    if (SESS && $('bLen')) $('bLen').textContent = 'About 20 to 30 minutes a session for a prepared student, about 20 questions. There is no fixed length: finish a session when its climbs have ended or when you are ready.';
+    if (SESS && (!cur || cur.sess)) {       // the sessions, with where each one stands
+      var kc = cur ? cur.sess.cur : 0;
+      h += '<ol class="ex-sess">' + SESS.map(function (s, k) {
+        var st = cur && k < kc ? 'done' : k === kc ? 'now' : 'later', na = cur ? sessAnswered(cur, k) : 0;
+        var note = st === 'done' ? 'Finished · ' + plural(na, 'answer') + ' locked in' : st === 'now' ? (cur && na ? 'In progress · ' + plural(na, 'question') + ' answered, saved' : 'Not started') : 'Opens when session ' + k + ' is finished';
+        return '<li class="' + st + '"><span class="n">' + (st === 'done' ? '✓' : k + 1) + '</span><span class="b"><b>' + esc(s.name) + '</b><small>' + esc(s.blurb) + '</small><small class="c">' + esc(s.calc.charAt(0).toUpperCase() + s.calc.slice(1)) + ' · ' + esc(note) + '</small></span></li>'; }).join('') + '</ol>';
+      if (cur) { var nk = sessAnswered(cur, kc); h += '<button class="btn primary" id="bResume" type="button">' + (nk ? 'Resume session ' + (kc + 1) : 'Start session ' + (kc + 1)) + '</button><button class="btn ghost" id="bNew" type="button">Start the whole exam over</button>'; }
+      else h += '<button class="btn primary" id="bBegin" type="button">Begin session 1</button>';
+    }
+    else if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
     else h += '<button class="btn primary" id="bBegin" type="button">Begin exam</button>';
     h += store.attempts.length ? '<button class="btn ghost" id="bPast" type="button">Past attempts (' + store.attempts.length + ')</button>' : '<button class="btn ghost" id="bPast" type="button">Import a saved report</button>';
     if (!cur && last) { var r = XA.record(last); h += '<div class="ex-last">Last attempt, ' + X.dayStamp(r.when) + ': Core ' + X.pct(r.corePct) + ', Stretch ' + X.pct(r.stretchPct) + '. <a href="#" id="bLast">View the report</a></div>'; }
     box.innerHTML = h;
-    $('beginNote').textContent = 'Progress is saved in this browser. Nothing is sent anywhere.';
+    $('beginNote').textContent = SESS ? 'Every answer is saved as you go. A session can be stopped at any point (Pause, then Save and leave) and picked up later, here. Nothing is sent anywhere.' : 'Progress is saved in this browser. Nothing is sent anywhere.';
     var b;
     if ((b = $('bBegin'))) b.onclick = startExam;
     if ((b = $('bResume'))) b.onclick = function () { S = store.current; resumeExam(); };
@@ -155967,7 +156044,7 @@ if (typeof module !== 'undefined') module.exports = XR;
     if ((b = $('bPast'))) b.onclick = showAttempts;
     if ((b = $('bLast'))) b.onclick = function (e) { e.preventDefault(); showReport(last); };
   }
-  function startExam() { S = XC.create(CTX); store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
+  function startExam() { S = XC.create(CTX); if (SESS) S.sess = { cur: 0, done: [] }; store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
   function resumeExam() { prepAll(); lastTick = Date.now(); goMap({ resumed: true }); }
 
   // ---------- journey map ----------
@@ -156006,10 +156083,10 @@ if (typeof module !== 'undefined') module.exports = XR;
     card.appendChild(track); return card;
   }
   function barMessage(o) {
-    var open = XC.openNodes(S).length, sug = XC.suggest(S, XM.byId);
-    if (!open) return { html: '<span class="msg"><b>Every path has ended.</b><small>Look back over the map, or submit the exam to see the report.</small></span><button class="btn primary" data-act="finish" type="button">Finish exam</button>' };
+    var open = sOpen().length, sug = sSuggest();
+    if (!open) return { html: '<span class="msg"><b>Every path ' + (sessOn() ? 'of this session ' : '') + 'has ended.</b><small>' + (sessOn() && !sessLast() ? 'Look back over the map, then finish the session. The next one can be started now or another day.' : 'Look back over the map, or submit the exam to see the report.') + '</small></span><button class="btn primary" data-act="finish" type="button">' + finishWord() + '</button>' };
     var m = '', cta = sug ? '<button class="btn primary" data-act="go" type="button">' + (o.start ? 'Start with the suggestion' : 'Continue') + '</button>' : '';
-    if (o.start) m = '<b>' + XM.word(XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
+    if (o.start) m = '<b>' + XM.word(sessOn() ? sessCur().lanes.length : XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
     else if (o.resumed) m = '<b>Welcome back.</b><small>' + plural(open, 'node') + ' open. The clock is running.</small>';
     else if (o.answered) {
       var n = o.answered, lane = XM.byId[n.terr].name, ev = o.event, opened = o.opened || [], what;
@@ -156019,24 +156096,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     return { html: '<span class="msg">' + m + '</span>' + cta };
   }
   function renderMap(o) {
-    o = o || {}; var sug = XC.suggest(S, XM.byId), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
+    o = o || {}; var sug = sSuggest(), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
     $('exBar').innerHTML = barMessage(o).html;
     var key = document.querySelector('.ex-tierkey'); if (!key) { key = el('p', 'ex-tierkey', '1 Foundation · 2 Fluency · 3 Transfer · 4 Challenge'); $('exLanes').parentNode.insertBefore(key, $('exLanes')); }
-    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id]) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
+    var sl = document.querySelector('.ex-sessline'); if (sessOn()) { if (!sl) { sl = el('p', 'ex-sessline'); $('exLanes').parentNode.insertBefore(sl, key); } sl.textContent = sessLabel(); } else if (sl) sl.parentNode.removeChild(sl);
+    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id] && inSess(T.id)) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
     var b = Object.keys(born)[0]; if (b) { var be = box.querySelector('[data-id="' + b + '"]') || box.querySelector('.ex-n.born'); if (be && be.scrollIntoView) { var r = be.getBoundingClientRect(); if (r.top < 90 || r.bottom > window.innerHeight - 20) be.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
   }
   function goMap(o) {
     leaveQ(); showView('map'); renderMap(o); renderClock();
     var c = $('exBar').querySelector('.btn'); if (c && o && (o.answered || o.back)) c.focus({ preventScroll: true });
   }
-  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = XC.suggest(S, XM.byId); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
+  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = sSuggest(); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
   $('exLanes').addEventListener('click', function (e) { var b = e.target.closest('button.ex-n'); if (b) openQ(b.dataset.id); });
 
   // ---------- question view ----------
   function leaveQ() { flushDraft(); if (sprint) { sprint.stop(); sprint = null; } sprintOn = false; if (pv) { pv.destroy(); pv = null; } curNode = null; curP = null; $('pauseBtn').disabled = false; $('qBack').disabled = false; $('v-q').classList.remove('ex-qtimed'); }
   function flushDraft() { if (draftT) { clearTimeout(draftT); draftT = 0; if (S && S.status === 'running') persist(); } }
   function openQ(id) {
-    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running') return;
+    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running' || !inSess(n.terr)) return;
     leaveQ(); curNode = n; prep(n);
     var p = genNode(n); curP = p;
     $('qTitle').textContent = XM.byId[n.terr].name; $('qSub').textContent = (n.role === 'probe' ? 'Foundation check' : n.role === 'summit' ? 'Summit' : TN[n.tier]) + ' · ' + (XA.FMT_NAMES[p.fmt] || '');
@@ -156093,13 +156171,20 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- pause ----------
   function setInert(on) { Array.prototype.forEach.call(document.querySelectorAll('header.top, main'), function (e) { e.inert = on; }); }
   $('pauseBtn').addEventListener('click', function () { if (!S || S.status !== 'running' || sprintOn) return; paused = true; flushDraft(); persist(); $('pauseOv').hidden = false; setInert(true); $('resumeBtn').focus(); });
+  if (SESS) {       // a session can be left and picked up later: everything is already saved
+    var lv = el('button', 'btn ghost', 'Save and leave'); lv.type = 'button'; lv.id = 'leaveBtn'; $('resumeBtn').parentNode.appendChild(lv);
+    $('resumeBtn').parentNode.querySelector('p').textContent = 'The exam clock is stopped and the questions are hidden. Your answers are saved: you can carry on now, or leave and come back to this session later.';
+    lv.addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); leaveQ(); persist(); showView('begin'); renderBegin(); });
+  }
   $('resumeBtn').addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); var f = $('qHost').querySelector('input, .choice'); if (view === 'q' && f && pv) pv.focus(); });
 
   // ---------- finish: check, then submit ----------
   var fdlg = $('finishDlg');
   function openFinish() {
     if (!S || S.status !== 'running') return; flushDraft();
-    var v = XC.verify(S), open = v.open, h = '<p>After you submit, answers are locked and the report opens. This cannot be undone.</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
+    var v = XC.verify(S), mid = sessOn() && !sessLast(); if (sessOn()) { v.open = v.open.filter(function (n) { return inSess(n.terr); }); v.flagged = v.open.filter(function (n) { return n.flagged; }); if (mid) v.answered = sessAnswered(S, S.sess.cur); }
+    $('finSubmit').textContent = mid ? 'Finish session ' + (S.sess.cur + 1) : 'Submit exam'; var fh = document.getElementById('finH'); if (fh && sessOn()) fh.textContent = mid ? 'Finish this session?' : 'Submit the exam?';
+    var open = v.open, h = '<p>' + (mid ? 'After you finish this session its answers are locked. Session ' + (S.sess.cur + 2) + ' can be started straight away or another day.' : 'After you submit, answers are locked and the report opens. This cannot be undone.') + '</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
     if (open.length) {
       h += '<p>Open nodes count as zero. You can still go back to any of them:</p><div class="ex-jump">' + open.slice(0, 12).map(function (n) { return '<button type="button" data-id="' + n.id + '">' + (n.flagged ? '<span class="fl">⚑ </span>' : '') + esc(XM.byId[n.terr].name) + ' · ' + (n.role === 'probe' ? 'Check' : TN[n.tier]) + '</button>'; }).join('') + (open.length > 12 ? '<span class="ex-chip">and ' + (open.length - 12) + ' more</span>' : '') + '</div>';
     } else h += '<p>Every open node has been answered or skipped.</p>';
@@ -156111,6 +156196,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   $('finBody').addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) { fdlg.close(); openQ(b.dataset.id); } });
   $('finSubmit').addEventListener('click', function () {
     if (!S || S.status !== 'running') { fdlg.close(); return; }
+    if (sessOn() && !sessLast()) { leaveQ(); S.sess.done[S.sess.cur] = Date.now(); S.sess.cur++; persist(); fdlg.close(); showView('begin'); renderBegin(); return; }
+    if (sessOn()) S.sess.done[S.sess.cur] = Date.now();
     leaveQ(); XC.finish(S); XR.fillSnaps(S, genNode); store.attempts.push(S); store.current = null; persist(); fdlg.close();
     var saved = exportReport(S, 'auto');
     showReport(S, true, saved);
@@ -156303,7 +156390,7 @@ if (typeof module !== 'undefined') module.exports = XR;
 
   // ---------- start ----------
   renderBegin(); showView('begin');
-  window.__exam = { S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
+  window.__exam = { sess: function () { return sessOn() ? { cur: S.sess.cur, n: SESS.length, open: sOpen().length, last: sessLast() } : null; }, S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
 })();
 
 /script>
@@ -169696,6 +169783,22 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
 #rMsg { margin: 0 0 12px; }
 @media (max-width: 560px) { .ex-rexport .btn { flex: 1 1 100%; justify-content: center; } }
 
+/* sessions (final exam): the list on the Begin screen, the line above the map */
+.ex-sess { list-style: none; margin: 4px 0 6px; padding: 0; flex: 1 1 100%; display: grid; gap: 10px; }
+.ex-sess li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+.ex-sess li.now { border-color: var(--accent-line); background: var(--accent-soft); }
+.ex-sess li.later { opacity: .62; }
+.ex-sess .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--line); color: var(--ink); }
+.ex-sess li.now .n { background: var(--accent); color: #fff; }
+.ex-sess li.done .n { background: var(--ok, #2e7d4f); color: #fff; }
+.ex-sess .b { min-width: 0; display: grid; gap: 3px; }
+.ex-sess .b b { font-size: 17px; }
+.ex-sess .b small { font-size: 14px; color: var(--ink-2); }
+.ex-sess .b small.c { color: var(--muted); font-weight: 600; }
+.ex-sessline { margin: 12px 4px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+.ex-pausebox .btn + .btn { margin-left: 10px; }
+@media (max-width: 520px) { #finishBtn .fx { display: none; } .ex-pausebox .btn { display: block; width: 100%; margin: 0 0 10px; } .ex-pausebox .btn + .btn { margin-left: 0; } }
+
 </style>
 </head>
 <body data-view="begin">
@@ -169728,7 +169831,7 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
     <div class="ex-fact"><div class="ex-fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></div><div><h2>Results at the end</h2><p>Answers are recorded as you go. The full report, with charts and next steps, opens when you submit, and a copy downloads as a file you can keep.</p></div></div>
   </div>
   <ul class="ex-rules">
-    <li>About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
+    <li id="bLen">About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
     <li>Everything saves automatically in this browser. You can pause, close the page and come back.</li>
     <li>Have scratch paper and a pencil ready: work each problem out before you answer. Tap <b>Not sure</b> on any question you want to skip, or <b>Flag</b> to come back to it.</li>
   </ul>
@@ -179239,12 +179342,28 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
   function prepAll() { S.nodes.forEach(prep); }
 
+  // ---------- sessions (final exam, protocol §25): the lanes are taken in separate sessions, one after another ----------
+  // G.exam.sessions = [{ name, lanes: [ids], calc, blurb }]. S.sess = { cur, done: [time each session was finished] }. Only the
+  // lanes of the current session are on the map; a finished session is locked. A session can be left at any time (Pause, then
+  // "Save and leave"): everything is saved after every answer, and the Begin screen resumes it.
+  var SESS = G.exam && G.exam.sessions && G.exam.sessions.length ? G.exam.sessions : null;
+  function sessOn() { return !!(SESS && S && S.sess); }
+  function sessCur() { return sessOn() ? SESS[Math.min(S.sess.cur, SESS.length - 1)] : null; }
+  function sessLast() { return !sessOn() || S.sess.cur >= SESS.length - 1; }
+  function inSess(T) { var c = sessCur(); return !c || c.lanes.indexOf(T) >= 0; }
+  function sOpen() { return XC.openNodes(S).filter(function (n) { return inSess(n.terr); }); }
+  function sSuggest() { if (!sessOn()) return XC.suggest(S, XM.byId); var r = XC.ranked(S, XM.byId).filter(function (x) { return inSess(x.node.terr); }); return r.length ? r[0].node : null; }
+  function sessAnswered(att, k) { return att.nodes.filter(function (n) { return n.status === 'done' && SESS[k].lanes.indexOf(n.terr) >= 0; }).length; }
+  function sessLabel() { var c = sessCur(); return c ? 'Session ' + (S.sess.cur + 1) + ' of ' + SESS.length + ' · ' + c.name + ' · ' + c.calc : ''; }
+  function finishWord() { return sessOn() && !sessLast() ? 'Finish session' : 'Finish exam'; }
+
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
     view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
+    if (live && sessOn()) $('finishBtn').innerHTML = 'Finish<span class="fx"> ' + (sessLast() ? 'exam' : 'session') + '</span>';
     window.scrollTo(0, 0);
   }
   function renderClock() { if (!S) return; $('exClock').textContent = X.clock(S.elapsed); var n = XC.answered(S).length; $('exCount').textContent = n + ' answered'; }
@@ -179262,12 +179381,22 @@ if (typeof module !== 'undefined') module.exports = XR;
   function renderBegin() {
     var box = $('beginBox'), cur = store.current && store.current.status === 'running' ? store.current : null, last = store.attempts[store.attempts.length - 1];
     var h = '';
-    if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
+    if (SESS && $('bLen')) $('bLen').textContent = 'About 20 to 30 minutes a session for a prepared student, about 20 questions. There is no fixed length: finish a session when its climbs have ended or when you are ready.';
+    if (SESS && (!cur || cur.sess)) {       // the sessions, with where each one stands
+      var kc = cur ? cur.sess.cur : 0;
+      h += '<ol class="ex-sess">' + SESS.map(function (s, k) {
+        var st = cur && k < kc ? 'done' : k === kc ? 'now' : 'later', na = cur ? sessAnswered(cur, k) : 0;
+        var note = st === 'done' ? 'Finished · ' + plural(na, 'answer') + ' locked in' : st === 'now' ? (cur && na ? 'In progress · ' + plural(na, 'question') + ' answered, saved' : 'Not started') : 'Opens when session ' + k + ' is finished';
+        return '<li class="' + st + '"><span class="n">' + (st === 'done' ? '✓' : k + 1) + '</span><span class="b"><b>' + esc(s.name) + '</b><small>' + esc(s.blurb) + '</small><small class="c">' + esc(s.calc.charAt(0).toUpperCase() + s.calc.slice(1)) + ' · ' + esc(note) + '</small></span></li>'; }).join('') + '</ol>';
+      if (cur) { var nk = sessAnswered(cur, kc); h += '<button class="btn primary" id="bResume" type="button">' + (nk ? 'Resume session ' + (kc + 1) : 'Start session ' + (kc + 1)) + '</button><button class="btn ghost" id="bNew" type="button">Start the whole exam over</button>'; }
+      else h += '<button class="btn primary" id="bBegin" type="button">Begin session 1</button>';
+    }
+    else if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
     else h += '<button class="btn primary" id="bBegin" type="button">Begin exam</button>';
     h += store.attempts.length ? '<button class="btn ghost" id="bPast" type="button">Past attempts (' + store.attempts.length + ')</button>' : '<button class="btn ghost" id="bPast" type="button">Import a saved report</button>';
     if (!cur && last) { var r = XA.record(last); h += '<div class="ex-last">Last attempt, ' + X.dayStamp(r.when) + ': Core ' + X.pct(r.corePct) + ', Stretch ' + X.pct(r.stretchPct) + '. <a href="#" id="bLast">View the report</a></div>'; }
     box.innerHTML = h;
-    $('beginNote').textContent = 'Progress is saved in this browser. Nothing is sent anywhere.';
+    $('beginNote').textContent = SESS ? 'Every answer is saved as you go. A session can be stopped at any point (Pause, then Save and leave) and picked up later, here. Nothing is sent anywhere.' : 'Progress is saved in this browser. Nothing is sent anywhere.';
     var b;
     if ((b = $('bBegin'))) b.onclick = startExam;
     if ((b = $('bResume'))) b.onclick = function () { S = store.current; resumeExam(); };
@@ -179275,7 +179404,7 @@ if (typeof module !== 'undefined') module.exports = XR;
     if ((b = $('bPast'))) b.onclick = showAttempts;
     if ((b = $('bLast'))) b.onclick = function (e) { e.preventDefault(); showReport(last); };
   }
-  function startExam() { S = XC.create(CTX); store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
+  function startExam() { S = XC.create(CTX); if (SESS) S.sess = { cur: 0, done: [] }; store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
   function resumeExam() { prepAll(); lastTick = Date.now(); goMap({ resumed: true }); }
 
   // ---------- journey map ----------
@@ -179314,10 +179443,10 @@ if (typeof module !== 'undefined') module.exports = XR;
     card.appendChild(track); return card;
   }
   function barMessage(o) {
-    var open = XC.openNodes(S).length, sug = XC.suggest(S, XM.byId);
-    if (!open) return { html: '<span class="msg"><b>Every path has ended.</b><small>Look back over the map, or submit the exam to see the report.</small></span><button class="btn primary" data-act="finish" type="button">Finish exam</button>' };
+    var open = sOpen().length, sug = sSuggest();
+    if (!open) return { html: '<span class="msg"><b>Every path ' + (sessOn() ? 'of this session ' : '') + 'has ended.</b><small>' + (sessOn() && !sessLast() ? 'Look back over the map, then finish the session. The next one can be started now or another day.' : 'Look back over the map, or submit the exam to see the report.') + '</small></span><button class="btn primary" data-act="finish" type="button">' + finishWord() + '</button>' };
     var m = '', cta = sug ? '<button class="btn primary" data-act="go" type="button">' + (o.start ? 'Start with the suggestion' : 'Continue') + '</button>' : '';
-    if (o.start) m = '<b>' + XM.word(XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
+    if (o.start) m = '<b>' + XM.word(sessOn() ? sessCur().lanes.length : XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
     else if (o.resumed) m = '<b>Welcome back.</b><small>' + plural(open, 'node') + ' open. The clock is running.</small>';
     else if (o.answered) {
       var n = o.answered, lane = XM.byId[n.terr].name, ev = o.event, opened = o.opened || [], what;
@@ -179327,24 +179456,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     return { html: '<span class="msg">' + m + '</span>' + cta };
   }
   function renderMap(o) {
-    o = o || {}; var sug = XC.suggest(S, XM.byId), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
+    o = o || {}; var sug = sSuggest(), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
     $('exBar').innerHTML = barMessage(o).html;
     var key = document.querySelector('.ex-tierkey'); if (!key) { key = el('p', 'ex-tierkey', '1 Foundation · 2 Fluency · 3 Transfer · 4 Challenge'); $('exLanes').parentNode.insertBefore(key, $('exLanes')); }
-    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id]) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
+    var sl = document.querySelector('.ex-sessline'); if (sessOn()) { if (!sl) { sl = el('p', 'ex-sessline'); $('exLanes').parentNode.insertBefore(sl, key); } sl.textContent = sessLabel(); } else if (sl) sl.parentNode.removeChild(sl);
+    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id] && inSess(T.id)) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
     var b = Object.keys(born)[0]; if (b) { var be = box.querySelector('[data-id="' + b + '"]') || box.querySelector('.ex-n.born'); if (be && be.scrollIntoView) { var r = be.getBoundingClientRect(); if (r.top < 90 || r.bottom > window.innerHeight - 20) be.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
   }
   function goMap(o) {
     leaveQ(); showView('map'); renderMap(o); renderClock();
     var c = $('exBar').querySelector('.btn'); if (c && o && (o.answered || o.back)) c.focus({ preventScroll: true });
   }
-  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = XC.suggest(S, XM.byId); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
+  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = sSuggest(); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
   $('exLanes').addEventListener('click', function (e) { var b = e.target.closest('button.ex-n'); if (b) openQ(b.dataset.id); });
 
   // ---------- question view ----------
   function leaveQ() { flushDraft(); if (sprint) { sprint.stop(); sprint = null; } sprintOn = false; if (pv) { pv.destroy(); pv = null; } curNode = null; curP = null; $('pauseBtn').disabled = false; $('qBack').disabled = false; $('v-q').classList.remove('ex-qtimed'); }
   function flushDraft() { if (draftT) { clearTimeout(draftT); draftT = 0; if (S && S.status === 'running') persist(); } }
   function openQ(id) {
-    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running') return;
+    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running' || !inSess(n.terr)) return;
     leaveQ(); curNode = n; prep(n);
     var p = genNode(n); curP = p;
     $('qTitle').textContent = XM.byId[n.terr].name; $('qSub').textContent = (n.role === 'probe' ? 'Foundation check' : n.role === 'summit' ? 'Summit' : TN[n.tier]) + ' · ' + (XA.FMT_NAMES[p.fmt] || '');
@@ -179401,13 +179531,20 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- pause ----------
   function setInert(on) { Array.prototype.forEach.call(document.querySelectorAll('header.top, main'), function (e) { e.inert = on; }); }
   $('pauseBtn').addEventListener('click', function () { if (!S || S.status !== 'running' || sprintOn) return; paused = true; flushDraft(); persist(); $('pauseOv').hidden = false; setInert(true); $('resumeBtn').focus(); });
+  if (SESS) {       // a session can be left and picked up later: everything is already saved
+    var lv = el('button', 'btn ghost', 'Save and leave'); lv.type = 'button'; lv.id = 'leaveBtn'; $('resumeBtn').parentNode.appendChild(lv);
+    $('resumeBtn').parentNode.querySelector('p').textContent = 'The exam clock is stopped and the questions are hidden. Your answers are saved: you can carry on now, or leave and come back to this session later.';
+    lv.addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); leaveQ(); persist(); showView('begin'); renderBegin(); });
+  }
   $('resumeBtn').addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); var f = $('qHost').querySelector('input, .choice'); if (view === 'q' && f && pv) pv.focus(); });
 
   // ---------- finish: check, then submit ----------
   var fdlg = $('finishDlg');
   function openFinish() {
     if (!S || S.status !== 'running') return; flushDraft();
-    var v = XC.verify(S), open = v.open, h = '<p>After you submit, answers are locked and the report opens. This cannot be undone.</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
+    var v = XC.verify(S), mid = sessOn() && !sessLast(); if (sessOn()) { v.open = v.open.filter(function (n) { return inSess(n.terr); }); v.flagged = v.open.filter(function (n) { return n.flagged; }); if (mid) v.answered = sessAnswered(S, S.sess.cur); }
+    $('finSubmit').textContent = mid ? 'Finish session ' + (S.sess.cur + 1) : 'Submit exam'; var fh = document.getElementById('finH'); if (fh && sessOn()) fh.textContent = mid ? 'Finish this session?' : 'Submit the exam?';
+    var open = v.open, h = '<p>' + (mid ? 'After you finish this session its answers are locked. Session ' + (S.sess.cur + 2) + ' can be started straight away or another day.' : 'After you submit, answers are locked and the report opens. This cannot be undone.') + '</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
     if (open.length) {
       h += '<p>Open nodes count as zero. You can still go back to any of them:</p><div class="ex-jump">' + open.slice(0, 12).map(function (n) { return '<button type="button" data-id="' + n.id + '">' + (n.flagged ? '<span class="fl">⚑ </span>' : '') + esc(XM.byId[n.terr].name) + ' · ' + (n.role === 'probe' ? 'Check' : TN[n.tier]) + '</button>'; }).join('') + (open.length > 12 ? '<span class="ex-chip">and ' + (open.length - 12) + ' more</span>' : '') + '</div>';
     } else h += '<p>Every open node has been answered or skipped.</p>';
@@ -179419,6 +179556,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   $('finBody').addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) { fdlg.close(); openQ(b.dataset.id); } });
   $('finSubmit').addEventListener('click', function () {
     if (!S || S.status !== 'running') { fdlg.close(); return; }
+    if (sessOn() && !sessLast()) { leaveQ(); S.sess.done[S.sess.cur] = Date.now(); S.sess.cur++; persist(); fdlg.close(); showView('begin'); renderBegin(); return; }
+    if (sessOn()) S.sess.done[S.sess.cur] = Date.now();
     leaveQ(); XC.finish(S); XR.fillSnaps(S, genNode); store.attempts.push(S); store.current = null; persist(); fdlg.close();
     var saved = exportReport(S, 'auto');
     showReport(S, true, saved);
@@ -179611,7 +179750,7 @@ if (typeof module !== 'undefined') module.exports = XR;
 
   // ---------- start ----------
   renderBegin(); showView('begin');
-  window.__exam = { S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
+  window.__exam = { sess: function () { return sessOn() ? { cur: S.sess.cur, n: SESS.length, open: sOpen().length, last: sessLast() } : null; }, S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
 })();
 
 /script>
@@ -192620,6 +192759,22 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
 #rMsg { margin: 0 0 12px; }
 @media (max-width: 560px) { .ex-rexport .btn { flex: 1 1 100%; justify-content: center; } }
 
+/* sessions (final exam): the list on the Begin screen, the line above the map */
+.ex-sess { list-style: none; margin: 4px 0 6px; padding: 0; flex: 1 1 100%; display: grid; gap: 10px; }
+.ex-sess li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+.ex-sess li.now { border-color: var(--accent-line); background: var(--accent-soft); }
+.ex-sess li.later { opacity: .62; }
+.ex-sess .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--line); color: var(--ink); }
+.ex-sess li.now .n { background: var(--accent); color: #fff; }
+.ex-sess li.done .n { background: var(--ok, #2e7d4f); color: #fff; }
+.ex-sess .b { min-width: 0; display: grid; gap: 3px; }
+.ex-sess .b b { font-size: 17px; }
+.ex-sess .b small { font-size: 14px; color: var(--ink-2); }
+.ex-sess .b small.c { color: var(--muted); font-weight: 600; }
+.ex-sessline { margin: 12px 4px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+.ex-pausebox .btn + .btn { margin-left: 10px; }
+@media (max-width: 520px) { #finishBtn .fx { display: none; } .ex-pausebox .btn { display: block; width: 100%; margin: 0 0 10px; } .ex-pausebox .btn + .btn { margin-left: 0; } }
+
 </style>
 </head>
 <body data-view="begin">
@@ -192652,7 +192807,7 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
     <div class="ex-fact"><div class="ex-fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></div><div><h2>Results at the end</h2><p>Answers are recorded as you go. The full report, with charts and next steps, opens when you submit, and a copy downloads as a file you can keep.</p></div></div>
   </div>
   <ul class="ex-rules">
-    <li>About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
+    <li id="bLen">About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
     <li>Everything saves automatically in this browser. You can pause, close the page and come back.</li>
     <li>Have scratch paper and a pencil ready: work each problem out before you answer. Tap <b>Not sure</b> on any question you want to skip, or <b>Flag</b> to come back to it.</li>
   </ul>
@@ -202017,12 +202172,28 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
   function prepAll() { S.nodes.forEach(prep); }
 
+  // ---------- sessions (final exam, protocol §25): the lanes are taken in separate sessions, one after another ----------
+  // G.exam.sessions = [{ name, lanes: [ids], calc, blurb }]. S.sess = { cur, done: [time each session was finished] }. Only the
+  // lanes of the current session are on the map; a finished session is locked. A session can be left at any time (Pause, then
+  // "Save and leave"): everything is saved after every answer, and the Begin screen resumes it.
+  var SESS = G.exam && G.exam.sessions && G.exam.sessions.length ? G.exam.sessions : null;
+  function sessOn() { return !!(SESS && S && S.sess); }
+  function sessCur() { return sessOn() ? SESS[Math.min(S.sess.cur, SESS.length - 1)] : null; }
+  function sessLast() { return !sessOn() || S.sess.cur >= SESS.length - 1; }
+  function inSess(T) { var c = sessCur(); return !c || c.lanes.indexOf(T) >= 0; }
+  function sOpen() { return XC.openNodes(S).filter(function (n) { return inSess(n.terr); }); }
+  function sSuggest() { if (!sessOn()) return XC.suggest(S, XM.byId); var r = XC.ranked(S, XM.byId).filter(function (x) { return inSess(x.node.terr); }); return r.length ? r[0].node : null; }
+  function sessAnswered(att, k) { return att.nodes.filter(function (n) { return n.status === 'done' && SESS[k].lanes.indexOf(n.terr) >= 0; }).length; }
+  function sessLabel() { var c = sessCur(); return c ? 'Session ' + (S.sess.cur + 1) + ' of ' + SESS.length + ' · ' + c.name + ' · ' + c.calc : ''; }
+  function finishWord() { return sessOn() && !sessLast() ? 'Finish session' : 'Finish exam'; }
+
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
     view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
+    if (live && sessOn()) $('finishBtn').innerHTML = 'Finish<span class="fx"> ' + (sessLast() ? 'exam' : 'session') + '</span>';
     window.scrollTo(0, 0);
   }
   function renderClock() { if (!S) return; $('exClock').textContent = X.clock(S.elapsed); var n = XC.answered(S).length; $('exCount').textContent = n + ' answered'; }
@@ -202040,12 +202211,22 @@ if (typeof module !== 'undefined') module.exports = XR;
   function renderBegin() {
     var box = $('beginBox'), cur = store.current && store.current.status === 'running' ? store.current : null, last = store.attempts[store.attempts.length - 1];
     var h = '';
-    if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
+    if (SESS && $('bLen')) $('bLen').textContent = 'About 20 to 30 minutes a session for a prepared student, about 20 questions. There is no fixed length: finish a session when its climbs have ended or when you are ready.';
+    if (SESS && (!cur || cur.sess)) {       // the sessions, with where each one stands
+      var kc = cur ? cur.sess.cur : 0;
+      h += '<ol class="ex-sess">' + SESS.map(function (s, k) {
+        var st = cur && k < kc ? 'done' : k === kc ? 'now' : 'later', na = cur ? sessAnswered(cur, k) : 0;
+        var note = st === 'done' ? 'Finished · ' + plural(na, 'answer') + ' locked in' : st === 'now' ? (cur && na ? 'In progress · ' + plural(na, 'question') + ' answered, saved' : 'Not started') : 'Opens when session ' + k + ' is finished';
+        return '<li class="' + st + '"><span class="n">' + (st === 'done' ? '✓' : k + 1) + '</span><span class="b"><b>' + esc(s.name) + '</b><small>' + esc(s.blurb) + '</small><small class="c">' + esc(s.calc.charAt(0).toUpperCase() + s.calc.slice(1)) + ' · ' + esc(note) + '</small></span></li>'; }).join('') + '</ol>';
+      if (cur) { var nk = sessAnswered(cur, kc); h += '<button class="btn primary" id="bResume" type="button">' + (nk ? 'Resume session ' + (kc + 1) : 'Start session ' + (kc + 1)) + '</button><button class="btn ghost" id="bNew" type="button">Start the whole exam over</button>'; }
+      else h += '<button class="btn primary" id="bBegin" type="button">Begin session 1</button>';
+    }
+    else if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
     else h += '<button class="btn primary" id="bBegin" type="button">Begin exam</button>';
     h += store.attempts.length ? '<button class="btn ghost" id="bPast" type="button">Past attempts (' + store.attempts.length + ')</button>' : '<button class="btn ghost" id="bPast" type="button">Import a saved report</button>';
     if (!cur && last) { var r = XA.record(last); h += '<div class="ex-last">Last attempt, ' + X.dayStamp(r.when) + ': Core ' + X.pct(r.corePct) + ', Stretch ' + X.pct(r.stretchPct) + '. <a href="#" id="bLast">View the report</a></div>'; }
     box.innerHTML = h;
-    $('beginNote').textContent = 'Progress is saved in this browser. Nothing is sent anywhere.';
+    $('beginNote').textContent = SESS ? 'Every answer is saved as you go. A session can be stopped at any point (Pause, then Save and leave) and picked up later, here. Nothing is sent anywhere.' : 'Progress is saved in this browser. Nothing is sent anywhere.';
     var b;
     if ((b = $('bBegin'))) b.onclick = startExam;
     if ((b = $('bResume'))) b.onclick = function () { S = store.current; resumeExam(); };
@@ -202053,7 +202234,7 @@ if (typeof module !== 'undefined') module.exports = XR;
     if ((b = $('bPast'))) b.onclick = showAttempts;
     if ((b = $('bLast'))) b.onclick = function (e) { e.preventDefault(); showReport(last); };
   }
-  function startExam() { S = XC.create(CTX); store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
+  function startExam() { S = XC.create(CTX); if (SESS) S.sess = { cur: 0, done: [] }; store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
   function resumeExam() { prepAll(); lastTick = Date.now(); goMap({ resumed: true }); }
 
   // ---------- journey map ----------
@@ -202092,10 +202273,10 @@ if (typeof module !== 'undefined') module.exports = XR;
     card.appendChild(track); return card;
   }
   function barMessage(o) {
-    var open = XC.openNodes(S).length, sug = XC.suggest(S, XM.byId);
-    if (!open) return { html: '<span class="msg"><b>Every path has ended.</b><small>Look back over the map, or submit the exam to see the report.</small></span><button class="btn primary" data-act="finish" type="button">Finish exam</button>' };
+    var open = sOpen().length, sug = sSuggest();
+    if (!open) return { html: '<span class="msg"><b>Every path ' + (sessOn() ? 'of this session ' : '') + 'has ended.</b><small>' + (sessOn() && !sessLast() ? 'Look back over the map, then finish the session. The next one can be started now or another day.' : 'Look back over the map, or submit the exam to see the report.') + '</small></span><button class="btn primary" data-act="finish" type="button">' + finishWord() + '</button>' };
     var m = '', cta = sug ? '<button class="btn primary" data-act="go" type="button">' + (o.start ? 'Start with the suggestion' : 'Continue') + '</button>' : '';
-    if (o.start) m = '<b>' + XM.word(XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
+    if (o.start) m = '<b>' + XM.word(sessOn() ? sessCur().lanes.length : XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
     else if (o.resumed) m = '<b>Welcome back.</b><small>' + plural(open, 'node') + ' open. The clock is running.</small>';
     else if (o.answered) {
       var n = o.answered, lane = XM.byId[n.terr].name, ev = o.event, opened = o.opened || [], what;
@@ -202105,24 +202286,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     return { html: '<span class="msg">' + m + '</span>' + cta };
   }
   function renderMap(o) {
-    o = o || {}; var sug = XC.suggest(S, XM.byId), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
+    o = o || {}; var sug = sSuggest(), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
     $('exBar').innerHTML = barMessage(o).html;
     var key = document.querySelector('.ex-tierkey'); if (!key) { key = el('p', 'ex-tierkey', '1 Foundation · 2 Fluency · 3 Transfer · 4 Challenge'); $('exLanes').parentNode.insertBefore(key, $('exLanes')); }
-    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id]) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
+    var sl = document.querySelector('.ex-sessline'); if (sessOn()) { if (!sl) { sl = el('p', 'ex-sessline'); $('exLanes').parentNode.insertBefore(sl, key); } sl.textContent = sessLabel(); } else if (sl) sl.parentNode.removeChild(sl);
+    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id] && inSess(T.id)) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
     var b = Object.keys(born)[0]; if (b) { var be = box.querySelector('[data-id="' + b + '"]') || box.querySelector('.ex-n.born'); if (be && be.scrollIntoView) { var r = be.getBoundingClientRect(); if (r.top < 90 || r.bottom > window.innerHeight - 20) be.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
   }
   function goMap(o) {
     leaveQ(); showView('map'); renderMap(o); renderClock();
     var c = $('exBar').querySelector('.btn'); if (c && o && (o.answered || o.back)) c.focus({ preventScroll: true });
   }
-  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = XC.suggest(S, XM.byId); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
+  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = sSuggest(); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
   $('exLanes').addEventListener('click', function (e) { var b = e.target.closest('button.ex-n'); if (b) openQ(b.dataset.id); });
 
   // ---------- question view ----------
   function leaveQ() { flushDraft(); if (sprint) { sprint.stop(); sprint = null; } sprintOn = false; if (pv) { pv.destroy(); pv = null; } curNode = null; curP = null; $('pauseBtn').disabled = false; $('qBack').disabled = false; $('v-q').classList.remove('ex-qtimed'); }
   function flushDraft() { if (draftT) { clearTimeout(draftT); draftT = 0; if (S && S.status === 'running') persist(); } }
   function openQ(id) {
-    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running') return;
+    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running' || !inSess(n.terr)) return;
     leaveQ(); curNode = n; prep(n);
     var p = genNode(n); curP = p;
     $('qTitle').textContent = XM.byId[n.terr].name; $('qSub').textContent = (n.role === 'probe' ? 'Foundation check' : n.role === 'summit' ? 'Summit' : TN[n.tier]) + ' · ' + (XA.FMT_NAMES[p.fmt] || '');
@@ -202179,13 +202361,20 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- pause ----------
   function setInert(on) { Array.prototype.forEach.call(document.querySelectorAll('header.top, main'), function (e) { e.inert = on; }); }
   $('pauseBtn').addEventListener('click', function () { if (!S || S.status !== 'running' || sprintOn) return; paused = true; flushDraft(); persist(); $('pauseOv').hidden = false; setInert(true); $('resumeBtn').focus(); });
+  if (SESS) {       // a session can be left and picked up later: everything is already saved
+    var lv = el('button', 'btn ghost', 'Save and leave'); lv.type = 'button'; lv.id = 'leaveBtn'; $('resumeBtn').parentNode.appendChild(lv);
+    $('resumeBtn').parentNode.querySelector('p').textContent = 'The exam clock is stopped and the questions are hidden. Your answers are saved: you can carry on now, or leave and come back to this session later.';
+    lv.addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); leaveQ(); persist(); showView('begin'); renderBegin(); });
+  }
   $('resumeBtn').addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); var f = $('qHost').querySelector('input, .choice'); if (view === 'q' && f && pv) pv.focus(); });
 
   // ---------- finish: check, then submit ----------
   var fdlg = $('finishDlg');
   function openFinish() {
     if (!S || S.status !== 'running') return; flushDraft();
-    var v = XC.verify(S), open = v.open, h = '<p>After you submit, answers are locked and the report opens. This cannot be undone.</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
+    var v = XC.verify(S), mid = sessOn() && !sessLast(); if (sessOn()) { v.open = v.open.filter(function (n) { return inSess(n.terr); }); v.flagged = v.open.filter(function (n) { return n.flagged; }); if (mid) v.answered = sessAnswered(S, S.sess.cur); }
+    $('finSubmit').textContent = mid ? 'Finish session ' + (S.sess.cur + 1) : 'Submit exam'; var fh = document.getElementById('finH'); if (fh && sessOn()) fh.textContent = mid ? 'Finish this session?' : 'Submit the exam?';
+    var open = v.open, h = '<p>' + (mid ? 'After you finish this session its answers are locked. Session ' + (S.sess.cur + 2) + ' can be started straight away or another day.' : 'After you submit, answers are locked and the report opens. This cannot be undone.') + '</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
     if (open.length) {
       h += '<p>Open nodes count as zero. You can still go back to any of them:</p><div class="ex-jump">' + open.slice(0, 12).map(function (n) { return '<button type="button" data-id="' + n.id + '">' + (n.flagged ? '<span class="fl">⚑ </span>' : '') + esc(XM.byId[n.terr].name) + ' · ' + (n.role === 'probe' ? 'Check' : TN[n.tier]) + '</button>'; }).join('') + (open.length > 12 ? '<span class="ex-chip">and ' + (open.length - 12) + ' more</span>' : '') + '</div>';
     } else h += '<p>Every open node has been answered or skipped.</p>';
@@ -202197,6 +202386,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   $('finBody').addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) { fdlg.close(); openQ(b.dataset.id); } });
   $('finSubmit').addEventListener('click', function () {
     if (!S || S.status !== 'running') { fdlg.close(); return; }
+    if (sessOn() && !sessLast()) { leaveQ(); S.sess.done[S.sess.cur] = Date.now(); S.sess.cur++; persist(); fdlg.close(); showView('begin'); renderBegin(); return; }
+    if (sessOn()) S.sess.done[S.sess.cur] = Date.now();
     leaveQ(); XC.finish(S); XR.fillSnaps(S, genNode); store.attempts.push(S); store.current = null; persist(); fdlg.close();
     var saved = exportReport(S, 'auto');
     showReport(S, true, saved);
@@ -202389,7 +202580,7 @@ if (typeof module !== 'undefined') module.exports = XR;
 
   // ---------- start ----------
   renderBegin(); showView('begin');
-  window.__exam = { S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
+  window.__exam = { sess: function () { return sessOn() ? { cur: S.sess.cur, n: SESS.length, open: sOpen().length, last: sessLast() } : null; }, S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
 })();
 
 /script>
@@ -216511,6 +216702,22 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
 #rMsg { margin: 0 0 12px; }
 @media (max-width: 560px) { .ex-rexport .btn { flex: 1 1 100%; justify-content: center; } }
 
+/* sessions (final exam): the list on the Begin screen, the line above the map */
+.ex-sess { list-style: none; margin: 4px 0 6px; padding: 0; flex: 1 1 100%; display: grid; gap: 10px; }
+.ex-sess li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+.ex-sess li.now { border-color: var(--accent-line); background: var(--accent-soft); }
+.ex-sess li.later { opacity: .62; }
+.ex-sess .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--line); color: var(--ink); }
+.ex-sess li.now .n { background: var(--accent); color: #fff; }
+.ex-sess li.done .n { background: var(--ok, #2e7d4f); color: #fff; }
+.ex-sess .b { min-width: 0; display: grid; gap: 3px; }
+.ex-sess .b b { font-size: 17px; }
+.ex-sess .b small { font-size: 14px; color: var(--ink-2); }
+.ex-sess .b small.c { color: var(--muted); font-weight: 600; }
+.ex-sessline { margin: 12px 4px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+.ex-pausebox .btn + .btn { margin-left: 10px; }
+@media (max-width: 520px) { #finishBtn .fx { display: none; } .ex-pausebox .btn { display: block; width: 100%; margin: 0 0 10px; } .ex-pausebox .btn + .btn { margin-left: 0; } }
+
 </style>
 </head>
 <body data-view="begin">
@@ -216543,7 +216750,7 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
     <div class="ex-fact"><div class="ex-fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></div><div><h2>Results at the end</h2><p>Answers are recorded as you go. The full report, with charts and next steps, opens when you submit, and a copy downloads as a file you can keep.</p></div></div>
   </div>
   <ul class="ex-rules">
-    <li>About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
+    <li id="bLen">About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
     <li>Everything saves automatically in this browser. You can pause, close the page and come back.</li>
     <li>Have scratch paper and a pencil ready: work each problem out before you answer. Tap <b>Not sure</b> on any question you want to skip, or <b>Flag</b> to come back to it.</li>
   </ul>
@@ -226918,12 +227125,28 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
   function prepAll() { S.nodes.forEach(prep); }
 
+  // ---------- sessions (final exam, protocol §25): the lanes are taken in separate sessions, one after another ----------
+  // G.exam.sessions = [{ name, lanes: [ids], calc, blurb }]. S.sess = { cur, done: [time each session was finished] }. Only the
+  // lanes of the current session are on the map; a finished session is locked. A session can be left at any time (Pause, then
+  // "Save and leave"): everything is saved after every answer, and the Begin screen resumes it.
+  var SESS = G.exam && G.exam.sessions && G.exam.sessions.length ? G.exam.sessions : null;
+  function sessOn() { return !!(SESS && S && S.sess); }
+  function sessCur() { return sessOn() ? SESS[Math.min(S.sess.cur, SESS.length - 1)] : null; }
+  function sessLast() { return !sessOn() || S.sess.cur >= SESS.length - 1; }
+  function inSess(T) { var c = sessCur(); return !c || c.lanes.indexOf(T) >= 0; }
+  function sOpen() { return XC.openNodes(S).filter(function (n) { return inSess(n.terr); }); }
+  function sSuggest() { if (!sessOn()) return XC.suggest(S, XM.byId); var r = XC.ranked(S, XM.byId).filter(function (x) { return inSess(x.node.terr); }); return r.length ? r[0].node : null; }
+  function sessAnswered(att, k) { return att.nodes.filter(function (n) { return n.status === 'done' && SESS[k].lanes.indexOf(n.terr) >= 0; }).length; }
+  function sessLabel() { var c = sessCur(); return c ? 'Session ' + (S.sess.cur + 1) + ' of ' + SESS.length + ' · ' + c.name + ' · ' + c.calc : ''; }
+  function finishWord() { return sessOn() && !sessLast() ? 'Finish session' : 'Finish exam'; }
+
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
     view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
+    if (live && sessOn()) $('finishBtn').innerHTML = 'Finish<span class="fx"> ' + (sessLast() ? 'exam' : 'session') + '</span>';
     window.scrollTo(0, 0);
   }
   function renderClock() { if (!S) return; $('exClock').textContent = X.clock(S.elapsed); var n = XC.answered(S).length; $('exCount').textContent = n + ' answered'; }
@@ -226941,12 +227164,22 @@ if (typeof module !== 'undefined') module.exports = XR;
   function renderBegin() {
     var box = $('beginBox'), cur = store.current && store.current.status === 'running' ? store.current : null, last = store.attempts[store.attempts.length - 1];
     var h = '';
-    if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
+    if (SESS && $('bLen')) $('bLen').textContent = 'About 20 to 30 minutes a session for a prepared student, about 20 questions. There is no fixed length: finish a session when its climbs have ended or when you are ready.';
+    if (SESS && (!cur || cur.sess)) {       // the sessions, with where each one stands
+      var kc = cur ? cur.sess.cur : 0;
+      h += '<ol class="ex-sess">' + SESS.map(function (s, k) {
+        var st = cur && k < kc ? 'done' : k === kc ? 'now' : 'later', na = cur ? sessAnswered(cur, k) : 0;
+        var note = st === 'done' ? 'Finished · ' + plural(na, 'answer') + ' locked in' : st === 'now' ? (cur && na ? 'In progress · ' + plural(na, 'question') + ' answered, saved' : 'Not started') : 'Opens when session ' + k + ' is finished';
+        return '<li class="' + st + '"><span class="n">' + (st === 'done' ? '✓' : k + 1) + '</span><span class="b"><b>' + esc(s.name) + '</b><small>' + esc(s.blurb) + '</small><small class="c">' + esc(s.calc.charAt(0).toUpperCase() + s.calc.slice(1)) + ' · ' + esc(note) + '</small></span></li>'; }).join('') + '</ol>';
+      if (cur) { var nk = sessAnswered(cur, kc); h += '<button class="btn primary" id="bResume" type="button">' + (nk ? 'Resume session ' + (kc + 1) : 'Start session ' + (kc + 1)) + '</button><button class="btn ghost" id="bNew" type="button">Start the whole exam over</button>'; }
+      else h += '<button class="btn primary" id="bBegin" type="button">Begin session 1</button>';
+    }
+    else if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
     else h += '<button class="btn primary" id="bBegin" type="button">Begin exam</button>';
     h += store.attempts.length ? '<button class="btn ghost" id="bPast" type="button">Past attempts (' + store.attempts.length + ')</button>' : '<button class="btn ghost" id="bPast" type="button">Import a saved report</button>';
     if (!cur && last) { var r = XA.record(last); h += '<div class="ex-last">Last attempt, ' + X.dayStamp(r.when) + ': Core ' + X.pct(r.corePct) + ', Stretch ' + X.pct(r.stretchPct) + '. <a href="#" id="bLast">View the report</a></div>'; }
     box.innerHTML = h;
-    $('beginNote').textContent = 'Progress is saved in this browser. Nothing is sent anywhere.';
+    $('beginNote').textContent = SESS ? 'Every answer is saved as you go. A session can be stopped at any point (Pause, then Save and leave) and picked up later, here. Nothing is sent anywhere.' : 'Progress is saved in this browser. Nothing is sent anywhere.';
     var b;
     if ((b = $('bBegin'))) b.onclick = startExam;
     if ((b = $('bResume'))) b.onclick = function () { S = store.current; resumeExam(); };
@@ -226954,7 +227187,7 @@ if (typeof module !== 'undefined') module.exports = XR;
     if ((b = $('bPast'))) b.onclick = showAttempts;
     if ((b = $('bLast'))) b.onclick = function (e) { e.preventDefault(); showReport(last); };
   }
-  function startExam() { S = XC.create(CTX); store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
+  function startExam() { S = XC.create(CTX); if (SESS) S.sess = { cur: 0, done: [] }; store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
   function resumeExam() { prepAll(); lastTick = Date.now(); goMap({ resumed: true }); }
 
   // ---------- journey map ----------
@@ -226993,10 +227226,10 @@ if (typeof module !== 'undefined') module.exports = XR;
     card.appendChild(track); return card;
   }
   function barMessage(o) {
-    var open = XC.openNodes(S).length, sug = XC.suggest(S, XM.byId);
-    if (!open) return { html: '<span class="msg"><b>Every path has ended.</b><small>Look back over the map, or submit the exam to see the report.</small></span><button class="btn primary" data-act="finish" type="button">Finish exam</button>' };
+    var open = sOpen().length, sug = sSuggest();
+    if (!open) return { html: '<span class="msg"><b>Every path ' + (sessOn() ? 'of this session ' : '') + 'has ended.</b><small>' + (sessOn() && !sessLast() ? 'Look back over the map, then finish the session. The next one can be started now or another day.' : 'Look back over the map, or submit the exam to see the report.') + '</small></span><button class="btn primary" data-act="finish" type="button">' + finishWord() + '</button>' };
     var m = '', cta = sug ? '<button class="btn primary" data-act="go" type="button">' + (o.start ? 'Start with the suggestion' : 'Continue') + '</button>' : '';
-    if (o.start) m = '<b>' + XM.word(XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
+    if (o.start) m = '<b>' + XM.word(sessOn() ? sessCur().lanes.length : XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
     else if (o.resumed) m = '<b>Welcome back.</b><small>' + plural(open, 'node') + ' open. The clock is running.</small>';
     else if (o.answered) {
       var n = o.answered, lane = XM.byId[n.terr].name, ev = o.event, opened = o.opened || [], what;
@@ -227006,24 +227239,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     return { html: '<span class="msg">' + m + '</span>' + cta };
   }
   function renderMap(o) {
-    o = o || {}; var sug = XC.suggest(S, XM.byId), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
+    o = o || {}; var sug = sSuggest(), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
     $('exBar').innerHTML = barMessage(o).html;
     var key = document.querySelector('.ex-tierkey'); if (!key) { key = el('p', 'ex-tierkey', '1 Foundation · 2 Fluency · 3 Transfer · 4 Challenge'); $('exLanes').parentNode.insertBefore(key, $('exLanes')); }
-    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id]) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
+    var sl = document.querySelector('.ex-sessline'); if (sessOn()) { if (!sl) { sl = el('p', 'ex-sessline'); $('exLanes').parentNode.insertBefore(sl, key); } sl.textContent = sessLabel(); } else if (sl) sl.parentNode.removeChild(sl);
+    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id] && inSess(T.id)) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
     var b = Object.keys(born)[0]; if (b) { var be = box.querySelector('[data-id="' + b + '"]') || box.querySelector('.ex-n.born'); if (be && be.scrollIntoView) { var r = be.getBoundingClientRect(); if (r.top < 90 || r.bottom > window.innerHeight - 20) be.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
   }
   function goMap(o) {
     leaveQ(); showView('map'); renderMap(o); renderClock();
     var c = $('exBar').querySelector('.btn'); if (c && o && (o.answered || o.back)) c.focus({ preventScroll: true });
   }
-  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = XC.suggest(S, XM.byId); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
+  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = sSuggest(); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
   $('exLanes').addEventListener('click', function (e) { var b = e.target.closest('button.ex-n'); if (b) openQ(b.dataset.id); });
 
   // ---------- question view ----------
   function leaveQ() { flushDraft(); if (sprint) { sprint.stop(); sprint = null; } sprintOn = false; if (pv) { pv.destroy(); pv = null; } curNode = null; curP = null; $('pauseBtn').disabled = false; $('qBack').disabled = false; $('v-q').classList.remove('ex-qtimed'); }
   function flushDraft() { if (draftT) { clearTimeout(draftT); draftT = 0; if (S && S.status === 'running') persist(); } }
   function openQ(id) {
-    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running') return;
+    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running' || !inSess(n.terr)) return;
     leaveQ(); curNode = n; prep(n);
     var p = genNode(n); curP = p;
     $('qTitle').textContent = XM.byId[n.terr].name; $('qSub').textContent = (n.role === 'probe' ? 'Foundation check' : n.role === 'summit' ? 'Summit' : TN[n.tier]) + ' · ' + (XA.FMT_NAMES[p.fmt] || '');
@@ -227080,13 +227314,20 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- pause ----------
   function setInert(on) { Array.prototype.forEach.call(document.querySelectorAll('header.top, main'), function (e) { e.inert = on; }); }
   $('pauseBtn').addEventListener('click', function () { if (!S || S.status !== 'running' || sprintOn) return; paused = true; flushDraft(); persist(); $('pauseOv').hidden = false; setInert(true); $('resumeBtn').focus(); });
+  if (SESS) {       // a session can be left and picked up later: everything is already saved
+    var lv = el('button', 'btn ghost', 'Save and leave'); lv.type = 'button'; lv.id = 'leaveBtn'; $('resumeBtn').parentNode.appendChild(lv);
+    $('resumeBtn').parentNode.querySelector('p').textContent = 'The exam clock is stopped and the questions are hidden. Your answers are saved: you can carry on now, or leave and come back to this session later.';
+    lv.addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); leaveQ(); persist(); showView('begin'); renderBegin(); });
+  }
   $('resumeBtn').addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); var f = $('qHost').querySelector('input, .choice'); if (view === 'q' && f && pv) pv.focus(); });
 
   // ---------- finish: check, then submit ----------
   var fdlg = $('finishDlg');
   function openFinish() {
     if (!S || S.status !== 'running') return; flushDraft();
-    var v = XC.verify(S), open = v.open, h = '<p>After you submit, answers are locked and the report opens. This cannot be undone.</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
+    var v = XC.verify(S), mid = sessOn() && !sessLast(); if (sessOn()) { v.open = v.open.filter(function (n) { return inSess(n.terr); }); v.flagged = v.open.filter(function (n) { return n.flagged; }); if (mid) v.answered = sessAnswered(S, S.sess.cur); }
+    $('finSubmit').textContent = mid ? 'Finish session ' + (S.sess.cur + 1) : 'Submit exam'; var fh = document.getElementById('finH'); if (fh && sessOn()) fh.textContent = mid ? 'Finish this session?' : 'Submit the exam?';
+    var open = v.open, h = '<p>' + (mid ? 'After you finish this session its answers are locked. Session ' + (S.sess.cur + 2) + ' can be started straight away or another day.' : 'After you submit, answers are locked and the report opens. This cannot be undone.') + '</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
     if (open.length) {
       h += '<p>Open nodes count as zero. You can still go back to any of them:</p><div class="ex-jump">' + open.slice(0, 12).map(function (n) { return '<button type="button" data-id="' + n.id + '">' + (n.flagged ? '<span class="fl">⚑ </span>' : '') + esc(XM.byId[n.terr].name) + ' · ' + (n.role === 'probe' ? 'Check' : TN[n.tier]) + '</button>'; }).join('') + (open.length > 12 ? '<span class="ex-chip">and ' + (open.length - 12) + ' more</span>' : '') + '</div>';
     } else h += '<p>Every open node has been answered or skipped.</p>';
@@ -227098,6 +227339,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   $('finBody').addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) { fdlg.close(); openQ(b.dataset.id); } });
   $('finSubmit').addEventListener('click', function () {
     if (!S || S.status !== 'running') { fdlg.close(); return; }
+    if (sessOn() && !sessLast()) { leaveQ(); S.sess.done[S.sess.cur] = Date.now(); S.sess.cur++; persist(); fdlg.close(); showView('begin'); renderBegin(); return; }
+    if (sessOn()) S.sess.done[S.sess.cur] = Date.now();
     leaveQ(); XC.finish(S); XR.fillSnaps(S, genNode); store.attempts.push(S); store.current = null; persist(); fdlg.close();
     var saved = exportReport(S, 'auto');
     showReport(S, true, saved);
@@ -227290,7 +227533,7 @@ if (typeof module !== 'undefined') module.exports = XR;
 
   // ---------- start ----------
   renderBegin(); showView('begin');
-  window.__exam = { S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
+  window.__exam = { sess: function () { return sessOn() ? { cur: S.sess.cur, n: SESS.length, open: sOpen().length, last: sessLast() } : null; }, S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
 })();
 
 /script>
@@ -242616,6 +242859,22 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
 #rMsg { margin: 0 0 12px; }
 @media (max-width: 560px) { .ex-rexport .btn { flex: 1 1 100%; justify-content: center; } }
 
+/* sessions (final exam): the list on the Begin screen, the line above the map */
+.ex-sess { list-style: none; margin: 4px 0 6px; padding: 0; flex: 1 1 100%; display: grid; gap: 10px; }
+.ex-sess li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); text-align: left; }
+.ex-sess li.now { border-color: var(--accent-line); background: var(--accent-soft); }
+.ex-sess li.later { opacity: .62; }
+.ex-sess .n { flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--line); color: var(--ink); }
+.ex-sess li.now .n { background: var(--accent); color: #fff; }
+.ex-sess li.done .n { background: var(--ok, #2e7d4f); color: #fff; }
+.ex-sess .b { min-width: 0; display: grid; gap: 3px; }
+.ex-sess .b b { font-size: 17px; }
+.ex-sess .b small { font-size: 14px; color: var(--ink-2); }
+.ex-sess .b small.c { color: var(--muted); font-weight: 600; }
+.ex-sessline { margin: 12px 4px 0; font-size: 14.5px; font-weight: 700; color: var(--ink-2); }
+.ex-pausebox .btn + .btn { margin-left: 10px; }
+@media (max-width: 520px) { #finishBtn .fx { display: none; } .ex-pausebox .btn { display: block; width: 100%; margin: 0 0 10px; } .ex-pausebox .btn + .btn { margin-left: 0; } }
+
 </style>
 </head>
 <body data-view="begin">
@@ -242648,7 +242907,7 @@ body { --accent: #7b4b94; --accent-ink: #ffffff; --accent-soft: #f0e8f5; --accen
     <div class="ex-fact"><div class="ex-fi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></div><div><h2>Results at the end</h2><p>Answers are recorded as you go. The full report, with charts and next steps, opens when you submit, and a copy downloads as a file you can keep.</p></div></div>
   </div>
   <ul class="ex-rules">
-    <li>About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
+    <li id="bLen">About 45 to 70 minutes for a prepared student. There is no fixed length and you can finish when you are ready.</li>
     <li>Everything saves automatically in this browser. You can pause, close the page and come back.</li>
     <li>Have scratch paper and a pencil ready: work each problem out before you answer. Tap <b>Not sure</b> on any question you want to skip, or <b>Flag</b> to come back to it.</li>
   </ul>
@@ -254757,12 +255016,28 @@ if (typeof module !== 'undefined') module.exports = XR;
   }
   function prepAll() { S.nodes.forEach(prep); }
 
+  // ---------- sessions (final exam, protocol §25): the lanes are taken in separate sessions, one after another ----------
+  // G.exam.sessions = [{ name, lanes: [ids], calc, blurb }]. S.sess = { cur, done: [time each session was finished] }. Only the
+  // lanes of the current session are on the map; a finished session is locked. A session can be left at any time (Pause, then
+  // "Save and leave"): everything is saved after every answer, and the Begin screen resumes it.
+  var SESS = G.exam && G.exam.sessions && G.exam.sessions.length ? G.exam.sessions : null;
+  function sessOn() { return !!(SESS && S && S.sess); }
+  function sessCur() { return sessOn() ? SESS[Math.min(S.sess.cur, SESS.length - 1)] : null; }
+  function sessLast() { return !sessOn() || S.sess.cur >= SESS.length - 1; }
+  function inSess(T) { var c = sessCur(); return !c || c.lanes.indexOf(T) >= 0; }
+  function sOpen() { return XC.openNodes(S).filter(function (n) { return inSess(n.terr); }); }
+  function sSuggest() { if (!sessOn()) return XC.suggest(S, XM.byId); var r = XC.ranked(S, XM.byId).filter(function (x) { return inSess(x.node.terr); }); return r.length ? r[0].node : null; }
+  function sessAnswered(att, k) { return att.nodes.filter(function (n) { return n.status === 'done' && SESS[k].lanes.indexOf(n.terr) >= 0; }).length; }
+  function sessLabel() { var c = sessCur(); return c ? 'Session ' + (S.sess.cur + 1) + ' of ' + SESS.length + ' · ' + c.name + ' · ' + c.calc : ''; }
+  function finishWord() { return sessOn() && !sessLast() ? 'Finish session' : 'Finish exam'; }
+
   // ---------- views ----------
   var VIEWS = ['begin', 'map', 'q', 'report', 'attempts'];
   function showView(v) {
     view = v; X.tip(null); VIEWS.forEach(function (x) { $('v-' + x).hidden = x !== v; }); document.body.dataset.view = v;
     var live = v === 'map' || v === 'q';
     $('exLive').hidden = !live; $('pauseBtn').hidden = !live; $('finishBtn').hidden = !live;
+    if (live && sessOn()) $('finishBtn').innerHTML = 'Finish<span class="fx"> ' + (sessLast() ? 'exam' : 'session') + '</span>';
     window.scrollTo(0, 0);
   }
   function renderClock() { if (!S) return; $('exClock').textContent = X.clock(S.elapsed); var n = XC.answered(S).length; $('exCount').textContent = n + ' answered'; }
@@ -254780,12 +255055,22 @@ if (typeof module !== 'undefined') module.exports = XR;
   function renderBegin() {
     var box = $('beginBox'), cur = store.current && store.current.status === 'running' ? store.current : null, last = store.attempts[store.attempts.length - 1];
     var h = '';
-    if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
+    if (SESS && $('bLen')) $('bLen').textContent = 'About 20 to 30 minutes a session for a prepared student, about 20 questions. There is no fixed length: finish a session when its climbs have ended or when you are ready.';
+    if (SESS && (!cur || cur.sess)) {       // the sessions, with where each one stands
+      var kc = cur ? cur.sess.cur : 0;
+      h += '<ol class="ex-sess">' + SESS.map(function (s, k) {
+        var st = cur && k < kc ? 'done' : k === kc ? 'now' : 'later', na = cur ? sessAnswered(cur, k) : 0;
+        var note = st === 'done' ? 'Finished · ' + plural(na, 'answer') + ' locked in' : st === 'now' ? (cur && na ? 'In progress · ' + plural(na, 'question') + ' answered, saved' : 'Not started') : 'Opens when session ' + k + ' is finished';
+        return '<li class="' + st + '"><span class="n">' + (st === 'done' ? '✓' : k + 1) + '</span><span class="b"><b>' + esc(s.name) + '</b><small>' + esc(s.blurb) + '</small><small class="c">' + esc(s.calc.charAt(0).toUpperCase() + s.calc.slice(1)) + ' · ' + esc(note) + '</small></span></li>'; }).join('') + '</ol>';
+      if (cur) { var nk = sessAnswered(cur, kc); h += '<button class="btn primary" id="bResume" type="button">' + (nk ? 'Resume session ' + (kc + 1) : 'Start session ' + (kc + 1)) + '</button><button class="btn ghost" id="bNew" type="button">Start the whole exam over</button>'; }
+      else h += '<button class="btn primary" id="bBegin" type="button">Begin session 1</button>';
+    }
+    else if (cur) h += '<div class="ex-resume">An exam is in progress: <b>' + plural(XC.answered(cur).length, 'question') + '</b> answered, <b>' + X.clock(cur.elapsed) + '</b> on the clock.</div><button class="btn primary" id="bResume" type="button">Resume exam</button><button class="btn ghost" id="bNew" type="button">Start over</button>';
     else h += '<button class="btn primary" id="bBegin" type="button">Begin exam</button>';
     h += store.attempts.length ? '<button class="btn ghost" id="bPast" type="button">Past attempts (' + store.attempts.length + ')</button>' : '<button class="btn ghost" id="bPast" type="button">Import a saved report</button>';
     if (!cur && last) { var r = XA.record(last); h += '<div class="ex-last">Last attempt, ' + X.dayStamp(r.when) + ': Core ' + X.pct(r.corePct) + ', Stretch ' + X.pct(r.stretchPct) + '. <a href="#" id="bLast">View the report</a></div>'; }
     box.innerHTML = h;
-    $('beginNote').textContent = 'Progress is saved in this browser. Nothing is sent anywhere.';
+    $('beginNote').textContent = SESS ? 'Every answer is saved as you go. A session can be stopped at any point (Pause, then Save and leave) and picked up later, here. Nothing is sent anywhere.' : 'Progress is saved in this browser. Nothing is sent anywhere.';
     var b;
     if ((b = $('bBegin'))) b.onclick = startExam;
     if ((b = $('bResume'))) b.onclick = function () { S = store.current; resumeExam(); };
@@ -254793,7 +255078,7 @@ if (typeof module !== 'undefined') module.exports = XR;
     if ((b = $('bPast'))) b.onclick = showAttempts;
     if ((b = $('bLast'))) b.onclick = function (e) { e.preventDefault(); showReport(last); };
   }
-  function startExam() { S = XC.create(CTX); store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
+  function startExam() { S = XC.create(CTX); if (SESS) S.sess = { cur: 0, done: [] }; store.current = S; prepAll(); persist(); lastTick = Date.now(); goMap({ start: true }); }
   function resumeExam() { prepAll(); lastTick = Date.now(); goMap({ resumed: true }); }
 
   // ---------- journey map ----------
@@ -254832,10 +255117,10 @@ if (typeof module !== 'undefined') module.exports = XR;
     card.appendChild(track); return card;
   }
   function barMessage(o) {
-    var open = XC.openNodes(S).length, sug = XC.suggest(S, XM.byId);
-    if (!open) return { html: '<span class="msg"><b>Every path has ended.</b><small>Look back over the map, or submit the exam to see the report.</small></span><button class="btn primary" data-act="finish" type="button">Finish exam</button>' };
+    var open = sOpen().length, sug = sSuggest();
+    if (!open) return { html: '<span class="msg"><b>Every path ' + (sessOn() ? 'of this session ' : '') + 'has ended.</b><small>' + (sessOn() && !sessLast() ? 'Look back over the map, then finish the session. The next one can be started now or another day.' : 'Look back over the map, or submit the exam to see the report.') + '</small></span><button class="btn primary" data-act="finish" type="button">' + finishWord() + '</button>' };
     var m = '', cta = sug ? '<button class="btn primary" data-act="go" type="button">' + (o.start ? 'Start with the suggestion' : 'Continue') + '</button>' : '';
-    if (o.start) m = '<b>' + XM.word(XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
+    if (o.start) m = '<b>' + XM.word(sessOn() ? sessCur().lanes.length : XM.TERRS.length, true) + ' paths are open.</b><small>Start anywhere. The highlighted node is a suggestion.</small>';
     else if (o.resumed) m = '<b>Welcome back.</b><small>' + plural(open, 'node') + ' open. The clock is running.</small>';
     else if (o.answered) {
       var n = o.answered, lane = XM.byId[n.terr].name, ev = o.event, opened = o.opened || [], what;
@@ -254845,24 +255130,25 @@ if (typeof module !== 'undefined') module.exports = XR;
     return { html: '<span class="msg">' + m + '</span>' + cta };
   }
   function renderMap(o) {
-    o = o || {}; var sug = XC.suggest(S, XM.byId), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
+    o = o || {}; var sug = sSuggest(), born = {}; (o.born || []).forEach(function (id) { born[id] = 1; });
     $('exBar').innerHTML = barMessage(o).html;
     var key = document.querySelector('.ex-tierkey'); if (!key) { key = el('p', 'ex-tierkey', '1 Foundation · 2 Fluency · 3 Transfer · 4 Challenge'); $('exLanes').parentNode.insertBefore(key, $('exLanes')); }
-    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id]) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
+    var sl = document.querySelector('.ex-sessline'); if (sessOn()) { if (!sl) { sl = el('p', 'ex-sessline'); $('exLanes').parentNode.insertBefore(sl, key); } sl.textContent = sessLabel(); } else if (sl) sl.parentNode.removeChild(sl);
+    var box = $('exLanes'); box.innerHTML = ''; XM.TERRS.forEach(function (T) { if (S.lanes[T.id] && inSess(T.id)) box.appendChild(laneEl(T, sug, born)); });   // an attempt started before a lane was added has no row for it
     var b = Object.keys(born)[0]; if (b) { var be = box.querySelector('[data-id="' + b + '"]') || box.querySelector('.ex-n.born'); if (be && be.scrollIntoView) { var r = be.getBoundingClientRect(); if (r.top < 90 || r.bottom > window.innerHeight - 20) be.scrollIntoView({ block: 'center', behavior: 'smooth' }); } }
   }
   function goMap(o) {
     leaveQ(); showView('map'); renderMap(o); renderClock();
     var c = $('exBar').querySelector('.btn'); if (c && o && (o.answered || o.back)) c.focus({ preventScroll: true });
   }
-  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = XC.suggest(S, XM.byId); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
+  $('exBar').addEventListener('click', function (e) { var b = e.target.closest('[data-act]'); if (!b) return; if (b.dataset.act === 'go') { var s = sSuggest(); if (s) openQ(s.id); } else if (b.dataset.act === 'finish') openFinish(); });
   $('exLanes').addEventListener('click', function (e) { var b = e.target.closest('button.ex-n'); if (b) openQ(b.dataset.id); });
 
   // ---------- question view ----------
   function leaveQ() { flushDraft(); if (sprint) { sprint.stop(); sprint = null; } sprintOn = false; if (pv) { pv.destroy(); pv = null; } curNode = null; curP = null; $('pauseBtn').disabled = false; $('qBack').disabled = false; $('v-q').classList.remove('ex-qtimed'); }
   function flushDraft() { if (draftT) { clearTimeout(draftT); draftT = 0; if (S && S.status === 'running') persist(); } }
   function openQ(id) {
-    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running') return;
+    var n = XC.node(S, id); if (!n || n.status !== 'open' || S.status !== 'running' || !inSess(n.terr)) return;
     leaveQ(); curNode = n; prep(n);
     var p = genNode(n); curP = p;
     $('qTitle').textContent = XM.byId[n.terr].name; $('qSub').textContent = (n.role === 'probe' ? 'Foundation check' : n.role === 'summit' ? 'Summit' : TN[n.tier]) + ' · ' + (XA.FMT_NAMES[p.fmt] || '');
@@ -254919,13 +255205,20 @@ if (typeof module !== 'undefined') module.exports = XR;
   // ---------- pause ----------
   function setInert(on) { Array.prototype.forEach.call(document.querySelectorAll('header.top, main'), function (e) { e.inert = on; }); }
   $('pauseBtn').addEventListener('click', function () { if (!S || S.status !== 'running' || sprintOn) return; paused = true; flushDraft(); persist(); $('pauseOv').hidden = false; setInert(true); $('resumeBtn').focus(); });
+  if (SESS) {       // a session can be left and picked up later: everything is already saved
+    var lv = el('button', 'btn ghost', 'Save and leave'); lv.type = 'button'; lv.id = 'leaveBtn'; $('resumeBtn').parentNode.appendChild(lv);
+    $('resumeBtn').parentNode.querySelector('p').textContent = 'The exam clock is stopped and the questions are hidden. Your answers are saved: you can carry on now, or leave and come back to this session later.';
+    lv.addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); leaveQ(); persist(); showView('begin'); renderBegin(); });
+  }
   $('resumeBtn').addEventListener('click', function () { paused = false; lastTick = Date.now(); $('pauseOv').hidden = true; setInert(false); var f = $('qHost').querySelector('input, .choice'); if (view === 'q' && f && pv) pv.focus(); });
 
   // ---------- finish: check, then submit ----------
   var fdlg = $('finishDlg');
   function openFinish() {
     if (!S || S.status !== 'running') return; flushDraft();
-    var v = XC.verify(S), open = v.open, h = '<p>After you submit, answers are locked and the report opens. This cannot be undone.</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
+    var v = XC.verify(S), mid = sessOn() && !sessLast(); if (sessOn()) { v.open = v.open.filter(function (n) { return inSess(n.terr); }); v.flagged = v.open.filter(function (n) { return n.flagged; }); if (mid) v.answered = sessAnswered(S, S.sess.cur); }
+    $('finSubmit').textContent = mid ? 'Finish session ' + (S.sess.cur + 1) : 'Submit exam'; var fh = document.getElementById('finH'); if (fh && sessOn()) fh.textContent = mid ? 'Finish this session?' : 'Submit the exam?';
+    var open = v.open, h = '<p>' + (mid ? 'After you finish this session its answers are locked. Session ' + (S.sess.cur + 2) + ' can be started straight away or another day.' : 'After you submit, answers are locked and the report opens. This cannot be undone.') + '</p><div class="ex-fin"><div><b>' + v.answered + '</b><span>answered</span></div><div class="' + (open.length ? 'warn' : '') + '"><b>' + open.length + '</b><span>still open</span></div><div class="' + (v.flagged.length ? 'warn' : '') + '"><b>' + v.flagged.length + '</b><span>flagged</span></div></div>';
     if (open.length) {
       h += '<p>Open nodes count as zero. You can still go back to any of them:</p><div class="ex-jump">' + open.slice(0, 12).map(function (n) { return '<button type="button" data-id="' + n.id + '">' + (n.flagged ? '<span class="fl">⚑ </span>' : '') + esc(XM.byId[n.terr].name) + ' · ' + (n.role === 'probe' ? 'Check' : TN[n.tier]) + '</button>'; }).join('') + (open.length > 12 ? '<span class="ex-chip">and ' + (open.length - 12) + ' more</span>' : '') + '</div>';
     } else h += '<p>Every open node has been answered or skipped.</p>';
@@ -254937,6 +255230,8 @@ if (typeof module !== 'undefined') module.exports = XR;
   $('finBody').addEventListener('click', function (e) { var b = e.target.closest('[data-id]'); if (b) { fdlg.close(); openQ(b.dataset.id); } });
   $('finSubmit').addEventListener('click', function () {
     if (!S || S.status !== 'running') { fdlg.close(); return; }
+    if (sessOn() && !sessLast()) { leaveQ(); S.sess.done[S.sess.cur] = Date.now(); S.sess.cur++; persist(); fdlg.close(); showView('begin'); renderBegin(); return; }
+    if (sessOn()) S.sess.done[S.sess.cur] = Date.now();
     leaveQ(); XC.finish(S); XR.fillSnaps(S, genNode); store.attempts.push(S); store.current = null; persist(); fdlg.close();
     var saved = exportReport(S, 'auto');
     showReport(S, true, saved);
@@ -255129,7 +255424,7 @@ if (typeof module !== 'undefined') module.exports = XR;
 
   // ---------- start ----------
   renderBegin(); showView('begin');
-  window.__exam = { S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
+  window.__exam = { sess: function () { return sessOn() ? { cur: S.sess.cur, n: SESS.length, open: sOpen().length, last: sessLast() } : null; }, S: function () { return S; }, store: function () { return store; }, cur: function () { return { n: curNode, p: curP, host: $('qHost') }; }, openQ: openQ, startExam: startExam, sprint: function () { return sprint; }, view: function () { return view; }, report: function () { return { att: RS, sum: RSUM }; } };
 })();
 
 /script>
